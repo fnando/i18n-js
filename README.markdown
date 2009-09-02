@@ -53,6 +53,7 @@ You can localize numbers, currencies & dates:
 	I18n.l("time.formats.short", "2009-09-18 23:12:43"); // yyyy-mm-dd hh:mm:ss
 	I18n.l("date.formats.short", 1251862029000);		 // Epoch time
 	I18n.l("date.formats.short", "09/18/2009");			 // mm/dd/yyyy
+	I18n.l("date.formats.short", (new Date()));          // Date object
 	
 	I18n.l("currency", 1990.99);
 	// $1,990.99
