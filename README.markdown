@@ -24,15 +24,35 @@ You can also interpolate values:
 
 	I18n.t("hello", {name: "John Doe"});
 
+The sample above will assume that you have the following translations in your
+`config/locales/*.yml`:
+
+	en:
+	  hello: "Hello {{name}}!"
+
 Pluralization is possible as well:
 
 	I18n.pluralize(10, "inbox.couting");
-	
-You can localize numbers, currencies & dates:
 
-	I18n.l("date.formats.short", "2009-09-18");
-	I18n.l("date.formats.short", 1251862029000);
-	I18n.l("date.formats.short", "09/18/2009");
+The sample above expects the following translation:
+	
+	en:
+	  inbox:
+	    counting:
+	      one: You have 1 new message
+	      other: You have {{count}} new messages
+	      none: You nave no messages
+
+Rais I18n will ignore the `none` key; on Javascript, it will be used whenever the count
+is zero. This is optional and you can ignore if you want.
+
+You can localize numbers, currencies & dates:
+	
+	// accepted formats
+	I18n.l("date.formats.short", "2009-09-18"); 		 // yyyy-mm-dd
+	I18n.l("time.formats.short", "2009-09-18 23:12:43"); // yyyy-mm-dd hh:mm:ss
+	I18n.l("date.formats.short", 1251862029000);		 // Epoch time
+	I18n.l("date.formats.short", "09/18/2009");			 // mm/dd/yyyy
 	
 	I18n.l("currency", 1990.99);
 	// $1,990.99
