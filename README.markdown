@@ -32,7 +32,7 @@ The sample above will assume that you have the following translations in your
 
 Pluralization is possible as well:
 
-	I18n.pluralize(10, "inbox.couting");
+	I18n.pluralize(10, "inbox.counting");
 
 The sample above expects the following translation:
 	
@@ -97,10 +97,18 @@ by adding something like this to your `ApplicationController`:
 
 Check it out the `vendor/plugins/i18n-js/test/i18n-test.js` for more examples!
 
+TODO
+----
+
+* Support default values for non-existing scopes
+* Read `config/i18n-js.yml` file to decide which scopes should be exported to `messages.js`
+
 MAINTAINER
 ----------
 
-* Nando Vieira (<http://simplesideias.com.br>)
+Nando Vieira (<http://simplesideias.com.br>)
+
+Recommend me on [WWR](http://www.workingwithrails.com/person/7846-nando-vieira)
 
 LICENSE:
 --------
