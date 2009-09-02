@@ -60,6 +60,29 @@ You can localize numbers, currencies & dates:
 	I18n.l("number", 1990.99);
 	// 1,990.99
 
+If you prefer, you can use the `I18n.strftime` function to format dates.
+
+	var date = new Date();
+	I18n.strftime(date, "%d/%m/%Y");
+
+The accepted formats are:
+
+	%a - The abbreviated weekday name (Sun)
+	%A - The  full  weekday  name (Sunday)
+	%b - The abbreviated month name (Jan)
+	%B - The  full  month  name (January)
+	%c - The preferred local date and time representation
+	%d - Day of the month (01..31)
+	%H - Hour of the day, 24-hour clock (00..23)
+	%I - Hour of the day, 12-hour clock (01..12)
+	%m - Month of the year (01..12)
+	%M - Minute of the hour (00..59)
+	%p - Meridian indicator (AM  or  PM)
+	%S - Second of the minute (00..60)
+	%w - Day of the week (Sunday is 0, 0..6)
+	%y - Year without a century (00..99)
+	%Y - Year with century
+
 On your development environment, you can automatically export your messages
 by adding something like this to your `ApplicationController`:
 
