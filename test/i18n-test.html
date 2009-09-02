@@ -17,9 +17,9 @@
 		function log(name, message) {
 			var tag = document.getElementById("logger");
 			message = message.toString();
-			message = message.replace(/&/sm, "&amp;");
-			message = message.replace(/</sm, "&lt;");
-			message = message.replace(/>/sm, "&gt;");
+			message = message.replace(/&/gm, "&amp;");
+			message = message.replace(/</gm, "&lt;");
+			message = message.replace(/>/gm, "&gt;");
 			tag.innerHTML += "<p><strong>" + name + ":</strong> " + message + "</p>";
 		}
 	</script>
@@ -28,7 +28,6 @@
 <body>
 
 <div id="content">
-
 	<div id="header">
 		<h1>JavaScript unit test file</h1>
 		<p>

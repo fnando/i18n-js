@@ -30,6 +30,14 @@ The sample above will assume that you have the following translations in your
 	en:
 	  hello: "Hello {{name}}!"
 
+You can set default values for missing scopes:
+
+	// simple translation
+	I18n.t("some.missing.scope", {defaultValue: "A default message"});
+	
+	// with interpolation
+	I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
+
 Pluralization is possible as well:
 
 	I18n.pluralize(10, "inbox.counting");
@@ -44,7 +52,17 @@ The sample above expects the following translation:
 	      none: You nave no messages
 
 Rais I18n will ignore the `none` key; on Javascript, it will be used whenever the count
-is zero. This is optional and you can ignore if you want.
+is zero. This is optional and you can safely ignore it if you want.
+
+Default values is permitted on the pluralize function:
+
+	options = {defaultValue: {
+		none: "No things here!",
+		one: "There is {{count}} thing here!",
+		other: "There are {{count}} things here!"
+	}};
+	
+	I18n.pluralize(1, "missing", options);
 
 You can localize numbers, currencies & dates:
 	
@@ -101,7 +119,6 @@ Check it out the `vendor/plugins/i18n-js/test/i18n-test.js` for more examples!
 TODO
 ----
 
-* Support default values for non-existing scopes
 * Read `config/i18n-js.yml` file to decide which scopes should be exported to `messages.js`
 
 MAINTAINER

@@ -291,4 +291,50 @@ new Test.Unit.Runner({
 		assertEqual("07/01, 09:12 h", I18n.localize("time.formats.short", "2009-01-07 09:12:35"));
 		assertEqual("Domingo, 29 de Novembro de 2009, 15:07 h", I18n.localize("time.formats.long", "2009-11-29 15:07:59"));
 	}},
+	
+	// Default value for simple translation
+	testDefaultValueForSimpleTranslation: function() { with(this) {
+		actual = I18n.translate("warning", {defaultValue: "Warning!"});
+		assertEqual("Warning!", actual);
+	}},	
+	
+	// Default value with interpolation
+	testDefaultValueWithInterpolation: function() { with(this) {
+		actual = I18n.translate("alert", {defaultValue: "Attention! {{message}}", message: "You're out of quota!"});
+		assertEqual("Attention! You're out of quota!", actual);
+	}},
+	
+	// Default value should not be used when scope exist
+	testDefaultValueShouldNotBeUsedWhenScopeExist: function() { with(this) {
+		actual = I18n.translate("hello", {defaultValue: "What's up?"});
+		assertEqual("Hello World!", actual);
+	}},	
+	
+	// Default value for pluralize
+	testDefaultValueForPluralize: function() { with(this) {
+		options = {defaultValue: {
+			none: "No things here!",
+			one: "There is {{count}} thing here!",
+			other: "There are {{count}} things here!"
+		}};
+		
+		assertEqual("No things here!", I18n.pluralize(0, "things", options));
+		assertEqual("There is 1 thing here!", I18n.pluralize(1, "things", options));
+		assertEqual("There are 5 things here!", I18n.pluralize(5, "things", options));
+	}},
+	
+	// Default value for pluralize should not be used when scope exist
+	testDefaultValueForPluralizeShouldNotBeUsedWhenScopeExist: function() { with(this) {
+		options = {defaultValue: {
+			none: "No things here!",
+			one: "There is {{count}} thing here!",
+			other: "There are {{count}} things here!"
+		}};
+		
+		assertEqual("You have no messages", I18n.pluralize(0, "inbox", options));
+		assertEqual("You have 1 message", I18n.pluralize(1, "inbox", options));
+		assertEqual("You have 5 messages", I18n.pluralize(5, "inbox", options));
+	}},
+
+	
 });
