@@ -6,8 +6,31 @@ It's a small library (5.2KB or 1.76KB when gzipped) to provide the Rails I18n tr
 USAGE
 -----
 
-To generate your files, just run `rake i18n:setup`. This command will copy `i18n.js`
-and export `messages.js` to your javascript directory.
+### Setting up
+
+Run `rake i18n:setup` to copy `i18n.js` to your javascript directory. Then 
+add the following code to your `config/environment.rb` file.
+
+	Rails::Initializer.run do |config|
+	  config.after_initialize do
+	    SimplesIdeias::I18n.export!
+	  end
+	end
+
+This will generate the `public/javascripts/messages.js` file every time you start your app. 
+On your development environment, you can automatically export your messages by adding something 
+like this to your `ApplicationController`:
+
+	class ApplicationController < ActionController::Base
+	  before_filter :export_i18n_messages
+
+	  private
+	    def export_i18n_messages
+	      SimplesIdeias::I18n.export! if RAILS_ENV == "development"
+	    end
+	end
+
+### On the Javascript
 
 Set your locale is easy as
 	
@@ -101,18 +124,6 @@ The accepted formats are:
 	%w - Day of the week (Sunday is 0, 0..6)
 	%y - Year without a century (00..99)
 	%Y - Year with century
-
-On your development environment, you can automatically export your messages
-by adding something like this to your `ApplicationController`:
-
-	class ApplicationController < ActionController::Base
-	  before_filter :export_i18n_messages
-	
-	  private
-	    def export_i18n_messages
-	      SimplesIdeias::I18n.export! if RAILS_ENV == "development"
-	    end
-	end
 
 Check it out the `vendor/plugins/i18n-js/test/i18n-test.js` for more examples!
 
