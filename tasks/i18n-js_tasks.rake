@@ -1,6 +1,6 @@
 namespace :i18n do
   desc "Copy i18n.js and export the messages file"
-  task :setup do
+  task :setup => :require_lib do
     SimplesIdeias::I18n.copy!
   end
   
