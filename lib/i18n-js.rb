@@ -10,6 +10,7 @@ module SimplesIdeias
         f << %(var I18n = I18n || {};\n)
         f << %(I18n.translations = );
         f << ::I18n.backend.__send__(:translations).to_json
+        f << %(;)
       end
     end
     
