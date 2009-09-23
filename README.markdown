@@ -9,16 +9,12 @@ USAGE
 ### Setting up
 
 Run `rake i18n:setup` to copy `i18n.js` to your javascript directory. Then 
-add the following code to your `config/environment.rb` file.
+you're ready to go!
 
-	Rails::Initializer.run do |config|
-	  config.after_initialize do
-	    SimplesIdeias::I18n.export!
-	  end
-	end
+Every time your application is started, the `public/javascripts/messages.js` will be generated.
+This file contains all messages that the I18n can find in the load path.
 
-This will generate the `public/javascripts/messages.js` file every time you start your app. 
-On your development environment, you can automatically export your messages by adding something 
+To speed up the development process, you can automatically export your messages by adding something 
 like this to your `ApplicationController`:
 
 	class ApplicationController < ActionController::Base
