@@ -78,13 +78,17 @@ new Test.Unit.Runner({
 		assertEqual("Hello World!", I18n.translate("hello"));
 	}},
 	
+	// Translation with invalid scope shall not block
+	testTranslationWithInvalidScope: function() { with(this) {
+		assertEqual("invalid.scope.shall.not.block", I18n.translate("invalid.scope.shall.not.block"));
+	}},
+
 	// Translation for single scope on a custom locale
 	testTranslationForSingleScopeOnACustomLocale: function() { with(this) {
 		I18n.locale = "pt";
 		assertEqual("Olá Mundo!", I18n.translate("hello"));
 	}},
-	
-	
+
 	// Translation for multiple scopes
 	testTranslationForMultipleScopes: function() { with(this) {
 		assertEqual("Hello stranger!", I18n.translate("greetings.stranger"));
