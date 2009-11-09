@@ -86,11 +86,12 @@ Default values is permitted on the pluralize function:
 You can localize numbers, currencies & dates:
 	
 	// accepted formats
-	I18n.l("date.formats.short", "2009-09-18"); 		 // yyyy-mm-dd
-	I18n.l("time.formats.short", "2009-09-18 23:12:43"); // yyyy-mm-dd hh:mm:ss
-	I18n.l("date.formats.short", 1251862029000);		 // Epoch time
-	I18n.l("date.formats.short", "09/18/2009");			 // mm/dd/yyyy
-	I18n.l("date.formats.short", (new Date()));          // Date object
+	I18n.l("date.formats.short", "2009-09-18"); 		  // yyyy-mm-dd
+	I18n.l("time.formats.short", "2009-09-18 23:12:43");  // yyyy-mm-dd hh:mm:ss
+	I18n.l("time.formats.short", "2009-11-09T18:10:34Z"); // ISO-8601
+	I18n.l("date.formats.short", 1251862029000);		  // Epoch time
+	I18n.l("date.formats.short", "09/18/2009");			  // mm/dd/yyyy
+	I18n.l("date.formats.short", (new Date()));           // Date object
 	
 	I18n.l("currency", 1990.99);
 	// $1,990.99
@@ -134,6 +135,24 @@ MAINTAINER
 Nando Vieira (<http://simplesideias.com.br>)
 
 Recommend me on [WWR](http://www.workingwithrails.com/person/7846-nando-vieira)
+
+CONTRIBUTING
+------------
+
+Once you've made your great commits:
+
+1. [Fork](http://help.github.com/forking/) I18n-JS
+2. Create a topic branch - `git checkout -b my_branch`
+3. Push to your branch - `git push origin my_branch`
+4. Create an [Issue](http://github.com/fnando/i18n-js/issues) with a link to your branch
+5. That's it!
+
+Please respect the indentation rules. And use tabs, not spaces.
+
+CONTRIBUTORS
+------------
+
+Sébastien Grosjean (<http://github.com/ZenCocoon>)
 
 LICENSE:
 --------
