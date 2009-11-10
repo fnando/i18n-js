@@ -122,6 +122,7 @@ The accepted formats are:
 	%w - Day of the week (Sunday is 0, 0..6)
 	%y - Year without a century (00..99)
 	%Y - Year with century
+	%z - Timezone offset (+0545)
 
 Check it out the `vendor/plugins/i18n-js/test/i18n-test.js` for more examples!
 
