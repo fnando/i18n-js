@@ -88,7 +88,8 @@ You can localize numbers, currencies & dates:
 	// accepted formats
 	I18n.l("date.formats.short", "2009-09-18"); 		  // yyyy-mm-dd
 	I18n.l("time.formats.short", "2009-09-18 23:12:43");  // yyyy-mm-dd hh:mm:ss
-	I18n.l("time.formats.short", "2009-11-09T18:10:34Z"); // ISO-8601
+	I18n.l("time.formats.short", "2009-11-09T18:10:34");  // JSON format with local Timezone (part of ISO-8601)
+	I18n.l("time.formats.short", "2009-11-09T18:10:34Z"); // JSON format in UTC (part on ISO-8601)
 	I18n.l("date.formats.short", 1251862029000);		  // Epoch time
 	I18n.l("date.formats.short", "09/18/2009");			  // mm/dd/yyyy
 	I18n.l("date.formats.short", (new Date()));           // Date object
