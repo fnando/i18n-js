@@ -285,8 +285,8 @@ new Test.Unit.Runner({
 		assertEqual("2009", I18n.strftime(date, "%Y"));
 	}},
 
-	// Date formatting with Timezone (IMPORTANT: Set your computer clock to Kathmendu timezone to pass this test (UTC+0545)
-	testDateFormattingWithTimezone___IMPORTANT_Set_your_computer_clock_to_Kathmendu_timezone_to_pass_this_test: function() { with(this) {
+	// Date formatting with Timezone (IMPORTANT: Set your computer clock to Kathmandu timezone to pass this test (UTC+0545)
+	testDateFormattingWithTimezone___IMPORTANT_Set_your_computer_clock_to_Kathmandu_timezone_to_pass_this_test: function() { with(this) {
 		I18n.locale = "pt";
 
 		// 2009-04-26 19:35:44 (Sunday)
