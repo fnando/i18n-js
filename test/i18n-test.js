@@ -291,12 +291,9 @@ new Test.Unit.Runner({
 		
 		var date = new Date(2009, 3, 26, 19, 35, 44);
 		
-		var stub = function() {
+		date.getTimezoneOffset = function() {
 			return 345;
 		};
-		
-		Date.prototype.getTimezoneOffset = stub;
-		date.getTimezoneOffset = stub;
 		
 		assertMatch(/^(\+|-)[\d]{4}$/, I18n.strftime(date, "%z"));
 		assertEqual("-0545", I18n.strftime(date, "%z"));
@@ -308,12 +305,9 @@ new Test.Unit.Runner({
 		
 		var date = new Date(2009, 3, 26, 19, 35, 44);
 		
-		var stub = function() {
+		date.getTimezoneOffset = function() {
 			return -345;
 		};
-		
-		Date.prototype.getTimezoneOffset = stub;
-		date.getTimezoneOffset = stub;
 		
 		assertMatch(/^(\+|-)[\d]{4}$/, I18n.strftime(date, "%z"));
 		assertEqual("+0545", I18n.strftime(date, "%z"));
