@@ -229,6 +229,9 @@ new Test.Unit.Runner({
 		assertEqual(expected.toString(), I18n.parseDate(expected).toString());
 
 		expected = new Date(2009, 0, 24, 15, 33, 44);
+		assertEqual(expected.toString(), I18n.parseDate("2009-01-24T15:33:44").toString());
+
+		expected = new Date(Date.UTC(2009, 0, 24, 15, 33, 44));
 		assertEqual(expected.toString(), I18n.parseDate("2009-01-24T15:33:44Z").toString());
 	}},
 	
