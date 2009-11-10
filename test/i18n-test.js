@@ -285,14 +285,37 @@ new Test.Unit.Runner({
 		assertEqual("2009", I18n.strftime(date, "%Y"));
 	}},
 
-	// Date formatting with Timezone (IMPORTANT: Set your computer clock to Kathmandu timezone to pass this test (UTC+0545)
-	testDateFormattingWithTimezone___IMPORTANT_Set_your_computer_clock_to_Kathmandu_timezone_to_pass_this_test: function() { with(this) {
+	// Date formatting with negative Timezone
+	testDateFormattingWithNegativeTimezone: function() { with(this) {
 		I18n.locale = "pt";
-
-		// 2009-04-26 19:35:44 (Sunday)
+		
 		var date = new Date(2009, 3, 26, 19, 35, 44);
-
-		// timezone offset
+		
+		var stub = function() {
+			return 345;
+		};
+		
+		Date.prototype.getTimezoneOffset = stub;
+		date.getTimezoneOffset = stub;
+		
+		assertMatch(/^(\+|-)[\d]{4}$/, I18n.strftime(date, "%z"));
+		assertEqual("-0545", I18n.strftime(date, "%z"));
+	}},
+	
+	// Date formatting with positive Timezone
+	testDateFormattingWithPositiveTimezone: function() { with(this) {
+		I18n.locale = "pt";
+		
+		var date = new Date(2009, 3, 26, 19, 35, 44);
+		
+		var stub = function() {
+			return -345;
+		};
+		
+		Date.prototype.getTimezoneOffset = stub;
+		date.getTimezoneOffset = stub;
+		
+		assertMatch(/^(\+|-)[\d]{4}$/, I18n.strftime(date, "%z"));
 		assertEqual("+0545", I18n.strftime(date, "%z"));
 	}},
 	
