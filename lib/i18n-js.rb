@@ -2,7 +2,7 @@ module SimplesIdeias
   module I18n
     extend self
     
-    CONFIG_FILE = "#{Rails.root}/config/i18n-js.yml"
+    CONFIG_FILE = "#{RAILS_ROOT}/config/i18n-js.yml"
     
     def export!(config = load_config!)
       # Validity check of the config file
@@ -51,7 +51,7 @@ module SimplesIdeias
       end
 
       def copy_js!(dir)
-        File.open(dir + "/i18n.js", "w+") do |f|
+        File.open(RAILS_ROOT + "/" + dir + "/i18n.js", "w+") do |f|
           f << File.read(File.dirname(__FILE__) + "/i18n.js")
         end
       end
@@ -75,7 +75,7 @@ module SimplesIdeias
         else
           translations = ::I18n.backend.__send__(:translations)
         end
-        File.open(Rails.root + "/" + file_config["file"], "w+") do |f|
+        File.open(RAILS_ROOT + "/" + file_config["file"], "w+") do |f|
           f << %(var I18n = I18n || {};\n)
           f << %(I18n.translations = );
           f << translations.to_json
