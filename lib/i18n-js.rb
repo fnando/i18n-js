@@ -19,10 +19,7 @@ module SimplesIdeias
 
     # Will run at every boot of the app
     def setup!
-      # Copy config file if not already present
-      copy_config!
-
-      # Load config to copy i18n.js to the desired location
+      # Copy (if needed) and load config
       config = load_config!
 
       # Validity check of the config file
@@ -102,6 +99,9 @@ module SimplesIdeias
       end
 
       def load_config!
+        # Copy config file if not already present
+        copy_config!
+
         YAML.load(File.open(CONFIG_FILE))
       end
   end
