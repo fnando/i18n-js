@@ -17,7 +17,7 @@ module SimplesIdeias
       end
     end
 
-    # To use with rake i18n:setup
+    # Will run at every boot of the app
     def setup!
       # Copy config file if not already present
       copy_config!
