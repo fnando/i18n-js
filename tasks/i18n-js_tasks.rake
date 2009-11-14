@@ -11,6 +11,6 @@ namespace :i18n do
   end
 
   task :require_lib do
-    require File.dirname(__FILE__) + "/../init"
+    require File.dirname(__FILE__) + "/../lib/i18n-js"
   end
 end
