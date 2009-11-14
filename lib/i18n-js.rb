@@ -3,6 +3,13 @@ module SimplesIdeias
     extend self
     
     CONFIG_FILE = "#{RAILS_ROOT}/config/i18n-js.yml"
+    INVALID_I18N_DIR = "
+
+    --- I18n-js ---
+    i18n_dir shall be defined in your config/i18n-js.yml.
+    You can simply delete config/i18n-js.yml to restore it as default.
+    ---------------
+    "
     
     def export!(config = load_config!)
       # Validity check of the config file
@@ -23,13 +30,7 @@ module SimplesIdeias
       config = load_config!
 
       # Validity check of the config file
-      raise "
-
-      --- I18n-js ---
-      i18n_dir shall be defined in your config/i18n-js.yml.
-      You can simply delete config/i18n-js.yml to restore it as default.
-      ---------------
-      " if config["i18n_dir"].nil?
+      raise INVALID_I18N_DIR if config["i18n_dir"].nil?
 
       # Copy the i18n.js file to the user desired location
       copy_js!(config["i18n_dir"])
