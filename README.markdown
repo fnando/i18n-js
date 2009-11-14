@@ -8,11 +8,10 @@ USAGE
 
 ### Setting up
 
-Run `rake i18n:setup` to copy `i18n.js` to your javascript directory. Then 
+Run `rake i18n:setup` to copy `i18n.js` to your configurable javascript directory. Then 
 you're ready to go!
 
-Every time your application is started, the `public/javascripts/messages.js` will be generated.
-This file contains all messages that the I18n can find in the load path.
+Every time your application is started, the translations messages defined in your configuration file will be generated.
 
 To speed up the development process, you can automatically export your messages by adding something 
 like this to your `ApplicationController`:
@@ -25,6 +24,30 @@ like this to your `ApplicationController`:
 	      SimplesIdeias::I18n.export! if RAILS_ENV == "development"
 	    end
 	end
+
+### Configuration
+
+The first time you will restart your application when using i18n-js, it will create you the default configuration file at `RAILS_ROOT/config/i18n-js.yml`
+
+By default your i18n.js file will be copied to your `RAILS_ROOT/public/javascipts` directory after running `rake i18n:setup` but you can change this behavior using the `i18_dir` option in your configuration file as follow:
+
+    i18n_dir: "public/javascripts/admin"
+
+Messages files can also be customized, you can even get more files generated to different folders and with different translations to best suit your needs.
+
+Examples:
+
+    translations:
+      name_of_your_choice:
+        file: 'public/javascripts/path-to-your-messages-file.js'
+        only: '*.date.formats'
+      second_file:
+        file: 'public/javascripts/path-to-your-second-file.js'
+        only: ['*.activerecord', '*.admin.*.title']
+
+Notice : If `only` is omitted all the translations will be saved
+
+To find more examples on how to use the configuration file please refer to the tests / fixtures
 
 ### On the Javascript
 
@@ -154,7 +177,7 @@ Please respect the indentation rules. And use tabs, not spaces.
 CONTRIBUTORS
 ------------
 
-Sébastien Grosjean (<http://github.com/ZenCocoon>)
+Sébastien Grosjean (<http://github.com/ZenCocoon>) : Recommend on [WWR](http://www.workingwithrails.com/person/)
 
 LICENSE:
 --------
