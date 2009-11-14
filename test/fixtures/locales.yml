@@ -28,6 +28,12 @@ en:
       long: "%B %d, %Y %H:%M"
     am: "am"
     pm: "pm"
+  admin:
+    show:
+      title: "Show"
+      note: "more details"
+    edit:
+      title: "Edit"
 
 fr:
   date:
@@ -62,3 +68,9 @@ fr:
         unit: '€'
         precision: 2
         format: '%n %u'
+  admin:
+    show:
+      title: "Visualiser"
+      note: "plus de détails"
+    edit:
+      title: "Editer"

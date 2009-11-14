@@ -4,19 +4,19 @@ translations:
     file: "public/javascripts/messages.js"
   basic_scope:
     file: "public/javascripts/basic_scope.js"
-    only: "*.activerecord.errors.template"
+    only: "*.number.currency.format"
   simple_scope:
     file: "public/javascripts/simple_scope.js"
     only: "*.date.formats"
   completion_scope:
     file: "public/javascripts/completion_scope.js"
-    only: "*.*.title"
+    only: "*.*.formats"
   deep_completion_scope:
     file: "public/javascripts/deep_completion_scope.js"
     only: "*.admin.*.title"
   multi_comletion:
     file: "public/javascripts/multi_completion.js"
-    only: "*.welcome.*"
+    only: "*.date.*"
   multi_scopes:
-    file: "public/javascripts/multi_scopes.js"
-    only: ["activerecord.errors", "*.date.month_names", "*.date.formats"]
+    file: "public/javascripts/folder/multi_scopes.js"
+    only: ["*.date.formats", "*.date.month_names", "*.time.invalid"]
