@@ -149,11 +149,6 @@ The accepted formats are:
 
 Check it out the `vendor/plugins/i18n-js/test/i18n-test.js` for more examples!
 
-TODO
-----
-
-* Read `config/i18n-js.yml` file to decide which scopes should be exported to `messages.js`
-
 MAINTAINER
 ----------
 
@@ -177,7 +172,7 @@ Please respect the indentation rules. And use tabs, not spaces.
 CONTRIBUTORS
 ------------
 
-Sébastien Grosjean (<http://github.com/ZenCocoon>) : Recommend on [WWR](http://www.workingwithrails.com/person/)
+Sébastien Grosjean (<http://github.com/ZenCocoon>) : Recommend on [WWR](http://workingwithrails.com/person/2773-sebastien-grosjean)
 
 LICENSE:
 --------
