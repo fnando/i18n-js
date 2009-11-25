@@ -1,20 +1,19 @@
 I18n-js
 =======
 
-It's a small library (5.2KB or 1.76KB when gzipped) to provide the Rails I18n translations on the Javascript. 
+It's a small library (5.2KB or 1.76KB when gzipped) to provide the Rails I18n translations on the Javascript.
 
 USAGE
 -----
 
 ### Setting up
 
-Run `rake i18n:setup` to copy `i18n.js` to your javascript directory. Then 
-you're ready to go!
+Run `rake i18n:setup` to copy `i18n.js` to your javascript directory and `i18n_js.rb` to your initializers folder. Then you're ready to go!
 
 Every time your application is started, the `public/javascripts/messages.js` will be generated.
 This file contains all messages that the I18n can find in the load path.
 
-To speed up the development process, you can automatically export your messages by adding something 
+To speed up the development process, you can automatically export your messages by adding something
 like this to your `ApplicationController`:
 
 	class ApplicationController < ActionController::Base
@@ -29,7 +28,7 @@ like this to your `ApplicationController`:
 ### On the Javascript
 
 Set your locale is easy as
-	
+
 	I18n.defaultLocale = "pt-BR";
 	I18n.locale = "pt-BR";
 	I18n.currentLocale();
@@ -53,7 +52,7 @@ You can set default values for missing scopes:
 
 	// simple translation
 	I18n.t("some.missing.scope", {defaultValue: "A default message"});
-	
+
 	// with interpolation
 	I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
 
@@ -62,7 +61,7 @@ Pluralization is possible as well:
 	I18n.pluralize(10, "inbox.counting");
 
 The sample above expects the following translation:
-	
+
 	en:
 	  inbox:
 	    counting:
@@ -80,11 +79,11 @@ Default values is permitted on the pluralize function:
 		one: "There is {{count}} thing here!",
 		other: "There are {{count}} things here!"
 	}};
-	
+
 	I18n.pluralize(1, "missing", options);
 
 You can localize numbers, currencies & dates:
-	
+
 	// accepted formats
 	I18n.l("date.formats.short", "2009-09-18"); 		  // yyyy-mm-dd
 	I18n.l("time.formats.short", "2009-09-18 23:12:43");  // yyyy-mm-dd hh:mm:ss
@@ -93,10 +92,10 @@ You can localize numbers, currencies & dates:
 	I18n.l("date.formats.short", 1251862029000);		  // Epoch time
 	I18n.l("date.formats.short", "09/18/2009");			  // mm/dd/yyyy
 	I18n.l("date.formats.short", (new Date()));           // Date object
-	
+
 	I18n.l("currency", 1990.99);
 	// $1,990.99
-	
+
 	I18n.l("number", 1990.99);
 	// 1,990.99
 

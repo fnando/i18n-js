@@ -1,9 +1,9 @@
 module SimplesIdeias
   module I18n
     extend self
-    
-    JAVASCRIPT_DIR = File.join(Rails.root, "public", "javascripts")
-    
+
+    JAVASCRIPT_DIR = "public/javascripts"
+
     def export!
       ::I18n.backend.__send__ :init_translations
       File.open(JAVASCRIPT_DIR + "/messages.js", "w+") do |f|
@@ -13,10 +13,14 @@ module SimplesIdeias
         f << %(;)
       end
     end
-    
+
     def copy!
-      File.open(JAVASCRIPT_DIR + "/i18n.js", "w+") do |f| 
+      File.open(JAVASCRIPT_DIR + "/i18n.js", "w+") do |f|
         f << File.read(File.dirname(__FILE__) + "/i18n.js")
+      end
+
+      File.open("config/initializers/i18n_js.rb", "w+") do |f|
+        f << %(SimplesIdeias::I18n.export!)
       end
     end
   end
