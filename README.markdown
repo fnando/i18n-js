@@ -152,6 +152,7 @@ MAINTAINER
 ----------
 
 Nando Vieira (<http://simplesideias.com.br>) Recommend on [WWR](http://www.workingwithrails.com/person/7846-nando-vieira)
+
 Sébastien Grosjean (<http://github.com/ZenCocoon>) : Recommend on [WWR](http://workingwithrails.com/person/2773-sebastien-grosjean)
 
 CONTRIBUTING
