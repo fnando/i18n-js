@@ -37,7 +37,8 @@ class I18nJSTest < ActiveSupport::TestCase
   %w( messages.js basic_scope.js simple_scope.js completion_scope.js deep_completion_scope.js multi_completion.js folder/multi_scopes.js ).each do |file|
     test "export! : file validity : #{file}" do
       SimplesIdeias::I18n.export!(load_test_config!)
-      # Base test on file size as key order varies
+      # FIXME: Make order constant to prevent useless updates
+      # Actual test are based on file size as key order varies
       assert_equal File.size(File.dirname(__FILE__)+"/fixtures/expected_results/#{file}"), File.size(RAILS_ROOT+"/public/javascripts/#{file}")
     end
   end

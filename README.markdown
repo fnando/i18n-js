@@ -1,19 +1,18 @@
 I18n-js
 =======
 
-It's a small library (5.2KB or 1.76KB when gzipped) to provide the Rails I18n translations on the Javascript. 
+It's a small library (5.2KB or 1.76KB when gzipped) to provide the Rails I18n translations on the Javascript.
 
 USAGE
 -----
 
 ### Setting up
 
-Run `rake i18n:setup` to copy `i18n.js` to your configurable javascript directory. Then 
-you're ready to go!
+Run `rake i18n:setup` to copy `i18n.js` to your javascript directory and `i18n-js.yml` to your config folder (if not already present). Then you're ready to go!
 
 Every time your application is started, the translations messages defined in your configuration file will be generated.
 
-To speed up the development process, you can automatically export your messages by adding something 
+To speed up the development process, you can automatically export your messages by adding something
 like this to your `ApplicationController`:
 
 	class ApplicationController < ActionController::Base
@@ -21,7 +20,7 @@ like this to your `ApplicationController`:
 
 	  private
 	    def export_i18n_messages
-	      SimplesIdeias::I18n.export! if RAILS_ENV == "development"
+	      SimplesIdeias::I18n.export! if Rails.env.development?
 	    end
 	end
 
@@ -29,7 +28,7 @@ like this to your `ApplicationController`:
 
 The first time you will restart your application when using i18n-js, it will create you the default configuration file at `RAILS_ROOT/config/i18n-js.yml`
 
-By default your i18n.js file will be copied to your `RAILS_ROOT/public/javascipts` directory after running `rake i18n:setup` but you can change this behavior using the `i18_dir` option in your configuration file as follow:
+By default your i18n.js file will be copied to your `RAILS_ROOT/public/javascipts` directory after running `rake i18n:setup` but you can change this behavior using the `i18n_dir` option in your configuration file as follow:
 
     i18n_dir: "public/javascripts/admin"
 
@@ -52,7 +51,7 @@ To find more examples on how to use the configuration file please refer to the t
 ### On the Javascript
 
 Set your locale is easy as
-	
+
 	I18n.defaultLocale = "pt-BR";
 	I18n.locale = "pt-BR";
 	I18n.currentLocale();
@@ -76,7 +75,7 @@ You can set default values for missing scopes:
 
 	// simple translation
 	I18n.t("some.missing.scope", {defaultValue: "A default message"});
-	
+
 	// with interpolation
 	I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
 
@@ -85,7 +84,7 @@ Pluralization is possible as well:
 	I18n.pluralize(10, "inbox.counting");
 
 The sample above expects the following translation:
-	
+
 	en:
 	  inbox:
 	    counting:
@@ -103,11 +102,11 @@ Default values is permitted on the pluralize function:
 		one: "There is {{count}} thing here!",
 		other: "There are {{count}} things here!"
 	}};
-	
+
 	I18n.pluralize(1, "missing", options);
 
 You can localize numbers, currencies & dates:
-	
+
 	// accepted formats
 	I18n.l("date.formats.short", "2009-09-18"); 		  // yyyy-mm-dd
 	I18n.l("time.formats.short", "2009-09-18 23:12:43");  // yyyy-mm-dd hh:mm:ss
@@ -116,10 +115,10 @@ You can localize numbers, currencies & dates:
 	I18n.l("date.formats.short", 1251862029000);		  // Epoch time
 	I18n.l("date.formats.short", "09/18/2009");			  // mm/dd/yyyy
 	I18n.l("date.formats.short", (new Date()));           // Date object
-	
+
 	I18n.l("currency", 1990.99);
 	// $1,990.99
-	
+
 	I18n.l("number", 1990.99);
 	// 1,990.99
 
@@ -131,9 +130,9 @@ If you prefer, you can use the `I18n.strftime` function to format dates.
 The accepted formats are:
 
 	%a - The abbreviated weekday name (Sun)
-	%A - The  full  weekday  name (Sunday)
+	%A - The full weekday name (Sunday)
 	%b - The abbreviated month name (Jan)
-	%B - The  full  month  name (January)
+	%B - The full month name (January)
 	%c - The preferred local date and time representation
 	%d - Day of the month (01..31)
 	%H - Hour of the day, 24-hour clock (00..23)
@@ -152,9 +151,8 @@ Check it out the `vendor/plugins/i18n-js/test/i18n-test.js` for more examples!
 MAINTAINER
 ----------
 
-Nando Vieira (<http://simplesideias.com.br>)
-
-Recommend me on [WWR](http://www.workingwithrails.com/person/7846-nando-vieira)
+Nando Vieira (<http://simplesideias.com.br>) Recommend on [WWR](http://www.workingwithrails.com/person/7846-nando-vieira)
+Sébastien Grosjean (<http://github.com/ZenCocoon>) : Recommend on [WWR](http://workingwithrails.com/person/2773-sebastien-grosjean)
 
 CONTRIBUTING
 ------------
@@ -168,11 +166,6 @@ Once you've made your great commits:
 5. That's it!
 
 Please respect the indentation rules. And use tabs, not spaces.
-
-CONTRIBUTORS
-------------
-
-Sébastien Grosjean (<http://github.com/ZenCocoon>) : Recommend on [WWR](http://workingwithrails.com/person/2773-sebastien-grosjean)
 
 LICENSE:
 --------
