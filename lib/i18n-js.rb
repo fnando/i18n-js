@@ -76,7 +76,7 @@ module SimplesIdeias
         File.open(RAILS_ROOT + "/" + file_config["file"], "w+") do |f|
           f << %(var I18n = I18n || {};\n)
           f << %(I18n.translations = );
-          f << translations.to_json
+          f << convert_hash_to_ordered_hash_and_sort(translations, true).to_json
           f << %(;)
         end
       end
@@ -104,6 +104,26 @@ module SimplesIdeias
         copy_config!
 
         YAML.load(File.open(CONFIG_FILE))
+      end
+
+      def convert_hash_to_ordered_hash_and_sort(object, deep = false)
+        # Hash is ordered in Ruby 1.9!
+        if RUBY_VERSION >= '1.9'
+          return object.class[res.sort {|a, b| a[0].to_s <=> b[0].to_s } ]
+        else
+          if object.is_a?(Hash)
+            res = returning(ActiveSupport::OrderedHash.new) do |map|
+              object.each {|k,v| map[k] = deep ? convert_hash_to_ordered_hash_and_sort(v, deep) : v }
+            end
+            return res.class[res.sort {|a, b| a[0].to_s <=> b[0].to_s } ]
+          elsif deep && object.is_a?(Array)
+            array = Array.new
+            object.each_with_index {|v,i| array[i] = convert_hash_to_ordered_hash_and_sort(v, deep) }
+            return array
+          else
+            return object
+          end
+        end
       end
   end
 end
