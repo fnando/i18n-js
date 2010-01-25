@@ -41,13 +41,10 @@ module SimplesIdeias
     private
 
       def copy_config!
-        if File.exist?(CONFIG_FILE)
-          puts "Skipped i18n-js.yml as already present."
-        else
+        unless File.exist?(CONFIG_FILE)
           File.open(CONFIG_FILE, "w+") do |f|
             f << File.read(File.dirname(__FILE__) + "/i18n-js.yml")
           end
-          puts "Copied i18n-js.yml at #{CONFIG_FILE}."
         end
       end
 
@@ -55,7 +52,6 @@ module SimplesIdeias
         File.open(RAILS_ROOT + "/" + dir + "/i18n.js", "w+") do |f|
           f << File.read(File.dirname(__FILE__) + "/i18n.js")
         end
-        puts "Copied i18n.js at #{RAILS_ROOT}/#{dir}/i18n.js."
       end
 
       def export_translations!(name, file_config)
