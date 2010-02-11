@@ -1,8 +1,8 @@
 module SimplesIdeias
   module I18n
     extend self
-    
-    CONFIG_FILE = "#{RAILS_ROOT}/config/i18n-js.yml"
+
+    CONFIG_FILE = Rails.root.join("config/i18n-js.yml")
     INVALID_I18N_DIR = "
 
     --- I18n-js ---
@@ -10,7 +10,7 @@ module SimplesIdeias
     You can simply delete config/i18n-js.yml to restore it as default.
     ---------------
     "
-    
+
     def export!(config = load_config!)
       # Validity check of the config file
       if config["translations"].nil?
@@ -33,9 +33,13 @@ module SimplesIdeias
       raise INVALID_I18N_DIR if config["i18n_dir"].nil?
 
       # Copy the i18n.js file to the user desired location
-      copy_js!(config["i18n_dir"])
+      copy_js! config["i18n_dir"]
 
       export!(config)
+    end
+
+    def backend_translations
+      ::I18n.backend.__send__(:translations)
     end
 
     private
@@ -49,9 +53,16 @@ module SimplesIdeias
       end
 
       def copy_js!(dir)
-        File.open(RAILS_ROOT + "/" + dir + "/i18n.js", "w+") do |f|
+        File.open(Rails.root.join(dir, "i18n.js"), "w+") do |f|
           f << File.read(File.dirname(__FILE__) + "/i18n.js")
         end
+      end
+
+      def load_config!
+        # Copy config file if not already present
+        copy_config!
+
+        YAML.load(File.open(CONFIG_FILE))
       end
 
       def export_translations!(name, file_config)
@@ -59,21 +70,22 @@ module SimplesIdeias
 
         if file_config.has_key?("only")
           if file_config["only"].is_a?(String)
-            translations = get_translations_only_for(::I18n.backend.__send__(:translations), file_config["only"])
+            translations = get_translations_only_for(backend_translations, file_config["only"])
           else
             translations = {}
 
             # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
             merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
             for scope in file_config["only"]
-              result = get_translations_only_for(::I18n.backend.__send__(:translations), scope)
+              result = get_translations_only_for(backend_translations, scope)
               translations.merge!(result, &merger) unless result.nil?
             end
           end
         else
-          translations = ::I18n.backend.__send__(:translations)
+          translations = backend_translations
         end
-        File.open(RAILS_ROOT + "/" + file_config["file"], "w+") do |f|
+
+        File.open(Rails.root.join(file_config["file"]), "w+") do |f|
           f << %(var I18n = I18n || {};\n)
           f << %(I18n.translations = );
           f << convert_hash_to_ordered_hash_and_sort(translations, true).to_json
@@ -97,13 +109,6 @@ module SimplesIdeias
           return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : get_translations_only_for(translations[scope.to_sym], scopes)}
         end
         nil
-      end
-
-      def load_config!
-        # Copy config file if not already present
-        copy_config!
-
-        YAML.load(File.open(CONFIG_FILE))
       end
 
       def convert_hash_to_ordered_hash_and_sort(object, deep = false)

@@ -2,9 +2,10 @@ require 'rubygems'
 require 'test/unit'
 require 'active_support'
 require 'active_support/test_case'
+require 'ostruct'
 
-# Stub RAILS_ROOT to get proper files writing location in every environments
-# Keep really careful with this files path as this folder is going to be removed !!!
-RAILS_ROOT = File.dirname(__FILE__) + "/tmp"
+# Stub Rails.root, so we don't need to load the whole Rails environment.
+# Be careful! The specified folder will be removed!
+Rails = OpenStruct.new(:root => Pathname.new(File.dirname(__FILE__) + "/tmp"))
 
 require File.dirname(__FILE__) + '/../lib/i18n-js'

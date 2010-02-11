@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + "/lib/i18n-js"
 
-Rails.configuration.after_initialize do
+config.to_prepare do
   SimplesIdeias::I18n.export!
 end

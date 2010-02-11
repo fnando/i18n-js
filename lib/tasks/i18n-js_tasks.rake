@@ -5,12 +5,11 @@ namespace :i18n do
   end
 
   desc "Export the messages files"
-  task :export do
-    require "config/environment"
+  task :export => :environment do
     SimplesIdeias::I18n.export!
   end
 
   task :require_lib do
-    require File.dirname(__FILE__) + "/../lib/i18n-js"
+    require File.dirname(__FILE__) + "/../i18n-js"
   end
 end

@@ -26,9 +26,9 @@ like this to your `ApplicationController`:
 
 ### Configuration
 
-The first time you will restart your application when using i18n-js, it will create you the default configuration file at `RAILS_ROOT/config/i18n-js.yml`
+The first time you will restart your application when using i18n-js, it will create you the default configuration file at `#{Rails.root}/config/i18n-js.yml`
 
-By default your i18n.js file will be copied to your `RAILS_ROOT/public/javascipts` directory after running `rake i18n:setup` but you can change this behavior using the `i18n_dir` option in your configuration file as follow:
+By default your i18n.js file will be copied to your `#{Rails.root}/public/javascipts` directory after running `rake i18n:setup` but you can change this behavior using the `i18n_dir` option in your configuration file as follow:
 
     i18n_dir: "public/javascripts/admin"
 
