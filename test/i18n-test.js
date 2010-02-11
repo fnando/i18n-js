@@ -136,7 +136,18 @@ new Test.Unit.Runner({
 		actual = I18n.pluralize(0, "unread", {unread: 5});
 		assertEqual("You have no new messages (5 unread)", actual);
 	}},
-	
+
+	// Numbers with default settings
+	testNumbersWithDefaultSettings: function() { with(this) {
+		assertEqual("1.000", I18n.toNumber(1));
+		assertEqual("12.000", I18n.toNumber(12));
+		assertEqual("123.000", I18n.toNumber(123));
+		assertEqual("1,234.000", I18n.toNumber(1234));
+		assertEqual("123,456.000", I18n.toNumber(123456));
+		assertEqual("1,234,567.000", I18n.toNumber(1234567));
+		assertEqual("12,345,678.000", I18n.toNumber(12345678));
+	}},
+
 	// Numbers considering options
 	testNumbersConsideringOptions: function() { with(this) {
 		options = {
@@ -145,24 +156,21 @@ new Test.Unit.Runner({
 			delimiter: "."
 		};
 		
-		assertEqual("1.00", I18n.toNumber(1, options));
-		assertEqual("12.00", I18n.toNumber(12, options));
-		assertEqual("123.00", I18n.toNumber(123, options));
-		assertEqual("1,234.00", I18n.toNumber(1234, options));
-		assertEqual("123,456.00", I18n.toNumber(123456, options));
-		assertEqual("1,234,567.00", I18n.toNumber(1234567, options));
-		assertEqual("12,345,678.00", I18n.toNumber(12345678, options));
+		assertEqual("1,00", I18n.toNumber(1, options));
+		assertEqual("12,00", I18n.toNumber(12, options));
+		assertEqual("123,00", I18n.toNumber(123, options));
+		assertEqual("1.234,00", I18n.toNumber(1234, options));
+		assertEqual("123.456,00", I18n.toNumber(123456, options));
+		assertEqual("1.234.567,00", I18n.toNumber(1234567, options));
+		assertEqual("12.345.678,00", I18n.toNumber(12345678, options));
 	}},
 
 	// Numbers with different precisions
 	testNumbersWithDifferentPrecisions: function() { with(this) {
-		options = {separator: ",", delimiter: "."};
+		options = {separator: ".", delimiter: ","};
 		
 		options["precision"] = 2;
 		assertEqual("1.98", I18n.toNumber(1.98, options));
-		
-		options["precision"] = 3;
-		assertEqual("1.980", I18n.toNumber(1.98, options));
 		
 		options["precision"] = 3;
 		assertEqual("1.980", I18n.toNumber(1.98, options));
@@ -188,8 +196,8 @@ new Test.Unit.Runner({
 					format: {
 						format: "%n %u",
 						unit: "USD",
-						delimiter: ",",
-						separator: ".",
+						delimiter: ".",
+						separator: ",",
 						precision: 2
 					}
 				}
@@ -203,7 +211,7 @@ new Test.Unit.Runner({
 
 	// Localize numbers
 	testLocalizeNumbers: function() { with(this) {
-		assertEqual("1,234,567.00", I18n.localize("number", 1234567));
+		assertEqual("1,234,567.000", I18n.localize("number", 1234567));
 	}},
 
 	// Localize currency
@@ -372,7 +380,5 @@ new Test.Unit.Runner({
 		assertEqual("You have no messages", I18n.pluralize(0, "inbox", options));
 		assertEqual("You have 1 message", I18n.pluralize(1, "inbox", options));
 		assertEqual("You have 5 messages", I18n.pluralize(5, "inbox", options));
-	}},
-
-	
+	}}
 });
