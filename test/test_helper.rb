@@ -1,9 +1,17 @@
 require 'rubygems'
 require 'test/unit'
-require 'active_support'
+
+begin
+  require 'active_support/all'
+rescue LoadError
+  require 'active_support'
+end
+
 require 'active_support/test_case'
 require 'ostruct'
 require 'pathname'
+require 'i18n'
+require 'json'
 
 # Stub Rails.root, so we don't need to load the whole Rails environment.
 # Be careful! The specified folder will be removed!
