@@ -22,7 +22,8 @@ new Test.Unit.Runner({
 					one: "You have 1 new message ({{unread}} unread)",
 					other: "You have {{count}} new messages ({{unread}} unread)",
 					zero: "You have no new messages ({{unread}} unread)"
-				}
+				},
+				number: null
 			},
 
 			pt: {
@@ -477,18 +478,37 @@ new Test.Unit.Runner({
 		assertEqual("You have 5 messages", I18n.pluralize(5, "inbox", options));
 	}},
 
-	// Options with defaults
-	testOptionsWithDefaults: function() { with(this) {
-		defaults = {name: "John Doe", role: "user"};
-		options = I18n.optionsWithDefaults(defaults, {name: "Mary Doe"});
+	// Prepare options
+	testPrepareOptions: function() { with(this) {
+		options = I18n.prepareOptions(
+			{name: "Mary Doe"},
+			{name: "John Doe", role: "user"}
+		);
 
 		assertEqual("Mary Doe", options["name"]);
 		assertEqual("user", options["role"]);
 	}},
 
-	// Options with defaults should return an empty hash when both values are null
-	testOptionsWithDefaultsShouldReturnAnEmptyHashWhenBothValuesAreNull: function() { with(this) {
-		assertNotNullOrUndefined(I18n.optionsWithDefaults(null, null));
+	// Prepare options with multiple options
+	testPrepareOptionsWithMultipleOptions: function() { with(this) {
+		options = I18n.prepareOptions(
+			{name: "Mary Doe"},
+			{name: "John Doe", role: "user"},
+			{age: 33},
+			{email: "mary@doe.com", url: "http://marydoe.com"},
+			{role: "admin", email: "john@doe.com"}
+		);
+
+		assertEqual("Mary Doe", options["name"]);
+		assertEqual("user", options["role"]);
+		assertEqual(33, options["age"]);
+		assertEqual("mary@doe.com", options["email"]);
+		assertEqual("http://marydoe.com", options["url"]);
+	}},
+
+	// Prepare options should return an empty hash when values are null
+	testPrepareOptionsShouldReturnAnEmptyHashWhenValuesAreNull: function() { with(this) {
+		assertNotNullOrUndefined(I18n.prepareOptions(null, null));
 	}},
 
 	// Percentage with defaults
