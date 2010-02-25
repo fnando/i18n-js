@@ -493,12 +493,12 @@ new Test.Unit.Runner({
 
 	// Percentage with defaults
 	testPercentageWithDefaults: function() { with(this) {
-		assertEqual("1,234.000%", I18n.toPercentage(1234));
+		assertEqual("1234.000%", I18n.toPercentage(1234));
 	}},
 
 	// Percentage with custom options
 	testPercentageWithCustomOptions: function() { with(this) {
-		assertEqual("1234%", I18n.toPercentage(1234, {delimiter: "", precision: 0}));
+		assertEqual("1_234%", I18n.toPercentage(1234, {delimiter: "_", precision: 0}));
 	}},
 
 	// Percentage with translation

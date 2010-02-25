@@ -3,6 +3,13 @@ I18n-js
 
 It's a small library (5.2KB or 1.76KB when gzipped) to provide the Rails I18n translations on the Javascript.
 
+This library has been tested on:
+
+* Safari 4 (Mac)
+* Firefox 3.6 (Mac)
+* Opera 10 (Mac)
+* IE6+ (Mac Parallels)
+
 USAGE
 -----
 
@@ -134,15 +141,6 @@ You can provide only the options you want to override:
 
 	I18n.toCurrency(1000, {precision: 0}); /$1,000/
 
-**NOTE:** The default options will be set as the scope `number.currency.format`; when not specified,
-will default to the following values:
-
-* `precision`: 3
-* `separator`: `.`
-* `delimiter`: `,`
-* `format`: `%u%n`, where `%u` means unit and `%n` means number
-* `unit`: `$`
-
 #### Date formatting
 
 	// accepted formats
@@ -183,9 +181,11 @@ Check it out the `vendor/plugins/i18n-js/test/i18n-test.js` for more examples!
 MAINTAINER
 ----------
 
-Nando Vieira (<http://simplesideias.com.br>) Recommend on [WWR](http://www.workingwithrails.com/person/7846-nando-vieira)
+Nando Vieira (<http://simplesideias.com.br>)
+Recommend on [WWR](http://www.workingwithrails.com/person/7846-nando-vieira)
 
-Sébastien Grosjean (<http://github.com/ZenCocoon>) : Recommend on [WWR](http://workingwithrails.com/person/2773-sebastien-grosjean)
+Sébastien Grosjean (<http://github.com/ZenCocoon>)
+Recommend on [WWR](http://workingwithrails.com/person/2773-sebastien-grosjean)
 
 CONTRIBUTING
 ------------
