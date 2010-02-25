@@ -529,5 +529,5 @@ new Test.Unit.Runner({
 		}
 
 		assertEqual("1-234+0000%", I18n.toPercentage(1234, {precision: 4, delimiter: "-", separator: "+"}));
-	}},
+	}}
 });
