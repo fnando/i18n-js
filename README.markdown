@@ -105,12 +105,13 @@ Similar to Rails helpers, you have localize number and currency formatting.
 	I18n.l("number", 1990.99);
 	// 1,990.99
 
-To have more control over number formatting, you can use the `I18n.toNumber` and `I18n.toCurrency` functions.
+To have more control over number formatting, you can use the `I18n.toNumber`, `I18n.toPercentage` and `I18n.toCurrency` functions.
 
-	I18n.toNumber(1000);    // 1,000.000
-	I18n.toCurrency(1000);  // $1,000.00
+	I18n.toNumber(1000);     // 1,000.000
+	I18n.toCurrency(1000);   // $1,000.00
+	I18n.toPercentage(100); // 100.000%
 
-The `toNumber` function accepts the following options:
+The `toNumber` and `toPercentage` functions accept the following options:
 
 * `precision`: defaults to 3
 * `separator`: defaults to `.`

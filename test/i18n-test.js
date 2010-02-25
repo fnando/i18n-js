@@ -168,6 +168,30 @@ new Test.Unit.Runner({
 		assertEqual("12,345,678.000", I18n.toNumber(12345678));
 	}},
 
+	// Numbers with partial translation and default options
+	testNumbersWithPartialTranslationAndDefaultOptions: function() { with(this) {
+		I18n.translations.en.number = {
+			format: {
+				precision: 2
+			}
+		}
+
+		assertEqual("1,234.00", I18n.toNumber(1234));
+	}},
+
+	// Numbers with full translation and default options
+	testNumbersWithFullTranslationAndDefaultOptions: function() { with(this) {
+		I18n.translations.en.number = {
+			format: {
+				delimiter: ".",
+				separator: ",",
+				precision: 2
+			}
+		}
+
+		assertEqual("1.234,00", I18n.toNumber(1234));
+	}},
+
 	// Numbers with some custom options that should be merged with default options
 	testNumbersWithSomeCustomOptionsThatShouldBeMergedWithDefaultOptions: function() { with(this) {
 		assertEqual("1,234", I18n.toNumber(1234, {precision: 0}));
@@ -220,16 +244,14 @@ new Test.Unit.Runner({
 
 	// Current with custom settings
 	testCurrencyWithCustomSettings: function() { with(this) {
-		I18n.translations["en"] = {
-			number: {
-				currency: {
-					format: {
-						format: "%n %u",
-						unit: "USD",
-						delimiter: ".",
-						separator: ",",
-						precision: 2
-					}
+		I18n.translations.en.number = {
+			currency: {
+				format: {
+					format: "%n %u",
+					unit: "USD",
+					delimiter: ".",
+					separator: ",",
+					precision: 2
 				}
 			}
 		};
@@ -241,16 +263,14 @@ new Test.Unit.Runner({
 
 	// Currency with custom settings and partial overriding
 	testCurrencyWithCustomSettingsAndPartialOverriding: function() { with(this) {
-		I18n.translations["en"] = {
-			number: {
-				currency: {
-					format: {
-						format: "%n %u",
-						unit: "USD",
-						delimiter: ".",
-						separator: ",",
-						precision: 2
-					}
+		I18n.translations.en.number = {
+			currency: {
+				format: {
+					format: "%n %u",
+					unit: "USD",
+					delimiter: ".",
+					separator: ",",
+					precision: 2
 				}
 			}
 		};
@@ -450,4 +470,48 @@ new Test.Unit.Runner({
 		assertEqual("user", options["role"]);
 	}},
 
+	// Options with defaults should return an empty hash when both values are null
+	testOptionsWithDefaultsShouldReturnAnEmptyHashWhenBothValuesAreNull: function() { with(this) {
+		assertNotNullOrUndefined(I18n.optionsWithDefaults(null, null));
+	}},
+
+	// Percentage with defaults
+	testPercentageWithDefaults: function() { with(this) {
+		assertEqual("1,234.000%", I18n.toPercentage(1234));
+	}},
+
+	// Percentage with custom options
+	testPercentageWithCustomOptions: function() { with(this) {
+		assertEqual("1234%", I18n.toPercentage(1234, {delimiter: "", precision: 0}));
+	}},
+
+	// Percentage with translation
+	testPercentageWithTranslation: function() { with(this) {
+		I18n.translations.en.number = {
+			percentage: {
+				format: {
+					precision: 2,
+					delimiter: ".",
+					separator: ","
+				}
+			}
+		}
+
+		assertEqual("1.234,00%", I18n.toPercentage(1234));
+	}},
+
+	// Percentage with translation and custom options
+	testPercentageWithTranslationAndCustomOptions: function() { with(this) {
+		I18n.translations.en.number = {
+			percentage: {
+				format: {
+					precision: 2,
+					delimiter: ".",
+					separator: ","
+				}
+			}
+		}
+
+		assertEqual("1-234+0000%", I18n.toPercentage(1234, {precision: 4, delimiter: "-", separator: "+"}));
+	}},
 });
