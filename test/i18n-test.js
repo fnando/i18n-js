@@ -16,12 +16,12 @@ new Test.Unit.Runner({
 				inbox: {
 					one: "You have {{count}} message",
 					other: "You have {{count}} messages",
-					none: "You have no messages"
+					zero: "You have no messages"
 				},
 				unread: {
 					one: "You have 1 new message ({{unread}} unread)",
 					other: "You have {{count}} new messages ({{unread}} unread)",
-					none: "You have no new messages ({{unread}} unread)"
+					zero: "You have no new messages ({{unread}} unread)"
 				}
 			},
 
@@ -135,8 +135,24 @@ new Test.Unit.Runner({
 
 	// Pluralize should return "other" scope
 	testPlurationShouldReturnOtherScope: function() { with(this) {
-		I18n.translations["en"]["inbox"]["none"] = null;
+		I18n.translations["en"]["inbox"]["zero"] = null;
 		assertEqual("You have 0 messages", I18n.pluralize(0, "inbox"));
+	}},
+
+	// Pluralize should return "zero" scope
+	testPlurationShouldReturnZeroScope: function() { with(this) {
+		I18n.translations["en"]["inbox"]["zero"] = "No messages (zero)";
+		I18n.translations["en"]["inbox"]["none"] = "No messages (none)";
+
+		assertEqual("No messages (zero)", I18n.pluralize(0, "inbox"));
+	}},
+
+	// Pluralize should return "none" scope
+	testPlurationShouldReturnNoneScope: function() { with(this) {
+		I18n.translations["en"]["inbox"]["zero"] = null;
+		I18n.translations["en"]["inbox"]["none"] = "No messages (none)";
+
+		assertEqual("No messages (none)", I18n.pluralize(0, "inbox"));
 	}},
 
 	// Pluralize with negative values

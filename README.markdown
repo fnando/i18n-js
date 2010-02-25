@@ -90,10 +90,9 @@ The sample above expects the following translation:
 	    counting:
 	      one: You have 1 new message
 	      other: You have {{count}} new messages
-	      none: You nave no messages
+	      zero: You nave no messages
 
-Rais I18n will ignore the `none` key; on Javascript, it will be used whenever the count
-is zero. This is optional and you can safely ignore it if you want.
+**NOTE:** Rais I18n recognizes the `zero` option but not everyone knows it.
 
 #### Number formatting
 
