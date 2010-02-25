@@ -82,7 +82,7 @@ new Test.Unit.Runner({
 
 	// Translation with invalid scope shall not block
 	testTranslationWithInvalidScope: function() { with(this) {
-		assertEqual("invalid.scope.shall.not.block", I18n.translate("invalid.scope.shall.not.block"));
+		assertEqual('[missing "en.invalid.scope.shall.not.block" translation]', I18n.translate("invalid.scope.shall.not.block"));
 	}},
 
 	// Translation for single scope on a custom locale
@@ -125,6 +125,16 @@ new Test.Unit.Runner({
 
 		actual = I18n.translate("unread", {unread: 5, count: 0});
 		assertEqual("You have no new messages (5 unread)", actual);
+	}},
+
+	// Missing translation with count option
+	testMissingTranslationWithCountOption: function() { with(this) {
+		actual = I18n.translate("invalid", {count: 1});
+		assertEqual('[missing "en.invalid" translation]', actual);
+
+		I18n.translations.en.inbox.one = null;
+		actual = I18n.translate("inbox", {count: 1});
+		assertEqual('[missing "en.inbox.one" translation]', actual);
 	}},
 
 	// Pluralization
