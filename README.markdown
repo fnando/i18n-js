@@ -83,6 +83,10 @@ Pluralization is possible as well:
 
 	I18n.pluralize(10, "inbox.counting");
 
+If you want to save some typing, use the shortcut `I18n.p` like
+
+	I18n.p(10, "inbox.counting");
+
 The sample above expects the following translation:
 
 	en:
@@ -105,7 +109,44 @@ Default values is permitted on the pluralize function:
 
 	I18n.pluralize(1, "missing", options);
 
-You can localize numbers, currencies & dates:
+#### Number formatting
+
+Similar to Rails helpers, you have localize number and currency formatting.
+
+	I18n.l("currency", 1990.99);
+	// $1,990.99
+
+	I18n.l("number", 1990.99);
+	// 1,990.99
+
+To have more control over number formatting, you can use the `I18n.toNumber` and `I18n.toCurrency` functions.
+
+	I18n.toNumber(1000);    // 1,000.000
+	I18n.toCurrency(1000);  // $1,000.00
+
+The `toNumber` function accepts the following options:
+
+* `precision`: defaults to 3
+* `separator`: defaults to `.`
+* `delimiter`: defaults to `,`
+
+See some number formatting examples:
+
+	I18n.toNumber(1000, {precision: 0});                   // 1,000
+	I18n.toNumber(1000, {delimiter: ".", separator: ","}); // 1.000,000
+	I18n.toNumber(1000, {delimiter: ".", precision: 0}); // 1.000
+
+The `toCurrency` function accepts the following options:
+
+* `precision`: defaults to 3
+* `separator`: defaults to `.`
+* `delimiter`: defaults to `,`
+* `format`: defaults to `%u%n`, where `%u` means unit and `%n` means number
+* `unit`: defaults to `$`
+
+	I18n.toCurrency(1000, {precision: 0}); /$1,000/
+
+#### Date formatting
 
 	// accepted formats
 	I18n.l("date.formats.short", "2009-09-18"); 		  // yyyy-mm-dd
@@ -115,12 +156,6 @@ You can localize numbers, currencies & dates:
 	I18n.l("date.formats.short", 1251862029000);		  // Epoch time
 	I18n.l("date.formats.short", "09/18/2009");			  // mm/dd/yyyy
 	I18n.l("date.formats.short", (new Date()));           // Date object
-
-	I18n.l("currency", 1990.99);
-	// $1,990.99
-
-	I18n.l("number", 1990.99);
-	// 1,990.99
 
 If you prefer, you can use the `I18n.strftime` function to format dates.
 
