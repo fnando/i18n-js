@@ -81,11 +81,7 @@ You can set default values for missing scopes:
 
 Pluralization is possible as well:
 
-	I18n.pluralize(10, "inbox.counting");
-
-If you want to save some typing, use the shortcut `I18n.p` like
-
-	I18n.p(10, "inbox.counting");
+	I18n.t("inbox.counting", {count: 10}); // You have 10 messages
 
 The sample above expects the following translation:
 
@@ -98,16 +94,6 @@ The sample above expects the following translation:
 
 Rais I18n will ignore the `none` key; on Javascript, it will be used whenever the count
 is zero. This is optional and you can safely ignore it if you want.
-
-Default values is permitted on the pluralize function:
-
-	options = {defaultValue: {
-		none: "No things here!",
-		one: "There is {{count}} thing here!",
-		other: "There are {{count}} things here!"
-	}};
-
-	I18n.pluralize(1, "missing", options);
 
 #### Number formatting
 

@@ -71,6 +71,7 @@ new Test.Unit.Runner({
 	testAliasesMethods: function() { with(this) {
 		assertEqual(I18n.translate, I18n.t);
 		assertEqual(I18n.localize, I18n.l);
+		assertEqual(I18n.pluralize, I18n.p);
 	}},
 
 	// Translation for single scope
@@ -104,6 +105,25 @@ new Test.Unit.Runner({
 	testMultipleInterpolations: function() { with(this) {
 		actual = I18n.translate("profile.details", {name: "John Doe", age: 27});
 		assertEqual("John Doe is 27-years old", actual);
+	}},
+
+	// Translation with count option
+	testTranslationWithCountOption: function() { with(this) {
+		assertEqual("You have 1 message", I18n.translate("inbox", {count: 1}));
+		assertEqual("You have 5 messages", I18n.translate("inbox", {count: 5}));
+		assertEqual("You have no messages", I18n.translate("inbox", {count: 0}));
+	}},
+
+	// Translation with count option and multiple placeholders
+	testTranslationWithCountOptionAndMultiplePlaceholders: function() { with(this) {
+		actual = I18n.translate("unread", {unread: 5, count: 1});
+		assertEqual("You have 1 new message (5 unread)", actual);
+
+		actual = I18n.translate("unread", {unread: 2, count: 10});
+		assertEqual("You have 10 new messages (2 unread)", actual);
+
+		actual = I18n.translate("unread", {unread: 5, count: 0});
+		assertEqual("You have no new messages (5 unread)", actual);
 	}},
 
 	// Pluralization
