@@ -219,7 +219,7 @@ new Test.Unit.Runner({
 	}},
 
 	// Current with custom settings
-	testCurrentWithCustomSettings: function() { with(this) {
+	testCurrencyWithCustomSettings: function() { with(this) {
 		I18n.translations["en"] = {
 			number: {
 				currency: {
@@ -237,6 +237,26 @@ new Test.Unit.Runner({
 		assertEqual("12,00 USD", I18n.toCurrency(12));
 		assertEqual("123,00 USD", I18n.toCurrency(123));
 		assertEqual("1.234,56 USD", I18n.toCurrency(1234.56));
+	}},
+
+	// Currency with custom settings and partial overriding
+	testCurrencyWithCustomSettingsAndPartialOverriding: function() { with(this) {
+		I18n.translations["en"] = {
+			number: {
+				currency: {
+					format: {
+						format: "%n %u",
+						unit: "USD",
+						delimiter: ".",
+						separator: ",",
+						precision: 2
+					}
+				}
+			}
+		};
+
+		assertEqual("12 USD", I18n.toCurrency(12, {precision: 0}));
+		assertEqual("123,00 bucks", I18n.toCurrency(123, {unit: "bucks"}));
 	}},
 
 	// Currency with some custom options that should be merged with default options

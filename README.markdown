@@ -124,13 +124,24 @@ See some number formatting examples:
 
 The `toCurrency` function accepts the following options:
 
-* `precision`: defaults to 3
-* `separator`: defaults to `.`
-* `delimiter`: defaults to `,`
-* `format`: defaults to `%u%n`, where `%u` means unit and `%n` means number
-* `unit`: defaults to `$`
+* `precision`: sets the level of precision
+* `separator`: sets the separator between the units
+* `delimiter`: sets the thousands delimiter
+* `format`: sets the format of the output string
+* `unit`: sets the denomination of the currency
+
+You can provide only the options you want to override:
 
 	I18n.toCurrency(1000, {precision: 0}); /$1,000/
+
+**NOTE:** The default options will be set as the scope `number.currency.format`; when not specified,
+will default to the following values:
+
+* `precision`: 3
+* `separator`: `.`
+* `delimiter`: `,`
+* `format`: `%u%n`, where `%u` means unit and `%n` means number
+* `unit`: `$`
 
 #### Date formatting
 
