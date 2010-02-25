@@ -1,7 +1,7 @@
 I18n-js
 =======
 
-It's a small library (5.2KB or 1.76KB when gzipped) to provide the Rails I18n translations on the Javascript.
+It's a small library to provide the Rails I18n translations on the Javascript.
 
 This library has been tested on:
 
