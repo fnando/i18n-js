@@ -368,14 +368,14 @@ new Test.Unit.Runner({
 		// full month
 		assertEqual("Abril", I18n.strftime(date, "%B"));
 
-		// short week day
+		// day
 		assertEqual("26", I18n.strftime(date, "%d"));
 
 		// 24-hour
 		assertEqual("19", I18n.strftime(date, "%H"));
 
 		// 12-hour
-		assertEqual("7", I18n.strftime(date, "%I"));
+		assertEqual("07", I18n.strftime(date, "%I"));
 
 		// month
 		assertEqual("04", I18n.strftime(date, "%m"));
@@ -397,6 +397,64 @@ new Test.Unit.Runner({
 
 		// full year
 		assertEqual("2009", I18n.strftime(date, "%Y"));
+	}},
+
+	// Date formatting without padding
+	testDateFormattingWithoutPadding: function() { with(this) {
+		I18n.locale = "pt";
+
+		// 2009-04-26 19:35:44 (Sunday)
+		var date = new Date(2009, 3, 9, 7, 8, 9);
+
+		// 24-hour without padding
+		assertEqual("7", I18n.strftime(date, "%-H"));
+
+		// 12-hour without padding
+		assertEqual("7", I18n.strftime(date, "%-I"));
+
+		// minutes without padding
+		assertEqual("8", I18n.strftime(date, "%-M"));
+
+		// seconds without padding
+		assertEqual("9", I18n.strftime(date, "%-S"));
+
+		// short year without padding
+		assertEqual("9", I18n.strftime(date, "%-y"));
+
+		// month without padding
+		assertEqual("4", I18n.strftime(date, "%-m"));
+
+		// day without padding
+		assertEqual("9", I18n.strftime(date, "%-d"));
+	}},
+
+	// Date formatting with padding
+	testDateFormattingWithPadding: function() { with(this) {
+		I18n.locale = "pt";
+
+		// 2009-04-26 19:35:44 (Sunday)
+		var date = new Date(2009, 3, 9, 7, 8, 9);
+
+		// 24-hour
+		assertEqual("07", I18n.strftime(date, "%H"));
+
+		// 12-hour
+		assertEqual("07", I18n.strftime(date, "%I"));
+
+		// minutes
+		assertEqual("08", I18n.strftime(date, "%M"));
+
+		// seconds
+		assertEqual("09", I18n.strftime(date, "%S"));
+
+		// short year
+		assertEqual("09", I18n.strftime(date, "%y"));
+
+		// month
+		assertEqual("04", I18n.strftime(date, "%m"));
+
+		// day
+		assertEqual("09", I18n.strftime(date, "%d"));
 	}},
 
 	// Date formatting with negative Timezone
