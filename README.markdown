@@ -109,6 +109,11 @@ If you're using the same scope over and over again, you may use the @scope@ opti
 	I18n.t("email", options);
 	I18n.t("username", options);
 
+You also provide an array as scope.
+
+	// use the greetings.hello scope
+	I18n.t(["greetings", "hello"]);
+
 #### Number formatting
 
 Similar to Rails helpers, you have localize number and currency formatting.
