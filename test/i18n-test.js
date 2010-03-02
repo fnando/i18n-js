@@ -80,6 +80,11 @@ new Test.Unit.Runner({
 		assertEqual("Hello World!", I18n.translate("hello"));
 	}},
 
+	// Translation as object
+	testTranslationAsObject: function() { with(this) {
+		assertEqual("object", typeof I18n.translate("greetings"));
+	}},
+
 	// Translation with invalid scope shall not block
 	testTranslationWithInvalidScope: function() { with(this) {
 		assertEqual('[missing "en.invalid.scope.shall.not.block" translation]', I18n.translate("invalid.scope.shall.not.block"));
