@@ -622,5 +622,11 @@ new Test.Unit.Runner({
 		}
 
 		assertEqual("1-234+0000%", I18n.toPercentage(1234, {precision: 4, delimiter: "-", separator: "+"}));
+	}},
+
+	// Scope as string
+	testScopeAsString: function() { with(this) {
+		actual = I18n.translate("stranger", {scope: "greetings"});
+		assertEqual("Hello stranger!", actual);
 	}}
 });

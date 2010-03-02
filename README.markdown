@@ -101,6 +101,14 @@ The sample above expects the following translation:
 
 **NOTE:** Rais I18n recognizes the `zero` option but not everyone knows it.
 
+If you're using the same scope over and over again, you may use the @scope@ option.
+
+	var options = {scope: "activerecord.attributes.user"};
+
+	I18n.t("name", options);
+	I18n.t("email", options);
+	I18n.t("username", options);
+
 #### Number formatting
 
 Similar to Rails helpers, you have localize number and currency formatting.
