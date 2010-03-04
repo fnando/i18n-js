@@ -352,9 +352,6 @@ new Test.Unit.Runner({
 
 		expected = new Date(Date.UTC(2009, 0, 24, 15, 33, 44));
 		assertEqual(expected.toString(), I18n.parseDate("2009-01-24T15:33:44Z").toString());
-
-		expected = new Date(Date.UTC(2010, 2, 3, 0, 43, 0));
-		assertEqual(expected.toString(), I18n.parseDate("2010-03-03T00:43:00+00:00").toString());
 	}},
 
 	// Date formatting
