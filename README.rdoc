@@ -116,6 +116,9 @@ Similar to Rails helpers, you have localize number and currency formatting.
   I18n.l("number", 1990.99);
   // 1,990.99
 
+  I18n.l("percentage", 123.45);
+  // 123.450%
+
 To have more control over number formatting, you can use the <tt>I18n.toNumber</tt>, <tt>I18n.toPercentage</tt> and <tt>I18n.toCurrency</tt> functions.
 
   I18n.toNumber(1000);     // 1,000.000
@@ -152,7 +155,7 @@ You can provide only the options you want to override:
   I18n.l("date.formats.short", "2009-09-18");           // yyyy-mm-dd
   I18n.l("time.formats.short", "2009-09-18 23:12:43");  // yyyy-mm-dd hh:mm:ss
   I18n.l("time.formats.short", "2009-11-09T18:10:34");  // JSON format with local Timezone (part of ISO-8601)
-  I18n.l("time.formats.short", "2009-11-09T18:10:34Z"); // JSON format in UTC (part on ISO-8601)
+  I18n.l("time.formats.short", "2009-11-09T18:10:34Z"); // JSON format in UTC (part of ISO-8601)
   I18n.l("date.formats.short", 1251862029000);          // Epoch time
   I18n.l("date.formats.short", "09/18/2009");           // mm/dd/yyyy
   I18n.l("date.formats.short", (new Date()));           // Date object
@@ -188,15 +191,27 @@ The accepted formats are:
   %Y  - Year with century
   %z  - Timezone offset (+0545)
 
-Check it out the <tt>vendor/plugins/i18n-js/test/i18n-test.js</tt> for more examples!
+Check out <tt>vendor/plugins/i18n-js/test/i18n-test.js</tt> for more examples!
+
+== Using I18nJS with other languages (Python, PHP, ...)
+
+The JavaScript library is language agnostic; so you can use it with PHP, Python, [you favorite language here].
+The only requirement is that you need to set the +translations+ attribute like following:
+
+  I18n.translations = {};
+
+  I18n.translations["en"] = {
+    message: "Some special message for you"
+  }
+
+  I18n.translations["pt"] = {
+    message: "Uma mensagem especial para você"
+  }
 
 == Maintainer
 
-Nando Vieira - http://simplesideias.com.br
-
-== Contributors
-
-Sébastien Grosjean - http://github.com/ZenCocoon
+* Nando Vieira - http://simplesideias.com.br
+* Sébastien Grosjean - http://github.com/ZenCocoon
 
 == Contributing
 
