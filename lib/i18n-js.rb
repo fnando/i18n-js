@@ -5,9 +5,11 @@ module SimplesIdeias
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
     MERGER = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2 }
 
-    # Load configuration file for partial exporting and
-    # custom output directory
+    # Set configuration file path
     CONFIG_FILE = Rails.root.join("config/i18n-js.yml")
+
+    # Set i18n.js output path
+    JAVASCRIPT_FILE = Rails.root.join("public/javascripts/i18n.js")
 
     # Export translations to JavaScript, considering settings
     # from configuration file
@@ -24,11 +26,12 @@ module SimplesIdeias
           end
         end
       else
-        save translations, "public/javascripts/messages.js"
+        save translations, "public/javascripts/translations.js"
       end
     end
 
-    # Load configuration file
+    # Load configuration file for partial exporting and
+    # custom output directory
     def config
       HashWithIndifferentAccess.new YAML.load_file(CONFIG_FILE)
     end
@@ -41,8 +44,15 @@ module SimplesIdeias
     # Copy configuration and JavaScript library files to
     # <tt>SimplesIdeias::I18n::CONFIG_FILE</tt> and <tt>public/i18n.js</tt>.
     def setup!
-      FileUtils.cp File.dirname(__FILE__) + "/i18n-js.yml", CONFIG_FILE
-      FileUtils.cp File.dirname(__FILE__) + "/i18n.js", Rails.root.join("public/i18n.js")
+      FileUtils.cp File.dirname(__FILE__) + "/i18n.js", JAVASCRIPT_FILE
+      FileUtils.cp(File.dirname(__FILE__) + "/i18n-js.yml", CONFIG_FILE) unless config?
+    end
+
+    # Retrieve an updated JavaScript library from Github.
+    def update!
+      require "open-uri"
+      contents = open("http://github.com/fnando/i18n-js/raw/master/lib/i18n.js").read
+      File.open(JAVASCRIPT_FILE, "w+") {|f| f << contents}
     end
 
     # Convert translations to JSON string and save file.
@@ -53,7 +63,7 @@ module SimplesIdeias
       File.open(file, "w+") do |f|
         f << %(var I18n = I18n || {};\n)
         f << %(I18n.translations = );
-        f << translations.to_json
+        f << sorted_hash(translations).to_json
         f << %(;)
       end
     end
@@ -101,6 +111,22 @@ module SimplesIdeias
 
     def deep_merge!(target, hash) # :nodoc:
       target.merge!(hash, &MERGER)
+    end
+
+    # Taken from http://seb.box.re/2010/1/15/deep-hash-ordering-with-ruby-1-8/
+    def sorted_hash(object, deep = false) # :nodoc:
+      if object.is_a?(Hash)
+        res = returning(ActiveSupport::OrderedHash.new) do |map|
+          object.each {|k, v| map[k] = deep ? sort(v, deep) : v }
+        end
+        return res.class[res.sort {|a, b| a[0].to_s <=> b[0].to_s } ]
+      elsif deep && object.is_a?(Array)
+        array = Array.new
+        object.each_with_index {|v, i| array[i] = sort(v, deep) }
+        return array
+      else
+        return object
+      end
     end
   end
 end

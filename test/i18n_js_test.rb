@@ -25,8 +25,15 @@ class I18nJSTest < ActiveSupport::TestCase
     assert File.file?(SimplesIdeias::I18n::CONFIG_FILE)
   end
 
+  test "don't overwrite existing configuration file" do
+    File.open(SimplesIdeias::I18n::CONFIG_FILE, "w+") {|f| f << "ORIGINAL"}
+    SimplesIdeias::I18n.setup!
+
+    assert_equal "ORIGINAL", File.read(SimplesIdeias::I18n::CONFIG_FILE)
+  end
+
   test "copy JavaScript library" do
-    path = Rails.root.join("public/i18n.js")
+    path = Rails.root.join("public/javascripts/i18n.js")
 
     assert_equal false, File.file?(path)
     SimplesIdeias::I18n.setup!
@@ -43,12 +50,12 @@ class I18nJSTest < ActiveSupport::TestCase
 
   test "export messages to default path when configuration file doesn't exist" do
     SimplesIdeias::I18n.export!
-    assert File.file?(Rails.root.join("public/javascripts/messages.js"))
+    assert File.file?(Rails.root.join("public/javascripts/translations.js"))
   end
 
   test "export messages using the default configuration file" do
     set_config "default.yml"
-    SimplesIdeias::I18n.expects(:save).with(translations, "public/javascripts/messages.js")
+    SimplesIdeias::I18n.expects(:save).with(translations, "public/javascripts/translations.js")
     SimplesIdeias::I18n.export!
   end
 
@@ -64,10 +71,18 @@ class I18nJSTest < ActiveSupport::TestCase
     SimplesIdeias::I18n.export!
   end
 
+  test "export to multiple files" do
+    set_config "multiple_files.yml"
+    SimplesIdeias::I18n.export!
+
+    assert File.file?(Rails.root.join("public/javascripts/all.js"))
+    assert File.file?(Rails.root.join("public/javascripts/tudo.js"))
+  end
+
   test "filtered translations using scope *.date.formats" do
     result = SimplesIdeias::I18n.filter(translations, "*.date.formats")
-    assert_equal [:date], result[:en].keys
-    assert_equal [:date], result[:fr].keys
+    assert_equal [:formats], result[:en][:date].keys
+    assert_equal [:formats], result[:fr][:date].keys
   end
 
   test "filtered translations using scope [*.date.formats, *.number.currency.format]" do
@@ -114,6 +129,28 @@ class I18nJSTest < ActiveSupport::TestCase
     SimplesIdeias::I18n.deep_merge!(target, {:a => {:c => 2}})
 
     assert_equal target[:a], {:b => 1, :c => 2}
+  end
+
+  test "sorted hash" do
+    assert_equal [:c, :a, :b], {:b => 1, :a => 2, :c => 3}.keys
+    assert_equal [:a, :b, :c], SimplesIdeias::I18n.sorted_hash(:b => 1, :a => 2, :c => 3).keys
+  end
+
+  test "sorted multi-levels hash" do
+    hash = {
+      :foo => {:b => 1, :a => 2, :c => 3}
+    }
+
+    assert_equal [:c, :a, :b], hash[:foo].keys
+    assert_equal [:a, :b, :c], SimplesIdeias::I18n.sorted_hash(hash[:foo]).keys
+  end
+
+  test "update javascript library" do
+    FakeWeb.register_uri(:get, "http://github.com/fnando/i18n-js/raw/master/lib/i18n.js", :body => "UPDATED")
+
+    SimplesIdeias::I18n.setup!
+    SimplesIdeias::I18n.update!
+    assert_equal "UPDATED", File.read(SimplesIdeias::I18n::JAVASCRIPT_FILE)
   end
 
   private
