@@ -68,7 +68,7 @@ module SimplesIdeias
       end
     end
 
-    def scoped_translations(scopes)
+    def scoped_translations(scopes) # :nodoc:
       result = {}
 
       [scopes].flatten.each do |scope|
