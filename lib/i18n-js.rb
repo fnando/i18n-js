@@ -117,12 +117,12 @@ module SimplesIdeias
     def sorted_hash(object, deep = false) # :nodoc:
       if object.is_a?(Hash)
         res = returning(ActiveSupport::OrderedHash.new) do |map|
-          object.each {|k, v| map[k] = deep ? sort(v, deep) : v }
+          object.each {|k, v| map[k] = deep ? sorted_hash(v, deep) : v }
         end
         return res.class[res.sort {|a, b| a[0].to_s <=> b[0].to_s } ]
       elsif deep && object.is_a?(Array)
         array = Array.new
-        object.each_with_index {|v, i| array[i] = sort(v, deep) }
+        object.each_with_index {|v, i| array[i] = sorted_hash(v, deep) }
         return array
       else
         return object
