@@ -657,5 +657,12 @@ new Test.Unit.Runner({
 	testScopeAsArray: function() { with(this) {
 		actual = I18n.translate(["greetings", "stranger"]);
 		assertEqual("Hello stranger!", actual);
+	}},
+
+	// New placeholder syntax
+	testNewPlaceholderSyntax: function() { with(this) {
+		I18n.translations["en"]["new_syntax"] = "Hi %{name}!";
+		actual = I18n.translate("new_syntax", {name: "John"});
+		assertEqual("Hi John!", actual);
 	}}
 });
