@@ -11,6 +11,16 @@ This library has been tested on:
 
 == Usage
 
+=== Installation
+
+You can use I18n-JS as plugin and gem. Choose what's best for you!
+
+  script/plugin install git://github.com/fnando/i18n-js.git
+
+or
+
+  gem install i18n-js
+
 === Setting up
 
 Run <tt>rake i18n:setup</tt> to copy <tt>i18n.js</tt> to your javascript directory and <tt>i18n-js.yml</tt> to your config folder (if not already present). Then you're ready to go!
