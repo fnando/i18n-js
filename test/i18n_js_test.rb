@@ -20,16 +20,16 @@ class I18nJSTest < ActiveSupport::TestCase
   end
 
   test "copy configuration file" do
-    assert_equal false, File.file?(SimplesIdeias::I18n::CONFIG_FILE)
+    assert_equal false, File.file?(SimplesIdeias::I18n.config_file)
     SimplesIdeias::I18n.setup!
-    assert File.file?(SimplesIdeias::I18n::CONFIG_FILE)
+    assert File.file?(SimplesIdeias::I18n.config_file)
   end
 
   test "don't overwrite existing configuration file" do
-    File.open(SimplesIdeias::I18n::CONFIG_FILE, "w+") {|f| f << "ORIGINAL"}
+    File.open(SimplesIdeias::I18n.config_file, "w+") {|f| f << "ORIGINAL"}
     SimplesIdeias::I18n.setup!
 
-    assert_equal "ORIGINAL", File.read(SimplesIdeias::I18n::CONFIG_FILE)
+    assert_equal "ORIGINAL", File.read(SimplesIdeias::I18n.config_file)
   end
 
   test "copy JavaScript library" do
@@ -150,19 +150,19 @@ class I18nJSTest < ActiveSupport::TestCase
 
     SimplesIdeias::I18n.setup!
     SimplesIdeias::I18n.update!
-    assert_equal "UPDATED", File.read(SimplesIdeias::I18n::JAVASCRIPT_FILE)
+    assert_equal "UPDATED", File.read(SimplesIdeias::I18n.javascript_file)
   end
 
   private
-    # Set the configuration as the current one
-    def set_config(path)
-      config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/resources/#{path}"))
-      SimplesIdeias::I18n.expects(:config?).returns(true)
-      SimplesIdeias::I18n.expects(:config).returns(config)
-    end
+  # Set the configuration as the current one
+  def set_config(path)
+    config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/resources/#{path}"))
+    SimplesIdeias::I18n.expects(:config?).returns(true)
+    SimplesIdeias::I18n.expects(:config).returns(config)
+  end
 
-    # Shortcut to SimplesIdeias::I18n.translations
-    def translations
-      SimplesIdeias::I18n.translations
-    end
+  # Shortcut to SimplesIdeias::I18n.translations
+  def translations
+    SimplesIdeias::I18n.translations
+  end
 end
