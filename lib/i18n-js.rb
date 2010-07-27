@@ -69,7 +69,7 @@ module SimplesIdeias
       File.open(file, "w+") do |f|
         f << %(var I18n = I18n || {};\n)
         f << %(I18n.translations = );
-        f << sorted_hash(translations).to_json
+        f << sorted_hash(translations, true).to_json
         f << %(;)
       end
     end
@@ -122,7 +122,7 @@ module SimplesIdeias
     # Taken from http://seb.box.re/2010/1/15/deep-hash-ordering-with-ruby-1-8/
     def sorted_hash(object, deep = false) # :nodoc:
       if object.is_a?(Hash)
-        res = returning(ActiveSupport::OrderedHash.new) do |map|
+        res = ActiveSupport::OrderedHash.new.tap do |map|
           object.each {|k, v| map[k] = deep ? sorted_hash(v, deep) : v }
         end
         return res.class[res.sort {|a, b| a[0].to_s <=> b[0].to_s } ]
