@@ -132,7 +132,6 @@ class I18nJSTest < ActiveSupport::TestCase
   end
 
   test "sorted hash" do
-    assert_not_equal [:a, :b, :c], {:b => 1, :a => 2, :c => 3}.keys
     assert_equal [:a, :b, :c], SimplesIdeias::I18n.sorted_hash(:b => 1, :a => 2, :c => 3).keys
   end
 
@@ -141,7 +140,6 @@ class I18nJSTest < ActiveSupport::TestCase
       :foo => {:b => 1, :a => 2, :c => 3}
     }
 
-    assert_not_equal [:a, :b, :c], hash[:foo].keys
     assert_equal [:a, :b, :c], SimplesIdeias::I18n.sorted_hash(hash[:foo]).keys
   end
 
