@@ -84,9 +84,7 @@ I18n.interpolate = function(message, options) {
 	var placeholder, value, name;
 
 	for (var i = 0; placeholder = matches[i]; i++) {
-		console.debug(placeholder)
 		name = placeholder.replace(this.PLACEHOLDER, "$1");
-		console.debug(name)
 
 		value = options[name];
 
