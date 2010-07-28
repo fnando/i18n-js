@@ -131,18 +131,6 @@ class I18nJSTest < ActiveSupport::TestCase
     assert_equal target[:a], {:b => 1, :c => 2}
   end
 
-  test "sorted hash" do
-    assert_equal [:a, :b, :c], SimplesIdeias::I18n.sorted_hash(:b => 1, :a => 2, :c => 3).keys
-  end
-
-  test "sorted multi-levels hash" do
-    hash = {
-      :foo => {:b => 1, :a => 2, :c => 3}
-    }
-
-    assert_equal [:a, :b, :c], SimplesIdeias::I18n.sorted_hash(hash[:foo]).keys
-  end
-
   test "update javascript library" do
     FakeWeb.register_uri(:get, "http://github.com/fnando/i18n-js/raw/master/lib/i18n.js", :body => "UPDATED")
 

@@ -48,7 +48,7 @@ module SimplesIdeias
     end
 
     # Copy configuration and JavaScript library files to
-    # <tt>SimplesIdeias::I18n::CONFIG_FILE</tt> and <tt>public/i18n.js</tt>.
+    # <tt>config/i18n-js.yml</tt> and <tt>public/javascripts/i18n.js</tt>.
     def setup!
       FileUtils.cp File.dirname(__FILE__) + "/../source/i18n.js", javascript_file
       FileUtils.cp(File.dirname(__FILE__) + "/../source/i18n-js.yml", config_file) unless config?
@@ -69,7 +69,7 @@ module SimplesIdeias
       File.open(file, "w+") do |f|
         f << %(var I18n = I18n || {};\n)
         f << %(I18n.translations = );
-        f << sorted_hash(translations, true).to_json
+        f << translations.to_json
         f << %(;)
       end
     end
@@ -117,22 +117,6 @@ module SimplesIdeias
 
     def deep_merge!(target, hash) # :nodoc:
       target.merge!(hash, &MERGER)
-    end
-
-    # Taken from http://seb.box.re/2010/1/15/deep-hash-ordering-with-ruby-1-8/
-    def sorted_hash(object, deep = false) # :nodoc:
-      if object.is_a?(Hash)
-        res = ActiveSupport::OrderedHash.new.tap do |map|
-          object.each {|k, v| map[k] = deep ? sorted_hash(v, deep) : v }
-        end
-        return res.class[res.sort {|a, b| a[0].to_s <=> b[0].to_s } ]
-      elsif deep && object.is_a?(Array)
-        array = Array.new
-        object.each_with_index {|v, i| array[i] = sorted_hash(v, deep) }
-        return array
-      else
-        return object
-      end
     end
   end
 end
