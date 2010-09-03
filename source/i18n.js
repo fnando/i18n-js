@@ -138,8 +138,9 @@ I18n.localize = function(scope, value) {
 
 I18n.parseDate = function(d) {
 	var matches, date;
-
-	if (matches = d.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ |T](\d{2}):(\d{2}):(\d{2}))?(Z)?/)) {
+	matches = d.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ |T](\d{2}):(\d{2}):(\d{2}))?(Z)?/);
+	
+	if (matches) {
 		// date/time strings: yyyy-mm-dd hh:mm:ss or yyyy-mm-dd or yyyy-mm-ddThh:mm:ssZ
 		for (var i = 1; i <= 6; i++) {
 			matches[i] = parseInt(matches[i], 10) || 0;
@@ -209,7 +210,7 @@ I18n.strftime = function(date, format) {
 	var padding = function(n) {
 		var s = "0" + n.toString();
 		return s.substr(s.length - 2);
-	}
+	};
 
 	var f = format;
 	f = f.replace("%a", options["abbr_day_names"][weekDay]);
@@ -244,8 +245,9 @@ I18n.toNumber = function(number, options) {
 		this.lookup("number.format"),
 		{precision: 3, separator: ".", delimiter: ","}
 	);
-
-	var string = number.toFixed(options["precision"]).toString();
+	
+	var negative = number < 0;
+	var string = Math.abs(number).toFixed(options["precision"]).toString();
 	var parts = string.split(".");
 
 	number = parts[0];
@@ -262,6 +264,10 @@ I18n.toNumber = function(number, options) {
 
 	if (options["precision"] > 0) {
 		formattedNumber += options["separator"] + parts[1];
+	}
+	
+	if (negative) {
+		formattedNumber = "-" + formattedNumber;
 	}
 
 	return formattedNumber;

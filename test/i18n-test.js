@@ -208,6 +208,17 @@ new Test.Unit.Runner({
 		assertEqual("1,234,567.000", I18n.toNumber(1234567));
 		assertEqual("12,345,678.000", I18n.toNumber(12345678));
 	}},
+	
+	// Negative numbers with default settings
+	testNegativeNumbersWithDefaultSettings: function() { with(this) {
+		assertEqual("-1.000", I18n.toNumber(-1));
+		assertEqual("-12.000", I18n.toNumber(-12));
+		assertEqual("-123.000", I18n.toNumber(-123));
+		assertEqual("-1,234.000", I18n.toNumber(-1234));
+		assertEqual("-123,456.000", I18n.toNumber(-123456));
+		assertEqual("-1,234,567.000", I18n.toNumber(-1234567));
+		assertEqual("-12,345,678.000", I18n.toNumber(-12345678));
+	}},
 
 	// Numbers with partial translation and default options
 	testNumbersWithPartialTranslationAndDefaultOptions: function() { with(this) {
