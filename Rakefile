@@ -1,7 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
-require 'lib/i18n-js/version'
+require File.dirname(__FILE__) + '/lib/i18n-js/version'
 
 desc 'Default: run unit tests.'
 task :default => :test
