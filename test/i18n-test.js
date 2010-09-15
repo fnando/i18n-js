@@ -1,6 +1,7 @@
 new Test.Unit.Runner({
 	setup: function() {
 		I18n.defaultLocale = "en";
+		I18n.defaultSeparator = ".";
 		I18n.locale = null;
 
 		I18n.translations = {
@@ -675,5 +676,12 @@ new Test.Unit.Runner({
 		I18n.translations["en"]["new_syntax"] = "Hi %{name}!";
 		actual = I18n.translate("new_syntax", {name: "John"});
 		assertEqual("Hi John!", actual);
-	}}
+	}},
+	
+	// Return translation for custom scope separator
+	testReturnTranslationForCustomScopeSeparator: function() { with(this) {
+		I18n.defaultSeparator = "•";
+		actual = I18n.translate("greetings•stranger");
+		assertEqual("Hello stranger!", actual);
+	}},
 });

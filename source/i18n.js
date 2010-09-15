@@ -4,6 +4,9 @@ var I18n = I18n || {};
 // Set default locale to english
 I18n.defaultLocale = "en";
 
+// Set default separator
+I18n.defaultSeparator = ".";
+
 // Set current locale to null
 I18n.locale = null;
 
@@ -20,14 +23,14 @@ I18n.lookup = function(scope, options) {
 	}
 
 	if (typeof(scope) == "object") {
-		scope = scope.join(".");
+		scope = scope.join(this.defaultSeparator);
 	}
 
 	if (options.scope) {
-		scope = options.scope.toString() + "." + scope;
+		scope = options.scope.toString() + this.defaultSeparator + scope;
 	}
 
-	scope = scope.split(".");
+	scope = scope.split(this.defaultSeparator);
 
 	while (scope.length > 0) {
 		var currentScope = scope.shift();
