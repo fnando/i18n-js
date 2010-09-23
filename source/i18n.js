@@ -305,8 +305,16 @@ I18n.toPercentage = function(number, options) {
 };
 
 I18n.pluralize = function(count, scope, options) {
-	var translation = this.lookup(scope, options);
-
+	var translation;
+	
+	try {
+		translation = this.lookup(scope, options);
+	} catch (error) {}
+	
+	if (!translation) {
+		return this.missingTranslation(scope);
+	}
+	
 	var message;
 	options = this.prepareOptions(options);
 	options["count"] = count.toString();
@@ -316,10 +324,10 @@ I18n.pluralize = function(count, scope, options) {
 			message = translation["zero"] || translation["none"] || translation["other"] || this.missingTranslation(scope, "zero");
 			break;
 		case 1:
-			message = translation["one"] || this.missingTranslation(scope, "one");;
+			message = translation["one"] || this.missingTranslation(scope, "one");
 			break;
 		default:
-			message = translation["other"] || this.missingTranslation(scope, "other");;
+			message = translation["other"] || this.missingTranslation(scope, "other");
 	}
 
 	return this.interpolate(message, options);
