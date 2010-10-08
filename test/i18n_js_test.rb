@@ -1,5 +1,11 @@
 require "test_helper"
 
+if File.basename(Rails.root) != "tmp"
+  warn "Don't run i18n-js tests with `rake test:plugins`. That will remove your project!"
+  warn "Please go to #{File.expand_path(File.dirname(__FILE__) + "/..")} and run `rake test`"
+  exit 1
+end
+
 class I18nJSTest < ActiveSupport::TestCase
   setup do
     # Remove temporary directory if already present
