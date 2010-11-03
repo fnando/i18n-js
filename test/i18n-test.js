@@ -27,7 +27,7 @@ new Test.Unit.Runner({
 				number: null
 			},
 
-			pt: {
+			"pt-BR": {
 				hello: "Olá Mundo!",
 				date: {
 					formats: {
@@ -74,8 +74,8 @@ new Test.Unit.Runner({
 	
 	// Custom locale
 	testCustomLocale: function() { with(this) {
-		I18n.locale = "pt";
-		assertEqual("pt", I18n.currentLocale());
+		I18n.locale = "pt-BR";
+		assertEqual("pt-BR", I18n.currentLocale());
 	}},
 	
 	// Aliases methods
@@ -102,7 +102,7 @@ new Test.Unit.Runner({
 	
 	// Translation for single scope on a custom locale
 	testTranslationForSingleScopeOnACustomLocale: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 		assertEqual("Olá Mundo!", I18n.translate("hello"));
 	}},
 	
@@ -388,7 +388,7 @@ new Test.Unit.Runner({
 	
 	// Date formatting
 	testDateFormatting: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 	
 		// 2009-04-26 19:35:44 (Sunday)
 		var date = new Date(2009, 3, 26, 19, 35, 44);
@@ -438,7 +438,7 @@ new Test.Unit.Runner({
 	
 	// Date formatting without padding
 	testDateFormattingWithoutPadding: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 	
 		// 2009-04-26 19:35:44 (Sunday)
 		var date = new Date(2009, 3, 9, 7, 8, 9);
@@ -467,7 +467,7 @@ new Test.Unit.Runner({
 	
 	// Date formatting with padding
 	testDateFormattingWithPadding: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 	
 		// 2009-04-26 19:35:44 (Sunday)
 		var date = new Date(2009, 3, 9, 7, 8, 9);
@@ -496,7 +496,7 @@ new Test.Unit.Runner({
 	
 	// Date formatting with negative Timezone
 	testDateFormattingWithNegativeTimezone: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 	
 		var date = new Date(2009, 3, 26, 19, 35, 44);
 	
@@ -510,7 +510,7 @@ new Test.Unit.Runner({
 	
 	// Date formatting with positive Timezone
 	testDateFormattingWithPositiveTimezone: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 	
 		var date = new Date(2009, 3, 26, 19, 35, 44);
 	
@@ -524,7 +524,7 @@ new Test.Unit.Runner({
 	
 	// Localize date strings
 	testLocalizeDateStrings: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 	
 		assertEqual("29/11/2009", I18n.localize("date.formats.default", "2009-11-29"));
 		assertEqual("07 de Janeiro", I18n.localize("date.formats.short", "2009-01-07"));
@@ -533,7 +533,7 @@ new Test.Unit.Runner({
 	
 	// Localize time strings
 	testLocalizeTimeStrings: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 		assertEqual("Domingo, 29 de Novembro de 2009, 15:07 h", I18n.localize("time.formats.default", "2009-11-29 15:07:59"));
 		assertEqual("07/01, 09:12 h", I18n.localize("time.formats.short", "2009-01-07 09:12:35"));
 		assertEqual("Domingo, 29 de Novembro de 2009, 15:07 h", I18n.localize("time.formats.long", "2009-11-29 15:07:59"));
@@ -541,11 +541,9 @@ new Test.Unit.Runner({
 	
 	// Localize percentage
 	testLocalizePercentage: function() { with(this) {
-		I18n.locale = "pt";
+		I18n.locale = "pt-BR";
 		assertEqual("123,45%", I18n.localize("percentage", 123.45));
 	}},
-	
-	
 	
 	// Default value for simple translation
 	testDefaultValueForSimpleTranslation: function() { with(this) {
