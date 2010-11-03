@@ -88,6 +88,12 @@ describe SimplesIdeias::I18n do
     File.should be_file(Rails.root.join("public/javascripts/tudo.js"))
   end
 
+  it "exports with multiple conditions" do
+    set_config "multiple_conditions.yml"
+    SimplesIdeias::I18n.export!
+    File.should be_file(Rails.root.join("public/javascripts/bitsnpieces.js"))
+  end
+
   it "filters translations using scope *.date.formats" do
     result = SimplesIdeias::I18n.filter(translations, "*.date.formats")
     result[:en][:date].keys.should == [:formats]

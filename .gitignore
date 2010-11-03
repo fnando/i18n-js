@@ -1,5 +1,5 @@
 doc
 coverage
 pkg
-test/tmp
+spec/tmp
 .DS_Store
