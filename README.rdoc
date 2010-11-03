@@ -13,12 +13,6 @@ This library has been tested on:
 
 === Installation
 
-You can use I18n-JS as plugin and gem. Choose what's best for you!
-
-  script/plugin install git://github.com/fnando/i18n-js.git
-
-or
-
   gem install i18n-js
 
 === Setting up
@@ -34,9 +28,9 @@ like this to your <tt>ApplicationController</tt>:
 	  before_filter :export_i18n_messages
 
 	  private
-	    def export_i18n_messages
-	      SimplesIdeias::I18n.export! if Rails.env.development?
-	    end
+    def export_i18n_messages
+      SimplesIdeias::I18n.export! if Rails.env.development?
+    end
 	end
 
 ==== Configuration
@@ -66,7 +60,14 @@ Set your locale is easy as
   I18n.currentLocale();
   // pt-BR
 
-You can use it to translate your messages:
+In practice, you'll have something like the following in your application.html.erb:
+
+  <script type="text/javascript">
+    I18n.defaultLocale = "<%= I18n.default_locale %>";
+    I18n.locale = "<%= I18n.locale %>";
+  </script>
+
+You can use translate your messages:
 
   I18n.t("some.scoped.translation");
 
@@ -201,7 +202,7 @@ The accepted formats are:
   %Y  - Year with century
   %z  - Timezone offset (+0545)
 
-Check out <tt>vendor/plugins/i18n-js/test/i18n-test.js</tt> for more examples!
+Check out <tt>vendor/plugins/i18n-js/spec/i18n_spec.js</tt> for more examples!
 
 == Using I18nJS with other languages (Python, PHP, ...)
 
