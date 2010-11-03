@@ -1,10 +1,15 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require 'spec_js/rake_task'
 require File.dirname(__FILE__) + '/lib/i18n-js/version'
 
 desc 'Default: run unit tests.'
-task :default => :test
+task :default => [:test, :"spec:js"]
+
+SpecJs::RakeTask.new do |t|
+  t.env_js = false
+end
 
 desc 'Test the i18n-js plugin.'
 Rake::TestTask.new(:test) do |t|

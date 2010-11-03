@@ -235,6 +235,12 @@ Once you've made your great commits:
 
 Please respect the indentation rules. And use tabs, not spaces (on the JavaScript).
 
+=== Running tests
+
+To run JavaScript tests, you need to install http://github.com/fnando/spec-js
+
+Then just run `rake`.
+
 == License
 
 (The MIT License)
