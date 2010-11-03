@@ -22,12 +22,12 @@ module SimplesIdeias
     def export!
       if config?
         for options in config[:translations]
-          options.reverse_merge!(:only => "*")
+          only = options[:only].to_a
 
-          if options[:only] == "*"
+          if only.empty? || only.index("*")
             save translations, options[:file]
           else
-            result = scoped_translations(options[:only])
+            result = only.inject({}) { |r, o| r.deep_merge(scoped_translations(o)) }
             save result, options[:file] unless result.empty?
           end
         end

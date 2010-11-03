@@ -85,6 +85,13 @@ class I18nJSTest < ActiveSupport::TestCase
     assert File.file?(Rails.root.join("public/javascripts/tudo.js"))
   end
 
+  test "export with multiple conditions" do
+    set_config "multiple_conditions.yml"
+    SimplesIdeias::I18n.export!
+
+    assert File.file?(Rails.root.join("public/javascripts/bitsnpieces.js"))
+  end
+
   test "filtered translations using scope *.date.formats" do
     result = SimplesIdeias::I18n.filter(translations, "*.date.formats")
     assert_equal [:formats], result[:en][:date].keys
