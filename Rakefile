@@ -1,47 +1,13 @@
-require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
-require 'spec_js/rake_task'
-require File.dirname(__FILE__) + '/lib/i18n-js/version'
+require "bundler"
+Bundler::GemHelper.install_tasks
 
-desc 'Default: run unit tests.'
-task :default => [:test, :"spec:js"]
-
+require "spec_js/rake_task"
 SpecJs::RakeTask.new do |t|
   t.env_js = false
 end
 
-desc 'Test the i18n-js plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:"spec:ruby")
 
-desc 'Generate documentation for the i18n-js plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'doc'
-  rdoc.title    = 'I18n for JavaScript'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
-
-begin
-  require 'jeweler'
-
-  JEWEL = Jeweler::Tasks.new do |gem|
-    gem.name = "i18n-js"
-    gem.email = "fnando.vieira@gmail.com"
-    gem.homepage = "http://github.com/fnando/i18n-js"
-    gem.authors = ["Nando Vieira"]
-    gem.version = SimplesIdeias::I18n::Version::STRING
-    gem.summary = "It's a small library to provide the Rails I18n translations on the Javascript."
-    gem.files =  FileList["README.rdoc", "init.rb", "install.rb", "{lib,test,source}/**/*", "Rakefile"]
-  end
-
-  Jeweler::GemcutterTasks.new
-rescue LoadError => e
-  puts "[JEWELER] You can't build a gem until you install jeweler with `gem install jeweler`"
-end
+desc "Run all specs"
+task :spec => [:"spec:ruby", :"spec:js"]

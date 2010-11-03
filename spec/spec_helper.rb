@@ -1,14 +1,4 @@
-require "rubygems"
-gem "test-unit"
-require "test/unit"
-require "mocha"
-
-begin
-  require "active_support/all"
-rescue LoadError
-  require "active_support"
-end
-
+require "active_support/all"
 require "active_support/version"
 require "active_support/test_case"
 require "ostruct"
@@ -21,6 +11,9 @@ FakeWeb.allow_net_connect = false
 
 # Stub Rails.root, so we don"t need to load the whole Rails environment.
 # Be careful! The specified folder will be removed!
-Rails = OpenStruct.new(:root => Pathname.new(File.dirname(__FILE__) + "/tmp"), :version => "0")
+Rails = OpenStruct.new({
+  :root => Pathname.new(File.dirname(__FILE__) + "/tmp"),
+  :version => "0"
+})
 
-require File.dirname(__FILE__) + "/../lib/i18n-js"
+require "i18n-js"

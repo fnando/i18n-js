@@ -237,9 +237,15 @@ Please respect the indentation rules. And use tabs, not spaces (on the JavaScrip
 
 === Running tests
 
+To run Ruby tests, you need to install http://github.com/rspec/rspec
+
+  gem install rspec
+
 To run JavaScript tests, you need to install http://github.com/fnando/spec-js
 
-Then just run `rake`.
+  gem install specjs
+
+Then just run `rake spec`.
 
 == License
 
