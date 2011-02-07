@@ -683,8 +683,4 @@ describe("I18n.js", function(){
   specify("return number as human size using custom options", function(){
     expect(I18n.toHumanSize(1024 * 1.6, {precision: 0})).toBeEqualTo("2KB");
   });
-  
-  specify("foo", function(){
-    expect(I18n.toUnitNumber(2999)).toBeEqualTo("foo");
-  });
 });
