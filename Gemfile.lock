@@ -15,6 +15,7 @@ GEM
     i18n (0.5.0)
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
+    notifier (0.1.2)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -33,6 +34,8 @@ GEM
       ruby-debug-base19 (>= 0.11.19)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
+    spec-js (0.1.0.beta.3)
+      notifier
 
 PLATFORMS
   ruby
@@ -43,3 +46,4 @@ DEPENDENCIES
   i18n-js!
   rspec (~> 2.5.0)
   ruby-debug19
+  spec-js (~> 0.1.0.beta.0)
