@@ -216,10 +216,10 @@ I18n.strftime = function(date, format) {
   };
 
   var f = format;
-  f = f.replace("%a", options["abbr_day_names"][weekDay]);
-  f = f.replace("%A", options["day_names"][weekDay]);
-  f = f.replace("%b", options["abbr_month_names"][month]);
-  f = f.replace("%B", options["month_names"][month]);
+  f = f.replace("%a", options.abbr_day_names[weekDay]);
+  f = f.replace("%A", options.day_names[weekDay]);
+  f = f.replace("%b", options.abbr_month_names[month]);
+  f = f.replace("%B", options.month_names[month]);
   f = f.replace("%d", padding(day));
   f = f.replace("%-d", day);
   f = f.replace("%H", padding(hour));
@@ -246,11 +246,11 @@ I18n.toNumber = function(number, options) {
   options = this.prepareOptions(
     options,
     this.lookup("number.format"),
-    {precision: 3, separator: ".", delimiter: ","}
+    {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
   );
   
   var negative = number < 0;
-  var string = Math.abs(number).toFixed(options["precision"]).toString();
+  var string = Math.abs(number).toFixed(options.precision).toString();
   var parts = string.split(".");
 
   number = parts[0];
@@ -263,14 +263,18 @@ I18n.toNumber = function(number, options) {
     number = number.substr(0, number.length -3);
   }
 
-  var formattedNumber = n.join(options["delimiter"]);
+  var formattedNumber = n.join(options.delimiter);
 
-  if (options["precision"] > 0) {
-    formattedNumber += options["separator"] + parts[1];
+  if (options.precision > 0) {
+    formattedNumber += options.separator + parts[1];
   }
   
   if (negative) {
     formattedNumber = "-" + formattedNumber;
+  }
+  
+  if (options.strip_insignificant_zeros) {
+    formattedNumber = formattedNumber.replace(/0+$/, "");
   }
 
   return formattedNumber;
@@ -285,8 +289,8 @@ I18n.toCurrency = function(number, options) {
   );
 
   number = this.toNumber(number, options);
-  number = options["format"]
-    .replace("%u", options["unit"])
+  number = options.format
+    .replace("%u", options.unit)
     .replace("%n", number);
 
   return number;
@@ -320,7 +324,7 @@ I18n.toHumanSize = function(number, options) {
   );
   
   number = this.toNumber(size, options);
-  number = options["format"]
+  number = options.format
     .replace("%u", unit)
     .replace("%n", number);
   
@@ -352,7 +356,7 @@ I18n.pluralize = function(count, scope, options) {
   
   var message;
   options = this.prepareOptions(options);
-  options["count"] = count.toString();
+  options.count = count.toString();
 
   switch(Math.abs(count)) {
     case 0:

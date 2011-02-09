@@ -683,4 +683,12 @@ describe("I18n.js", function(){
   specify("return number as human size using custom options", function(){
     expect(I18n.toHumanSize(1024 * 1.6, {precision: 0})).toBeEqualTo("2KB");
   });
+  
+  specify("return number without insignificant zeros", function(){
+    options = {precision: 4, strip_insignificant_zeros: true};
+    
+    expect(I18n.toNumber(1.2, options)).toBeEqualTo("1.2");
+    expect(I18n.toCurrency(1.2, options)).toBeEqualTo("$1.2");
+    expect(I18n.toHumanSize(1.2, options)).toBeEqualTo("1.2Bytes");
+  });
 });
