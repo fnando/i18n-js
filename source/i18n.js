@@ -274,7 +274,14 @@ I18n.toNumber = function(number, options) {
   }
   
   if (options.strip_insignificant_zeros) {
-    formattedNumber = formattedNumber.replace(/0+$/, "");
+    var regex = {
+        separator: new RegExp(options.separator.replace(/\./, "\\.") + "$")
+      , zeros: /0+$/
+    };
+    
+    formattedNumber = formattedNumber
+      .replace(regex.zeros, "")
+      .replace(regex.separator, "");
   }
 
   return formattedNumber;
