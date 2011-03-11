@@ -41,7 +41,7 @@ I18n.lookup = function(scope, options) {
     }
   }
 
-  if (!messages && options.defaultValue != null && options.defaultValue != undefined) {
+  if (!messages && options.defaultValue !== null && options.defaultValue !== undefined) {
     messages = options.defaultValue;
   }
 
@@ -67,7 +67,7 @@ I18n.prepareOptions = function() {
     }
 
     for (var key in opts) {
-      if (options[key] == undefined || options[key] == null) {
+      if (options[key] === undefined || options[key] === null) {
         options[key] = opts[key];
       }
     }
@@ -91,7 +91,7 @@ I18n.interpolate = function(message, options) {
 
     value = options[name];
 
-    if (options[name] == null || options[name] == undefined) {
+    if (options[name] === null || options[name] === undefined) {
       value = "[missing " + placeholder + " value]";
     }
 
@@ -142,7 +142,7 @@ I18n.localize = function(scope, value) {
 I18n.parseDate = function(d) {
   var matches, date;
   matches = d.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ |T](\d{2}):(\d{2}):(\d{2}))?(Z)?/);
-  
+
   if (matches) {
     // date/time strings: yyyy-mm-dd hh:mm:ss or yyyy-mm-dd or yyyy-mm-ddThh:mm:ssZ
     for (var i = 1; i <= 6; i++) {
@@ -209,8 +209,7 @@ I18n.strftime = function(date, format) {
 
   if (hour12 > 12) {
     hour12 = hour12 - 12;
-  }
-  else if (hour12 === 0) {
+  } else if (hour12 === 0) {
     hour12 = 12;
   }
 
@@ -252,7 +251,7 @@ I18n.toNumber = function(number, options) {
     this.lookup("number.format"),
     {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
   );
-  
+
   var negative = number < 0;
   var string = Math.abs(number).toFixed(options.precision).toString();
   var parts = string.split(".");
@@ -272,17 +271,17 @@ I18n.toNumber = function(number, options) {
   if (options.precision > 0) {
     formattedNumber += options.separator + parts[1];
   }
-  
+
   if (negative) {
     formattedNumber = "-" + formattedNumber;
   }
-  
+
   if (options.strip_insignificant_zeros) {
     var regex = {
         separator: new RegExp(options.separator.replace(/\./, "\\.") + "$")
       , zeros: /0+$/
     };
-    
+
     formattedNumber = formattedNumber
       .replace(regex.zeros, "")
       .replace(regex.separator, "");
@@ -312,33 +311,32 @@ I18n.toHumanSize = function(number, options) {
     , size = number
     , iterations = 0
     , unit
-    , precision;
-  
+    , precision
+  ;
+
   while (size >= kb && iterations < 4) {
     size = size / kb;
     iterations += 1;
-  };
-  
-  switch (iterations) {
-    case 0:
-      unit = this.t("number.human.storage_units.units.byte", {count: size});
-      precision = 0;
-      break;
-    default:
-      unit = this.t("number.human.storage_units.units." + [null, "kb", "mb", "gb", "tb"][iterations]);
-      precision = (size - Math.floor(size) == 0) ? 0 : 1;
-  };
-  
+  }
+
+  if (iterations === 0) {
+    unit = this.t("number.human.storage_units.units.byte", {count: size});
+    precision = 0;
+  } else {
+    unit = this.t("number.human.storage_units.units." + [null, "kb", "mb", "gb", "tb"][iterations]);
+    precision = (size - Math.floor(size) === 0) ? 0 : 1;
+  }
+
   options = this.prepareOptions(
     options,
     {precision: precision, format: "%n%u", delimiter: ""}
   );
-  
+
   number = this.toNumber(size, options);
   number = options.format
     .replace("%u", unit)
     .replace("%n", number);
-  
+
   return number;
 };
 
@@ -356,28 +354,28 @@ I18n.toPercentage = function(number, options) {
 
 I18n.pluralize = function(count, scope, options) {
   var translation;
-  
+
   try {
     translation = this.lookup(scope, options);
   } catch (error) {}
-  
+
   if (!translation) {
     return this.missingTranslation(scope);
   }
-  
+
   var message;
   options = this.prepareOptions(options);
   options.count = count.toString();
 
   switch(Math.abs(count)) {
     case 0:
-      message = translation["zero"] || translation["none"] || translation["other"] || this.missingTranslation(scope, "zero");
+      message = translation.zero || translation.none || translation.other || this.missingTranslation(scope, "zero");
       break;
     case 1:
-      message = translation["one"] || this.missingTranslation(scope, "one");
+      message = translation.one || this.missingTranslation(scope, "one");
       break;
     default:
-      message = translation["other"] || this.missingTranslation(scope, "other");
+      message = translation.other || this.missingTranslation(scope, "other");
   }
 
   return this.interpolate(message, options);
