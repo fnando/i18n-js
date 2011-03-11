@@ -191,6 +191,7 @@ I18n.strftime = function(date, format) {
   if (!options) {
     return date.toString();
   }
+  options.meridian = options.meridian || ["AM", "PM"];
 
   var weekDay = date.getDay();
   var day = date.getDate();
@@ -198,7 +199,7 @@ I18n.strftime = function(date, format) {
   var month = date.getMonth() + 1;
   var hour = date.getHours();
   var hour12 = hour;
-  var meridian = hour > 12? "PM" : "AM";
+  var meridian = hour > 11 ? 1 : 0;
   var secs = date.getSeconds();
   var mins = date.getMinutes();
   var offset = date.getTimezoneOffset();
@@ -208,6 +209,9 @@ I18n.strftime = function(date, format) {
 
   if (hour12 > 12) {
     hour12 = hour12 - 12;
+  }
+  else if (hour12 === 0) {
+    hour12 = 12;
   }
 
   var padding = function(n) {
@@ -230,7 +234,7 @@ I18n.strftime = function(date, format) {
   f = f.replace("%-m", month);
   f = f.replace("%M", padding(mins));
   f = f.replace("%-M", mins);
-  f = f.replace("%p", meridian);
+  f = f.replace("%p", options.meridian[meridian]);
   f = f.replace("%S", padding(secs));
   f = f.replace("%-S", secs);
   f = f.replace("%w", weekDay);

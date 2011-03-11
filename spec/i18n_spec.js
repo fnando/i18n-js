@@ -76,6 +76,21 @@ describe("I18n.js", function(){
           am: "AM",
           pm: "PM"
         }
+      },
+
+      "en-US": {
+        date: {
+          formats: {
+            "default": "%d/%m/%Y",
+            "short": "%d de %B",
+            "long": "%d de %B de %Y"
+          },
+            day_names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+            meridian: ["am", "pm"]
+        }
       }
     };
   });
@@ -505,6 +520,33 @@ describe("I18n.js", function(){
     expect(I18n.strftime(date, "%z")).toBeEqualTo("+0545");
   });
   
+  specify("date formatting with custom meridian", function(){
+    I18n.locale = "en-US";
+    var date = new Date(2009, 3, 26, 19, 35, 44);
+    expect(I18n.strftime(date, "%p")).toBeEqualTo("pm");
+  });
+
+  specify("date formatting meridian boundaries", function(){
+    I18n.locale = "en-US";
+    var date = new Date(2009, 3, 26, 0, 35, 44);
+    expect(I18n.strftime(date, "%p")).toBeEqualTo("am");
+
+    date = new Date(2009, 3, 26, 12, 35, 44);
+    expect(I18n.strftime(date, "%p")).toBeEqualTo("pm");
+  });
+
+  specify("date formatting hour12 values", function(){
+    I18n.locale = "pt-BR";
+    var date = new Date(2009, 3, 26, 19, 35, 44);
+    expect(I18n.strftime(date, "%I")).toBeEqualTo("07");
+
+    date = new Date(2009, 3, 26, 12, 35, 44);
+    expect(I18n.strftime(date, "%I")).toBeEqualTo("12");
+
+    date = new Date(2009, 3, 26, 0, 35, 44);
+    expect(I18n.strftime(date, "%I")).toBeEqualTo("12");
+  });
+
   specify("localize date strings", function(){
     I18n.locale = "pt-BR";
   
