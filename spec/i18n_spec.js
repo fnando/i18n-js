@@ -216,6 +216,12 @@ describe("I18n.js", function(){
     expect(actual).toBeEqualTo("You have no new messages (5 unread)");
   });
   
+  specify("pluralize should allow empty strings", function(){
+    I18n.translations["en"]["inbox"]["zero"] = "";
+
+    expect(I18n.p(0, "inbox")).toBeEqualTo("");
+  });
+
   specify("numbers with default settings", function(){
     expect(I18n.toNumber(1)).toBeEqualTo("1.000");
     expect(I18n.toNumber(12)).toBeEqualTo("12.000");
