@@ -13,6 +13,12 @@ I18n.locale = null;
 // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
 I18n.PLACEHOLDER = /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm;
 
+I18n.isValidNode = function(obj, node) {
+    // local undefined variable in case another library corrupts window.undefined
+    var undef;
+    return obj[node] !== null && obj[node] !== undef;
+}
+
 I18n.lookup = function(scope, options) {
   var translations = this.prepareOptions(I18n.translations);
   var messages = translations[I18n.currentLocale()];
@@ -41,7 +47,7 @@ I18n.lookup = function(scope, options) {
     }
   }
 
-  if (!messages && options.defaultValue !== null && options.defaultValue !== undefined) {
+  if (!messages && this.isValidNode(options, "defaultValue")) {
     messages = options.defaultValue;
   }
 
@@ -67,7 +73,7 @@ I18n.prepareOptions = function() {
     }
 
     for (var key in opts) {
-      if (options[key] === undefined || options[key] === null) {
+      if (!this.isValidNode(options, key)) {
         options[key] = opts[key];
       }
     }
@@ -91,7 +97,7 @@ I18n.interpolate = function(message, options) {
 
     value = options[name];
 
-    if (options[name] === null || options[name] === undefined) {
+    if (!this.isValidNode(options, name)) {
       value = "[missing " + placeholder + " value]";
     }
 
