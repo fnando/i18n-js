@@ -11,8 +11,8 @@ FakeWeb.allow_net_connect = false
 
 # Stub Rails.root, so we don"t need to load the whole Rails environment.
 # Be careful! The specified folder will be removed!
-Rails = OpenStruct.new({
-  :root => Pathname.new(File.dirname(__FILE__) + "/tmp"),
+Rails = Padrino = Framework = OpenStruct.new({
+  :root => Pathname.new(File.join(File.dirname(__FILE__), "tmp")),
   :version => "0"
 })
 

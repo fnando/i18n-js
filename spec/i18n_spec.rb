@@ -1,10 +1,10 @@
 require "spec_helper"
 
-if File.basename(Rails.root) != "tmp"
+if File.basename(Framework.root) != "tmp"
   warn <<-TXT
 \e[31;5m
 WARNING: That will remove your project!
-Please go to #{File.expand_path(File.dirname(__FILE__) + "/..")} and run `rake spec`\e[0m
+Please go to #{File.expand_path(File.join(File.dirname(__FILE__), ".."))} and run `rake spec`\e[0m
 TXT
   exit 1
 end
@@ -12,20 +12,20 @@ end
 describe SimplesIdeias::I18n do
   before do
     # Remove temporary directory if already present
-    FileUtils.rm_r(Rails.root) if File.exist?(Rails.root)
+    FileUtils.rm_r(Framework.root) if File.exist?(Framework.root)
 
     # Create temporary directory to test the files generation
     %w( config public/javascripts ).each do |path|
-      FileUtils.mkdir_p Rails.root.join(path)
+      FileUtils.mkdir_p Framework.root.join(path)
     end
 
     # Overwrite defaut locales path to use fixtures
-    I18n.load_path = [File.dirname(__FILE__) + "/resources/locales.yml"]
+    I18n.load_path = [File.join(File.dirname(__FILE__), "resources", "locales.yml")]
   end
 
   after do
     # Remove temporary directory
-    FileUtils.rm_r(Rails.root)
+    FileUtils.rm_r(Framework.root)
   end
 
   it "copies the configuration file" do
@@ -42,7 +42,7 @@ describe SimplesIdeias::I18n do
   end
 
   it "copies JavaScript library" do
-    path = Rails.root.join("public/javascripts/i18n.js")
+    path = File.join(Framework.root, "public", "javascripts", "i18n.js")
 
     File.should_not be_file(path)
     SimplesIdeias::I18n.setup!
@@ -59,24 +59,24 @@ describe SimplesIdeias::I18n do
 
   it "exports messages to default path when configuration file doesn't exist" do
     SimplesIdeias::I18n.export!
-    File.should be_file(Rails.root.join("public/javascripts/translations.js"))
+    File.should be_file(File.join(Framework.root, "public", "javascripts", "translations.js"))
   end
 
   it "exports messages using the default configuration file" do
     set_config "default.yml"
-    SimplesIdeias::I18n.should_receive(:save).with(translations, "public/javascripts/translations.js")
+    SimplesIdeias::I18n.should_receive(:save).with(translations, File.join("public", "javascripts", "translations.js"))
     SimplesIdeias::I18n.export!
   end
 
   it "exports messages using custom output path" do
     set_config "custom_path.yml"
-    SimplesIdeias::I18n.should_receive(:save).with(translations, "public/javascripts/translations/all.js")
+    SimplesIdeias::I18n.should_receive(:save).with(translations, File.join("public", "javascripts","translations", "all.js"))
     SimplesIdeias::I18n.export!
   end
 
   it "sets default scope to * when not specified" do
     set_config "no_scope.yml"
-    SimplesIdeias::I18n.should_receive(:save).with(translations, "public/javascripts/no_scope.js")
+    SimplesIdeias::I18n.should_receive(:save).with(translations, File.join("public", "javascripts", "no_scope.js"))
     SimplesIdeias::I18n.export!
   end
 
@@ -84,14 +84,14 @@ describe SimplesIdeias::I18n do
     set_config "multiple_files.yml"
     SimplesIdeias::I18n.export!
 
-    File.should be_file(Rails.root.join("public/javascripts/all.js"))
-    File.should be_file(Rails.root.join("public/javascripts/tudo.js"))
+    File.should be_file(File.join(Framework.root, "public", "javascripts", "all.js"))
+    File.should be_file(File.join(Framework.root, "public", "javascripts", "tudo.js"))
   end
 
   it "exports with multiple conditions" do
     set_config "multiple_conditions.yml"
     SimplesIdeias::I18n.export!
-    File.should be_file(Rails.root.join("public/javascripts/bitsnpieces.js"))
+    File.should be_file(File.join(Framework.root, "public", "javascripts", "bitsnpieces.js"))
   end
 
   it "filters translations using scope *.date.formats" do
@@ -147,7 +147,7 @@ describe SimplesIdeias::I18n do
   end
 
   it "updates the javascript library" do
-    FakeWeb.register_uri(:get, "http://github.com/fnando/i18n-js/raw/master/lib/i18n.js", :body => "UPDATED")
+    FakeWeb.register_uri(:get, "http://github.com/fnando/i18n-js/raw/master/source/i18n.js", :body => "UPDATED")
 
     SimplesIdeias::I18n.setup!
     SimplesIdeias::I18n.update!
@@ -157,7 +157,7 @@ describe SimplesIdeias::I18n do
   private
   # Set the configuration as the current one
   def set_config(path)
-    config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/resources/#{path}"))
+    config = HashWithIndifferentAccess.new(YAML.load_file(File.join(File.dirname(__FILE__), "/resources/#{path}")))
     SimplesIdeias::I18n.should_receive(:config?).and_return(true)
     SimplesIdeias::I18n.should_receive(:config).and_return(config)
   end
