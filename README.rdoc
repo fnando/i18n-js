@@ -33,6 +33,12 @@ like this to your <tt>ApplicationController</tt>:
     end
   end
 
+In Padrino, add the following to your app/app.rb:
+
+  before do
+    SimplesIdeias::I18n.export! if(Padrino.env == :development)
+  end
+
 ==== Configuration
 
 The first time you will restart your application when using i18n-js, it will create you the default configuration file at <tt>#{Rails.root}/config/i18n-js.yml</tt>
