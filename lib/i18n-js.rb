@@ -110,7 +110,7 @@ module SimplesIdeias
 
     # Initialize and return translations
     def translations
-      ::I18n.load_path += Dir[framework.join('app', 'locale', '**', '*.{rb,yml}').to_s] if defined?(Padrino)
+      ::I18n.load_path += Dir[File.join(framework.root, 'app', 'locale', '**', '*.{rb,yml}').to_s] if defined?(Padrino)
 
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
