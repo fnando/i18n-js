@@ -33,6 +33,12 @@ like this to your <tt>ApplicationController</tt>:
     end
   end
 
+In Padrino, add the following to your app/app.rb:
+
+  before do
+    SimplesIdeias::I18n.export! if(Padrino.env == :development)
+  end
+
 ==== Configuration
 
 The first time you will restart your application when using i18n-js, it will create you the default configuration file at <tt>#{Rails.root}/config/i18n-js.yml</tt>
@@ -258,7 +264,7 @@ To run Ruby tests, you need to install http://github.com/rspec/rspec
 
 To run JavaScript tests, you need to install http://github.com/fnando/spec-js
 
-  gem install specjs
+  gem install spec-js --pre
 
 Then just run `rake spec`.
 

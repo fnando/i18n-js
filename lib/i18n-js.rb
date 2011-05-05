@@ -4,17 +4,22 @@ module SimplesIdeias
   module I18n
     extend self
 
-    require "i18n-js/railtie" if Rails.version >= "3.0"
+    require "i18n-js/exceptions"
+    require "i18n-js/railtie" if defined?(Rails) && (Rails.version >= "3.0")
 
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
     MERGER = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2 }
 
+    def framework
+      (defined? Rails) ? Rails : ((defined? Padrino) ? Padrino : raise(UnsupportedFrameworkException))
+    end
+
     def config_file
-      Rails.root.join("config/i18n-js.yml")
+      File.join(framework.root, "config", "i18n-js.yml")
     end
 
     def javascript_file
-      Rails.root.join("public/javascripts/i18n.js")
+      File.join(framework.root, "public", "javascripts", "i18n.js")
     end
 
     # Export translations to JavaScript, considering settings
@@ -32,7 +37,7 @@ module SimplesIdeias
           end
         end
       else
-        save translations, "public/javascripts/translations.js"
+        save translations, File.join("public", "javascripts", "translations.js")
       end
     end
 
@@ -50,20 +55,20 @@ module SimplesIdeias
     # Copy configuration and JavaScript library files to
     # <tt>config/i18n-js.yml</tt> and <tt>public/javascripts/i18n.js</tt>.
     def setup!
-      FileUtils.cp File.dirname(__FILE__) + "/../source/i18n.js", javascript_file
-      FileUtils.cp(File.dirname(__FILE__) + "/../source/i18n-js.yml", config_file) unless config?
+      FileUtils.cp File.join(File.dirname(__FILE__), "..", "source", "i18n.js"), javascript_file
+      FileUtils.cp(File.join(File.dirname(__FILE__), "..", "source","i18n-js.yml"), config_file) unless config?
     end
 
     # Retrieve an updated JavaScript library from Github.
     def update!
       require "open-uri"
-      contents = open("http://github.com/fnando/i18n-js/raw/master/lib/i18n.js").read
+      contents = open("http://github.com/fnando/i18n-js/raw/master/source/i18n.js").read
       File.open(javascript_file, "w+") {|f| f << contents}
     end
 
     # Convert translations to JSON string and save file.
     def save(translations, file)
-      file = Rails.root.join(file)
+      file = File.join(framework.root, file)
       FileUtils.mkdir_p File.dirname(file)
 
       File.open(file, "w+") do |f|
@@ -105,6 +110,8 @@ module SimplesIdeias
 
     # Initialize and return translations
     def translations
+      ::I18n.load_path += Dir[File.join(framework.root, 'app', 'locale', '**', '*.{rb,yml}').to_s] if defined?(Padrino)
+
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
         translations
