@@ -32,7 +32,11 @@ module SimplesIdeias
           end
         end
       else
-        save translations, "public/javascripts/translations.js"
+        if Rails::VERSION::STRING =~ /3\.1/
+          save translations, "vendor/assets/javascripts/translations.js"
+        else
+          save translations, "public/javascripts/translations.js"
+        end
       end
     end
 
