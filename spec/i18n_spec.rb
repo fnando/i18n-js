@@ -59,7 +59,7 @@ describe SimplesIdeias::I18n do
 
   it "exports messages to default path when configuration file doesn't exist" do
     SimplesIdeias::I18n.export!
-    File.should be_file(Rails.root.join("public/javascripts/translations.js"))
+    Rails.root.join(SimplesIdeias::I18n.export_dir, "translations.js").should be_file
   end
 
   it "exports messages using the default configuration file" do
@@ -152,6 +152,18 @@ describe SimplesIdeias::I18n do
     SimplesIdeias::I18n.setup!
     SimplesIdeias::I18n.update!
     File.read(SimplesIdeias::I18n.javascript_file).should == "UPDATED"
+  end
+
+  describe "#export_dir" do
+    it "detects Rails 3.1" do
+      Rails.version = "3.1"
+      SimplesIdeias::I18n.export_dir == "vendor/assets/javascripts"
+    end
+
+    it "detects older Rails" do
+      Rails.version = "3.0.9"
+      SimplesIdeias::I18n.export_dir.to_s.should == "public/javascripts"
+    end
   end
 
   private

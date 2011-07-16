@@ -20,7 +20,7 @@ en:
     abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
     month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
     abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
-    order: [ :year, :month, :day ]
+    # order: [ :year, :month, :day ]
   time:
     formats:
       default: "%a, %d %b %Y %H:%M:%S %z"
@@ -47,7 +47,7 @@ fr:
     abbr_day_names: [dim, lun, mar, mer, jeu, ven, sam]
     month_names: [~, janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre]
     abbr_month_names: [~, jan., fév., mar., avr., mai, juin, juil., août, sept., oct., nov., déc.]
-    order: [ :day, :month, :year ]
+    # order: [ :day, :month, :year ]
   time:
     formats:
       default: "%d %B %Y %H:%M"

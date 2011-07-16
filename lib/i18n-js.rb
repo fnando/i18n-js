@@ -13,8 +13,16 @@ module SimplesIdeias
       Rails.root.join("config/i18n-js.yml")
     end
 
+    def export_dir
+      if Rails.version >= "3.1"
+        "vendor/assets/javascripts"
+      else
+        "public/javascripts"
+      end
+    end
+
     def javascript_file
-      Rails.root.join("public/javascripts/i18n.js")
+      Rails.root.join(export_dir, "i18n.js")
     end
 
     # Export translations to JavaScript, considering settings
@@ -32,7 +40,7 @@ module SimplesIdeias
           end
         end
       else
-        save translations, "public/javascripts/translations.js"
+        save translations, "#{export_dir}/translations.js"
       end
     end
 
