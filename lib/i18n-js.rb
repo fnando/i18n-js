@@ -32,7 +32,7 @@ module SimplesIdeias
           end
         end
       else
-        save translations, "public/javascripts/translations.js"
+        save translations, "vendor/assets/javascripts/translations.js"
       end
     end
 
