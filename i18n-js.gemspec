@@ -19,8 +19,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency "i18n"
   s.add_development_dependency "fakeweb"
-  s.add_development_dependency "activesupport", "~> 3.0.0"
-  s.add_development_dependency "rspec", "~> 2.5.0"
+  s.add_development_dependency "activesupport", ">= 3.0.0"
+  s.add_development_dependency "rspec", "~> 2.6"
   s.add_development_dependency "ruby-debug19"
   s.add_development_dependency "spec-js", "~> 0.1.0.beta.0"
+  s.add_development_dependency "rake", "0.8.7"
 end
