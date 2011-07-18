@@ -20,9 +20,13 @@ I18n.isValidNode = function(obj, node) {
 }
 
 I18n.lookup = function(scope, options) {
-  var translations = this.prepareOptions(I18n.translations);
-  var messages = translations[I18n.currentLocale()];
   options = this.prepareOptions(options);
+  var lookupLocale = options.locale || I18n.currentLocale();
+  var lookupLocaleFallbacks = options.fallbacks || I18n.fallbacks && I18n.fallbacks.slice(1, I18n.fallbacks.length) || [];
+  var lookupInitialScope = scope;
+
+  var translations = this.prepareOptions(I18n.translations);
+  var messages = translations[lookupLocale];
 
   if (!messages) {
     return;
@@ -43,6 +47,9 @@ I18n.lookup = function(scope, options) {
     messages = messages[currentScope];
 
     if (!messages) {
+      if (lookupLocaleFallbacks.length > 0) {
+        messages = I18n.lookup(lookupInitialScope, this.prepareOptions({ locale : lookupLocaleFallbacks.shift(), fallbacks: lookupLocaleFallbacks }, options));
+      }
       break;
     }
   }
