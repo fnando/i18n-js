@@ -145,12 +145,24 @@ I18n.localize = function(scope, value) {
   }
 };
 
-I18n.parseDate = function(d) {
-  var matches, date;
-  matches = d.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ |T](\d{2}):(\d{2}):(\d{2}))?(Z)?/);
+I18n.parseDate = function(date) {
+  var matches, convertedDate;
+
+  // we have a date, so just return it.
+  if (typeof(date) == "object") {
+    return date;
+  };
+
+  // it matches the following formats:
+  //   yyyy-mm-dd
+  //   yyyy-mm-dd[ T]hh:mm::ss
+  //   yyyy-mm-dd[ T]hh:mm::ss
+  //   yyyy-mm-dd[ T]hh:mm::ssZ
+  //   yyyy-mm-dd[ T]hh:mm::ss+0000
+  //
+  matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2}))?(Z|\+0000)?/);
 
   if (matches) {
-    // date/time strings: yyyy-mm-dd hh:mm:ss or yyyy-mm-dd or yyyy-mm-ddThh:mm:ssZ
     for (var i = 1; i <= 6; i++) {
       matches[i] = parseInt(matches[i], 10) || 0;
     }
@@ -159,21 +171,25 @@ I18n.parseDate = function(d) {
     matches[2] -= 1;
 
     if (matches[7]) {
-      date = new Date(Date.UTC(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]));
+      convertedDate = new Date(Date.UTC(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]));
     } else {
-      date = new Date(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]);
+      convertedDate = new Date(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]);
     }
-  } else if (typeof(d) == "number") {
+  } else if (typeof(date) == "number") {
     // UNIX timestamp
-    date = new Date();
-    date.setTime(d);
+    convertedDate = new Date();
+    convertedDate.setTime(date);
+  } else if (date.match(/\d+ \d+:\d+:\d+ [+-]\d+ \d+/)) {
+    // a valid javascript format with timezone info
+    convertedDate = new Date();
+    convertedDate.setTime(Date.parse(date))
   } else {
     // an arbitrary javascript string
-    date = new Date();
-    date.setTime(Date.parse(d));
+    convertedDate = new Date();
+    convertedDate.setTime(Date.parse(date));
   }
 
-  return date;
+  return convertedDate;
 };
 
 I18n.toTime = function(scope, d) {
