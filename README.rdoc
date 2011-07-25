@@ -258,6 +258,7 @@ To run Ruby tests, you need to install http://github.com/rspec/rspec
 
 To run JavaScript tests, you need to install http://github.com/fnando/spec-js
 
+  gem install spec-js --pre
   gem install specjs
 
 Then just run `rake spec`.
