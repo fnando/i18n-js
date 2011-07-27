@@ -230,6 +230,7 @@ I18n.strftime = function(date, format) {
   f = f.replace("%b", options.abbr_month_names[month]);
   f = f.replace("%B", options.month_names[month]);
   f = f.replace("%d", padding(day));
+  f = f.replace("%e", day);
   f = f.replace("%-d", day);
   f = f.replace("%H", padding(hour));
   f = f.replace("%-H", hour);
