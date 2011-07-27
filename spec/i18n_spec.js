@@ -478,6 +478,7 @@ describe("I18n.js", function(){
   
     // day without padding
     expect(I18n.strftime(date, "%-d")).toBeEqualTo("9");
+    expect(I18n.strftime(date, "%e")).toBeEqualTo("9");
   });
   
   specify("date formatting with padding", function(){
