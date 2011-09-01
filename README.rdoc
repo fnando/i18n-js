@@ -17,7 +17,17 @@ This library has been tested on:
 
 === Setting up
 
+==== Rails <= 3.0
 Run <tt>rake i18n:setup</tt> to copy <tt>i18n.js</tt> to your javascript directory and <tt>i18n-js.yml</tt> to your config folder (if not already present). Then you're ready to go!
+
+==== Rails >= 3.1
+Run <tt>rake i18n:setup</tt> to copy <tt>i18n-js.yml</tt> to your config folder (if not already present). You should change the path in <tt>i18n.js.yml</tt> to <tt>app/assets/javascripts/i18n</tt> to make full use of the asset pipeline.
+Next add the following lines to your application.js to make the javascripts and translations available to your app:
+
+  //= require i18n
+  //= require i18n/translations
+
+Then you're ready to go!
 
 Every time your application is started, the translations messages defined in your configuration file will be generated.
 
