@@ -1,4 +1,4 @@
-load("source/i18n.js");
+load("vendor/assets/javascripts/i18n.js");
 
 describe("I18n.js", function(){
   before(function() {

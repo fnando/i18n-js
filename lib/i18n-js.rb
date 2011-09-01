@@ -5,6 +5,7 @@ module SimplesIdeias
     extend self
 
     require "i18n-js/railtie" if Rails.version >= "3.0"
+    require 'i18n-js/engine' if Rails.version >= "3.1"
 
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
     MERGER = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2 }
@@ -15,7 +16,7 @@ module SimplesIdeias
 
     def export_dir
       if Rails.version >= "3.1"
-        "vendor/assets/javascripts"
+        "app/assets/javascripts/i18n"
       else
         "public/javascripts"
       end
@@ -58,8 +59,8 @@ module SimplesIdeias
     # Copy configuration and JavaScript library files to
     # <tt>config/i18n-js.yml</tt> and <tt>public/javascripts/i18n.js</tt>.
     def setup!
-      FileUtils.cp File.dirname(__FILE__) + "/../source/i18n.js", javascript_file
-      FileUtils.cp(File.dirname(__FILE__) + "/../source/i18n-js.yml", config_file) unless config?
+      FileUtils.cp(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js", javascript_file) unless Rails.version >= "3.1"
+      FileUtils.cp(File.dirname(__FILE__) + "/../config/i18n-js.yml", config_file) unless config?
     end
 
     # Retrieve an updated JavaScript library from Github.
