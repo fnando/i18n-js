@@ -5,7 +5,7 @@ module SimplesIdeias
     extend self
 
     require "i18n-js/railtie" if Rails.version >= "3.0"
-    require 'i18n-js/engine' if Rails.version >= "3.1"
+    require "i18n-js/engine" if Rails.version >= "3.1"
 
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
     MERGER = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2 }
@@ -15,7 +15,7 @@ module SimplesIdeias
     end
 
     def export_dir
-      if Rails.version >= "3.1"
+      if Rails.version >= "3.1" && config.fetch(:asset_pipeline, true)
         "app/assets/javascripts/i18n"
       else
         "public/javascripts"
@@ -48,7 +48,16 @@ module SimplesIdeias
     # Load configuration file for partial exporting and
     # custom output directory
     def config
-      HashWithIndifferentAccess.new YAML.load_file(config_file)
+      if config?
+        YAML.load_file(config_file).with_indifferent_access
+      else
+        {}
+      end
+    end
+
+    # Check if translations can be automatically exported.
+    def auto_export?
+      Rails.env.development? || (config? && config[:auto_export])
     end
 
     # Check if configuration file exist

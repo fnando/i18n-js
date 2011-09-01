@@ -57,6 +57,11 @@ describe SimplesIdeias::I18n do
     SimplesIdeias::I18n.config.should_not be_empty
   end
 
+  it "sets empty hash as configuration when no file is found" do
+    SimplesIdeias::I18n.config?.should be_false
+    SimplesIdeias::I18n.config.should == {}
+  end
+
   it "exports messages to default path when configuration file doesn't exist" do
     SimplesIdeias::I18n.export!
     Rails.root.join(SimplesIdeias::I18n.export_dir, "translations.js").should be_file
@@ -154,10 +159,34 @@ describe SimplesIdeias::I18n do
     File.read(SimplesIdeias::I18n.javascript_file).should == "UPDATED"
   end
 
+  describe "#auto_export?" do
+    it "returns true for development mode" do
+      Rails.env = stub(:development? => true)
+      SimplesIdeias::I18n.should be_auto_export
+    end
+
+    it "returns false for production mode" do
+      Rails.env = stub(:production? => true, :development? => false)
+      SimplesIdeias::I18n.should_not be_auto_export
+    end
+
+    it "returns true for production when configuration is set" do
+      Rails.env = stub(:production? => true, :development? => false)
+      SimplesIdeias::I18n.stub :config? => true, :config => {:auto_export => true}
+      SimplesIdeias::I18n.should be_auto_export
+    end
+  end
+
   describe "#export_dir" do
     it "detects Rails 3.1" do
       Rails.version = "3.1"
       SimplesIdeias::I18n.export_dir == "vendor/assets/javascripts"
+    end
+
+    it "acts as older Rails when asset pipeline is disabled" do
+      Rails.version = "3.1"
+      SimplesIdeias::I18n.stub :config => {:asset_pipeline => false}
+      SimplesIdeias::I18n.export_dir == "public/javascripts"
     end
 
     it "detects older Rails" do

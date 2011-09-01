@@ -27,21 +27,12 @@ Next add the following lines to your application.js to make the javascripts and 
   //= require i18n
   //= require i18n/translations
 
-Then you're ready to go!
+If you don't want to use the asset pipeline, just disable it on your configuration file by setting <tt>asset_pipeline</tt> to <tt>false</tt>.
 
-Every time your application is started, the translations messages defined in your configuration file will be generated.
+==== Exporting translations
 
-To speed up the development process, you can automatically export your messages by adding something
-like this to your <tt>ApplicationController</tt>:
-
-  class ApplicationController < ActionController::Base
-    before_filter :export_i18n_messages
-
-    private
-    def export_i18n_messages
-      SimplesIdeias::I18n.export! if Rails.env.development?
-    end
-  end
+You can export the translations file by running `rake i18n:js:export`. Translations will be automatically exported in development mode, but you can set the <tt>auto_export</tt> option
+to <tt>true</tt> on your configuration file if you want to export translations when your app is booted.
 
 ==== Configuration
 

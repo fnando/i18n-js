@@ -1,4 +1,18 @@
-# Find more details about this configuration file at http://github.com/fnando/i18n-js
+# Find more details about this configuration file
+# at http://github.com/fnando/i18n-js
+
+# Automatically export translations when running in
+# development mode, or once when your app is booted
+# in production mode.
+auto_export: no
+
+# Split context in several files.
+# By default only one file is exported.
 translations:
   - file: "public/javascripts/translations.js"
     only: "*"
+
+# Use Rails 3.1 asset pipeline feature.
+# You can disable it by changing the following
+# line to "no".
+asset_pipeline: yes
