@@ -107,7 +107,7 @@ module SimplesIdeias
       scopes = scopes.split(".") if scopes.is_a?(String)
       scopes = scopes.clone
       scope = scopes.shift
-
+      
       if scope == "*"
         results = {}
         translations.each do |scope, translations|
@@ -118,7 +118,7 @@ module SimplesIdeias
       elsif translations.has_key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
       end
-      nil
+      {}
     end
 
     # Initialize and return translations
