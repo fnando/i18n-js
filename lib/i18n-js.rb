@@ -32,13 +32,19 @@ module SimplesIdeias
     def export!
       if config?
         for options in config[:translations]
-          options.reverse_merge!(:only => "*")
-
-          if options[:only] == "*"
-            save translations, options[:file]
+          if options[:file] =~ /%\{locale\}/
+            ::I18n.available_locales.each do |locale|
+              result = scoped_translations("#{locale}.#{options[:only]}")
+              save result, options[:file].gsub(/%\{locale\}/, locale.to_s) unless result.empty?
+            end
           else
-            result = scoped_translations(options[:only])
-            save result, options[:file] unless result.empty?
+            options.reverse_merge!(:only => "*")
+            if options[:only] == "*"
+              save translations, options[:file]
+            else
+              result = scoped_translations(options[:only])
+              save result, options[:file] unless result.empty?
+            end
           end
         end
       else
