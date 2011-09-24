@@ -178,14 +178,15 @@ describe SimplesIdeias::I18n do
   end
 
   describe "#export_dir" do
-    it "detects Rails 3.1" do
+    it "detects Rails 3.1 with asset pipeline enabled" do
       Rails.version = "3.1"
+      Rails.stub_chain(:application, :config, :assets, :enabled => true)
       SimplesIdeias::I18n.export_dir == "vendor/assets/javascripts"
     end
 
-    it "acts as older Rails when asset pipeline is disabled" do
+    it "detects Rails 3.1 with asset pipeline disabled" do
       Rails.version = "3.1"
-      SimplesIdeias::I18n.stub :config => {:asset_pipeline => false}
+      Rails.stub_chain(:application, :config, :assets, :enabled => false)
       SimplesIdeias::I18n.export_dir == "public/javascripts"
     end
 

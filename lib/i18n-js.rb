@@ -15,7 +15,7 @@ module SimplesIdeias
     end
 
     def export_dir
-      if Rails.version >= "3.1" && config.fetch(:asset_pipeline, true)
+      if Rails.version >= "3.1" && Rails.application.config.assets.enabled
         "app/assets/javascripts/i18n"
       else
         "public/javascripts"
