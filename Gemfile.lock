@@ -45,7 +45,7 @@ DEPENDENCIES
   activesupport (>= 3.0.0)
   fakeweb
   i18n-js!
-  rake (= 0.8.7)
+  rake
   rspec (~> 2.6)
   ruby-debug19
   spec-js (~> 0.1.0.beta.0)
