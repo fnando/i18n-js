@@ -1,6 +1,3 @@
-# Find more details about this configuration file
-# at http://github.com/fnando/i18n-js
-
 # Split context in several files.
 # By default only one file with all translations is exported and
 # no configuration is required. Your settings for asset pipeline

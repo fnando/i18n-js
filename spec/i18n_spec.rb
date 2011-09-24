@@ -50,6 +50,7 @@ describe SimplesIdeias::I18n do
   end
 
   it "loads configuration file" do
+    set_config "default.yml"
     SimplesIdeias::I18n.setup!
 
     SimplesIdeias::I18n.config?.should be_true
@@ -65,12 +66,6 @@ describe SimplesIdeias::I18n do
   it "exports messages to default path when configuration file doesn't exist" do
     SimplesIdeias::I18n.export!
     Rails.root.join(SimplesIdeias::I18n.export_dir, "translations.js").should be_file
-  end
-
-  it "exports messages using the default configuration file" do
-    set_config "default.yml"
-    SimplesIdeias::I18n.should_receive(:save).with(translations, "public/javascripts/translations.js")
-    SimplesIdeias::I18n.export!
   end
 
   it "exports messages using custom output path" do
@@ -159,34 +154,16 @@ describe SimplesIdeias::I18n do
     File.read(SimplesIdeias::I18n.javascript_file).should == "UPDATED"
   end
 
-  describe "#auto_export?" do
-    it "returns true for development mode" do
-      Rails.env = stub(:development? => true)
-      SimplesIdeias::I18n.should be_auto_export
-    end
-
-    it "returns false for production mode" do
-      Rails.env = stub(:production? => true, :development? => false)
-      SimplesIdeias::I18n.should_not be_auto_export
-    end
-
-    it "returns true for production when configuration is set" do
-      Rails.env = stub(:production? => true, :development? => false)
-      SimplesIdeias::I18n.stub :config? => true, :config => {:auto_export => true}
-      SimplesIdeias::I18n.should be_auto_export
-    end
-  end
-
   describe "#export_dir" do
     it "detects Rails 3.1 with asset pipeline enabled" do
       Rails.version = "3.1"
-      Rails.stub_chain(:application, :config, :assets, :enabled => true)
+      Rails.stub_chain(:configuration, :assets, :enabled => true)
       SimplesIdeias::I18n.export_dir == "vendor/assets/javascripts"
     end
 
     it "detects Rails 3.1 with asset pipeline disabled" do
       Rails.version = "3.1"
-      Rails.stub_chain(:application, :config, :assets, :enabled => false)
+      Rails.stub_chain(:configuration, :assets, :enabled => false)
       SimplesIdeias::I18n.export_dir == "public/javascripts"
     end
 
@@ -200,8 +177,8 @@ describe SimplesIdeias::I18n do
   # Set the configuration as the current one
   def set_config(path)
     config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/resources/#{path}"))
-    SimplesIdeias::I18n.should_receive(:config?).and_return(true)
-    SimplesIdeias::I18n.should_receive(:config).and_return(config)
+    SimplesIdeias::I18n.stub(:config? => true)
+    SimplesIdeias::I18n.stub(:config => config)
   end
 
   # Shortcut to SimplesIdeias::I18n.translations

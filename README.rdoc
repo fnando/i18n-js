@@ -44,7 +44,13 @@ Examples:
   - file: 'public/javascripts/path-to-your-second-file.js'
     only: ['*.activerecord', '*.admin.*.title']
 
-If <tt>only</tt> is omitted all the translations will be saved
+If <tt>only</tt> is omitted all the translations will be saved. Also, make sure you add that initial <tt>*</tt>; it specifies that all languages will be exported. If you want to export only one language, you can do something like this:
+
+  translations:
+  - file: 'public/javascripts/en.js'
+    only: 'en.*'
+  - file: 'public/javascripts/pt-BR.js'
+    only: 'pt-BR.*'
 
 To find more examples on how to use the configuration file please refer to the tests.
 
