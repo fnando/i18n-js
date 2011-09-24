@@ -2,13 +2,6 @@
 
 It's a small library to provide the Rails I18n translations on the Javascript.
 
-This library has been tested on:
-
-* Safari 4 (Mac)
-* Firefox 3.6 (Mac)
-* Opera 10 (Mac)
-* IE6+ (Mac Parallels)
-
 == Usage
 
 === Installation
@@ -17,28 +10,31 @@ This library has been tested on:
 
 === Setting up
 
+You <b>don't</b> need to set up a thing. The default settings will work just okay. But if you want to split translations into several files or specify specific contexts, you can follow the rest of this setting up section.
+
 ==== Rails <= 3.0
+
 Run <tt>rake i18n:js:setup</tt> to copy <tt>i18n.js</tt> to your javascript directory and <tt>i18n-js.yml</tt> to your config folder (if not already present). Then you're ready to go!
 
 ==== Rails >= 3.1
+
 Run <tt>rake i18n:js:setup</tt> to copy <tt>i18n-js.yml</tt> to your config folder (if not already present). You should change the path in <tt>i18n.js.yml</tt> to <tt>app/assets/javascripts/i18n</tt> to make full use of the asset pipeline.
+
 Next add the following lines to your application.js to make the javascripts and translations available to your app:
 
   //= require i18n
   //= require i18n/translations
 
-If you don't want to use the asset pipeline, just disable it on your configuration file by setting <tt>asset_pipeline</tt> to <tt>false</tt>.
+If you don't want to use the asset pipeline, just disable it on your Rails application by setting <tt>config.assets.enabled</tt> to +false+ on your <tt>config/application.rb</tt> file.
 
 ==== Exporting translations
 
-You can export the translations file by running `rake i18n:js:export`. Translations will be automatically exported in development mode, but you can set the <tt>auto_export</tt> option
-to <tt>true</tt> on your configuration file if you want to export translations when your app is booted.
+You can export the translations file by running `rake i18n:js:export`.
+Translations will be automatically exported in development mode.
 
 ==== Configuration
 
-The first time you will restart your application when using i18n-js, it will create you the default configuration file at <tt>#{Rails.root}/config/i18n-js.yml</tt>
-
-Messages files can also be customized, you can even get more files generated to different folders and with different translations to best suit your needs.
+Translation files can be customized. You can even get more files generated to different folders and with different translations to best suit your needs.
 
 Examples:
 
@@ -120,7 +116,7 @@ You also provide an array as scope.
 
 ==== Number formatting
 
-Similar to Rails helpers, you have localize number and currency formatting.
+Similar to Rails helpers, you have localized number and currency formatting.
 
   I18n.l("currency", 1990.99);
   // $1,990.99
@@ -173,7 +169,6 @@ The +toHumanSize+ function accepts the following options:
 
   I18n.toHumanSize(1234); // 1KB
   I18n.toHumanSize(1234 * 1024); // 1MB
-
 
 ==== Date formatting
 
@@ -230,7 +225,7 @@ The only requirement is that you need to set the +translations+ attribute like f
     message: "Some special message for you"
   }
 
-  I18n.translations["pt"] = {
+  I18n.translations["pt-BR"] = {
     message: "Uma mensagem especial para você"
   }
 
@@ -253,13 +248,9 @@ Please respect the indentation rules. And use 2 spaces, not tabs.
 
 === Running tests
 
-To run Ruby tests, you need to install http://github.com/rspec/rspec
+First, install all dependencies.
 
-  gem install rspec
-
-To run JavaScript tests, you need to install http://github.com/fnando/spec-js
-
-  gem install spec-js --pre
+  bundle install
 
 Then just run `rake spec`.
 
