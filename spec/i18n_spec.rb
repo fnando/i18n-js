@@ -88,6 +88,13 @@ describe SimplesIdeias::I18n do
     File.should be_file(Rails.root.join("public/javascripts/tudo.js"))
   end
 
+  it "exports to a JS file per available locale" do
+    set_config "js_file_per_locale.yml"
+    SimplesIdeias::I18n.export!
+    
+    File.should be_file(Rails.root.join("public/javascripts/i18n/en.js"))
+  end
+
   it "exports with multiple conditions" do
     set_config "multiple_conditions.yml"
     SimplesIdeias::I18n.export!

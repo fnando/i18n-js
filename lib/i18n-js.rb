@@ -32,13 +32,19 @@ module SimplesIdeias
     def export!
       if config?
         for options in config[:translations]
-          options.reverse_merge!(:only => "*")
-
-          if options[:only] == "*"
-            save translations, options[:file]
+          if options[:file] =~ ::I18n::INTERPOLATION_PATTERN
+            ::I18n.available_locales.each do |locale|
+              result = scoped_translations("#{locale}.#{options[:only]}")
+              save result, ::I18n.interpolate(options[:file],{:locale => locale}) unless result.empty?
+            end
           else
-            result = scoped_translations(options[:only])
-            save result, options[:file] unless result.empty?
+            options.reverse_merge!(:only => "*")
+            if options[:only] == "*"
+              save translations, options[:file]
+            else
+              result = scoped_translations(options[:only])
+              save result, options[:file] unless result.empty?
+            end
           end
         end
       else
@@ -103,7 +109,7 @@ module SimplesIdeias
       scopes = scopes.split(".") if scopes.is_a?(String)
       scopes = scopes.clone
       scope = scopes.shift
-
+      
       if scope == "*"
         results = {}
         translations.each do |scope, translations|
@@ -114,7 +120,7 @@ module SimplesIdeias
       elsif translations.has_key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
       end
-      nil
+      {}
     end
 
     # Initialize and return translations
