@@ -5,10 +5,8 @@ module SimplesIdeias
         require "i18n-js/rake"
       end
 
-      config.to_prepare do
-        SimplesIdeias::I18n.tap do |i18n|
-          i18n.export! if i18n.auto_export?
-        end
+      initializer "i18n-js.initialize" do |app|
+        app.config.middleware.use(Middleware) if Rails.env.development?
       end
     end
   end
