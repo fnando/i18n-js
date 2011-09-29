@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    i18n-js (2.0.0)
+    i18n-js (2.0.1)
       i18n
 
 GEM
