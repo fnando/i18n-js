@@ -11,6 +11,15 @@ module SimplesIdeias
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
     MERGER = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2 }
 
+    # Under rails 3.1.1 and higher, perform a check to ensure that the
+    # full environment will be available during asset compilation.
+    # This is required to ensure I18n is loaded.
+    def assert_usable_configuration!
+      @usable_configuration ||= Rails.version >= "3.1.1" && 
+        Rails.application.config.assets.initialize_on_precompile ||
+        raise("Cannot precompile i18n-js translations unless environment is initialized. Please set config.assets.initialize_on_precompile to true.")
+    end
+
     def config_file
       Rails.root.join("config/i18n-js.yml")
     end
