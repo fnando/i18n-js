@@ -77,7 +77,7 @@ module SimplesIdeias
     # Retrieve an updated JavaScript library from Github.
     def update!
       require "open-uri"
-      contents = open("http://github.com/fnando/i18n-js/raw/master/lib/i18n.js").read
+      contents = open("https://raw.github.com/fnando/i18n-js/master/vendor/assets/javascripts/i18n.js").read
       File.open(javascript_file, "w+") {|f| f << contents}
     end
 
