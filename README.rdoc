@@ -71,6 +71,8 @@ In practice, you'll have something like the following in your application.html.e
 You can use translate your messages:
 
   I18n.t("some.scoped.translation");
+  // or translate with explicite setting of locale
+  I18n.t("some.scoped.translation", {locale: "fr"});
 
 You can also interpolate values:
 

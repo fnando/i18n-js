@@ -29,7 +29,7 @@ I18n.lookup = function(scope, options) {
   var messages = translations[options.locale || I18n.currentLocale()];
   options = this.prepareOptions(options);
 
-  if (!messages) {
+  if (!messages){
     return;
   }
 
