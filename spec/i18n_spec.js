@@ -135,6 +135,11 @@ describe("I18n.js", function(){
     expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
   });
 
+  specify("translation with default locale option", function(){
+    expect(I18n.t("hello", {locale: "en"})).toBeEqualTo("Hello World!");
+    expect(I18n.t("hello", {locale: "pt-BR"})).toBeEqualTo("Olá Mundo!");
+  });
+
   specify("single interpolation", function(){
     actual = I18n.t("greetings.name", {name: "John Doe"});
     expect(actual).toBeEqualTo("Hello John Doe!");

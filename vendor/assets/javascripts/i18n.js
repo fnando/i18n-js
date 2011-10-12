@@ -20,8 +20,9 @@ I18n.isValidNode = function(obj, node) {
 }
 
 I18n.lookup = function(scope, options) {
+  var options = options || {};
   var translations = this.prepareOptions(I18n.translations);
-  var messages = translations[I18n.currentLocale()];
+  var messages = translations[options.locale || I18n.currentLocale()];
   options = this.prepareOptions(options);
 
   if (!messages) {
