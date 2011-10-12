@@ -4,6 +4,9 @@ var I18n = I18n || {};
 // Set default locale to english
 I18n.defaultLocale = "en";
 
+// Set default handling of translation fallbacks to false
+I18n.fallbacks = false;
+
 // Set default separator
 I18n.defaultSeparator = ".";
 
@@ -20,11 +23,13 @@ I18n.isValidNode = function(obj, node) {
 }
 
 I18n.lookup = function(scope, options) {
+  var options = options || {};
+  var lookupInitialScope = scope;
   var translations = this.prepareOptions(I18n.translations);
-  var messages = translations[I18n.currentLocale()];
+  var messages = translations[options.locale || I18n.currentLocale()];
   options = this.prepareOptions(options);
 
-  if (!messages) {
+  if (!messages){
     return;
   }
 
@@ -43,6 +48,9 @@ I18n.lookup = function(scope, options) {
     messages = messages[currentScope];
 
     if (!messages) {
+      if (I18n.fallbacks && !options.fallback) {
+        messages = I18n.lookup(lookupInitialScope, this.prepareOptions({ locale: I18n.defaultLocale, fallback: true }, options));
+      }
       break;
     }
   }
