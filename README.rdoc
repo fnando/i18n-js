@@ -93,9 +93,9 @@ You can set default values for missing scopes:
 Translation fallback can be handled by taking from I18n.defaultLocale.
 To allow this in your application.html.erb specify:
 
-<script type="text/javascript">
-  I18n.fallbacks = true;
-</script>
+  <script type="text/javascript">
+    I18n.fallbacks = true;
+  </script>
 
 Then missing translation will be taken from your I18n.defaultLocale.
 Example:
