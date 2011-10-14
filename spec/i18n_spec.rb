@@ -91,7 +91,7 @@ describe SimplesIdeias::I18n do
   it "exports to a JS file per available locale" do
     set_config "js_file_per_locale.yml"
     SimplesIdeias::I18n.export!
-    
+
     File.should be_file(Rails.root.join("public/javascripts/i18n/en.js"))
   end
 
@@ -154,7 +154,7 @@ describe SimplesIdeias::I18n do
   end
 
   it "updates the javascript library" do
-    FakeWeb.register_uri(:get, "http://github.com/fnando/i18n-js/raw/master/lib/i18n.js", :body => "UPDATED")
+    FakeWeb.register_uri(:get, "https://raw.github.com/fnando/i18n-js/master/vendor/assets/javascripts/i18n.js", :body => "UPDATED")
 
     SimplesIdeias::I18n.setup!
     SimplesIdeias::I18n.update!
