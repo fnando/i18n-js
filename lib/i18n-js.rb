@@ -11,6 +11,15 @@ module SimplesIdeias
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
     MERGER = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2 }
 
+    # Under rails 3.1.1 and higher, perform a check to ensure that the
+    # full environment will be available during asset compilation.
+    # This is required to ensure I18n is loaded.
+    def assert_usable_configuration!
+      @usable_configuration ||= Rails.version >= "3.1.1" && 
+        Rails.application.config.assets.initialize_on_precompile ||
+        raise("Cannot precompile i18n-js translations unless environment is initialized. Please set config.assets.initialize_on_precompile to true.")
+    end
+
     def config_file
       Rails.root.join("config/i18n-js.yml")
     end
@@ -30,25 +39,46 @@ module SimplesIdeias
     # Export translations to JavaScript, considering settings
     # from configuration file
     def export!
-      if config?
-        for options in config[:translations]
-          if options[:file] =~ ::I18n::INTERPOLATION_PATTERN
-            ::I18n.available_locales.each do |locale|
-              result = scoped_translations("#{locale}.#{options[:only]}")
-              save result, ::I18n.interpolate(options[:file],{:locale => locale}) unless result.empty?
-            end
-          else
-            options.reverse_merge!(:only => "*")
-            if options[:only] == "*"
-              save translations, options[:file]
-            else
-              result = scoped_translations(options[:only])
-              save result, options[:file] unless result.empty?
-            end
-          end
+      translation_segments.each do |filename, translations|
+        save(translations, filename)
+      end
+    end
+
+    def segments_per_locale(pattern,scope)
+      ::I18n.available_locales.each_with_object({}) do |locale,segments|
+        result = scoped_translations("#{locale}.#{scope}")
+        unless result.empty?
+          segment_name = ::I18n.interpolate(pattern,{:locale => locale})
+          segments[segment_name] = result
         end
+      end
+    end
+
+    def segment_for_scope(scope)
+      if scope == "*"
+        translations
       else
-        save translations, "#{export_dir}/translations.js"
+        scoped_translations(scope)
+      end
+    end
+
+    def configured_segments
+      config[:translations].each_with_object({}) do |options,segments|
+        options.reverse_merge!(:only => "*")
+        if options[:file] =~ ::I18n::INTERPOLATION_PATTERN
+          segments.merge!(segments_per_locale(options[:file],options[:only]))
+        else
+          result = segment_for_scope(options[:only])
+          segments[options[:file]] = result unless result.empty?
+        end
+      end
+    end
+
+    def translation_segments
+      if config?
+        configured_segments
+      else
+        {"#{export_dir}/translations.js" => translations}
       end
     end
 
