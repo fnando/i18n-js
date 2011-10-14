@@ -27,7 +27,7 @@ If asset pipeline has been disabled for your Rails application, then you will ne
 
 ==== Exporting translations
 
-You can export the translations file by running `rake i18n:js:export`.
+You can export the translations file by running <tt>rake i18n:js:export</tt>.
 Translations will be automatically exported in development mode.
 
 ==== Configuration
@@ -51,7 +51,7 @@ If <tt>only</tt> is omitted all the translations will be saved. Also, make sure 
     only: 'pt-BR.*'
 
 Optionaly, you can auto generate a translation file per available locale if you specify the <tt>%{locale}</tt> placeholder.
-  
+
   translations:
   - file: "public/javascripts/i18n/%{locale}.js"
     only: '*'
@@ -69,7 +69,7 @@ Set your locale is easy as
   I18n.currentLocale();
   // pt-BR
 
-In practice, you'll have something like the following in your application.html.erb:
+In practice, you'll have something like the following in your <tt>application.html.erb</tt>:
 
   <script type="text/javascript">
     I18n.defaultLocale = "<%= I18n.default_locale %>";
@@ -279,7 +279,7 @@ First, install all dependencies.
 
   bundle install
 
-Then just run `rake spec`.
+Then just run <tt>rake spec</tt>.
 
 == License
 
