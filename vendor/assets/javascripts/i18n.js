@@ -21,11 +21,13 @@ I18n.isValidNode = function(obj, node, undefined) {
 }
 
 I18n.lookup = function(scope, options) {
-  var options = options || {};
-  var lookupInitialScope = scope;
-  var translations = this.prepareOptions(I18n.translations);
-  var messages = translations[options.locale || I18n.currentLocale()];
-  options = this.prepareOptions(options);
+  var options = options || {}
+    , lookupInitialScope = scope
+    , translations = this.prepareOptions(I18n.translations)
+    , messages = translations[options.locale || I18n.currentLocale()]
+    , options = this.prepareOptions(options)
+    , currentScope
+  ;
 
   if (!messages){
     return;
@@ -42,7 +44,7 @@ I18n.lookup = function(scope, options) {
   scope = scope.split(this.defaultSeparator);
 
   while (scope.length > 0) {
-    var currentScope = scope.shift();
+    currentScope = scope.shift();
     messages = messages[currentScope];
 
     if (!messages) {
@@ -67,9 +69,10 @@ I18n.lookup = function(scope, options) {
 //   #=> {name: "John Doe", role: "user"}
 //
 I18n.prepareOptions = function() {
-  var options = {};
-  var opts;
-  var count = arguments.length;
+  var options = {}
+    , opts
+    , count = arguments.length
+  ;
 
   for (var i = 0; i < count; i++) {
     opts = arguments[i];
@@ -90,13 +93,15 @@ I18n.prepareOptions = function() {
 
 I18n.interpolate = function(message, options) {
   options = this.prepareOptions(options);
-  var matches = message.match(this.PLACEHOLDER);
+  var matches = message.match(this.PLACEHOLDER)
+    , placeholder
+    , value
+    , name
+  ;
 
   if (!matches) {
     return message;
   }
-
-  var placeholder, value, name;
 
   for (var i = 0; placeholder = matches[i]; i++) {
     name = placeholder.replace(this.PLACEHOLDER, "$1");
@@ -199,8 +204,9 @@ I18n.parseDate = function(date) {
 };
 
 I18n.toTime = function(scope, d) {
-  var date = this.parseDate(d);
-  var format = this.lookup(scope);
+  var date = this.parseDate(d)
+    , format = this.lookup(scope)
+  ;
 
   if (date.toString().match(/invalid/i)) {
     return date.toString();
@@ -219,21 +225,23 @@ I18n.strftime = function(date, format) {
   if (!options) {
     return date.toString();
   }
+
   options.meridian = options.meridian || ["AM", "PM"];
 
-  var weekDay = date.getDay();
-  var day = date.getDate();
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var hour = date.getHours();
-  var hour12 = hour;
-  var meridian = hour > 11 ? 1 : 0;
-  var secs = date.getSeconds();
-  var mins = date.getMinutes();
-  var offset = date.getTimezoneOffset();
-  var absOffsetHours = Math.floor(Math.abs(offset / 60));
-  var absOffsetMinutes = Math.abs(offset) - (absOffsetHours * 60);
-  var timezoneoffset = (offset > 0 ? "-" : "+") + (absOffsetHours.toString().length < 2 ? "0" + absOffsetHours : absOffsetHours) + (absOffsetMinutes.toString().length < 2 ? "0" + absOffsetMinutes : absOffsetMinutes);
+  var weekDay = date.getDay()
+    , day = date.getDate()
+    , year = date.getFullYear()
+    , month = date.getMonth() + 1
+    , hour = date.getHours()
+    , hour12 = hour
+    , meridian = hour > 11 ? 1 : 0
+    , secs = date.getSeconds()
+    , mins = date.getMinutes()
+    , offset = date.getTimezoneOffset()
+    , absOffsetHours = Math.floor(Math.abs(offset / 60))
+    , absOffsetMinutes = Math.abs(offset) - (absOffsetHours * 60)
+    , timezoneoffset = (offset > 0 ? "-" : "+") + (absOffsetHours.toString().length < 2 ? "0" + absOffsetHours : absOffsetHours) + (absOffsetMinutes.toString().length < 2 ? "0" + absOffsetMinutes : absOffsetMinutes)
+  ;
 
   if (hour12 > 12) {
     hour12 = hour12 - 12;
@@ -281,21 +289,23 @@ I18n.toNumber = function(number, options) {
     {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
   );
 
-  var negative = number < 0;
-  var string = Math.abs(number).toFixed(options.precision).toString();
-  var parts = string.split(".");
+  var negative = number < 0
+    , string = Math.abs(number).toFixed(options.precision).toString()
+    , parts = string.split(".")
+    , precision
+    , buffer = []
+    , formattedNumber
+  ;
 
   number = parts[0];
-  var precision = parts[1];
-
-  var n = [];
+  precision = parts[1];
 
   while (number.length > 0) {
-    n.unshift(number.substr(Math.max(0, number.length - 3), 3));
+    buffer.unshift(number.substr(Math.max(0, number.length - 3), 3));
     number = number.substr(0, number.length -3);
   }
 
-  var formattedNumber = n.join(options.delimiter);
+  formattedNumber = buffer.join(options.delimiter);
 
   if (options.precision > 0) {
     formattedNumber += options.separator + parts[1];
@@ -313,7 +323,8 @@ I18n.toNumber = function(number, options) {
 
     formattedNumber = formattedNumber
       .replace(regex.zeros, "")
-      .replace(regex.separator, "");
+      .replace(regex.separator, "")
+    ;
   }
 
   return formattedNumber;
@@ -330,7 +341,8 @@ I18n.toCurrency = function(number, options) {
   number = this.toNumber(number, options);
   number = options.format
     .replace("%u", options.unit)
-    .replace("%n", number);
+    .replace("%n", number)
+  ;
 
   return number;
 };
@@ -364,7 +376,8 @@ I18n.toHumanSize = function(number, options) {
   number = this.toNumber(size, options);
   number = options.format
     .replace("%u", unit)
-    .replace("%n", number);
+    .replace("%n", number)
+  ;
 
   return number;
 };
@@ -414,8 +427,9 @@ I18n.pluralize = function(count, scope, options) {
 };
 
 I18n.missingTranslation = function() {
-  var message = '[missing "' + this.currentLocale();
-  var count = arguments.length;
+  var message = '[missing "' + this.currentLocale()
+    , count = arguments.length
+  ;
 
   for (var i = 0; i < count; i++) {
     message += "." + arguments[i];
