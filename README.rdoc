@@ -18,14 +18,12 @@ Run <tt>rake i18n:js:setup</tt> to copy <tt>i18n.js</tt> to your javascript dire
 
 ==== Rails >= 3.1
 
-Run <tt>rake i18n:js:setup</tt> to copy <tt>i18n-js.yml</tt> to your config folder (if not already present). You should change the path in <tt>i18n.js.yml</tt> to <tt>app/assets/javascripts/i18n</tt> to make full use of the asset pipeline.
-
-Next add the following lines to your application.js to make the javascripts and translations available to your app:
+Add the following lines to your application.js to make the javascripts and translations available to your app:
 
   //= require i18n
   //= require i18n/translations
 
-If you don't want to use the asset pipeline, just disable it on your Rails application by setting <tt>config.assets.enabled</tt> to +false+ on your <tt>config/application.rb</tt> file.
+If asset pipeline has been disabled for your Rails application, then you will need to run <tt>rake i18n:js:setup</tt> to copy <tt>i18n-js.yml</tt> to your config folder (if not already present).
 
 ==== Exporting translations
 

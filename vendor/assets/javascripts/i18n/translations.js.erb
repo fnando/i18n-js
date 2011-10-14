@@ -1,0 +1,7 @@
+<% SimplesIdeias::I18n.assert_usable_configuration! %>
+var I18n = I18n || {};
+I18n.translations = <%=
+  SimplesIdeias::I18n.translation_segments.each_with_object({}) do |(name, segment),translations|
+    translations.merge!(segment)
+  end.to_json
+%>;
