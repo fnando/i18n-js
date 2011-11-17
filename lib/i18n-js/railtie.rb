@@ -6,7 +6,7 @@ module SimplesIdeias
       end
 
       initializer "i18n-js.initialize" do |app|
-        app.config.middleware.use(Middleware) if Rails.env.development? && !Rails.configuration.assets.enabled
+        app.config.middleware.use(Middleware) if Rails.env.development? && !SimplesIdeias::I18n.has_asset_pipeline?
       end
     end
   end

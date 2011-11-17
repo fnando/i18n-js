@@ -16,8 +16,12 @@ module SimplesIdeias
     # This is required to ensure I18n is loaded.
     def assert_usable_configuration!
       @usable_configuration ||= Rails.version >= "3.1.1" &&
-        Rails.application.config.assets.initialize_on_precompile ||
+        Rails.configuration.assets.initialize_on_precompile ||
         raise("Cannot precompile i18n-js translations unless environment is initialized. Please set config.assets.initialize_on_precompile to true.")
+    end
+
+    def has_asset_pipeline?
+      Rails.configuration.respond_to?(:assets) && Rails.configuration.assets.enabled
     end
 
     def config_file
@@ -25,7 +29,7 @@ module SimplesIdeias
     end
 
     def export_dir
-      if Rails.version >= "3.1" && Rails.configuration.assets.enabled
+      if has_asset_pipeline?
         "app/assets/javascripts/i18n"
       else
         "public/javascripts"
