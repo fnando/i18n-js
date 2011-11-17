@@ -26,25 +26,29 @@ module SimplesIdeias
         end
       end
 
+      # Check if translations should be regenerated.
+      # ONLY REGENERATE when these conditions are met:
+      #
+      # # Cache file doesn't exist
+      # # Translations and cache size are different (files were removed/added)
+      # # Translation file has been updated
+      #
       def verify_locale_files!
         valid_cache = []
-        changed_files = []
+        new_cache = {}
 
         valid_cache.push cache_path.exist?
         valid_cache.push ::I18n.load_path.uniq.size == cache.size
 
         ::I18n.load_path.each do |path|
-          change = File.mtime(path).to_i
-          file_has_changed = change != cache[path]
-          valid_cache.push file_has_changed
-          valid_cache.push !file_has_changed
-          changed_files << path if file_has_changed
-          cache[path] = change
+          changed_at = File.mtime(path).to_i
+          valid_cache.push changed_at == cache[path]
+          new_cache[path] = changed_at
         end
 
         unless valid_cache.all?
           File.open(cache_path, "w+") do |file|
-            file << cache.to_yaml
+            file << new_cache.to_yaml
           end
 
           SimplesIdeias::I18n.export!

@@ -1,12 +1,11 @@
 require "spec_helper"
 
 if File.basename(Rails.root) != "tmp"
-  warn <<-TXT
+  abort <<-TXT
 \e[31;5m
 WARNING: That will remove your project!
 Please go to #{File.expand_path(File.dirname(__FILE__) + "/..")} and run `rake spec`\e[0m
 TXT
-  exit 1
 end
 
 describe SimplesIdeias::I18n do
