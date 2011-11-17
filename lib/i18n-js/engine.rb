@@ -4,6 +4,8 @@ module SimplesIdeias
       I18N_TRANSLATIONS_ASSET = "i18n/translations"
 
       initializer "i18n-js.asset_dependencies", :after => "sprockets.environment" do
+        next unless SimplesIdeias::I18n.has_asset_pipeline?
+
         config = Rails.root.join("config", "i18n-js.yml")
         cache_file = I18n::Engine.load_path_hash_cache
 
