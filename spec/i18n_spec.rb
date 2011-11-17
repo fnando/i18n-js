@@ -88,6 +88,12 @@ describe SimplesIdeias::I18n do
     File.should be_file(Rails.root.join("public/javascripts/tudo.js"))
   end
 
+  it "ignores an empty config file" do
+    set_config "no_config.yml"
+    SimplesIdeias::I18n.export!
+    Rails.root.join(SimplesIdeias::I18n.export_dir, "translations.js").should be_file
+  end
+
   it "exports to a JS file per available locale" do
     set_config "js_file_per_locale.yml"
     SimplesIdeias::I18n.export!
@@ -193,3 +199,4 @@ describe SimplesIdeias::I18n do
     SimplesIdeias::I18n.translations
   end
 end
+
