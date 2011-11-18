@@ -29,11 +29,12 @@ module SimplesIdeias
 
       # rewrite path cache hash at startup and before each request in development
       config.to_prepare do
+        next unless SimplesIdeias::I18n.has_asset_pipeline?
         SimplesIdeias::I18n::Engine.write_hash_if_changed unless Rails.env.production?
       end
 
       def self.load_path_hash_cache
-        @load_path_hash_cache ||= File.join(Rails.application.paths["tmp"].first, "i18n-js.i18n_path_cache.dat")
+        @load_path_hash_cache ||= Rails.root.join("tmp/i18n-js.cache")
       end
 
       def self.write_hash_if_changed
@@ -46,7 +47,9 @@ module SimplesIdeias
       end
 
       def self.write_hash!
-        File.open(load_path_hash_cache, "w") do |f|
+        FileUtils.mkdir_p Rails.root.join("tmp")
+
+        File.open(load_path_hash_cache, "w+") do |f|
           f.write(cached_load_path_hash)
         end
       end
