@@ -113,7 +113,7 @@ Example:
   I18n.t("some.missing.scope");
   // this key will be taken from "en" locale scope
 
-Pluralization is possible as well:
+Pluralization is possible as well and by default provides english rules:
 
   I18n.t("inbox.counting", {count: 10}); // You have 10 messages
 
@@ -127,6 +127,14 @@ The sample above expects the following translation:
         zero: You have no messages
 
 <b>NOTE:</b> Rais I18n recognizes the +zero+ option.
+
+If you need special rules just define them for your language, for example for ru locale in application.js:
+
+  I18n.pluralizationRules.ru = function (n) {
+    return n % 10 == 1 && n % 100 != 11 ? "one" : [2, 3, 4].indexOf(n % 10) >= 0 && [12, 13, 14].indexOf(n % 100) < 0 ? "few" : n % 10 == 0 || [5, 6, 7, 8, 9].indexOf(n % 10) >= 0 || [11, 12, 13, 14].indexOf(n % 100) >= 0 ? "many" : "other";
+  }
+
+You can find all rules on http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
 
 If you're using the same scope over and over again, you may use the +scope+ option.
 

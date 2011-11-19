@@ -16,9 +16,13 @@ I18n.locale = null;
 // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
 I18n.PLACEHOLDER = /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm;
 
-I18n.isValidNode = function(obj, node, undefined) {
-    return obj[node] !== null && obj[node] !== undefined;
+I18n.pluralizationRules = {
+  en: rule = function (n) { return n == 0 ? ["zero", "none", "other"] : n == 1 ? "one" : "other"; }
 }
+
+I18n.isValidNode = function(obj, node, undefined) {
+  return obj[node] !== null && obj[node] !== undefined;
+};
 
 I18n.lookup = function(scope, options) {
   var options = options || {}
@@ -394,6 +398,20 @@ I18n.toPercentage = function(number, options) {
   return number + "%";
 };
 
+I18n.pluralizer = function(locale) {
+  pluralizer = this.pluralizationRules[locale];
+  if (pluralizer !== undefined) return pluralizer;
+  return this.pluralizationRules["en"];
+};
+
+I18n.findAndTranslateValidNode = function(keys, translation) {
+  for (i = 0; i < keys.length; i++) {
+    key = keys[i];
+    if (this.isValidNode(translation, key)) return translation[key];
+  }
+  return null;
+};
+
 I18n.pluralize = function(count, scope, options) {
   var translation;
 
@@ -409,19 +427,12 @@ I18n.pluralize = function(count, scope, options) {
   options = this.prepareOptions(options);
   options.count = count.toString();
 
-  switch(Math.abs(count)) {
-    case 0:
-      message = this.isValidNode(translation, "zero") ? translation.zero :
-                this.isValidNode(translation, "none") ? translation.none :
-                this.isValidNode(translation, "other") ? translation.other :
-                this.missingTranslation(scope, "zero");
-      break;
-    case 1:
-      message = this.isValidNode(translation, "one") ? translation.one : this.missingTranslation(scope, "one");
-      break;
-    default:
-      message = this.isValidNode(translation, "other") ? translation.other : this.missingTranslation(scope, "other");
-  }
+  pluralizer = this.pluralizer(this.currentLocale());
+  key = pluralizer(Math.abs(count));
+  keys = ((typeof key == "object") && (key instanceof Array)) ? key : [key];
+
+  message = this.findAndTranslateValidNode(keys, translation);
+  if (message == null) message = this.missingTranslation(scope, keys[0]);
 
   return this.interpolate(message, options);
 };
