@@ -765,4 +765,23 @@ describe("I18n.js", function(){
     expect(I18n.toCurrency(1.2, options)).toBeEqualTo("$1.2");
     expect(I18n.toHumanSize(1.2, options)).toBeEqualTo("1.2Bytes");
   });
+
+  specify("return plural key for given count for english locale", function(){
+    expect(I18n.pluralizationRules.en(0)).toBeEqualTo(["zero", "none", "other"]);
+    expect(I18n.pluralizationRules.en(1)).toBeEqualTo("one");
+    expect(I18n.pluralizationRules.en(2)).toBeEqualTo("other");
+  });
+
+  specify("return given pluralizer", function(){
+    I18n.pluralizationRules.en = "en";
+    expect(I18n.pluralizer("ru")).toBeEqualTo("en");
+    I18n.pluralizationRules.ru = "ru";
+    expect(I18n.pluralizer("ru")).toBeEqualTo("ru");
+  });
+
+  specify("find and translate valid node", function(){
+    expect(I18n.findAndTranslateValidNode(["one", "other"], {one: "one", other: "other"})).toBeEqualTo("one");
+    expect(I18n.findAndTranslateValidNode(["one", "other"], {other: "other"})).toBeEqualTo("other");
+    expect(I18n.findAndTranslateValidNode(["one"], {})).toBeEqualTo(null);
+  });
 });
