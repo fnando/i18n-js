@@ -6,12 +6,12 @@ module SimplesIdeias
       initializer "i18n-js.asset_dependencies", :after => "sprockets.environment" do
         next unless SimplesIdeias::I18n.has_asset_pipeline?
 
-        config = Rails.root.join("config", "i18n-js.yml")
+        config = I18n.config_file
         cache_file = I18n::Engine.load_path_hash_cache
 
         Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, data|
           if context.logical_path == I18N_TRANSLATIONS_ASSET
-            context.depend_on(config)
+            context.depend_on(config) if I18n.config?
             # also set up dependencies on every locale file
             ::I18n.load_path.each {|path| context.depend_on(path)}
 
