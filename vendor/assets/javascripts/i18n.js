@@ -7,6 +7,9 @@ I18n.defaultLocale = "en";
 // Set default handling of translation fallbacks to false
 I18n.fallbacks = false;
 
+// Set default handling of translation fallbacks of locale i.e. (en-US to en) to false
+I18n.fallbacksLocale = false;
+
 // Set default separator
 I18n.defaultSeparator = ".";
 
@@ -23,8 +26,9 @@ I18n.isValidNode = function(obj, node, undefined) {
 I18n.lookup = function(scope, options) {
   var options = options || {}
     , lookupInitialScope = scope
+    , locale = options.locale || I18n.currentLocale()
     , translations = this.prepareOptions(I18n.translations)
-    , messages = translations[options.locale || I18n.currentLocale()]
+    , messages = translations[locale]
     , options = this.prepareOptions(options)
     , currentScope
   ;
@@ -48,7 +52,9 @@ I18n.lookup = function(scope, options) {
     messages = messages[currentScope];
 
     if (!messages) {
-      if (I18n.fallbacks && !options.fallback) {
+      if (I18n.fallbacksLocale && (locale.indexOf("-") != -1)) {
+        messages = I18n.lookup(lookupInitialScope, this.prepareOptions({ locale: locale.substring(0, locale.indexOf("-")) }, options));
+      } else if ((I18n.fallbacks || I18n.fallbacksLocale) && !options.fallback) {
         messages = I18n.lookup(lookupInitialScope, this.prepareOptions({ locale: I18n.defaultLocale, fallback: true }, options));
       }
       break;
