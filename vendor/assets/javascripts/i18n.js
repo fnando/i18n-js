@@ -53,7 +53,7 @@ I18n.lookup = function(scope, options) {
 
     if (!messages) {
       if (I18n.fallbacks && !options.fallback) {
-        messages = I18n.lookup(lookupInitialScope, this.prepareOptions({ locale: I18n.defaultLocale, fallback: true }, options));
+        messages = I18n.lookup(lookupInitialScope, this.prepareOptions({locale: I18n.defaultLocale, fallback: true}, options));
       }
       break;
     }
