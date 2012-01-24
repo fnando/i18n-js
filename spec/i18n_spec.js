@@ -151,6 +151,24 @@ describe("I18n.js", function(){
     expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
   });
 
+  specify("translation should still work if I18n.fallbacksLocale == true", function(){
+    I18n.locale = "en";
+    I18n.fallbacksLocale = true;
+    expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
+  });
+
+  specify("translation should handle fallbacksLocale if I18n.fallbacksLocale == true", function(){
+    I18n.locale = "en-US";
+    I18n.fallbacksLocale = true;
+    expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
+  });
+
+  specify("translation should handle fallbacksLocale if I18n.fallbacksLocale == true and no fallback available", function(){
+    I18n.locale = "pt-BR";
+    I18n.fallbacksLocale = true;
+    expect(I18n.t("greetings.stranger")).toBeEqualTo("[missing \"pt-BR.greetings.stranger\" translation]");
+  });
+
   specify("single interpolation", function(){
     actual = I18n.t("greetings.name", {name: "John Doe"});
     expect(actual).toBeEqualTo("Hello John Doe!");
