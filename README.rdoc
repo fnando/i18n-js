@@ -50,7 +50,7 @@ If <tt>only</tt> is omitted all the translations will be saved. Also, make sure 
   - file: 'public/javascripts/pt-BR.js'
     only: 'pt-BR.*'
 
-Optionaly, you can auto generate a translation file per available locale if you specify the <tt>%{locale}</tt> placeholder.
+Optionally, you can auto generate a translation file per available locale if you specify the <tt>%{locale}</tt> placeholder.
 
   translations:
   - file: "public/javascripts/i18n/%{locale}.js"
