@@ -14,7 +14,7 @@ You <b>don't</b> need to set up a thing. The default settings will work just oka
 
 ==== Rails <= 3.0
 
-Run <tt>rake i18n:js:setup</tt> to copy <tt>i18n.js</tt> to your javascript directory and <tt>i18n-js.yml</tt> to your config folder (if not already present). Then you're ready to go!
+Add <tt>require 'i18n-js/rake'</tt> to any of your rake files, then run <tt>rake i18n:js:setup</tt> to copy <tt>i18n.js</tt> to your javascript directory and <tt>i18n-js.yml</tt> to your config folder (if not already present). Then you're ready to go!
 
 ==== Rails >= 3.1
 
