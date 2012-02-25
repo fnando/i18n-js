@@ -151,6 +151,12 @@ describe("I18n.js", function(){
     expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
   });
 
+  specify("translation should handle fallback from unknown locale", function(){
+    I18n.locale = "fr";
+    I18n.fallbacks = true;
+    expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
+  });
+
   specify("single interpolation", function(){
     actual = I18n.t("greetings.name", {name: "John Doe"});
     expect(actual).toBeEqualTo("Hello John Doe!");
@@ -600,6 +606,12 @@ describe("I18n.js", function(){
   });
 
   specify("default value for simple translation", function(){
+    actual = I18n.t("warning", {defaultValue: "Warning!"});
+    expect(actual).toBeEqualTo("Warning!");
+  });
+
+  specify("default value for unknown locale", function(){
+    I18n.locale = "fr";
     actual = I18n.t("warning", {defaultValue: "Warning!"});
     expect(actual).toBeEqualTo("Warning!");
   });

@@ -28,14 +28,10 @@ I18n.lookup = function(scope, options) {
   var options = options || {}
     , lookupInitialScope = scope
     , translations = this.prepareOptions(I18n.translations)
-    , messages = translations[options.locale || I18n.currentLocale()]
+    , messages = translations[options.locale || I18n.currentLocale()] || {}
     , options = this.prepareOptions(options)
     , currentScope
   ;
-
-  if (!messages){
-    return;
-  }
 
   if (typeof(scope) == "object") {
     scope = scope.join(this.defaultSeparator);
