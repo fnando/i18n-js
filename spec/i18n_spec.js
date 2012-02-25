@@ -91,6 +91,14 @@ describe("I18n.js", function(){
             abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
             meridian: ["am", "pm"]
         }
+      },
+
+      "de": {
+        hello: "Hallo Welt!"
+      },
+
+      "nb": {
+        hello: "Hei Verden!"
       }
     };
   });
@@ -149,6 +157,25 @@ describe("I18n.js", function(){
     I18n.locale = "pt-BR";
     I18n.fallbacks = true;
     expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
+  });
+
+  specify("translation should handle fallback from unknown locale", function(){
+    I18n.locale = "fr";
+    I18n.fallbacks = true;
+    expect(I18n.t("greetings.stranger")).toBeEqualTo("Hello stranger!");
+  });
+
+  specify("translation should handle fallback to less specific locale", function(){
+    I18n.locale = "de-DE";
+    I18n.fallbacks = true;
+    expect(I18n.t("hello")).toBeEqualTo("Hallo Welt!");
+  });
+
+  specify("translation should handle fallback via custom rules", function(){
+    I18n.locale = "no";
+    I18n.fallbacks = true;
+    I18n.fallbackRules.no = [ "nb" ];
+    expect(I18n.t("hello")).toBeEqualTo("Hei Verden!");
   });
 
   specify("single interpolation", function(){
@@ -600,6 +627,12 @@ describe("I18n.js", function(){
   });
 
   specify("default value for simple translation", function(){
+    actual = I18n.t("warning", {defaultValue: "Warning!"});
+    expect(actual).toBeEqualTo("Warning!");
+  });
+
+  specify("default value for unknown locale", function(){
+    I18n.locale = "fr";
     actual = I18n.t("warning", {defaultValue: "Warning!"});
     expect(actual).toBeEqualTo("Warning!");
   });
