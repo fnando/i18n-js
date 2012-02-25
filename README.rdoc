@@ -100,18 +100,25 @@ You can set default values for missing scopes:
   // with interpolation
   I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
 
-Translation fallback can be handled by taking from I18n.defaultLocale.
-To allow this in your application.html.erb specify:
+Translation fallback can be enabled by adding to your <tt>application.html.erb</tt>:
 
   <script type="text/javascript">
     I18n.fallbacks = true;
   </script>
 
-Then missing translation will be taken from your I18n.defaultLocale.
+By default missing translations will first be looked for in less
+specific versions of the requested locale and if that fails by taking
+them from your I18n.defaultLocale.
 Example:
-  // if I18n.defaultLocale = "en" and translation doesn't exist for I18n.locale = "de"
+  // if I18n.defaultLocale = "en" and translation doesn't exist for I18n.locale = "de-DE"
   I18n.t("some.missing.scope");
-  // this key will be taken from "en" locale scope
+  // this key will be taken from "de" locale scope
+  // or, if that also doesn't exist, from "en" locale scope
+
+Custom fallback rules can also be specified for a particular language,
+for example:
+
+  I18n.fallbackRules.no = [ "nb", "en" ];
 
 Pluralization is possible as well and by default provides english rules:
 

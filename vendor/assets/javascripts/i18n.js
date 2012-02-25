@@ -16,8 +16,30 @@ I18n.locale = null;
 // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
 I18n.PLACEHOLDER = /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm;
 
+I18n.fallbackRules = {
+};
+
 I18n.pluralizationRules = {
   en: rule = function (n) { return n == 0 ? ["zero", "none", "other"] : n == 1 ? "one" : "other"; }
+}
+
+I18n.getFallbacks = function(locale) {
+  if (locale === I18n.defaultLocale) {
+    return [];
+  } else if (!I18n.fallbackRules[locale]) {
+    var rules = []
+      , components = locale.split("-");
+
+    for (var l = 1; l < components.length; l++) {
+      rules.push(components.slice(0, l).join("-"));
+    }
+
+    rules.push(I18n.defaultLocale);
+
+    I18n.fallbackRules[locale] = rules;
+  }
+
+  return I18n.fallbackRules[locale];
 }
 
 I18n.isValidNode = function(obj, node, undefined) {
@@ -28,7 +50,8 @@ I18n.lookup = function(scope, options) {
   var options = options || {}
     , lookupInitialScope = scope
     , translations = this.prepareOptions(I18n.translations)
-    , messages = translations[options.locale || I18n.currentLocale()] || {}
+    , locale = options.locale || I18n.currentLocale()
+    , messages = translations[locale] || {}
     , options = this.prepareOptions(options)
     , currentScope
   ;
@@ -43,20 +66,25 @@ I18n.lookup = function(scope, options) {
 
   scope = scope.split(this.defaultSeparator);
 
-  while (scope.length > 0) {
+  while (messages && scope.length > 0) {
     currentScope = scope.shift();
     messages = messages[currentScope];
-
-    if (!messages) {
-      if (I18n.fallbacks && !options.fallback) {
-        messages = I18n.lookup(lookupInitialScope, this.prepareOptions({locale: I18n.defaultLocale, fallback: true}, options));
-      }
-      break;
-    }
   }
 
-  if (!messages && this.isValidNode(options, "defaultValue")) {
-    messages = options.defaultValue;
+  if (!messages) {
+    if (I18n.fallbacks) {
+      var fallbacks = this.getFallbacks(locale);
+      for (var fallback = 0; fallback < fallbacks.length; fallbacks++) {
+        messages = I18n.lookup(lookupInitialScope, this.prepareOptions({locale: fallbacks[fallback]}, options));
+        if (messages) {
+          break;
+        }
+      }
+    }
+
+    if (!messages && this.isValidNode(options, "defaultValue")) {
+        messages = options.defaultValue;
+    }
   }
 
   return messages;
