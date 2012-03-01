@@ -20,8 +20,10 @@ I18n.fallbackRules = {
 };
 
 I18n.pluralizationRules = {
-  en: rule = function (n) { return n == 0 ? ["zero", "none", "other"] : n == 1 ? "one" : "other"; }
-}
+  en: rule = function (n) {
+    return n == 0 ? ["zero", "none", "other"] : n == 1 ? "one" : "other";
+  }
+};
 
 I18n.getFallbacks = function(locale) {
   if (locale === I18n.defaultLocale) {
