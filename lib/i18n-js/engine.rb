@@ -3,7 +3,8 @@ module SimplesIdeias
     class Engine < ::Rails::Engine
       I18N_TRANSLATIONS_ASSET = "i18n/translations"
 
-      initializer "i18n-js.asset_dependencies", :after => "sprockets.environment" do
+      initializer "i18n-js.asset_dependencies", :after => "sprockets.environment",
+                                                :before => "i18n-js.initialize" do
         next unless SimplesIdeias::I18n.has_asset_pipeline?
 
         config = I18n.config_file
