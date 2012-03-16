@@ -138,8 +138,18 @@ The sample above expects the following translation:
 If you need special rules just define them for your language, for example for ru locale in application.js:
 
   I18n.pluralizationRules.ru = function (n) {
-    return n % 10 == 1 && n % 100 != 11 ? "one" : [2, 3, 4].indexOf(n % 10) >= 0 && [12, 13, 14].indexOf(n % 100) < 0 ? "few" : n % 10 == 0 || [5, 6, 7, 8, 9].indexOf(n % 10) >= 0 || [11, 12, 13, 14].indexOf(n % 100) >= 0 ? "many" : "other";
-  }
+    var result, n_10 = n % 10, n_100 = n % 100;
+    if (n_10 == 1 && n_100 != 11) {
+      result = "one";
+    } else if ((n_10 >= 2 && n_10 <= 4) && (n_100 < 12 || n_100 > 14)) {
+      result = "few";
+    } else if (n_10 == 0 || (n_10 >= 5 && n_10 <= 9) || (n_100 >= 11 && n_100 <= 14)) {
+      result = "many";
+    } else {
+      result = "other";
+    }
+    return result;
+  };
 
 You can find all rules on http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
 
