@@ -99,6 +99,21 @@ describe SimplesIdeias::I18n do
 
     File.should be_file(Rails.root.join("public/javascripts/i18n/en.js"))
   end
+  
+  it "exports to a JS file per available locale using only array" do
+    set_config "js_file_per_locale_only_array.yml"
+    SimplesIdeias::I18n.export!
+
+	File.should be_file(Rails.root.join("public/javascripts/i18n/translation.en.js"))
+	File.should be_file(Rails.root.join("public/javascripts/i18n/translation.fr.js"))
+	File.should be_file(Rails.root.join("public/javascripts/i18n/en/translations.js"))
+	File.should be_file(Rails.root.join("public/javascripts/i18n/fr/translations.js"))
+	
+	File.read(Rails.root.join("public/javascripts/i18n/translation.en.js")).should_not == "var I18n = I18n || {};\nI18n.translations = {\"en\":null};"
+	File.read(Rails.root.join("public/javascripts/i18n/translation.en.js")).should_not == "var I18n = I18n || {};\nI18n.translations = {\"fr\":null};"
+	File.read(Rails.root.join("public/javascripts/i18n/en/translations.js")).should_not == "var I18n = I18n || {};\nI18n.translations = {\"en\":null};"
+	File.read(Rails.root.join("public/javascripts/i18n/fr/translations.js")).should_not == "var I18n = I18n || {};\nI18n.translations = {\"fr\":null};"
+  end
 
   it "exports with multiple conditions" do
     set_config "multiple_conditions.yml"

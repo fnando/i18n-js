@@ -1,0 +1,9 @@
+translations:
+  - file: "public/javascripts/i18n/translation.%{locale}.js"
+    only:
+      - "date.formats"
+      - "number.currency"
+  - file: "public/javascripts/i18n/%{locale}/translations.js"
+    only:
+      - "date.formats"
+      - "number.currency"

@@ -132,9 +132,9 @@ module SimplesIdeias
       result = {}
 
       [scopes].flatten.each do |scope|
-        deep_merge! result, filter(translations, scope)
+        t = filter(translations, scope)
+        deep_merge! result, t unless t.blank?
       end
-
       result
     end
 
@@ -151,8 +151,20 @@ module SimplesIdeias
           results[scope.to_sym] = tmp unless tmp.nil?
         end
         return results
-      elsif translations.has_key?(scope.to_sym)
-        return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
+      else
+        if translations.has_key?(scope.to_sym) and scopes.join(".").match(/^\[.+\]$/)
+          results = {}
+          scopes = scopes.join(".")
+          scopes = Array.instance_eval scopes
+          scopes.each do |s|
+            t = filter(translations[scope.to_sym], s)
+            deep_merge! results, {scope.to_sym => t } unless t.blank?
+          end
+          return results
+        elsif translations.has_key?(scope.to_sym)
+          t = scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)
+          return {scope.to_sym => t } unless t.blank?
+        end
       end
       nil
     end
