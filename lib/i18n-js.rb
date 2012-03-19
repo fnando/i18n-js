@@ -121,7 +121,7 @@ module SimplesIdeias
       FileUtils.mkdir_p File.dirname(file)
 
       File.open(file, "w+") do |f|
-        f << %(var I18n = I18n || { add_translation: function(translation) { this.translation = translation }};\n)
+        f << %(var I18n = I18n || { add_translation: function(translation) { this.translations = translation }};\n)
         f << %(I18n.add_translation\();
         f << translations.to_json
         f << %(\);)
