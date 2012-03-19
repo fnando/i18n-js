@@ -45,6 +45,25 @@ if (!Array.prototype.indexOf) {
 // Instantiate the object
 var I18n = I18n || {};
 
+// Merge translations
+I18n.merge_translation = function(destination, source) {
+	for (var property in source) {
+		if (source[property] && source[property].constructor && source[property].constructor === Object) {
+			destination[property] = destination[property] || {};
+			arguments.callee(destination[property], source[property]);
+		} else {
+			destination[property] = source[property];
+		}
+	}
+	return destination;
+};
+
+// Add new translation
+I18n.add_translation = function(new_translation) {
+	I18n.translations = I18n.translations || {};
+	I18n.merge_translation(I18n.translations, new_translation);
+};
+
 // Set default locale to english
 I18n.defaultLocale = "en";
 
