@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ $# -ne 0 ]; then
+  command="node lib/jasmine-node/cli.js $1 spec"
+  $command
+else
+  time node lib/jasmine-node/cli.js spec #/nested/uber-nested
+fi
