@@ -99,6 +99,24 @@ describe SimplesIdeias::I18n do
 
     File.should be_file(Rails.root.join("public/javascripts/i18n/en.js"))
   end
+  
+  it "exports to a JS file per available locale using only array" do
+    set_config "js_file_per_locale_only_array.yml"
+    SimplesIdeias::I18n.export!
+
+	locales = %w"en fr"
+	
+	locales.each do |locale|
+		File.should be_file(Rails.root.join("public/javascripts/i18n/translation.#{locale}.js"))
+		File.should be_file(Rails.root.join("public/javascripts/i18n/#{locale}/translations.js"))
+		# verify file content
+		wrong_content = "var I18n = I18n || { add_translation: function(translation) { this.translation = translation }};"
+		wrong_content += "\nI18n.add_translation({\"%{locale}\":null});"
+		
+		File.read(Rails.root.join("public/javascripts/i18n/translation.#{locale}.js")).should_not == wrong_content
+		File.read(Rails.root.join("public/javascripts/i18n/#{locale}/translations.js")).should_not == wrong_content
+	end
+  end
 
   it "exports with multiple conditions" do
     set_config "multiple_conditions.yml"
