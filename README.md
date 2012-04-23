@@ -251,9 +251,9 @@ You can run I18n tests using Node.js or your browser.
 
 To use Node.js, execute the following command from the lib's root directory:
 
-    $ ./node_modules/.bin/jasmine-node spec/
+    $ ./node_modules/.bin/jasmine-node spec/js
 
-To run using your browser, just open the `spec/runner.html` file.
+To run using your browser, just open the `spec/js/specs.html` file.
 
 ## License
 
