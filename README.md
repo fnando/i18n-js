@@ -90,10 +90,10 @@ You can set default values for missing scopes:
     // with interpolation
     I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
 
-Translation fallback can be enabled by enabling the `I18n.fallback` option:
+Translation fallback can be enabled by enabling the `I18n.fallbacks` option:
 
     <script type="text/javascript">
-      I18n.fallback = true;
+      I18n.fallbacks = true;
     </script>
 
 By default missing translations will first be looked for in less

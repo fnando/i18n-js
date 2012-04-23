@@ -18,6 +18,6 @@ describe("Defaults", function(){
   });
 
   it("sets fallback", function(){
-    expect(I18n.fallback).toEqual(false);
+    expect(I18n.fallbacks).toEqual(false);
   });
 });
