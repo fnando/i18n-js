@@ -1,33 +1,25 @@
 require "spec_helper"
 
 describe I18n::JS do
-  before do
-    I18n.load_path = [File.dirname(__FILE__) + "/fixtures/locales.yml"]
-  end
-
-  around do
-    FileUtils.rm_rf("/tmp/i18n-js")
-  end
-
   context "exporting" do
     before do
-      I18n::JS.stub :export_dir => "/tmp/i18n-js"
+      I18n::JS.stub :export_dir => temp_path
     end
 
     it "exports messages to default path when configuration file doesn't exist" do
       I18n::JS.export
-      File.join(I18n::JS.export_dir, "translations.js").should be_file
+      file_should_exist "translations.js"
     end
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS.should_receive(:save).with(translations, "public/javascripts/translations/all.js")
+      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/all.js")
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS.should_receive(:save).with(translations, "public/javascripts/no_scope.js")
+      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/no_scope.js")
       I18n::JS.export
     end
 
@@ -35,28 +27,29 @@ describe I18n::JS do
       set_config "multiple_files.yml"
       I18n::JS.export
 
-      File.should be_file(Rails.root.join("public/javascripts/all.js"))
-      File.should be_file(Rails.root.join("public/javascripts/tudo.js"))
+      file_should_exist "all.js"
+      file_should_exist "tudo.js"
     end
 
     it "ignores an empty config file" do
       set_config "no_config.yml"
       I18n::JS.export
-      File.should be_file("/tmp/i18n-js/translations.js")
+
+      file_should_exist "translations.js"
     end
 
     it "exports to a JS file per available locale" do
       set_config "js_file_per_locale.yml"
       I18n::JS.export
 
-      File.should be_file("/tmp/i18n-js/en.js")
+      file_should_exist "en.js"
     end
 
     it "exports with multiple conditions" do
       set_config "multiple_conditions.yml"
       I18n::JS.export
 
-      File.should be_file("/tmp/i18n-js/bitsnpieces.js")
+      file_should_exist "bitsnpieces.js"
     end
   end
 
@@ -126,17 +119,4 @@ describe I18n::JS do
       target[:a].should eql({:b => 1, :c => 2})
     end
   end
-
-  private
-  # Set the configuration as the current one
-  def set_config(path)
-    config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/fixtures/#{path}"))
-    I18n::JS.stub(:config? => true, :config => config)
-  end
-
-  # Shortcut to I18n::JS.translations
-  def translations
-    I18n::JS.translations
-  end
 end
-
