@@ -1,5 +1,5 @@
 translations:
-  - file: "/tmp/i18n-js/bitsnpieces.js"
+  - file: "tmp/i18n-js/bitsnpieces.js"
     only:
       - "*.date.formats"
       - "*.number.currency"
