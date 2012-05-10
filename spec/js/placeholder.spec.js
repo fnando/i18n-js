@@ -1,4 +1,4 @@
-var I18n = require("../../lib/i18n");
+var I18n = require("../../app/assets/javascripts/i18n");
 
 describe("Placeholder", function(){
   beforeEach(function(){
