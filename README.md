@@ -288,11 +288,17 @@ And use 2 spaces, not tabs. And don't touch the versioning thing.
 
 You can run I18n tests using Node.js or your browser.
 
-To use Node.js, execute the following command from the lib's root directory:
+To use Node.js, install the `jasmine-node` library:
 
-    $ ./node_modules/.bin/jasmine-node spec/js
+    $ npm install jasmine-node -g
+
+Then execute the following command from the lib's root directory:
+
+    $ jasmine-node spec/js
 
 To run using your browser, just open the `spec/js/specs.html` file.
+
+You can run both Ruby and JavaScript specs with `rake spec`.
 
 ## License
 
