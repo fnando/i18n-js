@@ -24,7 +24,7 @@ Add the gem to your Gemfile.
     gem "i18n-js"
 
 If you're using the [asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html),
-then you must add the following like to your `app/assets/javascripts/application.js`.
+then you must add the following line to your `app/assets/javascripts/application.js`.
 
     //= require i18n/translations
 
