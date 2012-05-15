@@ -109,11 +109,11 @@ describe SimplesIdeias::I18n do
   it "multiple wildcards" do
     result = SimplesIdeias::I18n.scoped_translations("*.*.test.*")
 
-    result.should == {:en => {}, :fr => {}}
+    result.should == {}
 
     result = SimplesIdeias::I18n.scoped_translations("*.*.*.test.*")
 
-    result.should == {:en => {:number => {}, :date => {}, :time => {}, :admin => {}}, :fr => {:number => {}, :date => {}, :time => {}, :admin => {}}}
+    result.should == {}
   end
 
   it "filters translations using scope *.date.formats" do

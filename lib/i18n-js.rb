@@ -132,7 +132,8 @@ module SimplesIdeias
       result = {}
 
       [scopes].flatten.each do |scope|
-        deep_merge! result, filter(translations, scope)
+        scope_result = filter(translations, scope)
+        deep_merge! result, scope_result if scope_result
       end
 
       result
@@ -150,6 +151,7 @@ module SimplesIdeias
           tmp = scopes.empty? ? translations : filter(translations, scopes)
           results[scope.to_sym] = tmp unless tmp.nil?
         end
+        return nil if results.empty?
         return results
       elsif translations.respond_to?(:has_key?) && translations.has_key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
