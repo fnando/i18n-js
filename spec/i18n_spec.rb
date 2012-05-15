@@ -106,6 +106,16 @@ describe SimplesIdeias::I18n do
     File.should be_file(Rails.root.join("public/javascripts/bitsnpieces.js"))
   end
 
+  it "multiple wildcards" do
+    result = SimplesIdeias::I18n.scoped_translations("*.*.test.*")
+
+    result.should == {:en => {}, :fr => {}}
+
+    result = SimplesIdeias::I18n.scoped_translations("*.*.*.test.*")
+
+    result.should == {:en => {:number => {}, :date => {}, :time => {}, :admin => {}}, :fr => {:number => {}, :date => {}, :time => {}, :admin => {}}}
+  end
+
   it "filters translations using scope *.date.formats" do
     result = SimplesIdeias::I18n.filter(translations, "*.date.formats")
     result[:en][:date].keys.should == [:formats]
