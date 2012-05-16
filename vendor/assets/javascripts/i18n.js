@@ -46,7 +46,7 @@ if (!Array.prototype.indexOf) {
 var I18n = I18n || {};
 
 // Set default locale to english
-I18n.defaultLocale = "en";
+I18n.defaultLocale = I18n.defaultLocale || "en";
 
 // Set default handling of translation fallbacks to false
 I18n.fallbacks = false;
@@ -55,7 +55,7 @@ I18n.fallbacks = false;
 I18n.defaultSeparator = ".";
 
 // Set current locale to null
-I18n.locale = null;
+I18n.locale = I18n.locale || null;
 
 // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
 I18n.PLACEHOLDER = /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm;
