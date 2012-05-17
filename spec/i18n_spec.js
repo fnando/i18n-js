@@ -817,4 +817,31 @@ describe("I18n.js", function(){
     expect(I18n.findAndTranslateValidNode(["one", "other"], {other: "other"})).toBeEqualTo("other");
     expect(I18n.findAndTranslateValidNode(["one"], {})).toBeEqualTo(null);
   });
+
+  // Scope fallback tests
+  specify('should not perform scope fallback if not configured',function(){
+    expect(I18n.lookup("number.human.storage_units.units.large.kb")).toBe(undefined);
+    expect(I18n.translate("greetings.hello")).toBe('[missing "en.greetings.hello" translation]');
+  });
+
+  specify('should override global scope fallback configuration on a method-level if specified',function() {
+    expect(I18n.translate("greetings.hello")).toBe('[missing "en.greetings.hello" translation]');
+    expect(I18n.translate("greetings.hello",{scopeFallbackNeeded: true})).toBe('Hello World!');
+    I18n.scopeFallbackNeeded=true;
+    expect(I18n.translate("greetings.hello")).toBe('Hello World!');
+    expect(I18n.translate("greetings.hello",{scopeFallbackNeeded: false})).toBe('[missing "en.greetings.hello" translation]');
+  });
+
+  specify('should compute parent scope by excluding second last scope element from key when original key is not found', function() {
+    I18n.scopeFallbackNeeded = true;
+    expect(I18n.translate("number.human.storage_units.units.large.kb")).toBe("KB");
+    expect(I18n.translate("greetings.hello")).toBe("Hello World!");
+    expect(I18n.translate("greetings.name",{name:"Sam"})).toBe("Hello Sam!");
+  });
+
+  specify('should compute parent scope properly for single-scoped keys', function() {
+    I18n.scopeFallbackNeeded = true;
+    expect(I18n.translate("hello")).toBe("Hello World!");
+    expect(I18n.translate("address")).toBe('[missing "en.address" translation]');
+  });
 });
