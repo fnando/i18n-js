@@ -57,6 +57,9 @@ I18n.defaultSeparator = ".";
 // Set current locale to null
 I18n.locale = null;
 
+// Fallback to parent scope
+I18n.scopeFallbackNeeded = false;
+
 // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
 I18n.PLACEHOLDER = /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm;
 
@@ -92,6 +95,11 @@ I18n.isValidNode = function(obj, node, undefined) {
   return obj[node] !== null && obj[node] !== undefined;
 };
 
+var computeFallbackScope= function(scopes) {
+    scopes.splice(scopes.length < 2 ? 0 : -2, 1);
+    return scopes;
+};
+
 I18n.lookup = function(scope, options) {
   var options = options || {}
     , lookupInitialScope = scope
@@ -100,8 +108,10 @@ I18n.lookup = function(scope, options) {
     , messages = translations[locale] || {}
     , options = this.prepareOptions(options)
     , currentScope
-  ;
+    , scopeFallbackNeeded;
 
+  scopeFallbackNeeded = (options.scopeFallbackNeeded !== undefined) ?
+                                        options.scopeFallbackNeeded : this.scopeFallbackNeeded;
   if (typeof(scope) == "object") {
     scope = scope.join(this.defaultSeparator);
   }
@@ -110,17 +120,21 @@ I18n.lookup = function(scope, options) {
     scope = options.scope.toString() + this.defaultSeparator + scope;
   }
 
+  var originalScopes = scope.split(this.defaultSeparator);
   scope = scope.split(this.defaultSeparator);
 
   while (messages && scope.length > 0) {
     currentScope = scope.shift();
     messages = messages[currentScope];
   }
-
   if (!messages) {
+
+    if (scopeFallbackNeeded && originalScopes.length > 1) {
+        return I18n.lookup(computeFallbackScope(originalScopes).join(this.defaultSeparator));
+    }
     if (I18n.fallbacks) {
       var fallbacks = this.getFallbacks(locale);
-      for (var fallback = 0; fallback < fallbacks.length; fallbacks++) {
+      for (var fallback = 0; fallback < fallbacks.length; fallback++) {
         messages = I18n.lookup(lookupInitialScope, this.prepareOptions({locale: fallbacks[fallback]}, options));
         if (messages) {
           break;
@@ -132,7 +146,6 @@ I18n.lookup = function(scope, options) {
         messages = options.defaultValue;
     }
   }
-
   return messages;
 };
 
