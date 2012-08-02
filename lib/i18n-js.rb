@@ -159,10 +159,20 @@ module SimplesIdeias
 
     # Initialize and return translations
     def translations
-      ::I18n.backend.instance_eval do
-        init_translations unless initialized?
-        translations
+      backends.reverse.inject({}) do |store, backend|
+        backend.instance_eval do
+          init_translations if respond_to?(:init_translations) && respond_to?(:initialized?) && !initialized?
+          if respond_to?(:translations)
+            store.merge(translations, &MERGER)
+          else
+            store
+          end
+        end
       end
+    end
+
+    def backends
+      ::I18n.backend.respond_to?(:backends) ? ::I18n.backend.backends : [::I18n.backend]
     end
 
     def deep_merge(target, hash) # :nodoc:
