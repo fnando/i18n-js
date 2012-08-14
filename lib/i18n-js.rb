@@ -43,9 +43,10 @@ module SimplesIdeias
     # Export translations to JavaScript, considering settings
     # from configuration file
     def export!
-      translation_segments.each do |filename, translations|
+      translation_segments.map do |filename, translations|
         save(translations, filename)
-      end
+        translations
+      end.inject({ }){ |a,b| a.merge(b)}
     end
 
     def segments_per_locale(pattern,scope)
