@@ -191,8 +191,11 @@ describe SimplesIdeias::I18n do
 
   private
   # Set the configuration as the current one
-  def set_config(path)
+  def set_config(path, options = { })
     config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/resources/#{path}"))
+    if config[:translations]
+      config[:translations].first.merge!(options)
+    end
     SimplesIdeias::I18n.stub(:config? => true)
     SimplesIdeias::I18n.stub(:config => config)
   end
