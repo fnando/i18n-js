@@ -43,14 +43,16 @@ module SimplesIdeias
     # Export translations to JavaScript, considering settings
     # from configuration file
     def export!
-      translation_segments.each do |filename, translations|
+      translation_segments.map do |filename, translations|
         save(translations, filename)
-      end
+        translations
+      end.inject({ }){ |a,b| a.merge(b)}
     end
 
     def segments_per_locale(pattern,scope)
       ::I18n.available_locales.each_with_object({}) do |locale,segments|
-        result = scoped_translations("#{locale}.#{scope}")
+        scopes = [scope].flatten.map{ |s| "#{locale}.#{s}"}
+        result = scoped_translations(scopes)
         unless result.empty?
           segment_name = ::I18n.interpolate(pattern,{:locale => locale})
           segments[segment_name] = result
@@ -134,7 +136,6 @@ module SimplesIdeias
       [scopes].flatten.each do |scope|
         deep_merge! result, filter(translations, scope)
       end
-
       result
     end
 
@@ -151,7 +152,7 @@ module SimplesIdeias
           results[scope.to_sym] = tmp unless tmp.nil?
         end
         return results
-      elsif translations.has_key?(scope.to_sym)
+      elsif translations.is_a?(Hash) && translations.has_key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
       end
       nil
@@ -166,11 +167,11 @@ module SimplesIdeias
     end
 
     def deep_merge(target, hash) # :nodoc:
-      target.merge(hash, &MERGER)
+      target.merge(hash || { }, &MERGER)
     end
 
     def deep_merge!(target, hash) # :nodoc:
-      target.merge!(hash, &MERGER)
+      target.merge!(hash || { }, &MERGER)
     end
   end
 end
