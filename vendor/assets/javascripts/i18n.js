@@ -198,7 +198,9 @@ I18n.translate = function(scope, options) {
   var translation = this.lookup(scope, options);
 
   try {
-    if (typeof(translation) == "object") {
+    if (!translation) {
+      return this.missingTranslation(scope);
+    } else if (typeof(translation) == "object") {
       if (typeof(options.count) == "number") {
         return this.pluralize(options.count, scope, options);
       } else {
