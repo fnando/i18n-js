@@ -148,7 +148,7 @@ describe("I18n.js", function(){
     expect(I18n.t("hello", {locale: "pt-BR"})).toBeEqualTo("Olá Mundo!");
   });
 
-  specify("translation should fall if locale is missing", function(){
+  specify("translation should fail if locale is missing", function(){
     I18n.locale = "pt-BR";
     expect(I18n.t("greetings.stranger")).toBeEqualTo("[missing \"pt-BR.greetings.stranger\" translation]");
   });
