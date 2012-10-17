@@ -121,4 +121,22 @@ describe("Numbers", function(){
   it("returns number as human size using custom options", function(){
     expect(I18n.toHumanSize(1024 * 1.6, {precision: 0})).toEqual("2KB");
   });
+
+  it("formats numbers with strip insignificant zero", function() {
+    options = {separator: ".", delimiter: ",", strip_insignificant_zeros: true};
+
+    options["precision"] = 2;
+    expect(I18n.toNumber(1.0, options)).toEqual("1");
+
+    options["precision"] = 3;
+    expect(I18n.toNumber(1.98, options)).toEqual("1.98");
+
+    options["precision"] = 4;
+    expect(I18n.toNumber(1.987, options)).toEqual("1.987");
+  });
+
+  it("keeps significant zeros [issue#103]", function() {
+    actual = I18n.toNumber(30, {strip_insignificant_zeros: true, precision: 0});
+    expect(actual).toEqual("30");
+  });
 });

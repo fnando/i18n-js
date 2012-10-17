@@ -355,24 +355,16 @@
 
     formattedNumber = buffer.join(options.delimiter);
 
-    if (options.precision > 0) {
-      formattedNumber += options.separator + parts[1];
+    if (options.strip_insignificant_zeros && precision) {
+      precision = precision.replace(/0+$/, "");
+    }
+
+    if (options.precision > 0 && precision) {
+      formattedNumber += options.separator + precision;
     }
 
     if (negative) {
       formattedNumber = "-" + formattedNumber;
-    }
-
-    if (options.strip_insignificant_zeros) {
-      var regex = {
-          separator: new RegExp(options.separator.replace(/\./, "\\.") + "$")
-        , zeros: /0+$/
-      };
-
-      formattedNumber = formattedNumber
-        .replace(regex.zeros, "")
-        .replace(regex.separator, "")
-      ;
     }
 
     return formattedNumber;
