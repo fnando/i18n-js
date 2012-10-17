@@ -267,6 +267,10 @@ The only requirement is that you need to set the `translations` attribute like f
       message: "Uma mensagem especial para você"
     }
 
+## Troubleshooting
+
+1. Want to support oldIE? Then you need to include something like [augment.js](http://augmentjs.com) or [es5-shim](https://github.com/kriskowal/es5-shim/).
+
 ## Maintainer
 
 - Nando Vieira - <http://nandovieira.com.br>
