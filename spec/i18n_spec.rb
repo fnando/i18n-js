@@ -48,13 +48,25 @@ describe SimplesIdeias::I18n do
     File.should be_file(path)
   end
 
+  # NOTE: set_config stubbed out config,
+  #       so we need to stub config_file, not config!
   it "loads configuration file" do
-    set_config "default.yml"
+    set_config_file "default.yml"
     SimplesIdeias::I18n.setup!
 
     SimplesIdeias::I18n.config?.should be_true
     SimplesIdeias::I18n.config.should be_kind_of(HashWithIndifferentAccess)
     SimplesIdeias::I18n.config.should_not be_empty
+  end
+
+  it "loads configuration file as erb" do
+    set_config_file "erb.yml"
+    SimplesIdeias::I18n.setup!
+
+    SimplesIdeias::I18n.config?.should be_true
+    SimplesIdeias::I18n.config.should be_kind_of(HashWithIndifferentAccess)
+    SimplesIdeias::I18n.config.should_not be_empty
+    SimplesIdeias::I18n.config["translations"].first["only"].should == "*"
   end
 
   it "sets empty hash as configuration when no file is found" do
@@ -204,6 +216,12 @@ describe SimplesIdeias::I18n do
     config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/resources/#{path}"))
     SimplesIdeias::I18n.stub(:config? => true)
     SimplesIdeias::I18n.stub(:config => config)
+  end
+
+  # Set the configuration-file as the current one
+  def set_config_file(path)
+    path = File.dirname(__FILE__) + "/resources/#{path}"
+    SimplesIdeias::I18n.stub(:config_file => path)
   end
 
   # Shortcut to SimplesIdeias::I18n.translations
