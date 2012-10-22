@@ -74,3 +74,9 @@ fr:
       note: "plus de détails"
     edit:
       title: "Editer"
+
+de:
+  admin:
+    show:
+      title: "Anzeigen"
+      description: "Beschreibung"
