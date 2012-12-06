@@ -290,6 +290,10 @@ I18n.toTime = function(scope, d) {
     return date.toString();
   }
 
+  if (typeof format === "function") {
+    format = format(scope);
+  }
+
   return this.strftime(date, format);
 };
 
@@ -345,6 +349,7 @@ I18n.strftime = function(date, format) {
   f = f.replace("%M", padding(mins));
   f = f.replace("%-M", mins);
   f = f.replace("%p", options.meridian[meridian]);
+  f = f.replace("%P", options.meridian[meridian].toLowerCase());
   f = f.replace("%S", padding(secs));
   f = f.replace("%-S", secs);
   f = f.replace("%w", weekDay);
