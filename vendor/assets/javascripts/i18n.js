@@ -290,6 +290,10 @@ I18n.toTime = function(scope, d) {
     return date.toString();
   }
 
+  if (typeof format === "function") {
+    format = format(scope);
+  }
+
   return this.strftime(date, format);
 };
 
