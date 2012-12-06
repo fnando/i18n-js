@@ -345,6 +345,7 @@ I18n.strftime = function(date, format) {
   f = f.replace("%M", padding(mins));
   f = f.replace("%-M", mins);
   f = f.replace("%p", options.meridian[meridian]);
+  f = f.replace("%P", options.meridian[meridian].toLowerCase());
   f = f.replace("%S", padding(secs));
   f = f.replace("%-S", secs);
   f = f.replace("%w", weekDay);
