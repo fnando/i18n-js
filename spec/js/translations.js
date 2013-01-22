@@ -5,6 +5,11 @@
     Translations.en = {
         hello: "Hello World!"
 
+      , booleans: {
+          yes: true,
+          no: false
+        }
+
       , greetings: {
             stranger: "Hello stranger!"
           , name: "Hello {{name}}!"

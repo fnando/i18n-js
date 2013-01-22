@@ -176,12 +176,12 @@
       while (scopes.length) {
         translations = translations[scopes.shift()];
 
-        if (!translations) {
+        if (translations === undefined || translations === null) {
           break;
         }
       }
 
-      if (translations) {
+      if (translations !== undefined && translations !== null) {
         return translations;
       }
     }
@@ -230,7 +230,7 @@
     options = this.prepareOptions(options);
     var translation = this.lookup(scope, options);
 
-    if (!translation) {
+    if (translation === undefined || translation === null) {
       return this.missingTranslation(scope);
     }
 
@@ -650,4 +650,4 @@
   I18n.t = I18n.translate;
   I18n.l = I18n.localize;
   I18n.p = I18n.pluralize;
-})(typeof(exports) === "undefined" ? this["I18n"] = {} : exports);
+})(typeof(exports) === "undefined" ? (this.I18n = this.I18n || {}) : exports);

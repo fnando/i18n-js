@@ -112,4 +112,9 @@ describe("Translate", function(){
     actual = I18n.t("greetings•stranger");
     expect(actual).toEqual("Hello stranger!");
   });
+
+  it("returns boolean values", function() {
+    expect(I18n.t("booleans.yes")).toEqual(true);
+    expect(I18n.t("booleans.no")).toEqual(false);
+  });
 });
