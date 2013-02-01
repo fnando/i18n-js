@@ -3,8 +3,10 @@ module I18n
     module Version
       MAJOR = 3
       MINOR = 0
-      PATCH = 0
-      STRING = "#{MAJOR}.#{MINOR}.#{PATCH}.rc3"
+      TINY  = 0
+      PATCH = "rc3" # Could be nil
+      
+      STRING = [MAJOR, MINOR, TINY, PATCH].compact.join('.')
     end
   end
 end
