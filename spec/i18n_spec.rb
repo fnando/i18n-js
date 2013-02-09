@@ -106,6 +106,16 @@ describe SimplesIdeias::I18n do
     File.should be_file(Rails.root.join("public/javascripts/bitsnpieces.js"))
   end
 
+  it "exports with multiple conditions and a JS file per locale" do
+    set_config "js_file_per_locale_with_multiple_conditions.yml"
+    SimplesIdeias::I18n.export!
+    filename = Rails.root.join("public/javascripts/i18n/multi-condition-multi-locale/en.js")
+    File.should be_file(filename)
+    file = File.read(filename)
+    file.should =~ /"formats"/
+    file.should =~ /"currency"/
+  end
+
   it "filters translations using scope *.date.formats" do
     result = SimplesIdeias::I18n.filter(translations, "*.date.formats")
     result[:en][:date].keys.should == [:formats]

@@ -53,7 +53,7 @@ module SimplesIdeias
         segment_name = ::I18n.interpolate(pattern,{:locale => locale})
         [scopes].flatten.each do |scope|
           result = scoped_translations("#{locale}.#{scope}")
-          (segments[segment_name] ||= {}).update(result) unless result.empty?
+          (segments[segment_name] ||= {}).deep_merge!(result) unless result.empty?
         end
       end
     end
