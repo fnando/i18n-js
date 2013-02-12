@@ -476,7 +476,7 @@ I18n.pluralizer = function(locale) {
 
 I18n.findAndTranslateValidNode = function(keys, translation) {
   for (i = 0; i < keys.length; i++) {
-    key = keys[i];
+    var key = keys[i];
     if (this.isValidNode(translation, key)) return translation[key];
   }
   return null;
