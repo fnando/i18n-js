@@ -469,7 +469,7 @@ I18n.toPercentage = function(number, options) {
 };
 
 I18n.pluralizer = function(locale) {
-  pluralizer = this.pluralizationRules[locale];
+  var pluralizer = this.pluralizationRules[locale];
   if (pluralizer !== undefined) return pluralizer;
   return this.pluralizationRules["en"];
 };
@@ -493,15 +493,14 @@ I18n.pluralize = function(count, scope, options) {
     return this.missingTranslation(scope);
   }
 
-  var message;
   options = this.prepareOptions(options);
   options.count = count.toString();
 
-  pluralizer = this.pluralizer(this.currentLocale());
-  key = pluralizer(Math.abs(count));
-  keys = ((typeof key == "object") && (key instanceof Array)) ? key : [key];
+  var pluralizer = this.pluralizer(this.currentLocale()),
+      key = pluralizer(Math.abs(count)),
+      keys = ((typeof key == "object") && (key instanceof Array)) ? key : [key];
 
-  message = this.findAndTranslateValidNode(keys, translation);
+  var message = this.findAndTranslateValidNode(keys, translation);
   if (message == null) message = this.missingTranslation(scope, keys[0]);
 
   return this.interpolate(message, options);
