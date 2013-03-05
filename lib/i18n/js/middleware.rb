@@ -48,6 +48,9 @@ module I18n
 
         return if valid_cache.all?
 
+        dir = File.dirname(cache_path)
+        FileUtils.mkdir_p(dir)
+
         File.open(cache_path, "w+") do |file|
           file << new_cache.to_yaml
         end
