@@ -116,8 +116,7 @@
     return list;
   };
 
-  //
-  //
+  // Hold pluralization rules.
   I18n.pluralization = {};
 
   // Return the pluralizer for a specific locale.
@@ -332,9 +331,9 @@
   //
   I18n.toNumber = function(number, options) {
     options = this.prepareOptions(
-      options,
-      this.lookup("number.format"),
-      {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
+        options
+      , this.lookup("number.format")
+      , {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
     );
 
     var negative = number < 0
@@ -387,10 +386,10 @@
   //
   I18n.toCurrency = function(number, options) {
     options = this.prepareOptions(
-      options,
-      this.lookup("number.currency.format"),
-      this.lookup("number.format"),
-      {unit: "$", precision: 2, format: "%u%n", delimiter: ",", separator: "."}
+        options
+      , this.lookup("number.currency.format")
+      , this.lookup("number.format")
+      , {unit: "$", precision: 2, format: "%u%n", delimiter: ",", separator: "."}
     );
 
     number = this.toNumber(number, options);
@@ -545,9 +544,8 @@
       hour12 = 12;
     }
 
-    var padding = function(n) {
-      var s = "0" + n.toString();
-      return s.substr(s.length - 2);
+    var padding = function(number) {
+      return ("0" + number.toString()).substr(-2);
     };
 
     format = format.replace("%a", options.abbr_day_names[weekDay]);
@@ -577,10 +575,9 @@
     return format;
   };
 
-  //
-  //
-  I18n.toTime = function(scope, d) {
-    var date = this.parseDate(d)
+  // Convert the given dateString into a formatted date.
+  I18n.toTime = function(scope, dateString) {
+    var date = this.parseDate(dateString)
       , format = this.lookup(scope)
     ;
 
@@ -595,22 +592,20 @@
     return this.strftime(date, format);
   };
 
-  //
-  //
+  // Convert a number into a formatted percentage value.
   I18n.toPercentage = function(number, options) {
     options = this.prepareOptions(
-      options,
-      this.lookup("number.percentage.format"),
-      this.lookup("number.format"),
-      {precision: 3, separator: ".", delimiter: ""}
+        options
+      , this.lookup("number.percentage.format")
+      , this.lookup("number.format")
+      , {precision: 3, separator: ".", delimiter: ""}
     );
 
     number = this.toNumber(number, options);
     return number + "%";
   };
 
-  //
-  //
+  // Convert a number into a readable size representation.
   I18n.toHumanSize = function(number, options) {
     var kb = 1024
       , size = number
@@ -633,8 +628,8 @@
     }
 
     options = this.prepareOptions(
-      options,
-      {precision: precision, format: "%n%u", delimiter: ""}
+        options
+      , {precision: precision, format: "%n%u", delimiter: ""}
     );
 
     number = this.toNumber(size, options);
