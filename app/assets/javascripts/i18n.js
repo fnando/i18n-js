@@ -14,6 +14,9 @@
 ;(function(I18n){
   "use strict";
 
+  // Just cache the Array#slice function.
+  var slice = Array.prototype.slice;
+
   I18n.reset = function() {
     // Set default locale. This locale will be used when fallback is enabled and
     // the translation doesn't exist in a particular locale.
@@ -197,19 +200,20 @@
   //     #=> {name: "John Doe", role: "user"}
   //
   I18n.prepareOptions = function() {
-    var args = Array.prototype.slice.call(arguments)
+    var args = slice.call(arguments)
       , options = {}
+      , subject
     ;
 
-    for (var i = 0, count = args.length; i < count; i++) {
-      var o = args.shift();
+    while (args.length) {
+      subject = args.shift();
 
-      if (typeof(o) != "object") {
+      if (typeof(subject) != "object") {
         continue;
       }
 
-      for (var attr in o) {
-        if (!o.hasOwnProperty(attr)) {
+      for (var attr in subject) {
+        if (!subject.hasOwnProperty(attr)) {
           continue;
         }
 
@@ -217,7 +221,7 @@
           continue;
         }
 
-        options[attr] = o[attr];
+        options[attr] = subject[attr];
       }
     }
 
@@ -307,12 +311,10 @@
 
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function(scope) {
-    var message = '[missing "' + this.currentLocale();
+    var message = '[missing "';
 
-    for (var i = 0; i < arguments.length; i++) {
-      message += "." + arguments[i];
-    }
-
+    message += this.currentLocale() + ".";
+    message += slice.call(arguments).join(".");
     message += '" translation]';
 
     return message;
