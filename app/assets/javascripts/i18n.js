@@ -17,6 +17,49 @@
   // Just cache the Array#slice function.
   var slice = Array.prototype.slice;
 
+  // Apply number padding.
+  var padding = function(number) {
+    return ("0" + number.toString()).substr(-2);
+  };
+
+  // Set default days/months translations.
+  var DAYS_AND_MONTHS = {
+      day_names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    , abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    , month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    , abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  };
+
+  // Set default number format.
+  var NUMBER_FORMAT = {
+      precision: 3
+    , separator: "."
+    , delimiter: ","
+    , strip_insignificant_zeros: false
+  };
+
+  // Set default currency format.
+  var CURRENCY_FORMAT = {
+      unit: "$"
+    , precision: 2
+    , format: "%u%n"
+    , delimiter: ","
+    , separator: "."
+  };
+
+  // Set default percentage format.
+  var PERCENTAGE_FORMAT = {
+      precision: 3
+    , separator: "."
+    , delimiter: ""
+  };
+
+  // Set default size units.
+  var SIZE_UNITS = [null, "kb", "mb", "gb", "tb"];
+
+  // Set meridian.
+  var MERIDIAN = ["AM", "PM"];
+
   I18n.reset = function() {
     // Set default locale. This locale will be used when fallback is enabled and
     // the translation doesn't exist in a particular locale.
@@ -335,7 +378,7 @@
     options = this.prepareOptions(
         options
       , this.lookup("number.format")
-      , {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
+      , NUMBER_FORMAT
     );
 
     var negative = number < 0
@@ -391,7 +434,7 @@
         options
       , this.lookup("number.currency.format")
       , this.lookup("number.format")
-      , {unit: "$", precision: 2, format: "%u%n", delimiter: ",", separator: "."}
+      , CURRENCY_FORMAT
     );
 
     number = this.toNumber(number, options);
@@ -513,16 +556,11 @@
     var options = this.lookup("date");
 
     if (!options) {
-      options = {
-          day_names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-        , abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-        , month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        , abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-      }
+      options = DAYS_AND_MONTHS;
     }
 
     if (!options.meridian) {
-      options.meridian = ["AM", "PM"];
+      options.meridian = MERIDIAN;
     }
 
     var weekDay = date.getDay()
@@ -545,10 +583,6 @@
     } else if (hour12 === 0) {
       hour12 = 12;
     }
-
-    var padding = function(number) {
-      return ("0" + number.toString()).substr(-2);
-    };
 
     format = format.replace("%a", options.abbr_day_names[weekDay]);
     format = format.replace("%A", options.day_names[weekDay]);
@@ -600,7 +634,7 @@
         options
       , this.lookup("number.percentage.format")
       , this.lookup("number.format")
-      , {precision: 3, separator: ".", delimiter: ""}
+      , PERCENTAGE_FORMAT
     );
 
     number = this.toNumber(number, options);
@@ -625,7 +659,7 @@
       unit = this.t("number.human.storage_units.units.byte", {count: size});
       precision = 0;
     } else {
-      unit = this.t("number.human.storage_units.units." + [null, "kb", "mb", "gb", "tb"][iterations]);
+      unit = this.t("number.human.storage_units.units." + SIZE_UNITS[iterations]);
       precision = (size - Math.floor(size) === 0) ? 0 : 1;
     }
 
