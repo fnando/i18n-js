@@ -6,7 +6,7 @@ RSpec::Core::RakeTask.new(:"spec:ruby")
 
 desc "Run JavaScript specs"
 task "spec:js" do
-  system "jasmine-node", "spec/js"
+  system "npm", "test"
 end
 
 desc "Run all specs"
