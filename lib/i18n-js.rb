@@ -4,8 +4,8 @@ module SimplesIdeias
   module I18n
     extend self
 
-    require "i18n-js/railtie" if Rails.version >= "3.0"
-    require "i18n-js/engine" if Rails.version >= "3.1"
+    require "i18n-js/railtie" if Rails.version.to_s >= "3.0"
+    require "i18n-js/engine" if Rails.version.to_s >= "3.1"
     require "i18n-js/middleware"
 
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
@@ -15,7 +15,7 @@ module SimplesIdeias
     # full environment will be available during asset compilation.
     # This is required to ensure I18n is loaded.
     def assert_usable_configuration!
-      @usable_configuration ||= Rails.version >= "3.1.1" &&
+      @usable_configuration ||= Rails.version.to_s >= "3.1.1" &&
         Rails.configuration.assets.initialize_on_precompile ||
         raise("Cannot precompile i18n-js translations unless environment is initialized. Please set config.assets.initialize_on_precompile to true.")
     end
@@ -104,7 +104,7 @@ module SimplesIdeias
     # Copy configuration and JavaScript library files to
     # <tt>config/i18n-js.yml</tt> and <tt>public/javascripts/i18n.js</tt>.
     def setup!
-      FileUtils.cp(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js", javascript_file) unless Rails.version >= "3.1"
+      FileUtils.cp(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js", javascript_file) unless Rails.version.to_s >= "3.1"
       FileUtils.cp(File.dirname(__FILE__) + "/../config/i18n-js.yml", config_file) unless config?
     end
 
