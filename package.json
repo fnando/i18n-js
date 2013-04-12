@@ -1,0 +1,11 @@
+{
+  "name": "i18n-js",
+  "version": "0.0.0",
+  "devDependencies": {
+    "jasmine-node": "*"
+  },
+
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine-node spec/js"
+  }
+}

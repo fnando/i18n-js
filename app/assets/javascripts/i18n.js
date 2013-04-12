@@ -14,6 +14,52 @@
 ;(function(I18n){
   "use strict";
 
+  // Just cache the Array#slice function.
+  var slice = Array.prototype.slice;
+
+  // Apply number padding.
+  var padding = function(number) {
+    return ("0" + number.toString()).substr(-2);
+  };
+
+  // Set default days/months translations.
+  var DAYS_AND_MONTHS = {
+      day_names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    , abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    , month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    , abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  };
+
+  // Set default number format.
+  var NUMBER_FORMAT = {
+      precision: 3
+    , separator: "."
+    , delimiter: ","
+    , strip_insignificant_zeros: false
+  };
+
+  // Set default currency format.
+  var CURRENCY_FORMAT = {
+      unit: "$"
+    , precision: 2
+    , format: "%u%n"
+    , delimiter: ","
+    , separator: "."
+  };
+
+  // Set default percentage format.
+  var PERCENTAGE_FORMAT = {
+      precision: 3
+    , separator: "."
+    , delimiter: ""
+  };
+
+  // Set default size units.
+  var SIZE_UNITS = [null, "kb", "mb", "gb", "tb"];
+
+  // Set meridian.
+  var MERIDIAN = ["AM", "PM"];
+
   I18n.reset = function() {
     // Set default locale. This locale will be used when fallback is enabled and
     // the translation doesn't exist in a particular locale.
@@ -116,8 +162,7 @@
     return list;
   };
 
-  //
-  //
+  // Hold pluralization rules.
   I18n.pluralization = {};
 
   // Return the pluralizer for a specific locale.
@@ -198,19 +243,20 @@
   //     #=> {name: "John Doe", role: "user"}
   //
   I18n.prepareOptions = function() {
-    var args = Array.prototype.slice.call(arguments)
+    var args = slice.call(arguments)
       , options = {}
+      , subject
     ;
 
-    for (var i = 0, count = args.length; i < count; i++) {
-      var o = args.shift();
+    while (args.length) {
+      subject = args.shift();
 
-      if (typeof(o) != "object") {
+      if (typeof(subject) != "object") {
         continue;
       }
 
-      for (var attr in o) {
-        if (!o.hasOwnProperty(attr)) {
+      for (var attr in subject) {
+        if (!subject.hasOwnProperty(attr)) {
           continue;
         }
 
@@ -218,7 +264,7 @@
           continue;
         }
 
-        options[attr] = o[attr];
+        options[attr] = subject[attr];
       }
     }
 
@@ -308,12 +354,10 @@
 
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function(scope) {
-    var message = '[missing "' + this.currentLocale();
+    var message = '[missing "';
 
-    for (var i = 0; i < arguments.length; i++) {
-      message += "." + arguments[i];
-    }
-
+    message += this.currentLocale() + ".";
+    message += slice.call(arguments).join(".");
     message += '" translation]';
 
     return message;
@@ -332,9 +376,9 @@
   //
   I18n.toNumber = function(number, options) {
     options = this.prepareOptions(
-      options,
-      this.lookup("number.format"),
-      {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
+        options
+      , this.lookup("number.format")
+      , NUMBER_FORMAT
     );
 
     var negative = number < 0
@@ -387,10 +431,10 @@
   //
   I18n.toCurrency = function(number, options) {
     options = this.prepareOptions(
-      options,
-      this.lookup("number.currency.format"),
-      this.lookup("number.format"),
-      {unit: "$", precision: 2, format: "%u%n", delimiter: ",", separator: "."}
+        options
+      , this.lookup("number.currency.format")
+      , this.lookup("number.format")
+      , CURRENCY_FORMAT
     );
 
     number = this.toNumber(number, options);
@@ -512,16 +556,11 @@
     var options = this.lookup("date");
 
     if (!options) {
-      options = {
-          day_names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-        , abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-        , month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        , abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-      }
+      options = DAYS_AND_MONTHS;
     }
 
     if (!options.meridian) {
-      options.meridian = ["AM", "PM"];
+      options.meridian = MERIDIAN;
     }
 
     var weekDay = date.getDay()
@@ -544,11 +583,6 @@
     } else if (hour12 === 0) {
       hour12 = 12;
     }
-
-    var padding = function(n) {
-      var s = "0" + n.toString();
-      return s.substr(s.length - 2);
-    };
 
     format = format.replace("%a", options.abbr_day_names[weekDay]);
     format = format.replace("%A", options.day_names[weekDay]);
@@ -577,10 +611,9 @@
     return format;
   };
 
-  //
-  //
-  I18n.toTime = function(scope, d) {
-    var date = this.parseDate(d)
+  // Convert the given dateString into a formatted date.
+  I18n.toTime = function(scope, dateString) {
+    var date = this.parseDate(dateString)
       , format = this.lookup(scope)
     ;
 
@@ -595,22 +628,20 @@
     return this.strftime(date, format);
   };
 
-  //
-  //
+  // Convert a number into a formatted percentage value.
   I18n.toPercentage = function(number, options) {
     options = this.prepareOptions(
-      options,
-      this.lookup("number.percentage.format"),
-      this.lookup("number.format"),
-      {precision: 3, separator: ".", delimiter: ""}
+        options
+      , this.lookup("number.percentage.format")
+      , this.lookup("number.format")
+      , PERCENTAGE_FORMAT
     );
 
     number = this.toNumber(number, options);
     return number + "%";
   };
 
-  //
-  //
+  // Convert a number into a readable size representation.
   I18n.toHumanSize = function(number, options) {
     var kb = 1024
       , size = number
@@ -628,13 +659,13 @@
       unit = this.t("number.human.storage_units.units.byte", {count: size});
       precision = 0;
     } else {
-      unit = this.t("number.human.storage_units.units." + [null, "kb", "mb", "gb", "tb"][iterations]);
+      unit = this.t("number.human.storage_units.units." + SIZE_UNITS[iterations]);
       precision = (size - Math.floor(size) === 0) ? 0 : 1;
     }
 
     options = this.prepareOptions(
-      options,
-      {precision: precision, format: "%n%u", delimiter: ""}
+        options
+      , {precision: precision, format: "%n%u", delimiter: ""}
     );
 
     number = this.toNumber(size, options);
@@ -650,4 +681,4 @@
   I18n.t = I18n.translate;
   I18n.l = I18n.localize;
   I18n.p = I18n.pluralize;
-})(typeof(exports) === "undefined" ? (this.I18n = this.I18n || {}) : exports);
+})(typeof(exports) === "undefined" ? (this.I18n = {}) : exports);
