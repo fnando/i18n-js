@@ -294,13 +294,14 @@ I18n.toTime = function(scope, d) {
 };
 
 I18n.strftime = function(date, format) {
-  var options = this.lookup("date");
+  var options = this.lookup("date"),
+      time = this.lookup("time");
 
   if (!options) {
     return date.toString();
   }
 
-  options.meridian = options.meridian || ["AM", "PM"];
+  options.meridian = time.am && time.pm ? [time.am, time.pm] : ["AM", "PM"];
 
   var weekDay = date.getDay()
     , day = date.getDate()
