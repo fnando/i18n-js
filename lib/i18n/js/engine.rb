@@ -7,6 +7,7 @@ module I18n
         ActiveSupport.on_load(:after_initialize, :yield => true) do
           next unless JS.has_asset_pipeline?
           next unless Rails.configuration.assets.compile
+          next if Rails.env == 'production'
 
           Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
             next source unless context.logical_path == "i18n/translations"
