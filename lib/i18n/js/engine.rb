@@ -10,7 +10,7 @@ module I18n
 
           Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
             next source unless context.logical_path == "i18n/translations"
-            ::I18n.load_path.each {|path| context.depend_on(path)}
+            ::I18n.load_path.each {|path| context.depend_on(File.expand_path(path))}
             source
           end
         end
