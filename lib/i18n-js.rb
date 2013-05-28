@@ -104,7 +104,7 @@ module SimplesIdeias
     # Copy configuration and JavaScript library files to
     # <tt>config/i18n-js.yml</tt> and <tt>public/javascripts/i18n.js</tt>.
     def setup!
-      FileUtils.cp(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js", javascript_file) unless Rails.version >= "3.1"
+      FileUtils.cp(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js", javascript_file) unless has_asset_pipeline?
       FileUtils.cp(File.dirname(__FILE__) + "/../config/i18n-js.yml", config_file) unless config?
     end
 
