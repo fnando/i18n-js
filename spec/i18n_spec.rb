@@ -40,12 +40,23 @@ describe SimplesIdeias::I18n do
     File.read(SimplesIdeias::I18n.config_file).should == "ORIGINAL"
   end
 
-  it "copies JavaScript library" do
-    path = Rails.root.join("public/javascripts/i18n.js")
+  context "copying i18n.js" do
+    let(:path) { Rails.root.join("public/javascripts/i18n.js") }
 
-    File.should_not be_file(path)
-    SimplesIdeias::I18n.setup!
-    File.should be_file(path)
+    it "copies JavaScript library" do
+      File.should_not be_file(path)
+      SimplesIdeias::I18n.setup!
+      File.should be_file(path)
+    end
+
+    it "should copy i18n.js when has_asset_pipeline? is false and Rails version >= 3.1" do
+      SimplesIdeias::I18n.stub(:has_asset_pipeline?).and_return(false)
+      Rails.stub(:version).and_return("3.1")
+
+      File.should_not be_file(path)
+      SimplesIdeias::I18n.setup!
+      File.should be_file(path)
+    end
   end
 
   it "loads configuration file" do
