@@ -1,7 +1,7 @@
 module SimplesIdeias
   module I18n
     class Engine < ::Rails::Engine
-      I18N_TRANSLATIONS_ASSET = "i18n/translations"
+      I18N_TRANSLATIONS_ASSET = /\Ai18n\/\w+\z/
 
       initializer "i18n-js.asset_dependencies", :after => "sprockets.environment",
                                                 :before => "i18n-js.initialize" do
@@ -11,7 +11,7 @@ module SimplesIdeias
         cache_file = I18n::Engine.load_path_hash_cache
 
         Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, data|
-          if context.logical_path == I18N_TRANSLATIONS_ASSET
+          if context.logical_path =~ I18N_TRANSLATIONS_ASSET
             context.depend_on(config) if I18n.config?
             # also set up dependencies on every locale file
             ::I18n.load_path.each {|path| context.depend_on(path)}
