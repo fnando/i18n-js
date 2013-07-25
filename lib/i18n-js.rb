@@ -6,6 +6,7 @@ module SimplesIdeias
 
     require "i18n-js/railtie" if Rails.version >= "3.0"
     require "i18n-js/engine" if Rails.version >= "3.1"
+    require "i18n-js/preprocessor" if Rails.version >= "3.1"
     require "i18n-js/middleware"
 
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
