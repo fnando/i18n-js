@@ -6,6 +6,7 @@ module SimplesIdeias
 
     require "i18n-js/railtie" if Rails.version >= "3.0"
     require "i18n-js/engine" if Rails.version >= "3.1"
+    require "i18n-js/preprocessor" if Rails.version >= "3.1"
     require "i18n-js/middleware"
 
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
@@ -22,6 +23,9 @@ module SimplesIdeias
 
     def has_asset_pipeline?
       Rails.configuration.respond_to?(:assets) && Rails.configuration.assets.enabled
+      return false unless Rails.configuration.respond_to?('assets')
+      assets = Rails.configuration.assets
+      assets.enabled.nil? || assets.enabled
     end
 
     def config_file
