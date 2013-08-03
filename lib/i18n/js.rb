@@ -48,7 +48,7 @@ module I18n
         translations
       else
         scoped_translations(scope)
-      end
+      end.select{|k,v| I18n.available_locales.include? k }
     end
 
     def self.configured_segments

@@ -91,6 +91,28 @@ describe I18n::JS do
       result[:en][:admin][:edit][:title].should eql("Edit")
       result[:fr][:admin][:edit][:title].should eql("Editer")
     end
+
+    context "with available_locales set" do
+      before do
+        I18n.stub :available_locales => [:fr]
+      end
+
+      context "with a global scope" do
+        let(:result){ I18n::JS.segment_for_scope("*") }
+        it "limits the translations to the available locales" do
+          result[:en].should be_nil
+          result[:fr].should be_present
+        end
+      end
+
+      context "with a specific scope" do
+        let(:result){ I18n::JS.segment_for_scope("*.date.formats") }
+        it "limits the translations to the available locales" do
+          result[:en].should be_nil
+          result[:fr][:date].keys.should eql([:formats])
+        end
+      end
+    end
   end
 
   context "general" do
