@@ -8,9 +8,7 @@ module I18n
           next unless JS::Dependencies.using_asset_pipeline?
           next unless Rails.configuration.assets.compile
 
-          registry = Sprockets.respond_to?("register_preprocessor") ? Sprockets : Rails.application.assets
-
-          registry.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
+          Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
             next source unless context.logical_path == "i18n/filtered"
             ::I18n.load_path.each {|path| context.depend_on(File.expand_path(path))}
             source
