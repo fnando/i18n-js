@@ -34,10 +34,11 @@ describe SimplesIdeias::I18n do
   end
 
   it "keeps existing configuration file" do
-    File.open(SimplesIdeias::I18n.config_file, "w+") {|f| f << "ORIGINAL"}
+    File.open(SimplesIdeias::I18n.config_file, "w+") {|f| f << "ORIGINAL: ORIGINAL"}
+
     SimplesIdeias::I18n.setup!
 
-    File.read(SimplesIdeias::I18n.config_file).should == "ORIGINAL"
+    File.read(SimplesIdeias::I18n.config_file).should == "ORIGINAL: ORIGINAL"
   end
 
   context "copying i18n.js" do
@@ -56,6 +57,21 @@ describe SimplesIdeias::I18n do
       File.should_not be_file(path)
       SimplesIdeias::I18n.setup!
       File.should be_file(path)
+    end
+
+    it "when namespace is not present in config_file defines i18n.js on window" do
+      File.open(SimplesIdeias::I18n.config_file, "w+") {|f| f << "ORIGINAL: ORIGINAL"}
+      SimplesIdeias::I18n.setup!
+
+
+      File.read(path).should include("})(this)")
+    end
+
+    it "when namespace is present in config_file defines i18n.js on namespace" do
+      File.open(SimplesIdeias::I18n.config_file, "w+") {|f| f << "js_namespace: window.bouyah"}
+      SimplesIdeias::I18n.setup!
+
+      File.read(path).should include("})(window.bouyah)")
     end
   end
 
