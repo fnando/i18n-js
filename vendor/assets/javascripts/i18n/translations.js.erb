@@ -1,8 +1,11 @@
 <%# encoding: utf-8%>
 
 <% SimplesIdeias::I18n.assert_usable_configuration! %>
-var I18n = I18n || {};
-I18n.translations = <%=
+
+var <%= SimplesIdeias::I18n.js_namespace %> = <%= SimplesIdeias::I18n.js_namespace %> || {};
+<%= SimplesIdeias::I18n.js_namespace %>.I18n = <%= SimplesIdeias::I18n.js_namespace %>.I18n || {};
+
+<%= SimplesIdeias::I18n.js_namespace %>.I18n.translations = <%=
   SimplesIdeias::I18n.translation_segments.each_with_object({}) do |(name, segment),translations|
     translations.merge!(segment)
   end.to_json

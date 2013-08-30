@@ -86,11 +86,9 @@ module SimplesIdeias
       end
     end
 
-    # Load configuration file for partial exporting and
-    # custom output directory
     def config
       if config?
-        (YAML.load_file(config_file) || {}).with_indifferent_access
+        HashWithIndifferentAccess.new(YAML.load_file(config_file) || {})
       else
         {}
       end
@@ -101,12 +99,28 @@ module SimplesIdeias
       File.file? config_file
     end
 
-    # Copy configuration and JavaScript library files to
-    # <tt>config/i18n-js.yml</tt> and <tt>public/javascripts/i18n.js</tt>.
+    # Copy configuration file to
+    # <tt>config/i18n-js.yml</tt>
+    # Copy JavaScript library
+    # <tt><tt>public/javascripts/i18n.js</tt>
     def setup!
-      FileUtils.cp(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js", javascript_file) unless has_asset_pipeline?
+      copy_i18n_js_lib_with_ns!
+      copy_config!
+    end
+
+    def copy_i18n_js_lib_with_ns!
+      i18n_js_lib = ERB.new(File.read(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js.erb")).result()
+      File.open(javascript_file, 'w+') { |f| f.write(i18n_js_lib) }
+    end
+
+    def js_namespace
+      config[:js_namespace] || "this"
+    end
+
+    def copy_config!
       FileUtils.cp(File.dirname(__FILE__) + "/../config/i18n-js.yml", config_file) unless config?
     end
+
 
     # Retrieve an updated JavaScript library from Github.
     def update!
@@ -121,8 +135,9 @@ module SimplesIdeias
       FileUtils.mkdir_p File.dirname(file)
 
       File.open(file, "w+") do |f|
-        f << %(var I18n = I18n || {};\n)
-        f << %(I18n.translations = );
+        f << %(var #{js_namespace} = #{js_namespace} || {};)
+        f << %(#{js_namespace}.I18n = #{js_namespace}.I18n || {};\n)
+        f << %(#{js_namespace}.I18n.translations = );
         f << translations.to_json
         f << %(;)
       end
