@@ -73,8 +73,8 @@ describe("I18n.js", function(){
             "short": "%d/%m, %H:%M h",
             "long": "%A, %d de %B de %Y, %H:%M h"
           },
-          am: "AM",
-          pm: "PM"
+          am: "am",
+          pm: "pm"
         }
       },
 
@@ -89,7 +89,15 @@ describe("I18n.js", function(){
             abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
             month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
-            meridian: ["am", "pm"]
+        },
+        time: {
+          formats: {
+            "default": "%A, %d de %B de %Y, %H:%M h",
+            "short": "%d/%m, %H:%M h",
+            "long": "%A, %d de %B de %Y, %H:%M h"
+          },
+          am: "am",
+          pm: "pm"
         }
       },
 
@@ -488,7 +496,7 @@ describe("I18n.js", function(){
     expect(I18n.strftime(date, "%M")).toBeEqualTo("35");
 
     // meridian
-    expect(I18n.strftime(date, "%p")).toBeEqualTo("PM");
+    expect(I18n.strftime(date, "%p")).toBeEqualTo("pm");
 
     // seconds
     expect(I18n.strftime(date, "%S")).toBeEqualTo("44");
