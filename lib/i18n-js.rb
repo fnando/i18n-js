@@ -21,7 +21,7 @@ module SimplesIdeias
     end
 
     def has_asset_pipeline?
-      Rails.configuration.respond_to?(:assets) && Rails.configuration.assets.enabled
+      Rails.configuration.respond_to?(:assets)
     end
 
     def config_file
