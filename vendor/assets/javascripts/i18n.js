@@ -183,7 +183,7 @@ I18n.interpolate = function(message, options) {
     value = options[name];
 
     if (!this.isValidNode(options, name)) {
-      value = "[missing " + placeholder + " value]";
+      value = this.missingPlaceholder(placeholder);
     }
 
     regex = new RegExp(placeholder.replace(/\{/gm, "\\{").replace(/\}/gm, "\\}"));
@@ -519,6 +519,10 @@ I18n.missingTranslation = function() {
   message += '" translation]';
 
   return message;
+};
+
+I18n.missingPlaceholder = function(placeholder) {
+  return "[missing " + placeholder + " value]";
 };
 
 I18n.currentLocale = function() {
