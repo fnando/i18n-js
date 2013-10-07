@@ -183,7 +183,7 @@ I18n.interpolate = function(message, options) {
     value = options[name];
 
     if (!this.isValidNode(options, name)) {
-      value = this.missingPlaceholder(placeholder);
+      value = this.missingPlaceholder(placeholder, message);
     }
 
     regex = new RegExp(placeholder.replace(/\{/gm, "\\{").replace(/\}/gm, "\\}"));
@@ -521,7 +521,7 @@ I18n.missingTranslation = function() {
   return message;
 };
 
-I18n.missingPlaceholder = function(placeholder) {
+I18n.missingPlaceholder = function(placeholder, message) {
   return "[missing " + placeholder + " value]";
 };
 
