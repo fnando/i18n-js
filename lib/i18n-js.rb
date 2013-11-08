@@ -121,10 +121,11 @@ module SimplesIdeias
       FileUtils.mkdir_p File.dirname(file)
 
       File.open(file, "w+") do |f|
-        f << %(var I18n = I18n || {};\n)
-        f << %(I18n.translations = );
-        f << translations.to_json
-        f << %(;)
+        f << %(window.I18n = window.I18n || {};\n)
+        f << %(window.I18n.translations = window.I18n.translations || {};\n)
+        translations.each do |locale, _translations|
+          f << %(window.I18n.translations["#{locale}"] = #{_translations.to_json};);
+        end
       end
     end
 
