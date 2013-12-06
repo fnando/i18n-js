@@ -337,7 +337,7 @@
       value = options[name];
 
       if (!this.isSet(options[name])) {
-        value = "[missing " + placeholder + " value]";
+        value = this.missingPlaceholder(placeholder, message);
       }
 
       regex = new RegExp(placeholder.replace(/\{/gm, "\\{").replace(/\}/gm, "\\}"));
@@ -389,6 +389,11 @@
     message += '" translation]';
 
     return message;
+  };
+
+  // Return a missing placeholder message for given parameters
+  I18n.missingPlaceholder = function(placeholder, message) {
+    return "[missing " + placeholder + " value]";
   };
 
   // Format number using localization rules.
