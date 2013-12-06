@@ -44,7 +44,7 @@ it by running the following command. Move the middleware line to your
 `config/environments/development.rb` file and run the following command before
 deploying.
 
-    $ rails runner I18n::JS.export
+    $ rake i18n:js:export
 
 This will export all translation files, including the custom scopes you may have
 defined on `config/i18n-js.yml`.
