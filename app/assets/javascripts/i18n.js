@@ -514,6 +514,7 @@
   //    yyyy-mm-dd[ T]hh:mm::ss
   //    yyyy-mm-dd[ T]hh:mm::ssZ
   //    yyyy-mm-dd[ T]hh:mm::ss+0000
+  //    yyyy-mm-dd[ T]hh:mm::ss+00:00
   //
   I18n.parseDate = function(date) {
     var matches, convertedDate;
@@ -523,7 +524,7 @@
       return date;
     };
 
-    matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2}))?(Z|\+0000)?/);
+    matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2}))?(Z|\+00:?00)?/);
 
     if (matches) {
       for (var i = 1; i <= 6; i++) {

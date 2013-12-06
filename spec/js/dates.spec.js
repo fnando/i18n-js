@@ -47,6 +47,10 @@ describe("Dates", function(){
     actual = I18n.parseDate("2011-07-20T12:51:55+0000");
     expect(actual.toString()).toEqual(expected.toString());
 
+    expected = new Date(Date.UTC(2011, 6, 20, 12, 51, 55));
+    actual = I18n.parseDate("2011-07-20T12:51:55+00:00");
+    expect(actual.toString()).toEqual(expected.toString());
+
     expected = new Date(Date.UTC(2011, 6, 20, 13, 03, 39));
     actual = I18n.parseDate("Wed Jul 20 13:03:39 +0000 2011");
     expect(actual.toString()).toEqual(expected.toString());
