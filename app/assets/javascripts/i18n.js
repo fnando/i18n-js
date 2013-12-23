@@ -60,27 +60,59 @@
   // Set meridian.
   var MERIDIAN = ["AM", "PM"];
 
+  // Other default options
+  var DEFAULT_OPTIONS = {
+    defaultLocale: "en",
+    locale: "en",
+    defaultSeparator: ".",
+    placeholder: /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm,
+    fallbacks: false,
+    translations: {},
+  }
+
   I18n.reset = function() {
     // Set default locale. This locale will be used when fallback is enabled and
     // the translation doesn't exist in a particular locale.
-    this.defaultLocale = "en";
+    this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
 
     // Set the current locale to `en`.
-    this.locale = "en";
+    this.locale = DEFAULT_OPTIONS.locale;
 
     // Set the translation key separator.
-    this.defaultSeparator = ".";
+    this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
 
     // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
-    this.placeholder = /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm;
+    this.placeholder = DEFAULT_OPTIONS.placeholder;
 
     // Set if engine should fallback to the default locale when a translation
     // is missing.
-    this.fallbacks = false;
+    this.fallbacks = DEFAULT_OPTIONS.fallbacks;
 
     // Set the default translation object.
-    this.translations = {};
+    this.translations = DEFAULT_OPTIONS.translations;
   };
+
+  // Much like `reset`, but only assign options if not already assigned
+  I18n.initializeOptions = function() {
+    if (typeof(this.defaultLocale) === "undefined" && this.defaultLocale !== null)
+      this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
+
+    if (typeof(this.locale) === "undefined" && this.locale !== null)
+      this.locale = DEFAULT_OPTIONS.locale;
+
+    if (typeof(this.defaultSeparator) === "undefined" && this.defaultSeparator !== null)
+      this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
+
+    if (typeof(this.placeholder) === "undefined" && this.placeholder !== null)
+      this.placeholder = DEFAULT_OPTIONS.placeholder;
+
+    if (typeof(this.fallbacks) === "undefined" && this.fallbacks !== null)
+      this.fallbacks = DEFAULT_OPTIONS.fallbacks;
+
+    if (typeof(this.translations) === "undefined" && this.translations !== null)
+      this.translations = DEFAULT_OPTIONS.translations;
+  }
+  I18n.initializeOptions();
 
   // Return a list of all locales that must be tried before returning the
   // missing translation message. By default, this will consider the inline option,
@@ -180,10 +212,6 @@
       default: return ["other"];
     }
   };
-
-  // Reset all default attributes. This is specially useful
-  // while running tests.
-  I18n.reset();
 
   // Return current locale. If no locale has been set, then
   // the current locale will be the default locale.
@@ -681,4 +709,4 @@
   I18n.t = I18n.translate;
   I18n.l = I18n.localize;
   I18n.p = I18n.pluralize;
-})(typeof(exports) === "undefined" ? (this.I18n = {}) : exports);
+})(typeof(exports) === "undefined" ? (this.I18n || (this.I18n = {})) : exports);
