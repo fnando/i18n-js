@@ -11,3 +11,7 @@ end
 
 desc "Run all specs"
 task :spec => ["spec:ruby", "spec:js"]
+
+task :default do
+  Rake::Task[:spec].invoke
+end
