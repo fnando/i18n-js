@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module SimplesIdeias
   module I18n
     class Middleware
@@ -47,6 +49,7 @@ module SimplesIdeias
         end
 
         unless valid_cache.all?
+          FileUtils.mkdir_p cache_path.dirname
           File.open(cache_path, "w+") do |file|
             file << new_cache.to_yaml
           end
