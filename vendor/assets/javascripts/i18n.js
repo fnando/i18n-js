@@ -329,29 +329,43 @@ I18n.strftime = function(date, format) {
   };
 
   var f = format;
-  f = f.replace("%a", options.abbr_day_names[weekDay]);
-  f = f.replace("%A", options.day_names[weekDay]);
-  f = f.replace("%b", options.abbr_month_names[month]);
-  f = f.replace("%B", options.month_names[month]);
-  f = f.replace("%d", padding(day));
-  f = f.replace("%e", day);
-  f = f.replace("%-d", day);
-  f = f.replace("%H", padding(hour));
-  f = f.replace("%-H", hour);
-  f = f.replace("%I", padding(hour12));
-  f = f.replace("%-I", hour12);
-  f = f.replace("%m", padding(month));
-  f = f.replace("%-m", month);
-  f = f.replace("%M", padding(mins));
-  f = f.replace("%-M", mins);
-  f = f.replace("%p", options.meridian[meridian]);
-  f = f.replace("%S", padding(secs));
-  f = f.replace("%-S", secs);
-  f = f.replace("%w", weekDay);
-  f = f.replace("%y", padding(year));
-  f = f.replace("%-y", padding(year).replace(/^0+/, ""));
-  f = f.replace("%Y", year);
-  f = f.replace("%z", timezoneoffset);
+  var keys = [
+    "%a", "%A", "%b", "%B", "%d", "%e", "%-d", "%H", "%-H",
+    "%I", "%-I", "%m", "%-m", "%M", "%-M", "%p", "%S", "%-S",
+    "%w", "%y", "%-y", "%Y", "%z",
+  ]
+  var substitute = function(substring) {
+    switch (substring) {
+      case "%a": return options.abbr_day_names[weekDay];
+      case "%A": return options.day_names[weekDay];
+      case "%b": return options.abbr_month_names[month];
+      case "%B": return options.month_names[month];
+      case "%d": return padding(day);
+      case "%e": return day;
+      case "%-d": return day;
+      case "%H": return padding(hour);
+      case "%-H": return hour;
+      case "%I": return padding(hour12);
+      case "%-I": return hour12;
+      case "%m": return padding(month);
+      case "%-m": return month;
+      case "%M": return padding(mins);
+      case "%-M": return mins;
+      case "%p": return options.meridian[meridian];
+      case "%S": return padding(secs);
+      case "%-S": return secs;
+      case "%w": return weekDay;
+      case "%y": return padding(year);
+      case "%-y": return padding(year).replace(/^0+/, "");
+      case "%Y": return year;
+      case "%z": return timezoneoffset;
+    }
+  };
+  for (var i = 0; i < keys.length; i++) {
+    if (f.indexOf(keys[i]) != -1) {
+      f = f.replace(keys[i], substitute(keys[i]));
+    }
+  }
 
   return f;
 };
