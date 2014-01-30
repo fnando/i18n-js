@@ -117,6 +117,18 @@ describe SimplesIdeias::I18n do
     File.should be_file(Rails.root.join("public/javascripts/bitsnpieces.js"))
   end
 
+  it "exports with multiple conditions to a JS file per available locale" do
+    set_config "multiple_conditions_per_locale.yml"
+
+    result = SimplesIdeias::I18n.translation_segments
+    result.keys.should == ["public/javascripts/i18n/bits.en.js", "public/javascripts/i18n/bits.fr.js"]
+
+    %w{en fr}.each do |lang|
+      result["public/javascripts/i18n/bits.#{lang}.js"].keys.should == [lang.to_sym]
+      result["public/javascripts/i18n/bits.#{lang}.js"][lang.to_sym].keys.sort.should == [:date, :number]
+    end
+  end
+
   it "filters translations using scope *.date.formats" do
     result = SimplesIdeias::I18n.filter(translations, "*.date.formats")
     result[:en][:date].keys.should == [:formats]
@@ -213,4 +225,3 @@ describe SimplesIdeias::I18n do
     SimplesIdeias::I18n.translations
   end
 end
-
