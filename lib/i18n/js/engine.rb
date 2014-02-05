@@ -7,6 +7,7 @@ module I18n
         ActiveSupport.on_load(:after_initialize, :yield => true) do
           next unless JS.has_asset_pipeline?
           next unless Rails.configuration.assets.compile
+          next unless %w[development test].include? Rails.env
 
           registry = Sprockets.respond_to?("register_preprocessor") ? Sprockets : Rails.application.assets
 
