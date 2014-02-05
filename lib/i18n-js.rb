@@ -121,11 +121,31 @@ module SimplesIdeias
       FileUtils.mkdir_p File.dirname(file)
 
       File.open(file, "w+") do |f|
-        f << %(var I18n = I18n || {};\n)
-        f << %(I18n.translations = );
-        f << translations.to_json
-        f << %(;)
+        f << js_code(translations)
       end
+    end
+
+    def js_code(translations)
+      <<-JS
+var I18n = I18n || {};
+(function() {  // avoid leaking appended translations
+  I18n.translations = I18n.translations || {};
+  var appended = #{translations.to_json};
+
+  function deepMerge(destination, source) {
+    for (var entry in source) {
+      if (source.hasOwnProperty(entry)) {
+        destination[entry] = (source[entry].constructor == Object
+                              ? deepMerge(destination[entry] || {}, source[entry])
+                              : source[entry]);
+      }
+    }
+    return destination;
+  }
+
+  I18n.translations = deepMerge(I18n.translations, appended);
+})();
+JS
     end
 
     def scoped_translations(scopes) # :nodoc:
