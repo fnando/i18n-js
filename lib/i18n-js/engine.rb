@@ -49,10 +49,12 @@ module SimplesIdeias
 
       def self.write_hash!
         FileUtils.mkdir_p Rails.root.join("tmp")
+        already_exists = File.exists?(load_path_hash_cache)
 
         File.open(load_path_hash_cache, "w+") do |f|
           f.write(cached_load_path_hash)
         end
+        File.chmod(0666, load_path_hash_cache) unless already_exists
       end
 
       class << self
