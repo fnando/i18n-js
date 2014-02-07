@@ -104,9 +104,18 @@ module I18n
 
       File.open(file, "w+") do |f|
         f << %(I18n.translations = );
-        f << translations.to_json
+        f << export_to_json(translations)
         f << %(;)
       end
+    end
+
+    def self.export_to_json(translations)
+      clean_translations(translations).to_json
+    end
+
+    def self.clean_translations(translations)
+      cleanup_proc = Proc.new { |k, v| v.kind_of?(Hash) ? (v.delete_if(&cleanup_proc); false) : v.nil? }
+      translations.dup.delete_if(&cleanup_proc)
     end
 
     def self.scoped_translations(scopes) # :nodoc:

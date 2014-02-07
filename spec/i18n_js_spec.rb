@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe I18n::JS do
+  subject { I18n::JS }
+
   context "exporting" do
     before do
       I18n::JS.stub :export_dir => temp_path
@@ -117,6 +119,19 @@ describe I18n::JS do
       I18n::JS.deep_merge!(target, {:a => {:c => 2}})
 
       target[:a].should eql({:b => 1, :c => 2})
+    end
+  end
+
+  describe "export to json" do
+    it "returns a json string" do
+      hash = {a: 1, b: { c: 2 }}
+      expect(subject.export_to_json(hash)).to eq hash.to_json
+    end
+
+    it "performs a cleanup" do
+      hash = {a: 1, b: { c: 2, d: nil }}
+      clean_hash = {a: 1, b: { c: 2 }}
+      expect(subject.export_to_json(hash)).to eq clean_hash.to_json
     end
   end
 end
