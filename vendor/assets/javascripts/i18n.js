@@ -100,6 +100,7 @@ I18n.lookup = function(scope, options) {
     , messages = translations[locale] || {}
     , options = this.prepareOptions(options)
     , currentScope
+    , scopeParts
   ;
 
   if (typeof(scope) == "object") {
@@ -110,11 +111,17 @@ I18n.lookup = function(scope, options) {
     scope = options.scope.toString() + this.defaultSeparator + scope;
   }
 
-  scope = scope.split(this.defaultSeparator);
+  scopeParts = scope.split(this.defaultSeparator);
 
-  while (messages && scope.length > 0) {
-    currentScope = scope.shift();
+  while (messages && scopeParts.length > 0) {
+    currentScope = scopeParts.shift();
     messages = messages[currentScope];
+  }
+
+  if (scope === 'date') {
+    if (I18n.fallbacks && messages.month_names.length < 2) {
+      messages = null;
+    }
   }
 
   if (!messages) {
