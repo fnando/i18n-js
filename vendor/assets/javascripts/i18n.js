@@ -100,6 +100,7 @@ I18n.lookup = function(scope, options) {
     , messages = translations[locale] || {}
     , options = this.prepareOptions(options)
     , currentScope
+    , scopeParts
   ;
 
   if (typeof(scope) == "object") {
@@ -110,11 +111,24 @@ I18n.lookup = function(scope, options) {
     scope = options.scope.toString() + this.defaultSeparator + scope;
   }
 
-  scope = scope.split(this.defaultSeparator);
+  scopeParts = scope.split(this.defaultSeparator);
 
-  while (messages && scope.length > 0) {
-    currentScope = scope.shift();
+  while (messages && scopeParts.length > 0) {
+    currentScope = scopeParts.shift();
     messages = messages[currentScope];
+  }
+
+  if (scope === 'date') {
+    if (I18n.fallbacks) {
+      var fall = false;
+      // optimally it should only fill in for the parts that are missing
+      // but for now just try to fallback if anything is missing
+      if (!messages.day_names || messages.day_names < 2) fall = true;
+      if (!messages.abbr_day_names || messages.abbr_day_names < 2) fall = true;
+      if (!messages.month_names || messages.month_names < 2) fall = true;
+      if (!messages.abbr_month_names || messages.abbr_month_names < 2) fall = true;
+      if (fall) messages = null;
+    }
   }
 
   if (!messages) {
