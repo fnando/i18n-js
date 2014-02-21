@@ -119,8 +119,15 @@ I18n.lookup = function(scope, options) {
   }
 
   if (scope === 'date') {
-    if (I18n.fallbacks && messages.month_names.length < 2) {
-      messages = null;
+    if (I18n.fallbacks) {
+      var fall = false;
+      // optimally it should only fill in for the parts that are missing
+      // but for now just try to fallback if anything is missing
+      if (!messages.day_names || messages.day_names < 2) fall = true;
+      if (!messages.abbr_day_names || messages.abbr_day_names < 2) fall = true;
+      if (!messages.month_names || messages.month_names < 2) fall = true;
+      if (!messages.abbr_month_names || messages.abbr_month_names < 2) fall = true;
+      if (fall) messages = null;
     }
   }
 

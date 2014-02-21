@@ -99,6 +99,25 @@ describe("I18n.js", function(){
 
       "nb": {
         hello: "Hei Verden!"
+      },
+
+      "es": {
+        date: {
+          formats: {
+            "default": "%d/%m/%Y",
+            "short": "%d de %B",
+            "long": "%d de %B de %Y"
+          },
+            day_names: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
+            abbr_day_names: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+            month_names: [null, "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"],
+            abbr_month_names: [null, "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dec"]
+        }
+      },
+      "es-PE": {
+        date: {
+          month_names: [null]
+        }
       }
     };
   });
@@ -611,6 +630,13 @@ describe("I18n.js", function(){
     expect(I18n.l("date.formats.default", "2009-11-29")).toBeEqualTo("29/11/2009");
     expect(I18n.l("date.formats.short", "2009-01-07")).toBeEqualTo("07 de Janeiro");
     expect(I18n.l("date.formats.long", "2009-01-07")).toBeEqualTo("07 de Janeiro de 2009");
+  });
+
+  specify("localize date string with fallbacks", function(){
+    I18n.locale = "es-PE";
+    I18n.fallbacks = true;
+
+    expect(I18n.l("date.formats.short", "2009-01-07")).toBeEqualTo("07 de Enero");
   });
 
   specify("localize time strings", function(){
