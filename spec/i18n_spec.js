@@ -94,7 +94,10 @@ describe("I18n.js", function(){
       },
 
       "de": {
-        hello: "Hallo Welt!"
+        hello: "Hallo Welt!",
+        date: {
+          day_names: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"]
+        }
       },
 
       "nb": {
@@ -603,6 +606,17 @@ describe("I18n.js", function(){
 
     date = new Date(2009, 3, 26, 0, 35, 44);
     expect(I18n.strftime(date, "%I")).toBeEqualTo("12");
+  });
+
+  specify("date formatting fallbacks", function(){
+    I18n.defaultLocale = "en-US";
+    I18n.locale = "de";
+
+    var date = new Date(2009, 3, 26, 19, 35, 44);
+    expect(I18n.strftime(date, "%A")).toBeEqualTo("Sonntag");
+
+    date = new Date(2009, 3, 26, 19, 35, 44);
+    expect(I18n.strftime(date, "%a")).toBeEqualTo("Sun");
   });
 
   specify("localize date strings", function(){

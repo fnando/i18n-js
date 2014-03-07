@@ -294,15 +294,12 @@ I18n.toTime = function(scope, d) {
 };
 
 I18n.strftime = function(date, format) {
-  var options = this.lookup("date");
-
-  if (!options) {
+  if (!this.lookup("date")) {
     return date.toString();
   }
 
-  options.meridian = options.meridian || ["AM", "PM"];
-
-  var weekDay = date.getDay()
+  var meridians = this.lookup("date.meridian") || ["AM", "PM"]
+    , weekDay = date.getDay()
     , day = date.getDate()
     , year = date.getFullYear()
     , month = date.getMonth() + 1
@@ -329,10 +326,10 @@ I18n.strftime = function(date, format) {
   };
 
   var f = format;
-  f = f.replace("%a", options.abbr_day_names[weekDay]);
-  f = f.replace("%A", options.day_names[weekDay]);
-  f = f.replace("%b", options.abbr_month_names[month]);
-  f = f.replace("%B", options.month_names[month]);
+  f = f.replace("%a", this.lookup("date.abbr_day_names")[weekDay]);
+  f = f.replace("%A", this.lookup("date.day_names")[weekDay]);
+  f = f.replace("%b", this.lookup("date.abbr_month_names")[month]);
+  f = f.replace("%B", this.lookup("date.month_names")[month]);
   f = f.replace("%d", padding(day));
   f = f.replace("%e", day);
   f = f.replace("%-d", day);
@@ -344,7 +341,7 @@ I18n.strftime = function(date, format) {
   f = f.replace("%-m", month);
   f = f.replace("%M", padding(mins));
   f = f.replace("%-M", mins);
-  f = f.replace("%p", options.meridian[meridian]);
+  f = f.replace("%p", meridians[meridian]);
   f = f.replace("%S", padding(secs));
   f = f.replace("%-S", secs);
   f = f.replace("%w", weekDay);
