@@ -111,6 +111,15 @@ describe SimplesIdeias::I18n do
     File.should be_file(Rails.root.join("public/javascripts/i18n/en.js"))
   end
 
+  it "exports to a JS file per available locale with fallback" do
+    set_config "js_file_per_locale_with_fallback.yml"
+    result = SimplesIdeias::I18n.export!
+
+    en = result["public/javascripts/i18n/en.js"][:en]
+    en[:admin][:show][:title].should == "Show"
+    en[:admin][:show][:description].should == "Beschreibung"
+  end
+
   it "exports with multiple conditions" do
     set_config "multiple_conditions.yml"
     SimplesIdeias::I18n.export!
@@ -213,4 +222,3 @@ describe SimplesIdeias::I18n do
     SimplesIdeias::I18n.translations
   end
 end
-
