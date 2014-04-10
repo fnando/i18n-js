@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "i18n-js/version"
+require "i18n/js/version"
 
 Gem::Specification.new do |s|
   s.name        = "i18n-js"
-  s.version     = SimplesIdeias::I18n::Version::STRING
+  s.version     = I18n::JS::Version::STRING
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nando Vieira"]
   s.email       = ["fnando.vieira@gmail.com"]
@@ -18,10 +18,8 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "i18n"
-  s.add_development_dependency "fakeweb"
-  s.add_development_dependency "activesupport", ">= 3.0.0"
-  s.add_development_dependency "rspec", "~> 2.6"
-  s.add_development_dependency "spec-js", "~> 0.1.0.beta.0"
+  s.add_development_dependency "activesupport"
+  s.add_development_dependency "rspec"
   s.add_development_dependency "rake"
-  s.add_development_dependency "pry"
+  s.add_development_dependency "pry-meta"
 end

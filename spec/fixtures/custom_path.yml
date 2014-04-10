@@ -1,0 +1,4 @@
+# Find more details about this configuration file at http://github.com/fnando/i18n-js
+translations:
+  - file: "tmp/i18n-js/all.js"
+    only: "*"

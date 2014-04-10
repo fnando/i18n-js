@@ -1,19 +1,41 @@
-require "active_support/all"
-require "active_support/version"
-require "active_support/test_case"
-require "ostruct"
-require "pathname"
 require "i18n"
 require "json"
-require "fakeweb"
 
-FakeWeb.allow_net_connect = false
+require "active_support/all"
+require "i18n/js"
 
-# Stub Rails.root, so we don"t need to load the whole Rails environment.
-# Be careful! The specified folder will be removed!
-Rails = OpenStruct.new({
-  :root => Pathname.new(File.dirname(__FILE__) + "/tmp"),
-  :version => "0"
-})
+module Helpers
+  # Set the configuration as the current one
+  def set_config(path)
+    config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/fixtures/#{path}"))
+    I18n::JS.stub(:config? => true, :config => config)
+  end
 
-require "i18n-js"
+  # Shortcut to I18n::JS.translations
+  def translations
+    I18n::JS.translations
+  end
+
+  def file_should_exist(name)
+    file_path = File.join(I18n::JS.export_dir, name)
+    File.should be_file(file_path)
+  end
+
+  def temp_path(file_name = "")
+    File.expand_path("../../tmp/i18n-js/#{file_name}", __FILE__)
+  end
+end
+
+RSpec.configure do |config|
+  config.before do
+    I18n.load_path = [File.dirname(__FILE__) + "/fixtures/locales.yml"]
+    FileUtils.rm_rf(temp_path)
+  end
+
+  config.after do
+    FileUtils.rm_rf(temp_path)
+  end
+
+  config.include Helpers
+end
+

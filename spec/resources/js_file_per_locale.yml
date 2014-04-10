@@ -1,3 +1,0 @@
-translations:
-  - file: "public/javascripts/i18n/%{locale}.js"
-    only: '*'

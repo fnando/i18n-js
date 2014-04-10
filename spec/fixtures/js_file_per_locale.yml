@@ -1,0 +1,3 @@
+translations:
+  - file: "tmp/i18n-js/%{locale}.js"
+    only: '*'
