@@ -6,6 +6,7 @@
 
 ### bug fixes
 - Fix regression: asset not being reloaded in development when translation changed
+- Requires `i18n` to be `~> 0.6`, `0.5` does not work at all
 
 
 ## Before 3.0.0.rc5
