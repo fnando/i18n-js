@@ -5,7 +5,7 @@ module I18n
     class Engine < ::Rails::Engine
       initializer :after => "sprockets.environment" do
         ActiveSupport.on_load(:after_initialize, :yield => true) do
-          next unless JS.has_asset_pipeline?
+          next unless JS::Dependencies.using_asset_pipeline?
           next unless Rails.configuration.assets.compile
 
           registry = Sprockets.respond_to?("register_preprocessor") ? Sprockets : Rails.application.assets

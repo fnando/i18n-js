@@ -3,7 +3,8 @@ require "FileUtils" unless defined?(FileUtils)
 
 module I18n
   module JS
-    if defined?(Rails)
+    require "i18n/js/dependencies"
+    if JS::Dependencies.rails?
       require "i18n/js/middleware"
       require "i18n/js/engine"
     end
@@ -11,12 +12,6 @@ module I18n
     # deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
     MERGER = proc do |key, v1, v2|
       Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2
-    end
-
-    # Detect if Rails app has asset pipeline support.
-    #
-    def self.has_asset_pipeline?
-      Rails.configuration.respond_to?(:assets) && Rails.configuration.assets.enabled
     end
 
     # The configuration file. This defaults to the `config/i18n-js.yml` file.
