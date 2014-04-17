@@ -59,13 +59,24 @@ by hand or using your favorite programming language. More info below.
 You **don't** need to set up a thing. The default settings will work just okay. But if you want to split translations into several files or specify specific contexts, you can follow the rest of this setting up section.
 
 Set your locale is easy as
+```javascript
+I18n.defaultLocale = "pt-BR";
+I18n.locale = "pt-BR";
+I18n.currentLocale();
+// pt-BR
+```
 
-    I18n.defaultLocale = "pt-BR";
-    I18n.locale = "pt-BR";
-    I18n.currentLocale();
-    // pt-BR
+**NOTE:** You can now apply your configuration **before I18n** is loaded like this:
+```javascript
+I18n = {} // You must define this object in top namespace, which should be `window`
+I18n.defaultLocale = "pt-BR";
+I18n.locale = "pt-BR";
 
-**NOTE:** Just make sure you apply your configuration **after i18n.js** is loaded. Otherwise, your settings will be ignored.
+// Load I18n from `i18n.js`, `application.js` or whatever
+
+I18n.currentLocale();
+// pt-BR
+```
 
 In practice, you'll have something like the following in your `application.html.erb`:
 
