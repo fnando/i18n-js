@@ -30,7 +30,15 @@ module I18n
 
     def self.segments_per_locale(pattern, scope)
       I18n.available_locales.each_with_object({}) do |locale, segments|
-        result = scoped_translations("#{locale}.#{scope}")
+        if scope.class == Array
+          result = {}
+          scope.each do |s|
+            result.deep_merge!(scoped_translations("#{locale}.#{s}"))
+          end
+        else
+          result = scoped_translations("#{locale}.#{scope}")
+        end
+        
         next if result.empty?
 
         segment_name = ::I18n.interpolate(pattern,{:locale => locale})
