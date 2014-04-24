@@ -51,6 +51,14 @@ describe I18n::JS do
 
       file_should_exist "bitsnpieces.js"
     end
+
+    it "exports to a JS file per available locale, with multiple conditions" do
+      set_config "js_file_per_locale_multiple_conditions.yml"
+      I18n::JS.export
+
+      file_should_exist "en.js"
+      file_should_exist "fr.js"
+    end
   end
 
   context "filters" do

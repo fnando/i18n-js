@@ -3,6 +3,7 @@ require "json"
 
 require "active_support/all"
 require "i18n/js"
+require "yaml"
 
 module Helpers
   # Set the configuration as the current one
@@ -36,6 +37,7 @@ RSpec.configure do |config|
     FileUtils.rm_rf(temp_path)
   end
 
+  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.include Helpers
 end
 
