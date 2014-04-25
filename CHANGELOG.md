@@ -7,6 +7,7 @@
 - Add back rake task for export (`rake i18n:js:export`)
 - Not overriding translation when manually run `I18n::JS.export` (https://github.com/fnando/i18n-js/pull/171)
 - Move missing placeholder text generation into its own function (for easier debugging) (https://github.com/fnando/i18n-js/pull/169)
+- Add support for milliseconds (`lll` in `yyyy-mm-ddThh:mm:ss.lllZ`) (https://github.com/fnando/i18n-js/pull/192)
 
 ### bug fixes
 - Fix regression: asset not being reloaded in development when translation changed
