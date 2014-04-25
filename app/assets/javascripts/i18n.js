@@ -515,16 +515,17 @@
   //    yyyy-mm-dd[ T]hh:mm::ssZ
   //    yyyy-mm-dd[ T]hh:mm::ss+0000
   //    yyyy-mm-dd[ T]hh:mm::ss+00:00
+  //    yyyy-mm-dd[ T]hh:mm::ss.123Z
   //
   I18n.parseDate = function(date) {
-    var matches, convertedDate;
+    var matches, convertedDate, fraction;
 
     // we have a date, so just return it.
     if (typeof(date) == "object") {
       return date;
     };
 
-    matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2}))?(Z|\+00:?00)?/);
+    matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2})([\.,]\d{1,3})?)?(Z|\+00:?00)?/);
 
     if (matches) {
       for (var i = 1; i <= 6; i++) {
@@ -534,10 +535,12 @@
       // month starts on 0
       matches[2] -= 1;
 
-      if (matches[7]) {
-        convertedDate = new Date(Date.UTC(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]));
+      fraction = matches[7] ? 1000 * ("0" + matches[7]) : null
+
+      if (matches[8]) {
+        convertedDate = new Date(Date.UTC(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6], fraction));
       } else {
-        convertedDate = new Date(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]);
+        convertedDate = new Date(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6], fraction);
       }
     } else if (typeof(date) == "number") {
       // UNIX timestamp
