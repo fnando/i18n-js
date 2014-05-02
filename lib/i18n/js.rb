@@ -1,5 +1,5 @@
 require "i18n"
-require "FileUtils" unless defined?(FileUtils)
+require "fileutils"
 
 module I18n
   module JS
