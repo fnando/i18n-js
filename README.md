@@ -11,6 +11,10 @@ Features:
 - Asset pipeline support
 - Lots more! :)
 
+## Code Status
+
+- [![Build Status](https://travis-ci.org/fnando/i18n-js.svg?branch=master)](https://travis-ci.org/fnando/i18n-js)
+
 ## Usage
 
 ### Installation

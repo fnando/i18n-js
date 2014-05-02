@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.1
+script: "bundle exec rake spec"
+before_install: # Need to install npm to test js
+- sudo apt-get update
+- sudo apt-get install npm
+- npm install jasmine-node
