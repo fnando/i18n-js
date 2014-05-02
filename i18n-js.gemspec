@@ -12,9 +12,8 @@ Gem::Specification.new do |s|
   s.summary     = "It's a small library to provide the Rails I18n translations on the Javascript."
   s.description = s.summary
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = Dir["{lib,vendor,config}/**/*"] + ["README.rdoc", "Rakefile"]
+  s.test_files    = Dir["spec/**/*"]
   s.require_paths = ["lib"]
 
   s.add_dependency "i18n", "~> 0.6"
