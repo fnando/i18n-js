@@ -19,7 +19,7 @@ Features:
 
 Add the gem to your Gemfile.
 
-    source :rubygems
+    source "https://rubygems.org"
     gem "rails", "3.2.3"
     gem "i18n-js"
 
