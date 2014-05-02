@@ -6,6 +6,7 @@ var DEBUG = false;
 
     Translations.en = {
         hello: "Hello World!"
+      , paid: "You were paid %{price}"
 
       , booleans: {
           yes: true,

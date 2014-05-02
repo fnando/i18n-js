@@ -350,7 +350,7 @@
     while (matches.length) {
       placeholder = matches.shift();
       name = placeholder.replace(this.placeholder, "$1");
-      value = options[name];
+      value = options[name].toString().replace(/\$/gm, "_#$#_");
 
       if (!this.isSet(options[name])) {
         value = this.missingPlaceholder(placeholder, message);
@@ -360,7 +360,7 @@
       message = message.replace(regex, value);
     }
 
-    return message;
+    return message.replace("_#$#_", "$");
   };
 
   // Pluralize the given scope using the `count` value.

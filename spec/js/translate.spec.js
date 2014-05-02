@@ -117,4 +117,11 @@ describe("Translate", function(){
     expect(I18n.t("booleans.yes")).toEqual(true);
     expect(I18n.t("booleans.no")).toEqual(false);
   });
+
+  it("escapes $ when doing substitution (IE)", function(){
+    I18n.locale = "en";
+
+    expect(I18n.t("paid", {price: "$0.12"})).toEqual("You were paid $0.12");
+    expect(I18n.t("paid", {price: "$1.35"})).toEqual("You were paid $1.35");
+  });
 });
