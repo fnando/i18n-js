@@ -245,4 +245,14 @@ describe("Dates", function(){
     date = new Date(2009, 3, 26, 19, 35, 44);
     expect(I18n.strftime(date, "%a")).toEqual("Sun");
   });
+
+  it("uses time as the meridian scope", function(){
+    I18n.locale = "de";
+
+    var date = new Date(2009, 3, 26, 19, 35, 44);
+    expect(I18n.strftime(date, "%p")).toEqual("de:PM");
+
+    date = new Date(2009, 3, 26, 7, 35, 44);
+    expect(I18n.strftime(date, "%p")).toEqual("de:AM");
+  });
 });

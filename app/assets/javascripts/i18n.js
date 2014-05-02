@@ -262,6 +262,19 @@
     }
   };
 
+  I18n.meridian = function() {
+    var time = this.lookup("time");
+    var date = this.lookup("date");
+
+    if (time && time.am && time.pm) {
+      return [time.am, time.pm];
+    } else if (date && date.meridian) {
+      return date.meridian;
+    } else {
+      return DATE.meridian;
+    }
+  };
+
   // Merge serveral hash options, checking if value is set before
   // overwriting any value. The precedence is from left to right.
   //
@@ -588,7 +601,9 @@
   //     %z  - Timezone offset (+0545)
   //
   I18n.strftime = function(date, format) {
-    var options = this.lookup("date");
+    var options = this.lookup("date")
+      , meridianOptions = I18n.meridian()
+    ;
 
     if (!options) {
       options = {};
@@ -634,7 +649,7 @@
     format = format.replace("%-m", month);
     format = format.replace("%M", padding(mins));
     format = format.replace("%-M", mins);
-    format = format.replace("%p", options.meridian[meridian]);
+    format = format.replace("%p", meridianOptions[meridian]);
     format = format.replace("%S", padding(secs));
     format = format.replace("%-S", secs);
     format = format.replace("%w", weekDay);

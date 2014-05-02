@@ -108,6 +108,11 @@ var DEBUG = false;
       , date: {
           day_names: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"]
         }
+
+      , time: {
+            am: "de:AM"
+          , pm: "de:PM"
+        }
     };
 
     Translations["nb"] = {
