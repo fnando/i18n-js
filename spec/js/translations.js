@@ -1,3 +1,5 @@
+var DEBUG = false;
+
 ;(function(){
   var generator = function() {
     var Translations = {};
@@ -102,7 +104,10 @@
     };
 
     Translations["de"] = {
-      hello: "Hallo Welt!"
+        hello: "Hallo Welt!"
+      , date: {
+          day_names: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"]
+        }
     };
 
     Translations["nb"] = {

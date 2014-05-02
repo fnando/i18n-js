@@ -234,4 +234,15 @@ describe("Dates", function(){
     var date = new Date(2009, 3, 26, 19, 35, 44);
     expect(I18n.strftime(date, "%a")).toEqual("Sun");
   });
+
+  it("applies locale fallback", function(){
+    I18n.defaultLocale = "en-US";
+    I18n.locale = "de";
+
+    var date = new Date(2009, 3, 26, 19, 35, 44);
+    expect(I18n.strftime(date, "%A")).toEqual("Sonntag");
+
+    date = new Date(2009, 3, 26, 19, 35, 44);
+    expect(I18n.strftime(date, "%a")).toEqual("Sun");
+  });
 });

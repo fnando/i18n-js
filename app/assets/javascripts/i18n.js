@@ -23,11 +23,12 @@
   };
 
   // Set default days/months translations.
-  var DAYS_AND_MONTHS = {
+  var DATE = {
       day_names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     , abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     , month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     , abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    , meridian: ["AM", "PM"]
   };
 
   // Set default number format.
@@ -56,9 +57,6 @@
 
   // Set default size units.
   var SIZE_UNITS = [null, "kb", "mb", "gb", "tb"];
-
-  // Set meridian.
-  var MERIDIAN = ["AM", "PM"];
 
   // Other default options
   var DEFAULT_OPTIONS = {
@@ -593,12 +591,10 @@
     var options = this.lookup("date");
 
     if (!options) {
-      options = DAYS_AND_MONTHS;
+      options = {};
     }
 
-    if (!options.meridian) {
-      options.meridian = MERIDIAN;
-    }
+    options = this.prepareOptions(options, DATE);
 
     var weekDay = date.getDay()
       , day = date.getDate()
@@ -612,7 +608,9 @@
       , offset = date.getTimezoneOffset()
       , absOffsetHours = Math.floor(Math.abs(offset / 60))
       , absOffsetMinutes = Math.abs(offset) - (absOffsetHours * 60)
-      , timezoneoffset = (offset > 0 ? "-" : "+") + (absOffsetHours.toString().length < 2 ? "0" + absOffsetHours : absOffsetHours) + (absOffsetMinutes.toString().length < 2 ? "0" + absOffsetMinutes : absOffsetMinutes)
+      , timezoneoffset = (offset > 0 ? "-" : "+") +
+          (absOffsetHours.toString().length < 2 ? "0" + absOffsetHours : absOffsetHours) +
+          (absOffsetMinutes.toString().length < 2 ? "0" + absOffsetMinutes : absOffsetMinutes)
     ;
 
     if (hour12 > 12) {
