@@ -262,6 +262,11 @@
     }
   };
 
+  // Rails changed the way the meridian is stored.
+  // It started with `date.meridian` returning an array,
+  // then it switched to `time.am` and `time.pm`.
+  // This function abstracts this different and returns
+  // and default value when none is provided.
   I18n.meridian = function() {
     var time = this.lookup("time");
     var date = this.lookup("date");
