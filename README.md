@@ -246,7 +246,6 @@ The accepted formats are:
     %A  - The full weekday name (Sunday)
     %b  - The abbreviated month name (Jan)
     %B  - The full month name (January)
-    %c  - The preferred local date and time representation
     %d  - Day of the month (01..31)
     %-d - Day of the month (1..31)
     %H  - Hour of the day, 24-hour clock (00..23)
