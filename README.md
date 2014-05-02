@@ -1,6 +1,6 @@
 # I18n.js
 
-It's a small library to provide the Rails I18n translations on the Javascript.
+It's a small library to provide the Rails I18n translations on the JavaScript.
 
 Features:
 
@@ -88,7 +88,7 @@ In practice, you'll have something like the following in your `application.html.
 You can use translate your messages:
 
     I18n.t("some.scoped.translation");
-    // or translate with explicite setting of locale
+    // or translate with explicit setting of locale
     I18n.t("some.scoped.translation", {locale: "fr"});
 
 You can also interpolate values:
@@ -125,7 +125,7 @@ are three different ways of doing it so:
     I18n.locales.no = "nb";
     I18n.locales.no = function(locale){ return ["nb"]; };
 
-Pluralization is possible as well and by default provides english rules:
+Pluralization is possible as well and by default provides English rules:
 
     I18n.t("inbox.counting", {count: 10}); // You have 10 messages
 
