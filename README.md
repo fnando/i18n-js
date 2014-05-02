@@ -1,5 +1,8 @@
 # I18n.js
 
+[![Build Status](https://travis-ci.org/fnando/i18n-js.svg?branch=master)](https://travis-ci.org/fnando/i18n-js)
+[![Code Climate](https://codeclimate.com/github/fnando/i18n-js.png)](https://codeclimate.com/github/fnando/i18n-js)
+
 It's a small library to provide the Rails I18n translations on the JavaScript.
 
 Features:
@@ -10,10 +13,6 @@ Features:
 - Locale fallback
 - Asset pipeline support
 - Lots more! :)
-
-## Code Status
-
-- [![Build Status](https://travis-ci.org/fnando/i18n-js.svg?branch=master)](https://travis-ci.org/fnando/i18n-js)
 
 ## Usage
 
