@@ -535,7 +535,6 @@
   //
   I18n.parseDate = function(date) {
     var matches, convertedDate, fraction;
-
     // we have a date, so just return it.
     if (typeof(date) == "object") {
       return date;
@@ -562,6 +561,13 @@
       // UNIX timestamp
       convertedDate = new Date();
       convertedDate.setTime(date);
+    } else if (date.match(/([A-Z][a-z]{2}) ([A-Z][a-z]{2}) (\d+) (\d+:\d+:\d+) ([+-]\d+) (\d+)/)) {
+      // This format `Wed Jul 20 13:03:39 +0000 2011` is parsed by
+      // webkit/firefox, but not by IE, so we must parse it manually.
+      convertedDate = new Date();
+      convertedDate.setTime(Date.parse([
+        RegExp.$1, RegExp.$2, RegExp.$3, RegExp.$6, RegExp.$4, RegExp.$5
+      ].join(" ")));
     } else if (date.match(/\d+ \d+:\d+:\d+ [+-]\d+ \d+/)) {
       // a valid javascript format with timezone info
       convertedDate = new Date();
