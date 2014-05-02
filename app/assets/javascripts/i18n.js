@@ -571,7 +571,7 @@
     } else if (date.match(/\d+ \d+:\d+:\d+ [+-]\d+ \d+/)) {
       // a valid javascript format with timezone info
       convertedDate = new Date();
-      convertedDate.setTime(Date.parse(date))
+      convertedDate.setTime(Date.parse(date));
     } else {
       // an arbitrary javascript string
       convertedDate = new Date();
