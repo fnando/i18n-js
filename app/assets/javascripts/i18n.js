@@ -315,12 +315,51 @@
     return options;
   };
 
+  // Generate a list of translation options for default fallbacks.
+  // `defaultValue` is also deleted from options as it is returned as part of
+  // the translationOptions array.
+  I18n.createTranslationOptions = function(scope, options) {
+    var translationOptions = [{scope: scope}];
+
+    // Defaults should be an array of hashes containing either
+    // fallback scopes or messages
+    if (this.isSet(options.defaults)) {
+      translationOptions = translationOptions.concat(options.defaults);
+    }
+
+    // Maintain support for defaultValue. Since it is always a message
+    // insert it in to the translation options as such.
+    if (this.isSet(options.defaultValue)) {
+      translationOptions.push({ message: options.defaultValue });
+      delete options.defaultValue;
+    }
+
+    return translationOptions;
+  };
+
   // Translate the given scope with the provided options.
   I18n.translate = function(scope, options) {
     options = this.prepareOptions(options);
-    var translation = this.lookup(scope, options);
 
-    if (translation === undefined || translation === null) {
+    var translationOptions = this.createTranslationOptions(scope, options);
+
+    var translation;
+    // Iterate through the translation options until a translation
+    // or message is found.
+    var translationFound =
+      translationOptions.some(function(translationOption) {
+        if (this.isSet(translationOption.scope)) {
+          translation = this.lookup(translationOption.scope, options);
+        } else if (this.isSet(translationOption.message)) {
+          translation = translationOption.message;
+        }
+
+        if (translation !== undefined && translation !== null) {
+          return true;
+        }
+      }, this);
+
+    if (!translationFound) {
       return this.missingTranslation(scope);
     }
 
