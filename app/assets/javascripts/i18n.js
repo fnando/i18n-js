@@ -235,6 +235,14 @@
       , translations
     ;
 
+    // Deal with the scope option provided through the second argument.
+    //
+    //    I18n.t('hello', {scope: 'greetings'});
+    //
+    if (options.scope) {
+      scope = [options.scope, scope].join(this.defaultSeparator);
+    }
+
     while (locales.length) {
       locale = locales.shift();
       scopes = scope.split(this.defaultSeparator);
@@ -266,7 +274,7 @@
   // It started with `date.meridian` returning an array,
   // then it switched to `time.am` and `time.pm`.
   // This function abstracts this difference and returns
-  // and default value when none is provided.
+  // the correct meridian or the default value when none is provided.
   I18n.meridian = function() {
     var time = this.lookup("time");
     var date = this.lookup("date");

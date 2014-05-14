@@ -124,4 +124,9 @@ describe("Translate", function(){
     expect(I18n.t("paid", {price: "$0.12"})).toEqual("You were paid $0.12");
     expect(I18n.t("paid", {price: "$1.35"})).toEqual("You were paid $1.35");
   });
+
+  it("sets default scope", function(){
+    var options = {scope: "greetings"};
+    expect(I18n.t("stranger", options)).toEqual("Hello stranger!");
+  });
 });
