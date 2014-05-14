@@ -129,4 +129,12 @@ describe("Translate", function(){
     var options = {scope: "greetings"};
     expect(I18n.t("stranger", options)).toEqual("Hello stranger!");
   });
+
+  it("accepts the scope as an array", function(){
+    expect(I18n.t(["greetings", "stranger"])).toEqual("Hello stranger!");
+  });
+
+  it("accepts the scope as an array using a base scope", function(){
+    expect(I18n.t(["stranger"], {scope: "greetings"})).toEqual("Hello stranger!");
+  });
 });

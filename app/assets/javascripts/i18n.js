@@ -235,6 +235,11 @@
       , translations
     ;
 
+    // Deal with the scope as an array.
+    if (scope.constructor === Array) {
+      scope = scope.join(this.defaultSeparator);
+    }
+
     // Deal with the scope option provided through the second argument.
     //
     //    I18n.t('hello', {scope: 'greetings'});
