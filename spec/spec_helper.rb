@@ -18,7 +18,7 @@ module Helpers
 
   def file_should_exist(name)
     file_path = File.join(I18n::JS.export_dir, name)
-    File.should be_file(file_path)
+    expect(File).to be_file(file_path)
   end
 
   def temp_path(file_name = "")

@@ -13,13 +13,13 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/all.js")
+      expect(I18n::JS).to receive(:save).with(translations, "tmp/i18n-js/all.js")
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/no_scope.js")
+      expect(I18n::JS).to receive(:save).with(translations, "tmp/i18n-js/no_scope.js")
       I18n::JS.export
     end
 
@@ -56,51 +56,51 @@ describe I18n::JS do
   context "filters" do
     it "filters translations using scope *.date.formats" do
       result = I18n::JS.filter(translations, "*.date.formats")
-      result[:en][:date].keys.should eql([:formats])
-      result[:fr][:date].keys.should eql([:formats])
+      expect(result[:en][:date].keys).to eql([:formats])
+      expect(result[:fr][:date].keys).to eql([:formats])
     end
 
     it "filters translations using scope [*.date.formats, *.number.currency.format]" do
       result = I18n::JS.scoped_translations(["*.date.formats", "*.number.currency.format"])
-      result[:en].keys.collect(&:to_s).sort.should eql(%w[ date number ])
-      result[:fr].keys.collect(&:to_s).sort.should eql(%w[ date number ])
+      expect(result[:en].keys.collect(&:to_s).sort).to eql(%w[ date number ])
+      expect(result[:fr].keys.collect(&:to_s).sort).to eql(%w[ date number ])
     end
 
     it "filters translations using multi-star scope" do
       result = I18n::JS.scoped_translations("*.*.formats")
 
-      result[:en].keys.collect(&:to_s).sort.should eql(%w[ date time ])
-      result[:fr].keys.collect(&:to_s).sort.should eql(%w[ date time ])
+      expect(result[:en].keys.collect(&:to_s).sort).to eql(%w[ date time ])
+      expect(result[:fr].keys.collect(&:to_s).sort).to eql(%w[ date time ])
 
-      result[:en][:date].keys.should eql([:formats])
-      result[:en][:time].keys.should eql([:formats])
+      expect(result[:en][:date].keys).to eql([:formats])
+      expect(result[:en][:time].keys).to eql([:formats])
 
-      result[:fr][:date].keys.should eql([:formats])
-      result[:fr][:time].keys.should eql([:formats])
+      expect(result[:fr][:date].keys).to eql([:formats])
+      expect(result[:fr][:time].keys).to eql([:formats])
     end
 
     it "filters translations using alternated stars" do
       result = I18n::JS.scoped_translations("*.admin.*.title")
 
-      result[:en][:admin].keys.collect(&:to_s).sort.should eql(%w[ edit show ])
-      result[:fr][:admin].keys.collect(&:to_s).sort.should eql(%w[ edit show ])
+      expect(result[:en][:admin].keys.collect(&:to_s).sort).to eql(%w[ edit show ])
+      expect(result[:fr][:admin].keys.collect(&:to_s).sort).to eql(%w[ edit show ])
 
-      result[:en][:admin][:show][:title].should eql("Show")
-      result[:fr][:admin][:show][:title].should eql("Visualiser")
+      expect(result[:en][:admin][:show][:title]).to eql("Show")
+      expect(result[:fr][:admin][:show][:title]).to eql("Visualiser")
 
-      result[:en][:admin][:edit][:title].should eql("Edit")
-      result[:fr][:admin][:edit][:title].should eql("Editer")
+      expect(result[:en][:admin][:edit][:title]).to eql("Edit")
+      expect(result[:fr][:admin][:edit][:title]).to eql("Editer")
     end
   end
 
   context "general" do
     it "sets export directory" do
-      I18n::JS.export_dir.should eql("public/javascripts")
+      expect(I18n::JS.export_dir).to eql("public/javascripts")
     end
 
     it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config?.should be_false
-      I18n::JS.config.should eql({})
+      expect(I18n::JS.config?).to be_false
+      expect(I18n::JS.config).to eql({})
     end
   end
 
@@ -109,14 +109,14 @@ describe I18n::JS do
       target = {:a => {:b => 1}}
       result = I18n::JS.deep_merge(target, {:a => {:c => 2}})
 
-      result[:a].should eql({:b => 1, :c => 2})
+      expect(result[:a]).to eql({:b => 1, :c => 2})
     end
 
     it "performs a banged deep merge" do
       target = {:a => {:b => 1}}
       I18n::JS.deep_merge!(target, {:a => {:c => 2}})
 
-      target[:a].should eql({:b => 1, :c => 2})
+      expect(target[:a]).to eql({:b => 1, :c => 2})
     end
   end
 end
