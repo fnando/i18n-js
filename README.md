@@ -30,7 +30,6 @@ If you're using the [asset pipeline](http://guides.rubyonrails.org/asset_pipelin
 then you must add the following line to your `app/assets/javascripts/application.js`.
 
 ```javascript
-//= require i18n
 //= require i18n/translations
 ```
 
@@ -39,7 +38,6 @@ If you're not using the asset pipeline, download the JavaScript file at
 Also load the `translations.js` file.
 
 ```erb
-<%= javascript_include_tag "i18n" %>
 <%= javascript_include_tag "i18n", "translations" %>
 ```
 
