@@ -13,7 +13,11 @@ module I18n
 
       private
       def cache_path
-        @cache_path ||= Rails.root.join("tmp/cache/i18n-js.yml")
+        @cache_path ||= cache_dir.join("i18n-js.yml")
+      end
+
+      def cache_dir
+        @cache_dir ||= Rails.root.join("tmp/cache")
       end
 
       def cache
@@ -23,6 +27,13 @@ module I18n
           else
             {}
           end
+        end
+      end
+
+      def save_cache(new_cache)
+        FileUtils.mkdir_p(cache_dir)
+        File.open(cache_path, "w+") do |file|
+          file << new_cache.to_yaml
         end
       end
 
@@ -48,9 +59,7 @@ module I18n
 
         return if valid_cache.all?
 
-        File.open(cache_path, "w+") do |file|
-          file << new_cache.to_yaml
-        end
+        save_cache(new_cache)
 
         ::I18n::JS.export
       end
