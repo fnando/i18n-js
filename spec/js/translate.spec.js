@@ -82,6 +82,44 @@ describe("Translate", function(){
     expect(I18n.t("hello")).toEqual("Hei Verden!");
   });
 
+  describe("when provided default valutes", function() {
+    it("uses scope provided in defaults if scope doesn't exist", function() {
+      actual = I18n.t("Hello!", {defaults: [{scope: "greetings.stranger"}]});
+      expect(actual).toEqual("Hello stranger!");
+    });
+
+    it("continues to fallback until a scope is found", function() {
+      var defaults = [{scope: "foo"}, {scope: "hello"}];
+
+      actual = I18n.t("foo", {defaults: defaults});
+      expect(actual).toEqual("Hello World!");
+    });
+
+    it("uses message if specified as a default", function() {
+      var defaults = [{message: "Hello all!"}];
+      actual = I18n.t("foo", {defaults: defaults});
+      expect(actual).toEqual("Hello all!");
+    });
+
+    it("uses the first message if no scopes are found", function() {
+      var defaults = [
+          {scope: "bar"}
+        , {message: "Hello all!"}
+        , {scope: "hello"}];
+      actual = I18n.t("foo", {defaults: defaults});
+      expect(actual).toEqual("Hello all!");
+    });
+
+    it("uses default value if no scope is found", function() {
+      var options = {
+          defaults: [{scope: "bar"}]
+        , defaultValue: "Hello all!"
+      };
+      actual = I18n.t("foo", options);
+      expect(actual).toEqual("Hello all!");
+    });
+  });
+
   it("uses default value for simple translation", function(){
     actual = I18n.t("warning", {defaultValue: "Warning!"});
     expect(actual).toEqual("Warning!");

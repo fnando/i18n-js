@@ -110,6 +110,21 @@ You can set default values for missing scopes:
     // with interpolation
     I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
 
+You can also provide a list of default fallbacks for missing scopes:
+
+    // As a scope
+    I18n.t("some.missing.scope", {defaults: [{scope: "some.existing.scope"}]});
+
+    // As a simple translation
+    I18n.t("some.missing.scope", {defaults: [{message: "some.existing.scope"}]});
+
+    Default values must be provided as an array of hashs where the key is the
+    type of translation desired, a `scope` or a `message`. The translation returned
+    will be either the first scope recognized, or the first message defined.
+
+    The translation will fallback to the `defaultValue` translation if no scope
+    in `defaults` matches and if no default of type `message` is found.
+
 Translation fallback can be enabled by enabling the `I18n.fallbacks` option:
 
     <script type="text/javascript">
