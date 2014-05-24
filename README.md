@@ -288,7 +288,7 @@ Check out `spec/*.spec.js` files for more examples!
 
 ## Using I18n.js with other languages (Python, PHP, ...)
 
-The JavaScript library is language agnostic; so you can use it with PHP, Python, [you favorite language here].
+The JavaScript library is language agnostic; so you can use it with PHP, Python, [your favorite language here].
 The only requirement is that you need to set the `translations` attribute like following:
 
     I18n.translations = {};
