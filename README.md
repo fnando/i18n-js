@@ -165,7 +165,7 @@ The sample above expects the following translation:
           other: You have {{count}} new messages
           zero: You have no messages
 
-**NOTE:** Rais I18n recognizes the `zero` option.
+**NOTE:** Rails I18n recognizes the `zero` option.
 
 If you need special rules just define them for your language, for example Russian, just add a new pluralizer:
 
