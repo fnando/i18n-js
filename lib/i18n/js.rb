@@ -138,7 +138,7 @@ module I18n
     def self.translations
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
-        translations
+        translations.slice(*::I18n.available_locales)
       end
     end
 

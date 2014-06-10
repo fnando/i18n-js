@@ -93,13 +93,37 @@ describe I18n::JS do
     end
   end
 
+  context "I18n.available_locales" do
+    context "when I18n.available_locales is not set" do
+      it "should allow all locales" do
+        result = I18n::JS.scoped_translations("*.admin.*.title")
+
+        result[:en][:admin][:show][:title].should eql("Show")
+        result[:fr][:admin][:show][:title].should eql("Visualiser")
+        result[:ja][:admin][:show][:title].should eql("Ignore me")
+      end
+    end
+
+    context "when I18n.available_locales is set" do
+      before { allow(::I18n).to receive(:available_locales){ [:en, :fr] } }
+
+      it "should ignore non-valid locales" do
+        result = I18n::JS.scoped_translations("*.admin.*.title")
+
+        result[:en][:admin][:show][:title].should eql("Show")
+        result[:fr][:admin][:show][:title].should eql("Visualiser")
+        result.keys.include?(:ja).should eql(false)
+      end
+    end
+  end
+
   context "general" do
     it "sets export directory" do
       I18n::JS.export_dir.should eql("public/javascripts")
     end
 
     it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config?.should be_false
+      I18n::JS.config?.should eql(false)
       I18n::JS.config.should eql({})
     end
   end

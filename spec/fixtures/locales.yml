@@ -74,3 +74,8 @@ fr:
       note: "plus de détails"
     edit:
       title: "Editer"
+
+ja:
+  admin:
+    show:
+      title: "Ignore me"
