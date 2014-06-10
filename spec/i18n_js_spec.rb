@@ -13,13 +13,15 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/all.js")
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, nil).and_call_original
+      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/no_scope.js")
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, nil).and_call_original
+      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
@@ -43,6 +45,7 @@ describe I18n::JS do
       I18n::JS.export
 
       file_should_exist "en.js"
+      file_should_exist "fr.js"
     end
 
     it "exports with multiple conditions" do
@@ -99,7 +102,7 @@ describe I18n::JS do
     end
 
     it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config?.should be_false
+      I18n::JS.config?.should eql(false)
       I18n::JS.config.should eql({})
     end
   end
