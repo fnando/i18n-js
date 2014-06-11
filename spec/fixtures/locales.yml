@@ -34,6 +34,7 @@ en:
       note: "more details"
     edit:
       title: "Edit"
+  foo: "Foo"
 
 fr:
   date:
