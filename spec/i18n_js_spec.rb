@@ -53,6 +53,8 @@ describe I18n::JS do
     end
 
     it "exports with multiple conditions to a JS file per available locale" do
+      allow(::I18n).to receive(:available_locales){ [:en, :fr] }
+
       set_config "multiple_conditions_per_locale.yml"
 
       result = I18n::JS.translation_segments
