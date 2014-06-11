@@ -61,6 +61,39 @@ deploying.
 This will export all translation files, including the custom scopes you may have
 defined on `config/i18n-js.yml`.
 
+#### Export Configuration
+
+Exported Translation files can be customized with config file `config/i18n-js.yml` (create it yourself). You can even get more files generated to different folders and with different translations to best suit your needs.
+
+Examples:
+```yaml
+translations:
+- file: 'public/javascripts/path-to-your-messages-file.js'
+  only: '*.date.formats'
+- file: 'public/javascripts/path-to-your-second-file.js'
+  only: ['*.activerecord', '*.admin.*.title']
+```
+
+If `only` is omitted all the translations will be saved. Also, make sure you add that initial `*`; it specifies that all languages will be exported. If you want to export only one language, you can do something like this:
+```yaml
+translations:
+- file: 'public/javascripts/en.js'
+  only: 'en.*'
+- file: 'public/javascripts/pt-BR.js'
+  only: 'pt-BR.*'
+```
+
+Optionally, you can auto generate a translation file per available locale if you specify the `%{locale}` placeholder.
+```yaml
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+- file: "public/javascripts/frontend/i18n/%{locale}.js"
+  only: ['frontend', 'users']
+```
+
+To find more examples on how to use the configuration file please refer to the tests.
+
 #### Vanilla JavaScript
 
 Just add the `i18n.js` file to your page. You'll have to build the translations object
