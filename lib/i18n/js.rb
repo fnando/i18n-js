@@ -29,7 +29,8 @@ module I18n
 
     def self.segments_per_locale(pattern, scope, namespace)
       I18n.available_locales.each_with_object([]) do |locale, segments|
-        result = scoped_translations("#{locale}.#{scope}")
+        scope = [scope] unless scope.respond_to?(:each)
+        result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"})
         next if result.empty?
         segments << Segment.new(::I18n.interpolate(pattern,{:locale => locale}), result, namespace)
       end
