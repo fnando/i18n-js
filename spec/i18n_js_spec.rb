@@ -111,7 +111,7 @@ describe I18n::JS do
     end
 
     it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config?.should be_false
+      I18n::JS.config?.should eql(false)
       I18n::JS.config.should eql({})
     end
   end
