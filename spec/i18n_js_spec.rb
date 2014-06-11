@@ -51,6 +51,18 @@ describe I18n::JS do
 
       file_should_exist "bitsnpieces.js"
     end
+
+    it "exports with multiple conditions to a JS file per available locale" do
+      set_config "multiple_conditions_per_locale.yml"
+
+      result = I18n::JS.translation_segments
+      result.keys.should eql(["tmp/i18n-js/bits.en.js", "tmp/i18n-js/bits.fr.js"])
+
+      %w{en fr}.each do |lang|
+        result["tmp/i18n-js/bits.#{lang}.js"].keys.should eql([lang.to_sym])
+        result["tmp/i18n-js/bits.#{lang}.js"][lang.to_sym].keys.sort.should eql([:date, :number])
+      end
+    end
   end
 
   context "filters" do
