@@ -56,11 +56,59 @@ describe I18n::JS do
       set_config "multiple_conditions_per_locale.yml"
 
       result = I18n::JS.translation_segments
-      result.keys.should eql(["tmp/i18n-js/bits.en.js", "tmp/i18n-js/bits.fr.js"])
+      expected_files = %w(en de fr).map { |locale| "tmp/i18n-js/bits.#{locale}.js" }
+      result.keys.should eql(expected_files)
 
       %w{en fr}.each do |lang|
         result["tmp/i18n-js/bits.#{lang}.js"].keys.should eql([lang.to_sym])
         result["tmp/i18n-js/bits.#{lang}.js"][lang.to_sym].keys.sort.should eql([:date, :number])
+      end
+    end
+
+    context "fallbacks" do
+      it "exports without fallback when disabled" do
+        set_config "js_file_per_locale_without_fallbacks.yml"
+
+        result = I18n::JS.translation_segments
+        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql(nil)
+      end
+
+      it "exports with default_locale as fallback when enabled" do
+        set_config "js_file_per_locale_with_fallbacks_enabled.yml"
+
+        result = I18n::JS.translation_segments
+        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+      end
+
+      it "exports with given locale as fallback" do
+        set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
+
+        result = I18n::JS.translation_segments
+        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+      end
+
+      context "with I18n::Fallbacks enabled" do
+        let(:backend_with_fallbacks) { backend_class_with_fallbacks.new }
+
+        before do
+          I18n.backend = backend_with_fallbacks
+          I18n.fallbacks[:fr] = [:de, :en]
+        end
+        after { I18n.backend = I18n::Backend::Simple.new }
+
+        it "exports with defined locale as fallback when enabled" do
+          set_config "js_file_per_locale_with_fallbacks_enabled.yml"
+
+          result = I18n::JS.translation_segments
+          result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+        end
+
+        it "exports with Fallbacks as Hash" do
+          set_config "js_file_per_locale_with_fallbacks_as_hash.yml"
+
+          result = I18n::JS.translation_segments
+          result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+        end
       end
     end
   end

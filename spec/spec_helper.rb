@@ -3,12 +3,18 @@ require "json"
 
 require "active_support/all"
 require "i18n/js"
+require 'rspec/its'
 
 module Helpers
   # Set the configuration as the current one
   def set_config(path)
     config_file = File.dirname(__FILE__) + "/fixtures/#{path}"
     I18n::JS.stub(:config? => true, :config_file => config_file)
+  end
+
+  # Set the configuration as the given one
+  def stub_config(config)
+    I18n::JS.stub(:config? => true, :config => config)
   end
 
   # Shortcut to I18n::JS.translations
@@ -23,6 +29,12 @@ module Helpers
 
   def temp_path(file_name = "")
     File.expand_path("../../tmp/i18n-js/#{file_name}", __FILE__)
+  end
+
+  def backend_class_with_fallbacks
+    klass = Class.new(I18n::Backend::Simple)
+    klass.send(:include, I18n::Backend::Fallbacks)
+    klass
   end
 end
 

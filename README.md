@@ -101,6 +101,42 @@ translations:
 <% end %>
 ```
 
+##### Fallbacks
+
+If you specify the %{locale} placeholder, you are able to merge missing translations by enabling fallbacks.
+
+Examples:
+```yaml
+fallbacks: true
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+This will enable merging fallbacks into each file. (set to false to disable)
+If you use I18n with fallbacks, the fallbacks defined there will be used.
+Otherwise I18n.default_locale will be used.
+
+```yaml
+fallbacks: :de
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+Here, :de will be used as fallback for all locales.
+
+```yaml
+fallbacks:
+  fr: ["de", "en"]
+  de: "en"
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+Fallbacks defined will be used, if not defined (e.g.: :pl) I18n.fallbacks or I18n.default_locale will be used.
+
 To find more examples on how to use the configuration file please refer to the tests.
 
 #### Vanilla JavaScript

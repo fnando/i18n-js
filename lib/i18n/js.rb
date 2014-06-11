@@ -4,6 +4,7 @@ require "fileutils"
 module I18n
   module JS
     require "i18n/js/dependencies"
+    require 'i18n/js/fallback_locales'
     if JS::Dependencies.rails?
       require "i18n/js/middleware"
       require "i18n/js/engine"
@@ -32,6 +33,8 @@ module I18n
       I18n.available_locales.each_with_object({}) do |locale, segments|
         scope = [scope] unless scope.respond_to?(:each)
         result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"})
+        merge_with_fallbacks!(result, locale, scope) if fallbacks?
+
         next if result.empty?
 
         segment_name = ::I18n.interpolate(pattern,{:locale => locale})
@@ -150,6 +153,25 @@ module I18n
 
     def self.deep_merge!(target, hash) # :nodoc:
       target.merge!(hash, &MERGER)
+    end
+
+    def self.fallbacks?
+      fallbacks != false
+    end
+
+    def self.fallbacks
+      config.fetch(:fallbacks) { false }
+    end
+
+    # deep_merge! given result with result for fallback locale
+    def self.merge_with_fallbacks!(result, locale, scope)
+      result[locale] ||= {}
+      fallback_locales = FallbackLocales.new(fallbacks, locale)
+
+      fallback_locales.each do |fallback_locale|
+        fallback_result = scoped_translations(scope.collect{|s| "#{fallback_locale}.#{s}"}) # NOTE: Duplicated code here
+        result[locale] = deep_merge(fallback_result[fallback_locale], result[locale])
+      end
     end
   end
 end
