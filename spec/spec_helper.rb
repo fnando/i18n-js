@@ -7,8 +7,8 @@ require "i18n/js"
 module Helpers
   # Set the configuration as the current one
   def set_config(path)
-    config = HashWithIndifferentAccess.new(YAML.load_file(File.dirname(__FILE__) + "/fixtures/#{path}"))
-    I18n::JS.stub(:config? => true, :config => config)
+    config_file = File.dirname(__FILE__) + "/fixtures/#{path}"
+    I18n::JS.stub(:config? => true, :config_file => config_file)
   end
 
   # Shortcut to I18n::JS.translations
