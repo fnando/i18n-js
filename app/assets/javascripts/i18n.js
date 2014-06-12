@@ -76,7 +76,7 @@
     translations: {},
     // Set missing translation behavior. 'message' will display a message
     // that the translation is missing, 'guess' will try to guess the string
-    defaultBahavior: 'message',
+    missingBahavior: 'message',
   }
 
   I18n.reset = function() {
