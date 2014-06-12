@@ -114,6 +114,13 @@ describe I18n::JS do
       I18n::JS.config?.should eql(false)
       I18n::JS.config.should eql({})
     end
+
+    it "executes erb in config file" do
+      set_config "erb.yml"
+
+      config_entry = I18n::JS.config["translations"].first
+      config_entry["only"].should eq("*.date.formats")
+    end
   end
 
   context "hash merging" do

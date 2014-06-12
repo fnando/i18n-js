@@ -83,7 +83,8 @@ module I18n
     # custom output directory
     def self.config
       if config?
-        (YAML.load_file(config_file) || {}).with_indifferent_access
+        erb = ERB.new(File.read(config_file)).result
+        (YAML.load(erb) || {}).with_indifferent_access
       else
         {}
       end
