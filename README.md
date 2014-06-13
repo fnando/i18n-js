@@ -92,6 +92,15 @@ translations:
   only: ['frontend', 'users']
 ```
 
+You can also include ERB in your config file.
+```yaml
+translations:
+<% Widgets.each do |widget| %>
+- file: <%= "'#{widget.file}'" %>
+  only: <%= "'#{widget.only}'" %>
+<% end %>
+```
+
 To find more examples on how to use the configuration file please refer to the tests.
 
 #### Vanilla JavaScript
