@@ -17,6 +17,7 @@
 - I18.t accepts an array as the scope
 - Fix regression: asset not being reloaded in development when translation changed
 - Requires `i18n` to be `~> 0.6`, `0.5` does not work at all
+- Fix using multi-star scope with top-level translation key (https://github.com/fnando/i18n-js/pull/221)
 
 
 ## Before 3.0.0.rc5

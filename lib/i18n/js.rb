@@ -130,7 +130,7 @@ module I18n
           results[scope.to_sym] = tmp unless tmp.nil?
         end
         return results
-      elsif translations.has_key?(scope.to_sym)
+      elsif translations.respond_to?(:has_key?) && translations.has_key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
       end
       nil
