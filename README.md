@@ -357,10 +357,11 @@ The only requirement is that you need to set the `translations` attribute like f
 Once you've made your great commits:
 
 1. [Fork](http://help.github.com/forking/) I18n.js
-2. Create a topic branch - `git checkout -b my_branch`
-3. Push to your branch - `git push origin my_branch`
-4. [Create an Issue](http://github.com/fnando/i18n-js/issues) with a link to your branch
-5. That's it!
+2. Create a branch with a clear name
+3. Make your changes (Please also add/change spec, README and CHANGELOG if applicable)
+4. Push changes to the created branch
+5. [Create an Pull Request](http://github.com/fnando/i18n-js/pulls)
+6. That's it!
 
 Please respect the indentation rules and code style.
 And use 2 spaces, not tabs. And don't touch the versioning thing.
