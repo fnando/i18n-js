@@ -185,7 +185,7 @@ are three different ways of doing it so:
     I18n.locales.no = "nb";
     I18n.locales.no = function(locale){ return ["nb"]; };
 
-If a translation is missing the default displayed message will be
+By default a missing translation will be displayed as
 [missing "name of scope" translation]
 While you are developing or if you do not want to provide a translation 
 in the default language you can set
@@ -194,8 +194,10 @@ in the default language you can set
     
 this will take the last section of your scope and guess the intended value
 camel case becomes lower cased text and undersocres are repplaced with space
-questionnaire.whatIsYourFavorite_ChristmasPresent becomes
-"what is your favorite Christmas present"
+
+    questionnaire.whatIsYourFavorite_ChristmasPresent
+
+becomes "what is your favorite Christmas present"
 
 Pluralization is possible as well and by default provides English rules:
 
