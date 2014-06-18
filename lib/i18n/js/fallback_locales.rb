@@ -15,7 +15,7 @@ module I18n
       # Returns: An Array of locales to use as fallbacks for given locale.
       def locales
         locales = case fallbacks
-                  when true, :default_locale
+                  when true
                     default_fallbacks
                   when :default_locale
                     [::I18n.default_locale]
