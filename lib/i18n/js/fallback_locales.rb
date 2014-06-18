@@ -69,27 +69,6 @@ module I18n
         end
         locales
       end
-
-      # Workaround to allow some nice i18n-js.yml
-      #
-      # NOTE: Fallbacks might be an Array of Locales or an Array of Hashes.
-      #       If it is an Array of Hashes (like when parsed from i18n-js.yml)
-      #       it must be treated in a special way.
-      def handle_fallbacks_as_array
-        if fallbacks.all? { |e| e.is_a?(Hash) }
-          array_with_hashes_to_fallbacks || default_fallbacks
-        else
-          fallbacks
-        end
-      end
-
-      # Workaround to allow some nice i18n-js.yml
-      #
-      # Returns: The first hash for current locale.
-      def array_with_hashes_to_fallbacks
-        hash = fallbacks.select { |e| e.keys == [locale.to_s] }.first
-        Array(hash[locale.to_s]) if hash
-      end
     end # -- class Fallbacks
   end # -- module JS
 end # -- module I18n
