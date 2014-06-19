@@ -60,55 +60,35 @@
 
   // Other default options
   var DEFAULT_OPTIONS = {
+    // Set default locale. This locale will be used when fallback is enabled and
+    // the translation doesn't exist in a particular locale.
     defaultLocale: "en",
+    // Set the current locale to `en`.
     locale: "en",
+    // Set the translation key separator.
     defaultSeparator: ".",
+    // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
     placeholder: /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm,
+    // Set if engine should fallback to the default locale when a translation
+    // is missing.
     fallbacks: false,
+    // Set the default translation object.
     translations: {},
+    // Set missing translation behavior. 'message' will display a message
+    // that the translation is missing, 'guess' will try to guess the string
+    missingBahavior: 'message',
   }
 
   I18n.reset = function() {
-    // Set default locale. This locale will be used when fallback is enabled and
-    // the translation doesn't exist in a particular locale.
-    this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
-
-    // Set the current locale to `en`.
-    this.locale = DEFAULT_OPTIONS.locale;
-
-    // Set the translation key separator.
-    this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
-
-    // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
-    this.placeholder = DEFAULT_OPTIONS.placeholder;
-
-    // Set if engine should fallback to the default locale when a translation
-    // is missing.
-    this.fallbacks = DEFAULT_OPTIONS.fallbacks;
-
-    // Set the default translation object.
-    this.translations = DEFAULT_OPTIONS.translations;
+    for(var prop in DEFAULT_OPTIONS)
+      this[prop] = DEFAULT_OPTIONS[prop];
   };
 
   // Much like `reset`, but only assign options if not already assigned
   I18n.initializeOptions = function() {
-    if (typeof(this.defaultLocale) === "undefined" && this.defaultLocale !== null)
-      this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
-
-    if (typeof(this.locale) === "undefined" && this.locale !== null)
-      this.locale = DEFAULT_OPTIONS.locale;
-
-    if (typeof(this.defaultSeparator) === "undefined" && this.defaultSeparator !== null)
-      this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
-
-    if (typeof(this.placeholder) === "undefined" && this.placeholder !== null)
-      this.placeholder = DEFAULT_OPTIONS.placeholder;
-
-    if (typeof(this.fallbacks) === "undefined" && this.fallbacks !== null)
-      this.fallbacks = DEFAULT_OPTIONS.fallbacks;
-
-    if (typeof(this.translations) === "undefined" && this.translations !== null)
-      this.translations = DEFAULT_OPTIONS.translations;
+    for(var prop in DEFAULT_OPTIONS)
+      if (typeof(this[prop]) === "undefined" && this[prop] !== null)
+        this[prop] = DEFAULT_OPTIONS[prop];
   }
   I18n.initializeOptions();
 
@@ -450,6 +430,16 @@
 
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function(scope) {
+    //guess intended string
+    if(this.missingBehavior == 'guess'){
+      //get only the last portion of the scope
+      var s = scope.split('.').slice(-1)[0];
+      //replace underscore with space && camelcase with space and lowercase letter
+      return s.replace('_',' ').replace(/([a-z])([A-Z])/g,
+        function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
+    }
+    
+    //default
     var message = '[missing "';
 
     message += this.currentLocale() + ".";

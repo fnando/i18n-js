@@ -1,5 +1,8 @@
 ## unreleased
 
+- You can now set `I18n.missingBehavior='guess'` to have the scope string output as text instead of of the
+  "[missing `scope`]" message when no translation is available
+
 ### enhancements
 
 - You can now assign `I18n.locale` & `I18n.default_locale` before loading `i18n.js` in `application.html.*`
