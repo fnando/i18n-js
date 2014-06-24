@@ -66,7 +66,7 @@
     placeholder: /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm,
     fallbacks: false,
     translations: {},
-  }
+  };
 
   I18n.reset = function() {
     // Set default locale. This locale will be used when fallback is enabled and
@@ -109,7 +109,7 @@
 
     if (typeof(this.translations) === "undefined" && this.translations !== null)
       this.translations = DEFAULT_OPTIONS.translations;
-  }
+  };
   I18n.initializeOptions();
 
   // Return a list of all locales that must be tried before returning the
@@ -602,7 +602,7 @@
       // month starts on 0
       matches[2] -= 1;
 
-      fraction = matches[7] ? 1000 * ("0" + matches[7]) : null
+      fraction = matches[7] ? 1000 * ("0" + matches[7]) : null;
 
       if (matches[8]) {
         convertedDate = new Date(Date.UTC(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6], fraction));
