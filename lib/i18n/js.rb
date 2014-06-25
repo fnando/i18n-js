@@ -47,11 +47,11 @@ module I18n
     def self.configured_segments
       config[:translations].inject([]) do |segments, options|
         options.reverse_merge!(:only => "*")
-        if options[:file] =~ ::I18n::INTERPOLATION_PATTERN
-          segments += segments_per_locale(options[:file], options[:only], options[:namespace])
+        if options[:file_path] =~ ::I18n::INTERPOLATION_PATTERN
+          segments += segments_per_locale(options[:file_path], options[:only], options[:namespace])
         else
           result = segment_for_scope(options[:only])
-          segments << Segment.new(options[:file], result, options[:namespace]) unless result.empty?
+          segments << Segment.new(options[:file_path], result, options[:namespace]) unless result.empty?
         end
         segments
       end
@@ -63,7 +63,7 @@ module I18n
 
     def self.filtered_translations
       {}.tap do |result|
-        translation_segments.each do |file, translations|
+        translation_segments.each do |file_path, translations|
           deep_merge!(result, translations)
         end
       end
