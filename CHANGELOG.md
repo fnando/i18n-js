@@ -12,7 +12,7 @@
 
 ### bug fixes
 
-- `I18n::JS.export` no longer exports locales other than those in `I18n.available_locales`
+- `I18n::JS.export` no longer exports locales other than those in `I18n.available_locales`, if `I18n.available_locales` is set
 - I18.t supports the base scope through the options argument
 - I18.t accepts an array as the scope
 - Fix regression: asset not being reloaded in development when translation changed
