@@ -59,7 +59,8 @@ deploying.
     $ rake i18n:js:export
 
 This will export all translation files, including the custom scopes you may have
-defined on `config/i18n-js.yml`.
+defined on `config/i18n-js.yml`. If `I18n.available_locales` is set (e.g. in your
+Rails `config/application.rb` file) then only the specified locales will be exported.
 
 #### Export Configuration
 

@@ -53,6 +53,8 @@ describe I18n::JS do
     end
 
     it "exports with multiple conditions to a JS file per available locale" do
+      allow(::I18n).to receive(:available_locales){ [:en, :fr] }
+
       set_config "multiple_conditions_per_locale.yml"
 
       result = I18n::JS.translation_segments
@@ -102,6 +104,30 @@ describe I18n::JS do
 
       result[:en][:admin][:edit][:title].should eql("Edit")
       result[:fr][:admin][:edit][:title].should eql("Editer")
+    end
+  end
+
+  context "I18n.available_locales" do
+    context "when I18n.available_locales is not set" do
+      it "should allow all locales" do
+        result = I18n::JS.scoped_translations("*.admin.*.title")
+
+        result[:en][:admin][:show][:title].should eql("Show")
+        result[:fr][:admin][:show][:title].should eql("Visualiser")
+        result[:ja][:admin][:show][:title].should eql("Ignore me")
+      end
+    end
+
+    context "when I18n.available_locales is set" do
+      before { allow(::I18n).to receive(:available_locales){ [:en, :fr] } }
+
+      it "should ignore non-valid locales" do
+        result = I18n::JS.scoped_translations("*.admin.*.title")
+
+        result[:en][:admin][:show][:title].should eql("Show")
+        result[:fr][:admin][:show][:title].should eql("Visualiser")
+        result.keys.include?(:ja).should eql(false)
+      end
     end
   end
 
