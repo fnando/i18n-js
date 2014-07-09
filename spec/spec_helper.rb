@@ -37,5 +37,13 @@ RSpec.configure do |config|
   end
 
   config.include Helpers
+
+  # Remove deprecation warnings
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+  config.mock_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
 end
 
