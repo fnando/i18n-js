@@ -7,4 +7,4 @@ script: "bundle exec rake spec"
 before_install: # Need to install npm to test js
 - sudo apt-get update
 - sudo apt-get install npm
-- npm install jasmine-node
+- npm install jasmine-node@1.14.2
