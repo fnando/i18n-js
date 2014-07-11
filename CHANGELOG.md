@@ -1,3 +1,11 @@
+
+## Unreleased
+
+### bug fixes
+
+- Prevent toString() call on `undefined` when there is a missing interpolation value
+
+
 ## 3.0.0.rc6
 
 ### enhancements
@@ -14,7 +22,6 @@
 
 ### bug fixes
 
-- Prevent toString() call on `undefined` when there is a missing interpolation value
 - `I18n::JS.export` no longer exports locales other than those in `I18n.available_locales`, if `I18n.available_locales` is set
 - I18.t supports the base scope through the options argument
 - I18.t accepts an array as the scope
