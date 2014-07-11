@@ -399,12 +399,15 @@
       return message;
     }
 
+    var value;
+
     while (matches.length) {
       placeholder = matches.shift();
       name = placeholder.replace(this.placeholder, "$1");
-      value = options[name].toString().replace(/\$/gm, "_#$#_");
 
-      if (!this.isSet(options[name])) {
+      if (this.isSet(options[name])) {
+        value = options[name].toString().replace(/\$/gm, "_#$#_");
+      } else {
         value = this.missingPlaceholder(placeholder, message);
       }
 
