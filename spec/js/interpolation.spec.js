@@ -28,6 +28,6 @@ describe("Interpolation", function(){
 
   it("outputs missing placeholder message if interpolation value is missing", function(){
     actual = I18n.t("greetings.name");
-    expect(actual).toEqual('Hello [missing {{name}} value]!');
+    expect(actual).toEqual("Hello [missing {{name}} value]!");
   })
 });
