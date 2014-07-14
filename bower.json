@@ -1,0 +1,16 @@
+{
+  "name": "i18n-js",
+  "version": "2.1.2",
+  "homepage": "https://github.com/fnando/i18n-js/",
+  "authors": [
+    "Nando Vieira"
+  ],
+  "description": "It's a small library to provide the I18n translations on the Javascript. It comes with Rails support.",
+  "main": "app/assets/javascripts/i18n.js",
+  "keywords": [
+    "i18n",
+    "translation",
+    "internationalization"
+  ],
+  "license": "MIT"
+}
