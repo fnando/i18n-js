@@ -10,6 +10,10 @@ module I18n
           safe_gem_check("rails", "~> 4") && running_rails4?
         end
 
+        def sprockets?
+          defined?(Sprockets) && Sprockets.respond_to?(:register_processor)
+        end
+
         def rails?
           rails_available? && running_rails?
         end
