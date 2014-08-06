@@ -32,6 +32,7 @@ If you're using the [asset pipeline](http://guides.rubyonrails.org/asset_pipelin
 then you must add the following line to your `app/assets/javascripts/application.js`.
 
 ```javascript
+//= require i18n
 //= require i18n/translations
 ```
 
