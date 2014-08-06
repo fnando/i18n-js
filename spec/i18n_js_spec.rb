@@ -166,20 +166,45 @@ describe I18n::JS do
   end
 end
 
-describe I18n::JS::Dependencies, "#sprockets?" do
+describe I18n::JS::Dependencies, ".sprockets_supports_register_preprocessor?" do
 
-  it "will return true when Sprockets is available to register processors" do
-    obj = class_double('Sprockets').as_stubbed_const(register_processor: true)
+  subject { described_class.sprockets_supports_register_preprocessor? }
 
-    expect(obj).to receive(:respond_to?).with(:register_processor).and_return(true)
-    expect(described_class.sprockets?).to be_truthy
+  context 'when Sprockets is available to register preprocessors' do
+    let!(:sprockets_double) do
+      class_double('Sprockets').as_stubbed_const(register_processor: true).tap do |double|
+        allow(double).to receive(:respond_to?).with(:register_preprocessor).and_return(true)
+      end
+    end
+
+    it { is_expected.to be_truthy }
+    it 'calls respond_to? with register_preprocessor on Sprockets' do
+      expect(sprockets_double).to receive(:respond_to?).with(:register_preprocessor).and_return(true)
+      subject
+    end
   end
 
-  it "will return false when Sprockets is not available" do
-    hide_const('Sprockets')
+  context 'when Sprockets is NOT available to register preprocessors' do
+    let!(:sprockets_double) do
+      class_double('Sprockets').as_stubbed_const(register_processor: true).tap do |double|
+        allow(double).to receive(:respond_to?).with(:register_preprocessor).and_return(false)
+      end
+    end
 
-    expect { Sprockets }.to raise_error(NameError)
-    expect(described_class.sprockets?).to be_falsey
+    it { is_expected.to be_falsy }
+    it 'calls respond_to? with register_preprocessor on Sprockets' do
+      expect(sprockets_double).to receive(:respond_to?).with(:register_preprocessor).and_return(false)
+      subject
+    end
+  end
+
+  context 'when Sprockets is missing' do
+    before do
+      hide_const('Sprockets')
+      expect { Sprockets }.to raise_error(NameError)
+    end
+
+    it { is_expected.to be_falsy }
   end
 
 end

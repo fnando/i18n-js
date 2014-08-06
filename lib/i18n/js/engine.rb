@@ -5,7 +5,7 @@ module I18n
     class Engine < ::Rails::Engine
       initializer :after => "sprockets.environment" do
         next unless JS::Dependencies.using_asset_pipeline?
-        next unless JS::Dependencies.sprockets?
+        next unless JS::Dependencies.sprockets_supports_register_preprocessor?
         next unless Rails.configuration.assets.compile
 
         Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
