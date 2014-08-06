@@ -4,7 +4,7 @@
 ### bug fixes
 
 - Prevent toString() call on `undefined` when there is a missing interpolation value
-
+- Added support for Rails instances without Sprockets object (https://github.com/fnando/i18n-js/pull/241)
 
 ## 3.0.0.rc6
 

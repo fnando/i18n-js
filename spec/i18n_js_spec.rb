@@ -165,3 +165,21 @@ describe I18n::JS do
     end
   end
 end
+
+describe I18n::JS::Dependencies, "#sprockets?" do
+
+  it "will return true when Sprockets is available to register processors" do
+    obj = class_double('Sprockets').as_stubbed_const(register_processor: true)
+
+    expect(obj).to receive(:respond_to?).with(:register_processor).and_return(true)
+    expect(described_class.sprockets?).to be_truthy
+  end
+
+  it "will return false when Sprockets is not available" do
+    hide_const('Sprockets')
+
+    expect { Sprockets }.to raise_error(NameError)
+    expect(described_class.sprockets?).to be_falsey
+  end
+
+end
