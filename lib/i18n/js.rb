@@ -13,8 +13,8 @@ module I18n
 
     # The configuration file. This defaults to the `config/i18n-js.yml` file.
     #
-    def self.config_file
-      @config_file ||= "config/i18n-js.yml"
+    def self.config_file_path
+      @config_file_path ||= "config/i18n-js.yml"
     end
 
     # Export translations to JavaScript, considering settings
@@ -80,7 +80,7 @@ module I18n
     # custom output directory
     def self.config
       if config?
-        erb = ERB.new(File.read(config_file)).result
+        erb = ERB.new(File.read(config_file_path)).result
         (YAML.load(erb) || {}).with_indifferent_access
       else
         {}
@@ -89,7 +89,7 @@ module I18n
 
     # Check if configuration file exist
     def self.config?
-      File.file? config_file
+      File.file? config_file_path
     end
 
     # Convert translations to JSON string and save file.
