@@ -3,7 +3,7 @@ require "spec_helper"
 describe I18n::JS do
   context "exporting" do
     before do
-      I18n::JS.stub :export_dir => temp_path
+      I18n::JS.stub :default_export_dir_path => temp_path
     end
 
     it "exports messages to default path when configuration file doesn't exist" do
@@ -133,7 +133,7 @@ describe I18n::JS do
 
   context "general" do
     it "sets export directory" do
-      I18n::JS.export_dir.should eql("public/javascripts")
+      I18n::JS.default_export_dir_path.should eql("public/javascripts")
     end
 
     it "sets empty hash as configuration when no file is found" do

@@ -56,7 +56,7 @@ module I18n
       end
     end
 
-    def self.export_dir
+    def self.default_export_dir_path
       "public/javascripts"
     end
 
@@ -72,7 +72,7 @@ module I18n
       if config? && config[:translations]
         configured_segments
       else
-        {"#{export_dir}/translations.js" => translations}
+        {"#{default_export_dir_path}/translations.js" => translations}
       end
     end
 
