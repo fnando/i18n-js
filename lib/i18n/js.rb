@@ -11,10 +11,15 @@ module I18n
       require "i18n/js/engine"
     end
 
+    DEFAULT_CONFIG_PATH = "config/i18n-js.yml"
+
     # The configuration file. This defaults to the `config/i18n-js.yml` file.
     #
     def self.config_file_path
-      @config_file_path ||= "config/i18n-js.yml"
+      @config_file_path ||= DEFAULT_CONFIG_PATH
+    end
+    def self.config_file_path=(new_path)
+      @config_file_path = new_path
     end
 
     # Export translations to JavaScript, considering settings

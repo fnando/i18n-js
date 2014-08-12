@@ -1,6 +1,22 @@
 require "spec_helper"
 
 describe I18n::JS do
+  describe '.config_file_path' do
+    let(:default_path) { I18n::JS::DEFAULT_CONFIG_PATH }
+    let(:new_path) { File.join("tmp", default_path) }
+
+    subject { described_class.config_file_path }
+
+    context "when it is not set" do
+      it { should eq default_path }
+    end
+    context "when it is set already" do
+      before { described_class.config_file_path = new_path }
+
+      it { should eq new_path }
+    end
+  end
+
   context "exporting" do
     before do
       I18n::JS.stub :default_export_dir_path => temp_path
