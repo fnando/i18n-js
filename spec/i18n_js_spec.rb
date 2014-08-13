@@ -81,6 +81,12 @@ describe I18n::JS do
         result["tmp/i18n-js/bits.#{lang}.js"][lang.to_sym].keys.sort.should eql([:date, :number])
       end
     end
+
+    it "calls .export_i18n_js" do
+      allow(described_class).to receive(:export_i18n_js)
+      I18n::JS.export
+      expect(described_class).to have_received(:export_i18n_js).once
+    end
   end
 
   context "filters" do
@@ -162,6 +168,67 @@ describe I18n::JS do
 
       config_entry = I18n::JS.config["translations"].first
       config_entry["only"].should eq("*.date.formats")
+    end
+  end
+
+
+  describe "i18n.js exporting" do
+    describe ".export_i18n_js" do
+      before do
+        allow(FileUtils).to receive(:mkdir_p).and_call_original
+        allow(FileUtils).to receive(:cp).and_call_original
+
+        described_class.stub(:export_i18n_js_dir_path).and_return(export_i18n_js_dir_path)
+        I18n::JS.export_i18n_js
+      end
+
+      context 'when .export_i18n_js_dir_path returns something' do
+        let(:export_i18n_js_dir_path) { temp_path }
+
+        it "does create the folder before copying" do
+          expect(FileUtils).to have_received(:mkdir_p).with(export_i18n_js_dir_path).once
+        end
+        it "does copy the file with FileUtils.cp" do
+          expect(FileUtils).to have_received(:cp).once
+        end
+        it "exports the file" do
+          File.should be_file(File.join(I18n::JS.export_i18n_js_dir_path, "i18n.js"))
+        end
+      end
+
+      context 'when .export_i18n_js_dir_path is set to nil' do
+        let(:export_i18n_js_dir_path) { nil }
+
+        it "does NOT create the folder before copying" do
+          expect(FileUtils).to_not have_received(:mkdir_p)
+        end
+        it "does NOT copy the file with FileUtils.cp" do
+          expect(FileUtils).to_not have_received(:cp)
+        end
+      end
+    end
+
+
+    describe '.export_i18n_js_dir_path' do
+      let(:default_path) { I18n::JS.default_export_dir_path }
+      let(:new_path) { File.join("tmp", default_path) }
+      before { described_class.remove_instance_variable(:@export_i18n_js_dir_path) }
+
+      subject { described_class.export_i18n_js_dir_path }
+
+      context "when it is not set" do
+        it { should eq default_path }
+      end
+      context "when it is set to another path already" do
+        before { described_class.export_i18n_js_dir_path = new_path }
+
+        it { should eq new_path }
+      end
+      context "when it is set to nil already" do
+        before { described_class.export_i18n_js_dir_path = nil }
+
+        it { should be_nil }
+      end
     end
   end
 end

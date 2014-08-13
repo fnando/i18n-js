@@ -25,6 +25,8 @@ module I18n
     # Export translations to JavaScript, considering settings
     # from configuration file
     def self.export
+      export_i18n_js
+
       translation_segments.each do |filename, translations|
         save(translations, filename)
       end
@@ -143,6 +145,29 @@ module I18n
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
         translations.slice(*::I18n.available_locales)
+      end
+    end
+
+
+    ### Export i18n.js
+    begin
+      # Copy i18n.js
+      def self.export_i18n_js
+        return if export_i18n_js_dir_path.nil?
+
+        FileUtils.mkdir_p(export_i18n_js_dir_path)
+
+        i18n_js_path = File.expand_path('../../../app/assets/javascripts/i18n.js', __FILE__)
+        FileUtils.cp(i18n_js_path, export_i18n_js_dir_path)
+      end
+      def self.export_i18n_js_dir_path
+        return @export_i18n_js_dir_path if defined?(@export_i18n_js_dir_path)
+
+        @export_i18n_js_dir_path = default_export_dir_path
+      end
+      # Setting this to nil would disable i18n.js exporting
+      def self.export_i18n_js_dir_path=(new_path)
+        @export_i18n_js_dir_path = new_path
       end
     end
   end
