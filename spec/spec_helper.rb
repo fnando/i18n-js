@@ -17,7 +17,7 @@ module Helpers
   end
 
   def file_should_exist(name)
-    file_path = File.join(I18n::JS.default_export_dir_path, name)
+    file_path = File.join(I18n::JS::DEFAULT_EXPORT_DIR_PATH, name)
     File.should be_file(file_path)
   end
 

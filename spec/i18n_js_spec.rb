@@ -19,7 +19,7 @@ describe I18n::JS do
 
   context "exporting" do
     before do
-      I18n::JS.stub :default_export_dir_path => temp_path
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
     end
 
     it "exports messages to default path when configuration file doesn't exist" do
@@ -155,7 +155,7 @@ describe I18n::JS do
 
   context "general" do
     it "sets export directory" do
-      I18n::JS.default_export_dir_path.should eql("public/javascripts")
+      I18n::JS::DEFAULT_EXPORT_DIR_PATH.should eql("public/javascripts")
     end
 
     it "sets empty hash as configuration when no file is found" do
@@ -210,7 +210,7 @@ describe I18n::JS do
 
 
     describe '.export_i18n_js_dir_path' do
-      let(:default_path) { I18n::JS.default_export_dir_path }
+      let(:default_path) { I18n::JS::DEFAULT_EXPORT_DIR_PATH }
       let(:new_path) { File.join("tmp", default_path) }
       before { described_class.remove_instance_variable(:@export_i18n_js_dir_path) }
 

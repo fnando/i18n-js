@@ -12,6 +12,7 @@ module I18n
     end
 
     DEFAULT_CONFIG_PATH = "config/i18n-js.yml"
+    DEFAULT_EXPORT_DIR_PATH = "public/javascripts"
 
     # The configuration file. This defaults to the `config/i18n-js.yml` file.
     #
@@ -63,10 +64,6 @@ module I18n
       end
     end
 
-    def self.default_export_dir_path
-      "public/javascripts"
-    end
-
     def self.filtered_translations
       {}.tap do |result|
         translation_segments.each do |filename, translations|
@@ -79,7 +76,7 @@ module I18n
       if config? && config[:translations]
         configured_segments
       else
-        {"#{default_export_dir_path}/translations.js" => translations}
+        {"#{DEFAULT_EXPORT_DIR_PATH}/translations.js" => translations}
       end
     end
 
@@ -163,7 +160,7 @@ module I18n
       def self.export_i18n_js_dir_path
         return @export_i18n_js_dir_path if defined?(@export_i18n_js_dir_path)
 
-        @export_i18n_js_dir_path = default_export_dir_path
+        @export_i18n_js_dir_path = DEFAULT_EXPORT_DIR_PATH
       end
       # Setting this to nil would disable i18n.js exporting
       def self.export_i18n_js_dir_path=(new_path)
