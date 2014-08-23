@@ -60,7 +60,11 @@ module I18n
     end
 
     def self.export_dir
-      "public/javascripts"
+      if JS::Dependencies.using_asset_pipeline?
+        "app/assets/javascripts/i18n"
+      else
+        "public/javascripts"
+      end
     end
 
     def self.filtered_translations

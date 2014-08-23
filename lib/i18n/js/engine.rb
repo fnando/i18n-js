@@ -9,7 +9,7 @@ module I18n
         next unless Rails.configuration.assets.compile
 
         Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
-          if context.logical_path == "i18n/filtered"
+          if context.logical_path == "i18n/translations"
             ::I18n.load_path.each {|path| context.depend_on(File.expand_path(path))}
           end
           source
