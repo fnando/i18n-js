@@ -65,7 +65,7 @@
     defaultSeparator: ".",
     placeholder: /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm,
     fallbacks: false,
-    translations: {},
+    translations: {}
   };
 
   I18n.reset = function() {
