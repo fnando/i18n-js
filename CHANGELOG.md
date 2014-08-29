@@ -20,6 +20,7 @@
 - Move missing placeholder text generation into its own function (for easier debugging) (https://github.com/fnando/i18n-js/pull/169)
 - Add support for milliseconds (`lll` in `yyyy-mm-ddThh:mm:ss.lllZ`) (https://github.com/fnando/i18n-js/pull/192)
 - Add back i18n-js.yml config file generator : `rails generate i18n:js:config` (https://github.com/fnando/i18n-js/pull/225)
+- Add fallbacks option to i18n-js.yml (https://github.com/fnando/i18n-js/pull/226)
 
 ### bug fixes
 
