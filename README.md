@@ -32,8 +32,12 @@ If you're using the [asset pipeline](http://guides.rubyonrails.org/asset_pipelin
 then you must add the following line to your `app/assets/javascripts/application.js`.
 
 ```javascript
-// The following line will include `i18n` library already
-// No need to put `//= require i18n`
+//
+// This is optional (in case you have `I18n is not defined` error)
+// If you want to put this line, you must put it BEFORE `i18n/translations`
+//= require i18n
+//
+// This is a must
 //= require i18n/translations
 ```
 
