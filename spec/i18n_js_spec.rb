@@ -13,13 +13,15 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/all.js")
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, nil).and_call_original
+      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/no_scope.js")
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, nil).and_call_original
+      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
@@ -43,6 +45,7 @@ describe I18n::JS do
       I18n::JS.export
 
       file_should_exist "en.js"
+      file_should_exist "fr.js"
     end
 
     it "exports with multiple conditions" do
@@ -58,11 +61,12 @@ describe I18n::JS do
       set_config "multiple_conditions_per_locale.yml"
 
       result = I18n::JS.translation_segments
-      result.keys.should eql(["tmp/i18n-js/bits.en.js", "tmp/i18n-js/bits.fr.js"])
+      result.map(&:file).should eql(["tmp/i18n-js/bits.en.js", "tmp/i18n-js/bits.fr.js"])
 
       %w{en fr}.each do |lang|
-        result["tmp/i18n-js/bits.#{lang}.js"].keys.should eql([lang.to_sym])
-        result["tmp/i18n-js/bits.#{lang}.js"][lang.to_sym].keys.sort.should eql([:date, :number])
+        segment = result.select{|s| s.file == "tmp/i18n-js/bits.#{lang}.js"}.first
+        segment.translations.keys.should eql([lang.to_sym])
+        segment.translations[lang.to_sym].keys.sort.should eql([:date, :number])
       end
     end
   end
