@@ -164,6 +164,28 @@ describe I18n::JS do
       target[:a].should eql({:b => 1, :c => 2})
     end
   end
+
+  describe ".clean_translations" do
+
+    subject { described_class.clean_translations(input_hash) }
+
+    context 'when input_hash does NOT contain nil value' do
+      let(:input_hash) { {a: 1, b: { c: 2 }} }
+      let(:expected_hash) { input_hash }
+
+      it 'returns the original input' do
+        is_expected.to eq expected_hash
+      end
+    end
+    context 'when input_hash does contain nil value' do
+      let(:input_hash) { {a: 1, b: { c: 2, d: nil }, e: { f: nil }} }
+      let(:expected_hash) { {a: 1, b: { c: 2 }, e: {}} }
+
+      it 'returns the original input with nil values removed' do
+        is_expected.to eq expected_hash
+      end
+    end
+  end
 end
 
 describe I18n::JS::Dependencies, ".sprockets_supports_register_preprocessor?" do
