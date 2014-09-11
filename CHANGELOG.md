@@ -6,6 +6,7 @@
 - Prevent toString() call on `undefined` when there is a missing interpolation value
 - Added support for Rails instances without Sprockets object (https://github.com/fnando/i18n-js/pull/241)
 - Fix `DEFAULT_OPTIONS` in `i18n.js` which contained an excessive comma
+- Fix `nil` values are exported into JS files which causes strange translation error
 
 ## 3.0.0.rc6
 
