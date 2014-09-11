@@ -13,6 +13,9 @@ module I18n
     MERGER = proc do |key, v1, v2|
       Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2
     end
+    HASH_CLEANER_PROC = proc do |k, v|
+       v.kind_of?(Hash) ? (v.delete_if(&HASH_CLEANER_PROC); false) : v.nil?
+    end
 
     # The configuration file. This defaults to the `config/i18n-js.yml` file.
     #
@@ -101,7 +104,7 @@ module I18n
 
       File.open(file, "w+") do |f|
         f << %(I18n.translations || (I18n.translations = {});\n)
-        translations.each do |locale, translations_for_locale|
+        clean_translations(translations).each do |locale, translations_for_locale|
           f << %(I18n.translations["#{locale}"] = #{translations_for_locale.to_json};\n);
         end
       end
@@ -142,6 +145,11 @@ module I18n
         init_translations unless initialized?
         translations.slice(*::I18n.available_locales)
       end
+    end
+
+    # Initialize and return translations
+    def self.clean_translations(custom_translations)
+      custom_translations.dup.delete_if(&HASH_CLEANER_PROC)
     end
 
     def self.deep_merge(target, hash) # :nodoc:
