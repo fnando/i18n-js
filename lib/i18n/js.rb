@@ -1,20 +1,14 @@
 require "i18n"
 require "fileutils"
 
+require "i18n/js/utils"
+
 module I18n
   module JS
     require "i18n/js/dependencies"
     if JS::Dependencies.rails?
       require "i18n/js/middleware"
       require "i18n/js/engine"
-    end
-
-    # deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
-    MERGER = proc do |key, v1, v2|
-      Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2
-    end
-    HASH_CLEANER_PROC = proc do |k, v|
-       v.kind_of?(Hash) ? (v.delete_if(&HASH_CLEANER_PROC); false) : v.nil?
     end
 
     # The configuration file. This defaults to the `config/i18n-js.yml` file.
@@ -69,7 +63,7 @@ module I18n
     def self.filtered_translations
       {}.tap do |result|
         translation_segments.each do |filename, translations|
-          deep_merge!(result, translations)
+          Utils.deep_merge!(result, translations)
         end
       end
     end
@@ -104,7 +98,7 @@ module I18n
 
       File.open(file, "w+") do |f|
         f << %(I18n.translations || (I18n.translations = {});\n)
-        clean_translations(translations).each do |locale, translations_for_locale|
+        Utils.strip_keys_with_nil_values(translations).each do |locale, translations_for_locale|
           f << %(I18n.translations["#{locale}"] = #{translations_for_locale.to_json};\n);
         end
       end
@@ -114,7 +108,7 @@ module I18n
       result = {}
 
       [scopes].flatten.each do |scope|
-        deep_merge! result, filter(translations, scope)
+        Utils.deep_merge! result, filter(translations, scope)
       end
 
       result
@@ -145,19 +139,6 @@ module I18n
         init_translations unless initialized?
         translations.slice(*::I18n.available_locales)
       end
-    end
-
-    # Initialize and return translations
-    def self.clean_translations(custom_translations)
-      custom_translations.dup.delete_if(&HASH_CLEANER_PROC)
-    end
-
-    def self.deep_merge(target, hash) # :nodoc:
-      target.merge(hash, &MERGER)
-    end
-
-    def self.deep_merge!(target, hash) # :nodoc:
-      target.merge!(hash, &MERGER)
     end
   end
 end
