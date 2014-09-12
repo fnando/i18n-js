@@ -212,7 +212,7 @@ describe I18n::JS do
     describe '.export_i18n_js_dir_path' do
       let(:default_path) { I18n::JS::DEFAULT_EXPORT_DIR_PATH }
       let(:new_path) { File.join("tmp", default_path) }
-      before { described_class.remove_instance_variable(:@export_i18n_js_dir_path) }
+      before { described_class.send(:remove_instance_variable, :@export_i18n_js_dir_path) }
 
       subject { described_class.export_i18n_js_dir_path }
 
