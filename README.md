@@ -359,6 +359,25 @@ The only requirement is that you need to set the `translations` attribute like f
       message: "Uma mensagem especial para você"
     }
 
+## Known Issues
+
+### Missing translations in precompiled file(s) after adding any new locale file
+
+Due to the design of `sprockets`:
+- `depend_on` only takes file paths, not directory paths
+- registered `preprocessors` are only run when fingerprint of any asset file, including `.erb` files, is changed
+
+New locale files won't be picked up unless any existing locale file content is changed.  
+You can workaround it manually by running
+```bash
+$ rake assets:clobber
+```
+to clear the asset cache.  
+Or just change something in existing locale file.
+
+Please see issue #213 for detail & related discussion.
+
+
 ## Maintainer
 
 - Nando Vieira - <http://nandovieira.com.br>
