@@ -375,6 +375,10 @@ $ rake assets:clobber
 to clear the asset cache.  
 Or just change something in existing locale file.
 
+**Note:** `rake assets:clobber` will also remove all fingerprinted assets.  
+If you are precompiling assets on target machine(s),
+old assets might be removed and cannot be served in cached pages.
+
 Please see issue #213 for detail & related discussion.
 
 
