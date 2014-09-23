@@ -44,7 +44,7 @@ then you must add the following line to your `app/assets/javascripts/application
 #### Rails app without [Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
 
 If you're not using the asset pipeline, download the JavaScript file at
-<https://github.com/fnando/i18n-js/tree/master/lib/i18n.js> and load it on your page.
+<https://github.com/fnando/i18n-js/blob/master/app/assets/javascripts/i18n.js> and load it on your page.
 Also load the `translations.js` file.
 
 ```erb
