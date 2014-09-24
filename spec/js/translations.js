@@ -8,6 +8,8 @@ var DEBUG = false;
         hello: "Hello World!"
       , paid: "You were paid %{price}"
 
+      , paid_with_vat: "You were paid %{price} (incl. VAT %{vat})"
+
       , booleans: {
           yes: true,
           no: false

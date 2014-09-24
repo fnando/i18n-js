@@ -163,6 +163,15 @@ describe("Translate", function(){
     expect(I18n.t("paid", {price: "$1.35"})).toEqual("You were paid $1.35");
   });
 
+  it("replaces all occurrences of escaped $", function(){
+    I18n.locale = "en";
+
+    expect(I18n.t("paid_with_vat", {
+      price: "$0.12",
+      vat: "$0.02"}
+    )).toEqual("You were paid $0.12 (incl. VAT $0.02)");
+  });
+
   it("sets default scope", function(){
     var options = {scope: "greetings"};
     expect(I18n.t("stranger", options)).toEqual("Hello stranger!");

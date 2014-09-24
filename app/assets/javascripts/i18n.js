@@ -415,7 +415,7 @@
       message = message.replace(regex, value);
     }
 
-    return message.replace("_#$#_", "$");
+    return message.replace(/_#\$#_/g, "$");
   };
 
   // Pluralize the given scope using the `count` value.
