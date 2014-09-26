@@ -373,7 +373,10 @@ You can workaround it manually by running
 $ rake assets:clobber
 ```
 to clear the asset cache.  
-Or just change something in existing locale file.
+**Or**  
+Change something in existing locale file.  
+**Or**  
+Change `config.assets.version`  
 
 **Note:** `rake assets:clobber` will also remove all fingerprinted assets.  
 If you are precompiling assets on target machine(s),
