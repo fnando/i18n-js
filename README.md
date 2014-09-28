@@ -420,6 +420,11 @@ You can also provide an array as scope.
     // use the greetings.hello scope
     I18n.t(["greetings", "hello"]);
 
+Default scope can also be configured globally.
+
+    I18n.defaultScope = "activerecord.attributes";
+    I18n.t("user.name");
+
 #### Number formatting
 
 Similar to Rails helpers, you have localized number and currency formatting.

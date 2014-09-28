@@ -205,4 +205,14 @@ describe("Translate", function(){
   it("accepts the scope as an array using a base scope", function(){
     expect(I18n.t(["stranger"], {scope: "greetings"})).toEqual("Hello stranger!");
   });
+
+  it("uses default scope when configured", function(){
+    I18n.defaultScope = "greetings";
+    expect(I18n.t("stranger")).toEqual("Hello stranger!");
+  });
+
+  it("prioritizes custom scope over default", function(){
+    I18n.defaultScope = "other";
+    expect(I18n.t("stranger", {scope: "greetings"})).toEqual("Hello stranger!");
+  });
 });

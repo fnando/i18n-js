@@ -100,6 +100,8 @@
     // string is actually missing for testing purposes, you can prefix the
     // guessed string by setting the value here. By default, no prefix!
     , missingTranslationPrefix: ''
+    // Set default scope for all I18n keys.
+    , defaultScope: null
   };
 
   I18n.reset = function() {
@@ -129,6 +131,8 @@
     // Set the default missing string prefix for guess behaviour
     this.missingTranslationPrefix = DEFAULT_OPTIONS.missingTranslationPrefix;
 
+    // Set the default scope to null
+    this.defaultScope = DEFAULT_OPTIONS.defaultScope;
   };
 
   // Much like `reset`, but only assign options if not already assigned
@@ -375,6 +379,13 @@
     if (this.isSet(options.defaultValue)) {
       translationOptions.push({ message: options.defaultValue });
       delete options.defaultValue;
+    }
+
+    // Add defaultScope.scope too lookup array
+    if (!this.isSet(options.scope) && I18n.defaultScope) {
+      translationOptions.push({
+        scope: I18n.defaultScope.concat(I18n.defaultSeparator, scope)
+      });
     }
 
     return translationOptions;
