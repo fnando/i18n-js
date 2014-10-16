@@ -1,6 +1,10 @@
 
 ## Unreleased
 
+### enhancements
+
+- The Rails Engine initializer is now named as `i18n-js.register_preprocessor` (https://github.com/fnando/i18n-js/pull/261)
+
 ### bug fixes
 
 - Prevent toString() call on `undefined` when there is a missing interpolation value
