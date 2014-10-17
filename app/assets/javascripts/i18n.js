@@ -228,7 +228,7 @@
   I18n.lookup = function(scope, options) {
     options = this.prepareOptions(options);
 
-    var locales = this.locales.get(options.locale)
+    var locales = this.locales.get(options.locale).slice()
       , requestedLocale = locales[0]
       , locale
       , scopes

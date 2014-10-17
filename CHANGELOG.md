@@ -12,6 +12,7 @@
 - Fix `DEFAULT_OPTIONS` in `i18n.js` which contained an excessive comma
 - Fix `nil` values are exported into JS files which causes strange translation error
 - Fix pattern to replace all escaped $ in I18n.translate
+- Fix JS `I18n.lookup` modifies existing locales accidentally
 
 ## 3.0.0.rc6
 
