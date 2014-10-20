@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://rubygems.org/gems/i18n-js"
   s.summary     = "It's a small library to provide the Rails I18n translations on the Javascript."
   s.description = s.summary
+  s.license       = "MIT"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
