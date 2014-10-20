@@ -11,15 +11,23 @@ module I18n
       require "i18n/js/engine"
     end
 
+    DEFAULT_CONFIG_PATH = "config/i18n-js.yml"
+    DEFAULT_EXPORT_DIR_PATH = "public/javascripts"
+
     # The configuration file. This defaults to the `config/i18n-js.yml` file.
     #
-    def self.config_file
-      @config_file ||= "config/i18n-js.yml"
+    def self.config_file_path
+      @config_file_path ||= DEFAULT_CONFIG_PATH
+    end
+    def self.config_file_path=(new_path)
+      @config_file_path = new_path
     end
 
     # Export translations to JavaScript, considering settings
     # from configuration file
     def self.export
+      export_i18n_js
+
       translation_segments.each do |filename, translations|
         save(translations, filename)
       end
@@ -56,10 +64,6 @@ module I18n
       end
     end
 
-    def self.export_dir
-      "public/javascripts"
-    end
-
     def self.filtered_translations
       {}.tap do |result|
         translation_segments.each do |filename, translations|
@@ -72,7 +76,7 @@ module I18n
       if config? && config[:translations]
         configured_segments
       else
-        {"#{export_dir}/translations.js" => translations}
+        {"#{DEFAULT_EXPORT_DIR_PATH}/translations.js" => translations}
       end
     end
 
@@ -80,7 +84,7 @@ module I18n
     # custom output directory
     def self.config
       if config?
-        erb = ERB.new(File.read(config_file)).result
+        erb = ERB.new(File.read(config_file_path)).result
         (YAML.load(erb) || {}).with_indifferent_access
       else
         {}
@@ -89,7 +93,7 @@ module I18n
 
     # Check if configuration file exist
     def self.config?
-      File.file? config_file
+      File.file? config_file_path
     end
 
     # Convert translations to JSON string and save file.
@@ -138,6 +142,29 @@ module I18n
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
         translations.slice(*::I18n.available_locales)
+      end
+    end
+
+
+    ### Export i18n.js
+    begin
+      # Copy i18n.js
+      def self.export_i18n_js
+        return if export_i18n_js_dir_path.nil?
+
+        FileUtils.mkdir_p(export_i18n_js_dir_path)
+
+        i18n_js_path = File.expand_path('../../../app/assets/javascripts/i18n.js', __FILE__)
+        FileUtils.cp(i18n_js_path, export_i18n_js_dir_path)
+      end
+      def self.export_i18n_js_dir_path
+        return @export_i18n_js_dir_path if defined?(@export_i18n_js_dir_path)
+
+        @export_i18n_js_dir_path = DEFAULT_EXPORT_DIR_PATH
+      end
+      # Setting this to nil would disable i18n.js exporting
+      def self.export_i18n_js_dir_path=(new_path)
+        @export_i18n_js_dir_path = new_path
       end
     end
   end

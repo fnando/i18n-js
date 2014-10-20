@@ -4,6 +4,12 @@
 ### enhancements
 
 - The Rails Engine initializer is now named as `i18n-js.register_preprocessor` (https://github.com/fnando/i18n-js/pull/261)
+- Rename `I18n::JS.config_file` to `I18n::JS.config_file_path` and make it configurable  
+  Expected a `String`, default is still `config/i18n-js.yml`
+- When running `rake i18n:js:export`, the `i18n.js` will also be exported to `I18n::JS.export_i18n_js_dir_path` by default
+- Add `I18n::JS.export_i18n_js_dir_path`  
+  Expected a `String`, default is `public/javascripts`  
+  Set to `nil` will disable exporting `i18n.js`
 
 ### bug fixes
 
