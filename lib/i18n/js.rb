@@ -6,6 +6,7 @@ require "i18n/js/utils"
 module I18n
   module JS
     require "i18n/js/dependencies"
+    require "i18n/js/fallback_locales"
     if JS::Dependencies.rails?
       require "i18n/js/middleware"
       require "i18n/js/engine"
