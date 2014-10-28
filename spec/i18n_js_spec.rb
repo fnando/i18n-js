@@ -73,10 +73,13 @@ describe I18n::JS do
 
       set_config "multiple_conditions_per_locale.yml"
 
-      result = I18n::JS.translation_segments
-      result.keys.should eql(["tmp/i18n-js/bits.en.js", "tmp/i18n-js/bits.fr.js"])
+      expected_locales = %w(en fr)
 
-      %w{en fr}.each do |lang|
+      result = I18n::JS.translation_segments
+      expected_files = expected_locales.map { |locale| "tmp/i18n-js/bits.#{locale}.js" }
+      result.keys.should eql(expected_files)
+
+      expected_locales.each do |lang|
         result["tmp/i18n-js/bits.#{lang}.js"].keys.should eql([lang.to_sym])
         result["tmp/i18n-js/bits.#{lang}.js"][lang.to_sym].keys.sort.should eql([:date, :number])
       end
