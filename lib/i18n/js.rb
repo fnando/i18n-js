@@ -153,7 +153,10 @@ module I18n
     end
 
     def self.fallbacks
-      config.fetch(:fallbacks) { false }
+      config.fetch(:fallbacks) do
+        # default value
+        true
+      end
     end
 
     # deep_merge! given result with result for fallback locale
