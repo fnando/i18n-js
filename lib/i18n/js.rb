@@ -38,6 +38,8 @@ module I18n
       I18n.available_locales.each_with_object({}) do |locale, segments|
         scope = [scope] unless scope.respond_to?(:each)
         result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"})
+        merge_with_fallbacks!(result, locale, scope) if use_fallbacks?
+
         next if result.empty?
 
         segment_name = ::I18n.interpolate(pattern,{:locale => locale})
@@ -143,6 +145,25 @@ module I18n
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
         translations.slice(*::I18n.available_locales)
+      end
+    end
+
+    def self.use_fallbacks?
+      fallbacks != false
+    end
+
+    def self.fallbacks
+      config.fetch(:fallbacks) { false }
+    end
+
+    # deep_merge! given result with result for fallback locale
+    def self.merge_with_fallbacks!(result, locale, scope)
+      result[locale] ||= {}
+      fallback_locales = FallbackLocales.new(fallbacks, locale)
+
+      fallback_locales.each do |fallback_locale|
+        fallback_result = scoped_translations(scope.collect{|s| "#{fallback_locale}.#{s}"}) # NOTE: Duplicated code here
+        result[locale] = Utils.deep_merge(fallback_result[fallback_locale], result[locale])
       end
     end
 

@@ -132,6 +132,68 @@ describe I18n::JS do
     end
   end
 
+  context "fallbacks" do
+    it "exports without fallback when disabled" do
+      set_config "js_file_per_locale_without_fallbacks.yml"
+
+      result = I18n::JS.translation_segments
+      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql(nil)
+    end
+
+    it "exports with default_locale as fallback when enabled" do
+      set_config "js_file_per_locale_with_fallbacks_enabled.yml"
+
+      result = I18n::JS.translation_segments
+      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+    end
+
+    it "exports with default_locale as fallback when enabled with :default_locale" do
+      set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
+
+      result = I18n::JS.translation_segments
+      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+    end
+
+    it "exports with given locale as fallback" do
+      set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
+
+      result = I18n::JS.translation_segments
+      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+    end
+
+    context "with I18n::Fallbacks enabled" do
+      let(:backend_with_fallbacks) { backend_class_with_fallbacks.new }
+      let!(:old_backebad) { I18n.backend }
+
+      before do
+        I18n.backend = backend_with_fallbacks
+        I18n.fallbacks[:fr] = [:de, :en]
+      end
+      after { I18n.backend = old_backebad }
+
+      it "exports with defined locale as fallback when enabled" do
+        set_config "js_file_per_locale_with_fallbacks_enabled.yml"
+
+        result = I18n::JS.translation_segments
+        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+      end
+
+      it "exports with defined locale as fallback when enabled with :default_locale" do
+        set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
+
+        result = I18n::JS.translation_segments
+        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+      end
+
+      it "exports with Fallbacks as Hash" do
+        set_config "js_file_per_locale_with_fallbacks_as_hash.yml"
+
+        result = I18n::JS.translation_segments
+        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+      end
+    end
+  end
+
   context "I18n.available_locales" do
     context "when I18n.available_locales is not set" do
       it "should allow all locales" do
