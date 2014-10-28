@@ -3,6 +3,8 @@
 
 ### enhancements
 
+- Add support for loading via AMD and CommonJS module loaders ([#266](https://github.com/fnando/i18n-js/pull/266))
+
 ### bug fixes
 
 ## 3.0.0.rc7
