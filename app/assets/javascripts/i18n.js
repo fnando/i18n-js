@@ -11,8 +11,25 @@
 //
 // See tests for specific formatting like numbers and dates.
 //
-;(function(I18n){
+
+;(function(factory) {
+  if (typeof module !== 'undefined') {
+    // Node/CommonJS
+    module.exports = factory();
+
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(factory);
+
+  } else {
+    // Browser globals
+    this.I18n = factory();
+  }
+}(function() {
   "use strict";
+
+  // Use previously defined object if exists in current scope
+  var I18n = this && this.I18n || {};
 
   // Just cache the Array#slice function.
   var slice = Array.prototype.slice;
@@ -797,4 +814,6 @@
   I18n.t = I18n.translate;
   I18n.l = I18n.localize;
   I18n.p = I18n.pluralize;
-})(typeof(exports) === "undefined" ? (this.I18n || (this.I18n = {})) : exports);
+
+  return I18n;
+}));
