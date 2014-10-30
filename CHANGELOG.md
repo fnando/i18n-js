@@ -7,6 +7,8 @@
 
 ### bug fixes
 
+- Fix pluralization rules selection for negative `count` ([#268](https://github.com/fnando/i18n-js/pull/268))
+
 ## 3.0.0.rc7
 
 ### enhancements
