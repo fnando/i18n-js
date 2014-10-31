@@ -453,7 +453,7 @@
     }
 
     pluralizer = this.pluralization.get(options.locale);
-    keys = pluralizer(Math.abs(count));
+    keys = pluralizer(count);
 
     while (keys.length) {
       key = keys.shift();

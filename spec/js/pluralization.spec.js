@@ -76,6 +76,7 @@ describe("Pluralization", function(){
 
     expect(I18n.p(0, "things")).toEqual("No things");
     expect(I18n.p(4, "things")).toEqual("A few things");
+    expect(I18n.p(-4, "things")).toEqual("-4 things");
     expect(I18n.p(10, "things")).toEqual("10 things");
   });
 
