@@ -224,9 +224,6 @@
     switch (count) {
       case 0: return ["zero", "other"];
       case 1: return ["one"];
-      // For negative one should be singular or plural,
-      // see http://english.stackexchange.com/questions/9735/is-1-singular-or-plural
-      case -1: return ["one"];
       default: return ["other"];
     }
   };
