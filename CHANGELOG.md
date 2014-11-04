@@ -7,7 +7,7 @@
 
 ### bug fixes
 
-- Fix pluralization rules selection for negative `count` ([#268](https://github.com/fnando/i18n-js/pull/268))
+- Fix pluralization rules selection for negative `count` (e.g. `-1` was lead to use `one` for pluralization) ([#268](https://github.com/fnando/i18n-js/pull/268))
 
 ## 3.0.0.rc7
 
