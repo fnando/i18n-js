@@ -320,6 +320,17 @@ The `toHumanSize` function accepts the following options:
     I18n.l("date.formats.short", "09/18/2009");           // mm/dd/yyyy
     I18n.l("date.formats.short", (new Date()));           // Date object
 
+You can also add placeholders to the date format:
+
+    I18n.translations["en"] = {
+      date: {
+        formats: {
+          ordinal_day: "%B %{day}"
+        }
+      }
+    }
+    I18n.l("date.formats.ordinal_day", "2009-09-18", { day: '18th' }); // Sep 18th
+
 If you prefer, you can use the `I18n.strftime` function to format dates.
 
     var date = new Date();

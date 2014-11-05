@@ -34,6 +34,13 @@ describe("Localization", function(){
     expect(I18n.l("time.formats.long", "2009-11-29 15:07:59")).toEqual("Domingo, 29 de Novembro de 2009, 15:07 h");
   });
 
+  it("localizes date/time strings with placeholders", function(){
+    I18n.locale = "pt-BR";
+
+    expect(I18n.l("date.formats.short_with_placeholders", "2009-01-07", { p1: "!", p2: "?" })).toEqual("07 de Janeiro ! ?");
+    expect(I18n.l("time.formats.short_with_placeholders", "2009-01-07 09:12:35", { p1: "!" })).toEqual("07/01, 09:12 h !");
+  });
+
   it("localizes percentage", function(){
     I18n.locale = "pt-BR";
     expect(I18n.l("percentage", 123.45)).toEqual("123,45%");
