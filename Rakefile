@@ -9,7 +9,8 @@ RSpec::Core::RakeTask.new(:"spec:ruby")
 
 desc "Run JavaScript specs"
 task "spec:js" do
-  system "npm", "test"
+  # Need to call `exit!` manually to propogate exit status
+  system "npm", "test" or exit!(1)
 end
 
 desc "Run all specs"
