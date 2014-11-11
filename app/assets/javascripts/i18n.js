@@ -15,21 +15,21 @@
 ;(function(factory) {
   if (typeof module !== 'undefined') {
     // Node/CommonJS
-    module.exports = factory();
+    module.exports = factory(this);
 
   } else if (typeof define === 'function' && define.amd) {
     // AMD
-    define(factory);
+    define((function(global){ return function(){ factory(global); }})(this));
 
   } else {
     // Browser globals
-    this.I18n = factory();
+    this.I18n = factory(this);
   }
-}(function() {
+}(function(global) {
   "use strict";
 
   // Use previously defined object if exists in current scope
-  var I18n = this && this.I18n || {};
+  var I18n = global && global.I18n || {};
 
   // Just cache the Array#slice function.
   var slice = Array.prototype.slice;
