@@ -4,6 +4,9 @@
 ### enhancements
 
 - Add support for loading via AMD and CommonJS module loaders ([#266](https://github.com/fnando/i18n-js/pull/266))
+- Add `I18n.nullPlaceholder`  
+  Defaults to I18n.missingPlaceholder (`[missing {{name}} value]`)  
+  Set to `function() {return "";}` to match Ruby `I18n.t("name: %{name}", name: nil)`
 
 ### bug fixes
 
