@@ -424,6 +424,8 @@
 
       if (this.isSet(options[name])) {
         value = options[name].toString().replace(/\$/gm, "_#$#_");
+      } else if (name in options) {
+        value = "";
       } else {
         value = this.missingPlaceholder(placeholder, message);
       }
