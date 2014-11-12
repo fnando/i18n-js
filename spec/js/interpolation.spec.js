@@ -29,5 +29,10 @@ describe("Interpolation", function(){
   it("outputs missing placeholder message if interpolation value is missing", function(){
     actual = I18n.t("greetings.name");
     expect(actual).toEqual("Hello [missing {{name}} value]!");
-  })
+  });
+
+  it("handles explicit null values", function(){
+    actual = I18n.t("greetings.name", {name: null});
+    expect(actual).toEqual("Hello !");
+  });
 });
