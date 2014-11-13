@@ -29,5 +29,18 @@ describe("Interpolation", function(){
   it("outputs missing placeholder message if interpolation value is missing", function(){
     actual = I18n.t("greetings.name");
     expect(actual).toEqual("Hello [missing {{name}} value]!");
-  })
+  });
+
+  it("outputs missing placeholder message if interpolation value is null", function(){
+    actual = I18n.t("greetings.name", {name: null});
+    expect(actual).toEqual("Hello [missing {{name}} value]!");
+  });
+
+  it("allows overriding the null placeholder message", function(){
+    var orig = I18n.nullPlaceholder;
+    I18n.nullPlaceholder = function() {return "";}
+    actual = I18n.t("greetings.name", {name: null});
+    expect(actual).toEqual("Hello !");
+    I18n.nullPlaceholder = orig;
+  });
 });

@@ -424,6 +424,8 @@
 
       if (this.isSet(options[name])) {
         value = options[name].toString().replace(/\$/gm, "_#$#_");
+      } else if (name in options) {
+        value = this.nullPlaceholder(placeholder, message);
       } else {
         value = this.missingPlaceholder(placeholder, message);
       }
@@ -482,6 +484,10 @@
   // Return a missing placeholder message for given parameters
   I18n.missingPlaceholder = function(placeholder, message) {
     return "[missing " + placeholder + " value]";
+  };
+
+  I18n.nullPlaceholder = function() {
+    return I18n.missingPlaceholder.apply(I18n, arguments);
   };
 
   // Format number using localization rules.
