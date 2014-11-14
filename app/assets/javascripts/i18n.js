@@ -580,7 +580,9 @@
   //
   // It will default to the value's `toString` function.
   //
-  I18n.localize = function(scope, value) {
+  I18n.localize = function(scope, value, options) {
+    options || (options = {});
+
     switch (scope) {
       case "currency":
         return this.toCurrency(value);
@@ -590,11 +592,15 @@
       case "percentage":
         return this.toPercentage(value);
       default:
+        var localizedValue;
+
         if (scope.match(/^(date|time)/)) {
-          return this.toTime(scope, value);
+          localizedValue = this.toTime(scope, value);
         } else {
-          return value.toString();
+          localizedValue = value.toString();
         }
+
+        return this.interpolate(localizedValue, options);
     }
   };
 
