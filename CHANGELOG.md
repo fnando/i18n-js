@@ -7,6 +7,7 @@
 - Add `I18n.nullPlaceholder`  
   Defaults to I18n.missingPlaceholder (`[missing {{name}} value]`)  
   Set to `function() {return "";}` to match Ruby `I18n.t("name: %{name}", name: nil)`
+- For date formatting, you can now also add placeholders to the date format, see README for detail
 
 ### bug fixes
 
