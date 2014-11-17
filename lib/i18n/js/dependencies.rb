@@ -1,13 +1,15 @@
 module I18n
   module JS
+    # When using `safe_gem_check` to check for a pre-release version of gem,
+    # we need to specify pre-release version suffix in version constraint
     module Dependencies
       class << self
         def rails3?
-          safe_gem_check("rails", "~> 3") && running_rails3?
+          safe_gem_check("rails", "~> 3.0") && running_rails3?
         end
 
         def rails4?
-          safe_gem_check("rails", "~> 4") && running_rails4?
+          safe_gem_check("rails", "~> 4.0", ">= 4.0.0.beta1") && running_rails4?
         end
 
         def sprockets_supports_register_preprocessor?
@@ -19,7 +21,7 @@ module I18n
         end
 
         def rails_available?
-          safe_gem_check("rails", '>= 3')
+          safe_gem_check("rails", '>= 3.0.0.beta')
         end
 
         def using_asset_pipeline?
