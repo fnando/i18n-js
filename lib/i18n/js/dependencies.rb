@@ -51,11 +51,11 @@ module I18n
           defined?(Rails) && Rails.respond_to?(:version)
         end
 
-        def safe_gem_check(gem_name, version_string)
+        def safe_gem_check(*args)
           if Gem::Specification.respond_to?(:find_by_name)
-            Gem::Specification.find_by_name(gem_name, version_string)
+            Gem::Specification.find_by_name(*args)
           elsif Gem.respond_to?(:available?)
-            Gem.available?(gem_name, version_string)
+            Gem.available?(*args)
           end
         rescue Gem::LoadError
           false
