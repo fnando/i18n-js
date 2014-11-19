@@ -12,6 +12,9 @@
 ### bug fixes
 
 - Fix pluralization rules selection for negative `count` (e.g. `-1` was lead to use `one` for pluralization) ([#268](https://github.com/fnando/i18n-js/pull/268))
+- Remove check for `Rails.configuration.assets.compile` before telling Sprockets the dependency of translations JS file  
+  This might be the reason of many "cache not expired" issues  
+  Discovered/reported in #277
 
 ## 3.0.0.rc7
 

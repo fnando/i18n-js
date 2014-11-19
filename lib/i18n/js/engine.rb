@@ -6,7 +6,6 @@ module I18n
       initializer "i18n-js.register_preprocessor", :after => "sprockets.environment" do
         next unless JS::Dependencies.using_asset_pipeline?
         next unless JS::Dependencies.sprockets_supports_register_preprocessor?
-        next unless Rails.configuration.assets.compile
 
         Rails.application.assets.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
           if context.logical_path == "i18n/filtered"
