@@ -11,6 +11,8 @@
 
 ### bug fixes
 
+- Fix factory initialization so that the Node/CommonJS branch only gets executed if the environment is Node/CommonJS
+  (it currently will execute if module is defined in the global scope, which occurs with QUnit, for example)
 - Fix pluralization rules selection for negative `count` (e.g. `-1` was lead to use `one` for pluralization) ([#268](https://github.com/fnando/i18n-js/pull/268))
 - Remove check for `Rails.configuration.assets.compile` before telling Sprockets the dependency of translations JS file  
   This might be the reason of many "cache not expired" issues  
