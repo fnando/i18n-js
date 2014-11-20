@@ -13,7 +13,7 @@
 //
 
 ;(function(factory) {
-  if (typeof module !== 'undefined') {
+  if (typeof module !== 'undefined' && module.exports) {
     // Node/CommonJS
     module.exports = factory(this);
 
