@@ -3,6 +3,13 @@
 
 ### enhancements
 
+### bug fixes
+
+
+## 3.0.0.rc8
+
+### enhancements
+
 - Add support for loading via AMD and CommonJS module loaders ([#266](https://github.com/fnando/i18n-js/pull/266))
 - Add `I18n.nullPlaceholder`  
   Defaults to I18n.missingPlaceholder (`[missing {{name}} value]`)  
