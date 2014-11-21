@@ -24,6 +24,15 @@ module Helpers
   def temp_path(file_name = "")
     File.expand_path("../../tmp/i18n-js/#{file_name}", __FILE__)
   end
+
+
+  def self.included(base)
+    base.let(:backend_class_with_fallbacks) do
+      klass = Class.new(I18n::Backend::Simple)
+      klass.send(:include, I18n::Backend::Fallbacks)
+      klass
+    end
+  end
 end
 
 RSpec.configure do |config|

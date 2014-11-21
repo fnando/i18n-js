@@ -121,6 +121,65 @@ translations:
 
 To find more examples on how to use the configuration file please refer to the tests.
 
+##### Fallbacks
+
+If you specify the `fallbacks` option, you will be able to fill missing translations with those inside fallback locale(s).  
+Default value is `true`.
+
+Examples:
+```yaml
+fallbacks: true
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+This will enable merging fallbacks into each file. (set to `false` to disable).
+If you use `I18n` with fallbacks, the fallbacks defined there will be used.
+Otherwise `I18n.default_locale` will be used.
+
+```yaml
+fallbacks: :de
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+Here, the specified locale `:de` will be used as fallback for all locales.
+
+```yaml
+fallbacks:
+  fr: ["de", "en"]
+  de: "en"
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+Fallbacks defined will be used, if not defined (e.g. `:pl`) `I18n.fallbacks` or `I18n.default_locale` will be used.
+
+```yaml
+fallbacks: :default_locale
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+Setting the option to `:default_locale` will enforce the fallback to use the `I18n.default_locale`, ignoring `I18n.fallbacks`.
+
+Examples:
+```yaml
+fallbacks: false
+
+translations:
+- file: "public/javascripts/i18n/%{locale}.js"
+  only: '*'
+```
+You must disable this feature by setting the option to `false`.
+
+To find more examples on how to use the configuration file please refer to the tests.
+
+
 #### Vanilla JavaScript
 
 Just add the `i18n.js` file to your page. You'll have to build the translations object
