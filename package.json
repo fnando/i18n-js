@@ -7,5 +7,9 @@
   "main": "app/assets/javascripts/i18n.js",
   "scripts": {
     "test": "./node_modules/.bin/jasmine-node spec/js"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/fnando/i18n-js.git"
+  }  
 }
