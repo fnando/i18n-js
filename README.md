@@ -185,6 +185,18 @@ To find more examples on how to use the configuration file please refer to the t
 Just add the `i18n.js` file to your page. You'll have to build the translations object
 by hand or using your favorite programming language. More info below.
 
+#### Via NPM with webpack and CommonJS
+
+Add the following line to your package.json dependencies (where version is the version you want)
+```javascript
+"i18n-js": "http://github.com/fnando/i18n-js/archive/v3.0.0.rc8.tar.gz"
+```
+Then use via 
+```javascript
+var i18n = require("i18n-js");
+```
+
+
 ### Setting up
 
 You **don't** need to set up a thing. The default settings will work just okay. But if you want to split translations into several files or specify specific contexts, you can follow the rest of this setting up section.
