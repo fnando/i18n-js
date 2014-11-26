@@ -187,11 +187,11 @@ by hand or using your favorite programming language. More info below.
 
 #### Via NPM with webpack and CommonJS
 
-Add the following line to your package.json dependencies (where version is the version you want)
+Add the following line to your package.json dependencies (where version is the version you want - n.b. npm install requires it to be the gzipped tarball, see [npm install](https://www.npmjs.org/doc/cli/npm-install.html))
 ```javascript
 "i18n-js": "http://github.com/fnando/i18n-js/archive/v3.0.0.rc8.tar.gz"
 ```
-Then use via 
+Run npm install then use via
 ```javascript
 var i18n = require("i18n-js");
 ```
