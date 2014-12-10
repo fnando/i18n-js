@@ -23,8 +23,10 @@ Features:
 Add the gem to your Gemfile.
 
     source "https://rubygems.org"
-    gem "rails", "3.2.3"
-    gem "i18n-js"
+    gem "rails", "your_rails_version"
+    # You only need this RC version constraint during the development of `3.0.0`, once stable version is released you can remove `rc8` suffix
+    # `3.0.0.rc8` is the latest version of released RC version when this entry is changed, you might want to change it later
+    gem "i18n-js", ">= 3.0.0.rc8" 
 
 #### Rails app with [Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
 
