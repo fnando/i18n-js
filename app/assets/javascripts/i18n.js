@@ -19,7 +19,7 @@
 
   } else if (typeof define === 'function' && define.amd) {
     // AMD
-    define((function(global){ return function(){ return factory(global); }})(this));
+    define('i18n', (function(global){ return function(){ return factory(global); }})(this));
 
   } else {
     // Browser globals
