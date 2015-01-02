@@ -16,5 +16,4 @@ gemfile:
 matrix:
   fast_finish: true
   allow_failures:
-    - rvm: 2.2
     - rvm: ruby-head
