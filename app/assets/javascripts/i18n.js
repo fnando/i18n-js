@@ -61,13 +61,16 @@
       unit: "$"
     , precision: 2
     , format: "%u%n"
+    , sign_first: true
     , delimiter: ","
     , separator: "."
   };
 
   // Set default percentage format.
   var PERCENTAGE_FORMAT = {
-      precision: 3
+      unit: "%"
+    , precision: 3
+    , format: "%n%u"
     , separator: "."
     , delimiter: ""
   };
@@ -514,6 +517,8 @@
       , precision
       , buffer = []
       , formattedNumber
+      , format = options.format || "%n"
+      , sign = negative ? "-" : ""
     ;
 
     number = parts[0];
@@ -534,9 +539,18 @@
       formattedNumber += options.separator + precision;
     }
 
-    if (negative) {
-      formattedNumber = "-" + formattedNumber;
+    if (options.sign_first) {
+      format = "%s" + format;
     }
+    else {
+      format = format.replace("%n", "%s%n");
+    }
+
+    formattedNumber = format
+      .replace("%u", options.unit)
+      .replace("%n", formattedNumber)
+      .replace("%s", sign)
+    ;
 
     return formattedNumber;
   };
@@ -564,13 +578,7 @@
       , CURRENCY_FORMAT
     );
 
-    number = this.toNumber(number, options);
-    number = options.format
-      .replace("%u", options.unit)
-      .replace("%n", number)
-    ;
-
-    return number;
+    return this.toNumber(number, options);
   };
 
   // Localize several values.
@@ -782,8 +790,7 @@
       , PERCENTAGE_FORMAT
     );
 
-    number = this.toNumber(number, options);
-    return number + "%";
+    return this.toNumber(number, options);
   };
 
   // Convert a number into a readable size representation.
@@ -810,16 +817,10 @@
 
     options = this.prepareOptions(
         options
-      , {precision: precision, format: "%n%u", delimiter: ""}
+      , {unit: unit, precision: precision, format: "%n%u", delimiter: ""}
     );
 
-    number = this.toNumber(size, options);
-    number = options.format
-      .replace("%u", unit)
-      .replace("%n", number)
-    ;
-
-    return number;
+    return this.toNumber(size, options);
   };
 
   // Set aliases, so we can save some typing.

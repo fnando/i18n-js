@@ -364,6 +364,7 @@ The `toCurrency` function accepts the following options:
 - `format`: sets the format of the output string
 - `unit`: sets the denomination of the currency
 - `strip_insignificant_zeros`: defaults to `false`
+- `sign_first`: defaults to `true`
 
 You can provide only the options you want to override:
 
