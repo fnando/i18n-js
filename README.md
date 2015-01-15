@@ -254,7 +254,7 @@ You can also provide a list of default fallbacks for missing scopes:
     I18n.t("some.missing.scope", {defaults: [{scope: "some.existing.scope"}]});
 
     // As a simple translation
-    I18n.t("some.missing.scope", {defaults: [{message: "some.existing.scope"}]});
+    I18n.t("some.missing.scope", {defaults: [{message: "Some message"}]});
 
     Default values must be provided as an array of hashs where the key is the
     type of translation desired, a `scope` or a `message`. The translation returned
