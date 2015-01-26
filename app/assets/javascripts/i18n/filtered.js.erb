@@ -4,11 +4,9 @@
   if (typeof module !== 'undefined' && module.exports) {
     // Node/CommonJS
     factory(require('i18n'));
-
   } else if (typeof define === 'function' && define.amd) {
     // AMD
     define(['i18n'], factory);
-
   } else {
     // Browser globals
     factory(this.I18n);
