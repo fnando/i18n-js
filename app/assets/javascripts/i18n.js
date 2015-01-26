@@ -16,11 +16,9 @@
   if (typeof module !== 'undefined' && module.exports) {
     // Node/CommonJS
     module.exports = factory(this);
-
   } else if (typeof define === 'function' && define.amd) {
     // AMD
     define('i18n', (function(global){ return function(){ return factory(global); }})(this));
-
   } else {
     // Browser globals
     this.I18n = factory(this);
