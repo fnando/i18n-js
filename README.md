@@ -110,9 +110,9 @@ translations:
 ```
 
 #### Export Configuration (For other things)
-- `I18n::JS.config_file_path`  
-  Expected Type: `String`  
-  Default: `config/i18n-js.yml`  
+- `I18n::JS.config_file_paths`
+  Expected Type: `Array`
+  Default: Engine and application roots 'config/i18n-js.yml'
   Behaviour: Try to read the config file from that location  
 - `I18n::JS.export_i18n_js_dir_path`  
   Expected Type: `String`  
