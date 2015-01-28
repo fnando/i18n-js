@@ -2,6 +2,7 @@ require "i18n"
 require "fileutils"
 
 require "i18n/js/utils"
+require "i18n/js/config"
 
 module I18n
   module JS
@@ -15,13 +16,15 @@ module I18n
     DEFAULT_CONFIG_PATH = "config/i18n-js.yml"
     DEFAULT_EXPORT_DIR_PATH = "public/javascripts"
 
-    # The configuration file. This defaults to the `config/i18n-js.yml` file.
-    #
-    def self.config_file_path
-      @config_file_path ||= DEFAULT_CONFIG_PATH
+    cattr_accessor :config_file_paths
+
+    def self.engine_roots
+      Rails::Engine.subclasses.map(&:instance).map(&:root)
     end
-    def self.config_file_path=(new_path)
-      @config_file_path = new_path
+
+    def self.discover_configs
+      roots = engine_roots + [Rails.application.root]
+      configs = roots.map { |root| root.join(DEFAULT_CONFIG_PATH) }
     end
 
     # Export translations to JavaScript, considering settings
@@ -34,11 +37,13 @@ module I18n
       end
     end
 
-    def self.segments_per_locale(pattern, scope)
+    def self.segments_per_locale(config, options)
+      pattern, scope = options[:file], options[:only]
+
       I18n.available_locales.each_with_object({}) do |locale, segments|
         scope = [scope] unless scope.respond_to?(:each)
         result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"})
-        merge_with_fallbacks!(result, locale, scope) if use_fallbacks?
+        merge_with_fallbacks!(result, locale, scope, config.fallbacks) if config.use_fallbacks?
 
         next if result.empty?
 
@@ -56,46 +61,52 @@ module I18n
     end
 
     def self.configured_segments
-      config[:translations].each_with_object({}) do |options, segments|
-        options.reverse_merge!(:only => "*")
-        if options[:file] =~ ::I18n::INTERPOLATION_PATTERN
-          segments.merge!(segments_per_locale(options[:file], options[:only]))
-        else
-          result = segment_for_scope(options[:only])
-          segments[options[:file]] = result unless result.empty?
+      configs.each_with_object({}) do |config, segments|
+        next unless config.translations?
+
+        config.translations.each do |options|
+          if options[:file] =~ ::I18n::INTERPOLATION_PATTERN
+            segments.merge!(segments_per_locale(config, options))
+          else
+            result = segment_for_scope(options[:only])
+            segments[options[:file]] = result unless result.empty?
+          end
         end
       end
     end
 
     def self.filtered_translations
-      {}.tap do |result|
-        translation_segments.each do |filename, translations|
-          Utils.deep_merge!(result, translations)
-        end
+      translation_segments.each_with_object({}) do |(filename, translations), result|
+        Utils.deep_merge!(result, translations)
       end
     end
 
     def self.translation_segments
-      if config? && config[:translations]
+      if existing_configs.any?
         configured_segments
       else
         {"#{DEFAULT_EXPORT_DIR_PATH}/translations.js" => translations}
       end
     end
 
+    def self.configs
+      existing_configs.map do |config_path|
+        Config.read(config_path)
+      end
+    end
+
     # Load configuration file for partial exporting and
     # custom output directory
-    def self.config
-      if config?
-        erb = ERB.new(File.read(config_file_path)).result
-        (YAML.load(erb) || {}).with_indifferent_access
-      else
-        {}
-      end
+    def self.read_config(config_file_path)
+    end
+
+    def self.existing_configs
+      config_file_paths.select { |path| File.exist?(path) }
     end
 
     # Check if configuration file exist
     def self.config?
+      config_file_paths.map(&:exist?)
       File.file? config_file_path
     end
 
@@ -112,13 +123,9 @@ module I18n
     end
 
     def self.scoped_translations(scopes) # :nodoc:
-      result = {}
-
-      [scopes].flatten.each do |scope|
+      [scopes].flatten.each_with_object({}) do |scope, result|
         Utils.deep_merge! result, filter(translations, scope)
       end
-
-      result
     end
 
     # Filter translations according to the specified scope.
@@ -148,19 +155,8 @@ module I18n
       end
     end
 
-    def self.use_fallbacks?
-      fallbacks != false
-    end
-
-    def self.fallbacks
-      config.fetch(:fallbacks) do
-        # default value
-        true
-      end
-    end
-
     # deep_merge! given result with result for fallback locale
-    def self.merge_with_fallbacks!(result, locale, scope)
+    def self.merge_with_fallbacks!(result, locale, scope, fallbacks)
       result[locale] ||= {}
       fallback_locales = FallbackLocales.new(fallbacks, locale)
 
