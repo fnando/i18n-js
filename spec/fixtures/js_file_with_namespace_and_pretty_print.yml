@@ -1,0 +1,5 @@
+translations:
+  - file: "tmp/i18n-js/%{locale}.js"
+    only: '*'
+    namespace: "Foo"
+    pretty_print: true

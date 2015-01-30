@@ -29,13 +29,15 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/all.js")
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {}).and_call_original
+      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS.should_receive(:save).with(translations, "tmp/i18n-js/no_scope.js")
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {}).and_call_original
+      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
@@ -59,6 +61,7 @@ describe I18n::JS do
       I18n::JS.export
 
       file_should_exist "en.js"
+      file_should_exist "fr.js"
     end
 
     it "exports with multiple conditions" do
@@ -73,15 +76,13 @@ describe I18n::JS do
 
       set_config "multiple_conditions_per_locale.yml"
 
-      expected_locales = %w(en fr)
-
       result = I18n::JS.translation_segments
-      expected_files = expected_locales.map { |locale| "tmp/i18n-js/bits.#{locale}.js" }
-      result.keys.should eql(expected_files)
+      result.map(&:file).should eql(["tmp/i18n-js/bits.en.js", "tmp/i18n-js/bits.fr.js"])
 
-      expected_locales.each do |lang|
-        result["tmp/i18n-js/bits.#{lang}.js"].keys.should eql([lang.to_sym])
-        result["tmp/i18n-js/bits.#{lang}.js"][lang.to_sym].keys.sort.should eql([:date, :number])
+      %w(en fr).each do |lang|
+        segment = result.select{|s| s.file == "tmp/i18n-js/bits.#{lang}.js"}.first
+        segment.translations.keys.should eql([lang.to_sym])
+        segment.translations[lang.to_sym].keys.sort.should eql([:date, :number])
       end
     end
 
@@ -133,32 +134,31 @@ describe I18n::JS do
   end
 
   context "fallbacks" do
+    subject do
+      I18n::JS.translation_segments.inject({}) do |hash, segment|
+        hash[segment.file] = segment.translations
+        hash
+      end
+    end
+
     it "exports without fallback when disabled" do
       set_config "js_file_per_locale_without_fallbacks.yml"
-
-      result = I18n::JS.translation_segments
-      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql(nil)
+      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql(nil)
     end
 
     it "exports with default_locale as fallback when enabled" do
       set_config "js_file_per_locale_with_fallbacks_enabled.yml"
-
-      result = I18n::JS.translation_segments
-      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
     end
 
     it "exports with default_locale as fallback when enabled with :default_locale" do
       set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
-
-      result = I18n::JS.translation_segments
-      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
     end
 
     it "exports with given locale as fallback" do
       set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
-
-      result = I18n::JS.translation_segments
-      result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
     end
 
     context "with I18n::Fallbacks enabled" do
@@ -173,24 +173,50 @@ describe I18n::JS do
 
       it "exports with defined locale as fallback when enabled" do
         set_config "js_file_per_locale_with_fallbacks_enabled.yml"
-
-        result = I18n::JS.translation_segments
-        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+        subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
       end
 
       it "exports with defined locale as fallback when enabled with :default_locale" do
         set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
-
-        result = I18n::JS.translation_segments
-        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+        subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
       end
 
       it "exports with Fallbacks as Hash" do
         set_config "js_file_per_locale_with_fallbacks_as_hash.yml"
-
-        result = I18n::JS.translation_segments
-        result["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+        subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
       end
+    end
+  end
+
+  context "namespace and pretty_print options" do
+
+    before do
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+      set_config "js_file_with_namespace_and_pretty_print.yml"
+    end
+
+    it "exports with defined locale as fallback when enabled" do
+      I18n::JS.export
+      file_should_exist "en.js"
+      output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
+      expect(output).to match(/^#{
+<<EOS
+Foo.translations || (Foo.translations = {});
+Foo.translations["en"] = {
+  "number": {
+      "format": {
+EOS
+}.+#{
+<<EOS
+    "edit": {
+      "title": "Edit"
+    }
+  },
+  "foo": "Foo",
+  "fallback_test": "Success"
+};
+EOS
+}$/)
     end
   end
 
@@ -235,7 +261,6 @@ describe I18n::JS do
       config_entry["only"].should eq("*.date.formats")
     end
   end
-
 
   describe "i18n.js exporting" do
     describe ".export_i18n_js" do
@@ -296,88 +321,4 @@ describe I18n::JS do
       end
     end
   end
-end
-
-describe I18n::JS::Dependencies, ".sprockets_supports_register_preprocessor?" do
-
-  subject { described_class.sprockets_supports_register_preprocessor? }
-
-  context 'when Sprockets is available to register preprocessors' do
-    let!(:sprockets_double) do
-      class_double('Sprockets').as_stubbed_const(register_processor: true).tap do |double|
-        allow(double).to receive(:respond_to?).with(:register_preprocessor).and_return(true)
-      end
-    end
-
-    it { is_expected.to be_truthy }
-    it 'calls respond_to? with register_preprocessor on Sprockets' do
-      expect(sprockets_double).to receive(:respond_to?).with(:register_preprocessor).and_return(true)
-      subject
-    end
-  end
-
-  context 'when Sprockets is NOT available to register preprocessors' do
-    let!(:sprockets_double) do
-      class_double('Sprockets').as_stubbed_const(register_processor: true).tap do |double|
-        allow(double).to receive(:respond_to?).with(:register_preprocessor).and_return(false)
-      end
-    end
-
-    it { is_expected.to be_falsy }
-    it 'calls respond_to? with register_preprocessor on Sprockets' do
-      expect(sprockets_double).to receive(:respond_to?).with(:register_preprocessor).and_return(false)
-      subject
-    end
-  end
-
-  context 'when Sprockets is missing' do
-    before do
-      hide_const('Sprockets')
-      expect { Sprockets }.to raise_error(NameError)
-    end
-
-    it { is_expected.to be_falsy }
-  end
-
-end
-
-describe I18n::JS::Utils do
-
-  describe ".strip_keys_with_nil_values" do
-    subject { described_class.strip_keys_with_nil_values(input_hash) }
-
-    context 'when input_hash does NOT contain nil value' do
-      let(:input_hash) { {a: 1, b: { c: 2 }} }
-      let(:expected_hash) { input_hash }
-
-      it 'returns the original input' do
-        is_expected.to eq expected_hash
-      end
-    end
-    context 'when input_hash does contain nil value' do
-      let(:input_hash) { {a: 1, b: { c: 2, d: nil }, e: { f: nil }} }
-      let(:expected_hash) { {a: 1, b: { c: 2 }, e: {}} }
-
-      it 'returns the original input with nil values removed' do
-        is_expected.to eq expected_hash
-      end
-    end
-  end
-
-  context "hash merging" do
-    it "performs a deep merge" do
-      target = {:a => {:b => 1}}
-      result = described_class.deep_merge(target, {:a => {:c => 2}})
-
-      result[:a].should eql({:b => 1, :c => 2})
-    end
-
-    it "performs a banged deep merge" do
-      target = {:a => {:b => 1}}
-      described_class.deep_merge!(target, {:a => {:c => 2}})
-
-      target[:a].should eql({:b => 1, :c => 2})
-    end
-  end
-
 end
