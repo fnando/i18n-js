@@ -5,7 +5,8 @@ describe I18n::JS::Segment do
   let(:file)        { "tmp/i18n-js/segment.js" }
   let(:translations){ { "en" => { "test" => "Test" }, "fr" => { "test" => "Test2" } } }
   let(:namespace)   { "MyNamespace" }
-  let(:options)     { {namespace: namespace} }
+  let(:pretty_print){ nil }
+  let(:options)     { {namespace: namespace, pretty_print: pretty_print} }
   subject { I18n::JS::Segment.new(file, translations, options) }
 
   describe ".new" do
@@ -35,6 +36,20 @@ describe I18n::JS::Segment do
 
       it "should default namespace to `I18n`" do
         subject.namespace.should eql("I18n")
+      end
+    end
+
+    context "when pretty_print is nil" do
+      it "should set pretty_print to false" do
+        subject.pretty_print.should be false
+      end
+    end
+
+    context "when pretty_print is truthy" do
+      let(:pretty_print){ 1 }
+
+      it "should set pretty_print to true" do
+        subject.pretty_print.should be true
       end
     end
   end

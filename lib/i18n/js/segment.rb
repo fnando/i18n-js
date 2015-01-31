@@ -9,7 +9,7 @@ module I18n
         @file         = file
         @translations = translations
         @namespace    = options[:namespace] || 'I18n'
-        @pretty_print = options[:pretty_print]
+        @pretty_print = !!options[:pretty_print]
       end
 
       # Saves JSON file containing translations
