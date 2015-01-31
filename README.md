@@ -110,20 +110,33 @@ translations:
 ```
 
 #### Export Configuration (For other things)
-- `I18n::JS.config_file_path`  
+
+- `I18n::JS.config_file_path`
   Expected Type: `String`  
   Default: `config/i18n-js.yml`  
   Behaviour: Try to read the config file from that location  
-- `I18n::JS.export_i18n_js_dir_path`  
+
+- `I18n::JS.export_i18n_js_dir_path`
   Expected Type: `String`  
   Default: `public/javascripts`  
   Behaviour:  
   - Any `String`: considered as a relative path for a folder to `Rails.root` and export `i18n.js` to that folder for `rake i18n:js:export`
-  - `nil`: Disable `i18n.js` exporting
+  - Any non-`String` (`nil`, `false`, `:none`, etc): Disable `i18n.js` exporting
+
+- You may also set `export_i18n_js` in your config file, e.g.:
+
+```yaml
+export_i18n_js_: false
+# OR
+export_i18n_js: "my/path"
+
+translations:
+  - ...
+``
 
 To find more examples on how to use the configuration file please refer to the tests.
 
-##### Fallbacks
+#### Fallbacks
 
 If you specify the `fallbacks` option, you will be able to fill missing translations with those inside fallback locale(s).  
 Default value is `true`.
@@ -182,10 +195,41 @@ You must disable this feature by setting the option to `false`.
 To find more examples on how to use the configuration file please refer to the tests.
 
 
+#### Namespace
+
+Setting the `namespace` option will change the namespace of the output Javascript file to something other than `I18n`.
+This can be useful in no-conflict scenarios. Example:
+
+```yaml
+translations:
+- file: "public/javascripts/i18n/translations.js"
+  namespace: "MyNamespace"
+```
+
+will create:
+
+```
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = { ... }
+```
+
+
+#### Pretty Print
+
+Set the `pretty_print` option if you would like whitespace and indentation in your output file (default: false)
+
+```yaml
+translations:
+- file: "public/javascripts/i18n/translations.js"
+  pretty_print: true
+```
+
+
 #### Vanilla JavaScript
 
 Just add the `i18n.js` file to your page. You'll have to build the translations object
 by hand or using your favorite programming language. More info below.
+
 
 #### Via NPM with webpack and CommonJS
 
