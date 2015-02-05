@@ -1,12 +1,12 @@
 require "i18n"
 require "fileutils"
-
 require "i18n/js/utils"
 
 module I18n
   module JS
     require "i18n/js/dependencies"
     require "i18n/js/fallback_locales"
+    require "i18n/js/segment"
     if JS::Dependencies.rails?
       require "i18n/js/middleware"
       require "i18n/js/engine"
@@ -20,6 +20,7 @@ module I18n
     def self.config_file_path
       @config_file_path ||= DEFAULT_CONFIG_PATH
     end
+
     def self.config_file_path=(new_path)
       @config_file_path = new_path
     end
@@ -29,21 +30,17 @@ module I18n
     def self.export
       export_i18n_js
 
-      translation_segments.each do |filename, translations|
-        save(translations, filename)
-      end
+      translation_segments.each(&:save!)
     end
 
-    def self.segments_per_locale(pattern, scope)
-      I18n.available_locales.each_with_object({}) do |locale, segments|
+    def self.segments_per_locale(pattern, scope, options)
+      I18n.available_locales.each_with_object([]) do |locale, segments|
         scope = [scope] unless scope.respond_to?(:each)
         result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"})
         merge_with_fallbacks!(result, locale, scope) if use_fallbacks?
 
         next if result.empty?
-
-        segment_name = ::I18n.interpolate(pattern,{:locale => locale})
-        segments[segment_name] = result
+        segments << Segment.new(::I18n.interpolate(pattern, {:locale => locale}), result, options)
       end
     end
 
@@ -56,21 +53,25 @@ module I18n
     end
 
     def self.configured_segments
-      config[:translations].each_with_object({}) do |options, segments|
-        options.reverse_merge!(:only => "*")
-        if options[:file] =~ ::I18n::INTERPOLATION_PATTERN
-          segments.merge!(segments_per_locale(options[:file], options[:only]))
+      config[:translations].inject([]) do |segments, options|
+        file = options[:file]
+        only = options[:only] || '*'
+        segment_options = options.slice(:namespace, :pretty_print)
+
+        if file =~ ::I18n::INTERPOLATION_PATTERN
+          segments += segments_per_locale(file, only, segment_options)
         else
-          result = segment_for_scope(options[:only])
-          segments[options[:file]] = result unless result.empty?
+          result = segment_for_scope(only)
+          segments << Segment.new(file, result, segment_options) unless result.empty?
         end
+        segments
       end
     end
 
     def self.filtered_translations
       {}.tap do |result|
-        translation_segments.each do |filename, translations|
-          Utils.deep_merge!(result, translations)
+        translation_segments.each do |segment|
+          Utils.deep_merge!(result, segment.translations)
         end
       end
     end
@@ -79,7 +80,7 @@ module I18n
       if config? && config[:translations]
         configured_segments
       else
-        {"#{DEFAULT_EXPORT_DIR_PATH}/translations.js" => translations}
+        [Segment.new("#{DEFAULT_EXPORT_DIR_PATH}/translations.js", translations)]
       end
     end
 
@@ -97,18 +98,6 @@ module I18n
     # Check if configuration file exist
     def self.config?
       File.file? config_file_path
-    end
-
-    # Convert translations to JSON string and save file.
-    def self.save(translations, file)
-      FileUtils.mkdir_p File.dirname(file)
-
-      File.open(file, "w+") do |f|
-        f << %(I18n.translations || (I18n.translations = {});\n)
-        Utils.strip_keys_with_nil_values(translations).each do |locale, translations_for_locale|
-          f << %(I18n.translations["#{locale}"] = #{translations_for_locale.to_json};\n);
-        end
-      end
     end
 
     def self.scoped_translations(scopes) # :nodoc:

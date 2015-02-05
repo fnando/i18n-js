@@ -123,7 +123,7 @@ translations:
 
 To find more examples on how to use the configuration file please refer to the tests.
 
-##### Fallbacks
+#### Fallbacks
 
 If you specify the `fallbacks` option, you will be able to fill missing translations with those inside fallback locale(s).  
 Default value is `true`.
@@ -186,6 +186,7 @@ To find more examples on how to use the configuration file please refer to the t
 
 Just add the `i18n.js` file to your page. You'll have to build the translations object
 by hand or using your favorite programming language. More info below.
+
 
 #### Via NPM with webpack and CommonJS
 
