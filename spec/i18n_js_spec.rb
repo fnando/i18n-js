@@ -188,6 +188,38 @@ describe I18n::JS do
     end
   end
 
+  context "namespace and pretty_print options" do
+
+    before do
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+      set_config "js_file_with_namespace_and_pretty_print.yml"
+    end
+
+    it "exports with defined locale as fallback when enabled" do
+      I18n::JS.export
+      file_should_exist "en.js"
+      output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
+      expect(output).to match(/^#{
+<<EOS
+Foo.translations || (Foo.translations = {});
+Foo.translations["en"] = {
+  "number": {
+      "format": {
+EOS
+}.+#{
+<<EOS
+    "edit": {
+      "title": "Edit"
+    }
+  },
+  "foo": "Foo",
+  "fallback_test": "Success"
+};
+EOS
+}$/)
+    end
+  end
+
   context "I18n.available_locales" do
     context "when I18n.available_locales is not set" do
       it "should allow all locales" do

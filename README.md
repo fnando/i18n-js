@@ -182,6 +182,36 @@ You must disable this feature by setting the option to `false`.
 To find more examples on how to use the configuration file please refer to the tests.
 
 
+#### Namespace
+
+Setting the `namespace` option will change the namespace of the output Javascript file to something other than `I18n`.
+This can be useful in no-conflict scenarios. Example:
+
+```yaml
+translations:
+- file: "public/javascripts/i18n/translations.js"
+  namespace: "MyNamespace"
+```
+
+will create:
+
+```
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = { ... }
+```
+
+
+#### Pretty Print
+
+Set the `pretty_print` option if you would like whitespace and indentation in your output file (default: false)
+
+```yaml
+translations:
+- file: "public/javascripts/i18n/translations.js"
+  pretty_print: true
+```
+
+
 #### Vanilla JavaScript
 
 Just add the `i18n.js` file to your page. You'll have to build the translations object
