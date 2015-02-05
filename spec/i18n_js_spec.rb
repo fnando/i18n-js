@@ -262,9 +262,10 @@ EOS
     end
   end
 
-
   describe "i18n.js exporting" do
-    describe ".export_i18n_js" do
+    after { begin described_class.send(:remove_instance_variable, :@export_i18n_js_dir_path); rescue; end }
+
+    describe ".export_i18n_js with global variable" do
       before do
         allow(FileUtils).to receive(:mkdir_p).and_call_original
         allow(FileUtils).to receive(:cp).and_call_original
@@ -299,11 +300,47 @@ EOS
       end
     end
 
+    describe ".export_i18n_js with config" do
+
+      let(:export_action) do
+        allow(FileUtils).to receive(:mkdir_p).and_call_original
+        allow(FileUtils).to receive(:cp).and_call_original
+        I18n::JS.export_i18n_js
+      end
+
+      context 'when :export_i18n_js set in config' do
+        before { set_config "js_export_dir_custom.yml"; export_action }
+        let(:export_i18n_js_dir_path) { temp_path }
+        let(:config_export_path) { "tmp/i18n-js/foo" }
+
+        it "does create the folder before copying" do
+          expect(FileUtils).to have_received(:mkdir_p).with(config_export_path).once
+        end
+        it "does copy the file with FileUtils.cp" do
+          expect(FileUtils).to have_received(:cp).once
+        end
+        it "exports the file" do
+          File.should be_file(File.join(config_export_path, "i18n.js"))
+        end
+      end
+
+      context 'when .export_i18n_js_dir_path is set to false' do
+        before { set_config "js_export_dir_none.yml"; export_action }
+
+        it "does NOT create the folder before copying" do
+          expect(FileUtils).to_not have_received(:mkdir_p)
+        end
+
+        it "does NOT copy the file with FileUtils.cp" do
+          expect(FileUtils).to_not have_received(:cp)
+        end
+      end
+    end
 
     describe '.export_i18n_js_dir_path' do
       let(:default_path) { I18n::JS::DEFAULT_EXPORT_DIR_PATH }
       let(:new_path) { File.join("tmp", default_path) }
-      before { described_class.send(:remove_instance_variable, :@export_i18n_js_dir_path) }
+      after { described_class.send(:remove_instance_variable, :@export_i18n_js_dir_path) }
 
       subject { described_class.export_i18n_js_dir_path }
 
@@ -318,7 +355,7 @@ EOS
       context "when it is set to nil already" do
         before { described_class.export_i18n_js_dir_path = nil }
 
-        it { should be_nil }
+        it { should eq :none }
       end
     end
   end

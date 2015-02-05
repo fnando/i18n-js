@@ -110,16 +110,29 @@ translations:
 ```
 
 #### Export Configuration (For other things)
-- `I18n::JS.config_file_path`  
+
+- `I18n::JS.config_file_path`
   Expected Type: `String`  
   Default: `config/i18n-js.yml`  
   Behaviour: Try to read the config file from that location  
-- `I18n::JS.export_i18n_js_dir_path`  
+
+- `I18n::JS.export_i18n_js_dir_path`
   Expected Type: `String`  
   Default: `public/javascripts`  
   Behaviour:  
   - Any `String`: considered as a relative path for a folder to `Rails.root` and export `i18n.js` to that folder for `rake i18n:js:export`
-  - `nil`: Disable `i18n.js` exporting
+  - Any non-`String` (`nil`, `false`, `:none`, etc): Disable `i18n.js` exporting
+
+- You may also set `export_i18n_js` in your config file, e.g.:
+
+```yaml
+export_i18n_js_: false
+# OR
+export_i18n_js: "my/path"
+
+translations:
+  - ...
+``
 
 To find more examples on how to use the configuration file please refer to the tests.
 
