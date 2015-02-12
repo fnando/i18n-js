@@ -1,3 +1,4 @@
+require "yaml"
 require "i18n"
 require "fileutils"
 require "i18n/js/utils"
@@ -159,25 +160,28 @@ module I18n
       end
     end
 
-
     ### Export i18n.js
     begin
+
       # Copy i18n.js
       def self.export_i18n_js
-        return if export_i18n_js_dir_path.nil?
+        return unless export_i18n_js_dir_path.is_a? String
 
         FileUtils.mkdir_p(export_i18n_js_dir_path)
 
         i18n_js_path = File.expand_path('../../../app/assets/javascripts/i18n.js', __FILE__)
         FileUtils.cp(i18n_js_path, export_i18n_js_dir_path)
       end
-      def self.export_i18n_js_dir_path
-        return @export_i18n_js_dir_path if defined?(@export_i18n_js_dir_path)
 
-        @export_i18n_js_dir_path = DEFAULT_EXPORT_DIR_PATH
+      def self.export_i18n_js_dir_path
+        @export_i18n_js_dir_path ||= (config[:export_i18n_js] || :none) if config.has_key?(:export_i18n_js)
+        @export_i18n_js_dir_path ||= DEFAULT_EXPORT_DIR_PATH
+        @export_i18n_js_dir_path
       end
+
       # Setting this to nil would disable i18n.js exporting
       def self.export_i18n_js_dir_path=(new_path)
+        new_path = :none unless new_path.is_a? String
         @export_i18n_js_dir_path = new_path
       end
     end
