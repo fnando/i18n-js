@@ -3,6 +3,8 @@
 
 ### enhancements
 
+- Force currency number sign to be at first place using `sign_first` option, default to `true`
+
 ### bug fixes
 
 
@@ -16,7 +18,6 @@
   Set to `function() {return "";}` to match Ruby `I18n.t("name: %{name}", name: nil)`
 - For date formatting, you can now also add placeholders to the date format, see README for detail
 - Add fallbacks option to `i18n-js.yml`, defaults to `true`
-- Force currency number sign to be at first place using `sign_first` option, default to `true`
 
 ### bug fixes
 
