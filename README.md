@@ -329,6 +329,33 @@ are three different ways of doing it so:
     I18n.locales.no = "nb";
     I18n.locales.no = function(locale){ return ["nb"]; };
 
+By default a missing translation will be displayed as
+
+    [missing "name of scope" translation]
+
+While you are developing or if you do not want to provide a translation
+in the default language you can set
+
+    I18n.missingBehaviour='guess';
+
+this will take the last section of your scope and guess the intended value.
+Camel case becomes lower cased text and underscores are replaced with space
+
+    questionnaire.whatIsYourFavorite_ChristmasPresent
+
+becomes "what is your favorite Christmas present"
+
+In order to still detect untranslated strings, you can
+i18n.missingTranslationPrefix to something like:
+
+  I18n.missingTranslationPrefix = 'EE: '
+
+And result will be:
+
+    "EE: what is your favorite Christmas present"
+
+This will help you doing automated tests against your localisation assets.
+
 Pluralization is possible as well and by default provides English rules:
 
     I18n.t("inbox.counting", {count: 10}); // You have 10 messages

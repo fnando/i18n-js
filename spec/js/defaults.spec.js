@@ -20,4 +20,12 @@ describe("Defaults", function(){
   it("sets fallback", function(){
     expect(I18n.fallbacks).toEqual(false);
   });
+
+  it("set empty translation prefix", function(){
+    expect(I18n.missingTranslationPrefix).toEqual('');
+  });
+
+  it("sets default missingBehaviour", function(){
+    expect(I18n.missingBehaviour).toEqual('message');
+  });
 });

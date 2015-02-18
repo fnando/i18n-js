@@ -1,6 +1,11 @@
 
 ## Unreleased
 
+- You can now set `I18n.missingBehavior='guess'` to have the scope string output as text instead of of the
+  "[missing `scope`]" message when no translation is available.
+- Combined that with `I18n.missingTranslationPrefix='SOMETHING'` and you can
+  still identify those missing strings.
+
 ### enhancements
 
 - Force currency number sign to be at first place using `sign_first` option, default to `true`
