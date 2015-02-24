@@ -53,7 +53,7 @@ module I18n
 
         def safe_gem_check(*args)
           if Gem::Specification.respond_to?(:find_by_name)
-            Gem::Specification.find_by_name(*args)
+            Gem::Specification.find_all_by_name(*args)
           elsif Gem.respond_to?(:available?)
             Gem.available?(*args)
           end
