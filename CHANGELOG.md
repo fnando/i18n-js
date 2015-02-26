@@ -6,6 +6,7 @@
 - Force currency number sign to be at first place using `sign_first` option, default to `true`
 - Add option `namespace` & `pretty_print` ([#300](https://github.com/fnando/i18n-js/pull/300))
 - Add option `export_i18n_js` ([#301](https://github.com/fnando/i18n-js/pull/301))
+- Now the gem also detects pre-release versions of `rails`
 
 ### bug fixes
 
