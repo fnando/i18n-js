@@ -24,6 +24,12 @@ describe("Translate", function(){
     expect(actual).toEqual(expected);
   });
 
+  it("returns missing message translation for valid scope with scope", function(){
+    actual = I18n.t("monster", {scope: "greetings"});
+    expected = '[missing "en.greetings.monster" translation]';
+    expect(actual).toEqual(expected);
+  });
+
   it("returns translation for single scope on a custom locale", function(){
     I18n.locale = "pt-BR";
     expect(I18n.t("hello")).toEqual("Olá Mundo!");

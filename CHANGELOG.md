@@ -10,6 +10,8 @@
 
 ### bug fixes
 
+- [JS] Fix missing translation message when scope is passed in options
+
 
 ## 3.0.0.rc8
 

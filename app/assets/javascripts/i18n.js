@@ -253,18 +253,7 @@
       , translations
     ;
 
-    // Deal with the scope as an array.
-    if (scope.constructor === Array) {
-      scope = scope.join(this.defaultSeparator);
-    }
-
-    // Deal with the scope option provided through the second argument.
-    //
-    //    I18n.t('hello', {scope: 'greetings'});
-    //
-    if (options.scope) {
-      scope = [options.scope, scope].join(this.defaultSeparator);
-    }
+    scope = this.getFullScope(scope, options);
 
     while (locales.length) {
       locale = locales.shift();
@@ -391,7 +380,7 @@
       }, this);
 
     if (!translationFound) {
-      return this.missingTranslation(scope);
+      return this.missingTranslation(scope, options);
     }
 
     if (typeof(translation) === "string") {
@@ -452,7 +441,7 @@
     }
 
     if (!translations) {
-      return this.missingTranslation(scope);
+      return this.missingTranslation(scope, options);
     }
 
     pluralizer = this.pluralization.get(options.locale);
@@ -472,14 +461,11 @@
   };
 
   // Return a missing translation message for the given parameters.
-  I18n.missingTranslation = function(scope) {
-    var message = '[missing "';
+  I18n.missingTranslation = function(scope, options) {
+    var fullScope           = this.getFullScope(scope, options);
+    var fullScopeWithLocale = [this.currentLocale(), fullScope].join(this.defaultSeparator);
 
-    message += this.currentLocale() + ".";
-    message += slice.call(arguments).join(".");
-    message += '" translation]';
-
-    return message;
+    return '[missing "' + fullScopeWithLocale + '" translation]';
   };
 
   // Return a missing placeholder message for given parameters
@@ -820,6 +806,25 @@
 
     return this.toNumber(size, options);
   };
+
+  I18n.getFullScope = function(scope, options) {
+    options = this.prepareOptions(options);
+
+    // Deal with the scope as an array.
+    if (scope.constructor === Array) {
+      scope = scope.join(this.defaultSeparator);
+    }
+
+    // Deal with the scope option provided through the second argument.
+    //
+    //    I18n.t('hello', {scope: 'greetings'});
+    //
+    if (options.scope) {
+      scope = [options.scope, scope].join(this.defaultSeparator);
+    }
+
+    return scope;
+  }
 
   // Set aliases, so we can save some typing.
   I18n.t = I18n.translate;
