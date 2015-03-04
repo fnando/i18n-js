@@ -78,12 +78,27 @@
 
   // Other default options
   var DEFAULT_OPTIONS = {
-    defaultLocale: "en",
-    locale: "en",
-    defaultSeparator: ".",
-    placeholder: /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm,
-    fallbacks: false,
-    translations: {}
+    // Set default locale. This locale will be used when fallback is enabled and
+    // the translation doesn't exist in a particular locale.
+      defaultLocale: "en"
+    // Set the current locale to `en`.
+    , locale: "en"
+    // Set the translation key separator.
+    , defaultSeparator: "."
+    // Set the placeholder format. Accepts `{placeholder}}` and `%{placeholder}`.}
+    , placeholder: /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm
+    // Set if engine should fallback to the default locale when a translation
+    // is missing.
+    , fallbacks: false
+    // Set the default translation object.
+    , translations: {}
+    // Set missing translation behavior. 'message' will display a message
+    // that the translation is missing, 'guess' will try to guess the string
+    , missingBehaviour: 'message'
+    // if you use missingBehaviour with 'message', but want to know that the
+    // string is actually missing for testing purposes, you can prefix the
+    // guessed string by setting the value here. By default, no prefix!
+    , missingTranslationPrefix: ''
   };
 
   I18n.reset = function() {
@@ -106,6 +121,13 @@
 
     // Set the default translation object.
     this.translations = DEFAULT_OPTIONS.translations;
+
+    // Set the default missing behaviour
+    this.missingBehaviour = DEFAULT_OPTIONS.missingBehaviour;
+
+    // Set the default missing string prefix for guess behaviour
+    this.missingTranslationPrefix = DEFAULT_OPTIONS.missingTranslationPrefix;
+
   };
 
   // Much like `reset`, but only assign options if not already assigned
@@ -462,6 +484,16 @@
 
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function(scope, options) {
+    //guess intended string
+    if(this.missingBehaviour == 'guess'){
+      //get only the last portion of the scope
+      var s = scope.split('.').slice(-1)[0];
+      //replace underscore with space && camelcase with space and lowercase letter
+      return (this.missingTranslationPrefix.length > 0 ? this.missingTranslationPrefix : '') +
+          s.replace('_',' ').replace(/([a-z])([A-Z])/g,
+          function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
+    }
+
     var fullScope           = this.getFullScope(scope, options);
     var fullScopeWithLocale = [this.currentLocale(), fullScope].join(this.defaultSeparator);
 
