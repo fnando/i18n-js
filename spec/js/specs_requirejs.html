@@ -44,13 +44,22 @@
                 "paths": {
                     "i18n": "../../app/assets/javascripts/i18n"
                 },
+		/* Since the i18n.js file explicitly names its module 'i18n', but each
+		   spec uses the full path in the require statement, it appears that
+		   loading fails. This map will map the full path to the short form.
+		   */
+		"map": {
+		    "*": {
+		    	"../../app/assets/javascripts/i18n": "i18n"
+		    }
+		},
                 "shim": shims
             });
-        require((["../../app/assets/javascripts/i18n", './translations']).concat(testScripts),
+        require((["i18n", './translations']).concat(testScripts),
                         function(I18n, translationFactory) {
             // Example for using the translation factory
-            //I18n.translations = translationFactory();
-            //console.log(I18n.t('hello'));
+            I18n.translations = translationFactory();
+            console.log(I18n.t('hello'));
 
             // Execute the specs
             jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
