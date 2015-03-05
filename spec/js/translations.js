@@ -127,7 +127,9 @@ var DEBUG = false;
     return Translations;
   };
 
-  if (typeof(exports) === "undefined") {
+  if (typeof define === 'function' && define.amd) {
+    define(function() { return generator; });
+  } else if (typeof(exports) === "undefined") {
     window.Translations = generator;
   } else {
     module.exports = generator;
