@@ -12,6 +12,8 @@
 - Add option `namespace` & `pretty_print` ([#300](https://github.com/fnando/i18n-js/pull/300))
 - Add option `export_i18n_js` ([#301](https://github.com/fnando/i18n-js/pull/301))
 - Now the gem also detects pre-release versions of `rails`
+- Add `:except` option to exclude certain phrases or groups of phrases from the
+  outputted translations ([#312](https://github.com/fnando/i18n-js/pull/312))
 
 ### bug fixes
 
