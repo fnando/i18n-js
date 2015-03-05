@@ -34,22 +34,22 @@ module I18n
       translation_segments.each(&:save!)
     end
 
-    def self.segments_per_locale(pattern, scope, options)
+    def self.segments_per_locale(pattern, scope, exceptions, options)
       I18n.available_locales.each_with_object([]) do |locale, segments|
         scope = [scope] unless scope.respond_to?(:each)
-        result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"})
-        merge_with_fallbacks!(result, locale, scope) if use_fallbacks?
+        result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"}, exceptions)
+        merge_with_fallbacks!(result, locale, scope, exceptions) if use_fallbacks?
 
         next if result.empty?
         segments << Segment.new(::I18n.interpolate(pattern, {:locale => locale}), result, options)
       end
     end
 
-    def self.segment_for_scope(scope)
+    def self.segment_for_scope(scope, exceptions)
       if scope == "*"
-        translations
+        exclude(translations, exceptions)
       else
-        scoped_translations(scope)
+        scoped_translations(scope, exceptions)
       end
     end
 
@@ -57,14 +57,17 @@ module I18n
       config[:translations].inject([]) do |segments, options|
         file = options[:file]
         only = options[:only] || '*'
+        exceptions = [options[:except] || []].flatten
+
         segment_options = options.slice(:namespace, :pretty_print)
 
         if file =~ ::I18n::INTERPOLATION_PATTERN
-          segments += segments_per_locale(file, only, segment_options)
+          segments += segments_per_locale(file, only, exceptions, segment_options)
         else
-          result = segment_for_scope(only)
+          result = segment_for_scope(only, exceptions)
           segments << Segment.new(file, result, segment_options) unless result.empty?
         end
+
         segments
       end
     end
@@ -101,14 +104,28 @@ module I18n
       File.file? config_file_path
     end
 
-    def self.scoped_translations(scopes) # :nodoc:
+    def self.scoped_translations(scopes, exceptions = []) # :nodoc:
       result = {}
 
       [scopes].flatten.each do |scope|
-        Utils.deep_merge! result, filter(translations, scope)
+        translations_without_exceptions = exclude(translations, exceptions)
+        filtered_translations = filter(translations_without_exceptions, scope)
+
+        Utils.deep_merge! result, filtered_translations
       end
 
       result
+    end
+
+    # Exclude keys from translations listed in the `except:` section in the config file
+    def self.exclude(translations, exceptions)
+      return translations if exceptions.empty?
+
+      exceptions.inject(translations) do |memo, exception|
+        Utils.deep_reject(memo) do |key, value|
+          key.to_s == exception.to_s
+        end
+      end
     end
 
     # Filter translations according to the specified scope.
@@ -150,12 +167,12 @@ module I18n
     end
 
     # deep_merge! given result with result for fallback locale
-    def self.merge_with_fallbacks!(result, locale, scope)
+    def self.merge_with_fallbacks!(result, locale, scope, exceptions)
       result[locale] ||= {}
       fallback_locales = FallbackLocales.new(fallbacks, locale)
 
       fallback_locales.each do |fallback_locale|
-        fallback_result = scoped_translations(scope.collect{|s| "#{fallback_locale}.#{s}"}) # NOTE: Duplicated code here
+        fallback_result = scoped_translations(scope.collect{|s| "#{fallback_locale}.#{s}"}, exceptions) # NOTE: Duplicated code here
         result[locale] = Utils.deep_merge(fallback_result[fallback_locale], result[locale])
       end
     end

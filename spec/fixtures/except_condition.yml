@@ -1,0 +1,5 @@
+translations:
+  - file: "tmp/i18n-js/trimmed.js"
+    except:
+      - "active_admin"
+      - "mailers"

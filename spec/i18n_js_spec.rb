@@ -86,6 +86,13 @@ describe I18n::JS do
       end
     end
 
+    it "exports with :except condition" do
+      set_config "except_condition.yml"
+      I18n::JS.export
+
+      file_should_exist "trimmed.js"
+    end
+
     it "calls .export_i18n_js" do
       allow(described_class).to receive(:export_i18n_js)
       I18n::JS.export
@@ -130,6 +137,41 @@ describe I18n::JS do
 
       result[:en][:admin][:edit][:title].should eql("Edit")
       result[:fr][:admin][:edit][:title].should eql("Editer")
+    end
+  end
+
+  context "exceptions" do
+    it "does not include a key listed in the exceptions list" do
+      result = I18n::JS.scoped_translations("*", ['admin'])
+
+      result[:en][:admin].should be_nil
+      result[:fr][:admin].should be_nil
+    end
+
+    it "does not include multiple keys listed in the exceptions list" do
+      result = I18n::JS.scoped_translations("*", ['title', 'note'])
+
+      result[:en][:admin][:show].should be_empty
+      result[:en][:admin][:edit].should be_empty
+
+      result[:fr][:admin][:show].should be_empty
+      result[:fr][:admin][:show].should be_empty
+      result[:fr][:admin][:edit].should be_empty
+    end
+
+    it "does not include a key listed in the exceptions list and respecs the 'only' option" do
+      result = I18n::JS.scoped_translations("fr.*", ['date', 'time', 'number', 'show'])
+
+      result[:en].should be_nil
+      result[:de].should be_nil
+      result[:ja].should be_nil
+
+      result[:fr][:date].should be_nil
+      result[:fr][:time].should be_nil
+      result[:fr][:number].should be_nil
+      result[:fr][:admin][:show].should be_nil
+
+      result[:fr][:admin][:edit][:title].should be_a(String)
     end
   end
 
