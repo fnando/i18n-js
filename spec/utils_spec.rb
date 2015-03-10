@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe I18n::JS::Utils do
 
   describe ".strip_keys_with_nil_values" do
@@ -34,6 +36,34 @@ describe I18n::JS::Utils do
       described_class.deep_merge!(target, {:a => {:c => 2}})
 
       target[:a].should eql({:b => 1, :c => 2})
+    end
+  end
+
+  describe ".deep_reject" do
+    it "performs a deep keys rejection" do
+      hash = {:a => {:b => 1}}
+
+      result = described_class.deep_reject(hash) { |k, v| k == :b }
+
+      result.should eql({:a => {}})
+    end
+
+    it "performs a deep keys rejection prunning the whole tree if necessary" do
+      hash = {:a => {:b => {:c => {:d => 1, :e => 2}}}}
+
+      result = described_class.deep_reject(hash) { |k, v| k == :b }
+
+      result.should eql({:a => {}})
+    end
+
+
+    it "performs a deep keys rejection without changing the original hash" do
+      hash = {:a => {:b => 1, :c => 2}}
+
+      result = described_class.deep_reject(hash) { |k, v| k == :b }
+
+      result.should eql({:a => {:c => 2}})
+      hash.should eql({:a => {:b => 1, :c => 2}})
     end
   end
 end
