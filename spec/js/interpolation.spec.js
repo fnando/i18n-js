@@ -20,10 +20,64 @@ describe("Interpolation", function(){
     expect(actual).toEqual("John Doe is 27-years old");
   });
 
-  it("performs interpolation with the count option", function(){
-    expect(I18n.t("inbox", {count: 0})).toEqual("You have no messages");
-    expect(I18n.t("inbox", {count: 1})).toEqual("You have 1 message");
-    expect(I18n.t("inbox", {count: 5})).toEqual("You have 5 messages");
+  describe("Pluralization", function() {
+    var translation_key;
+
+    describe("when count is passed in", function() {
+      describe("and translation key does contain pluralization", function() {
+        beforeEach(function() {
+          translation_key = "inbox";
+        });
+
+        it("return translated and pluralized string", function() {
+          expect(I18n.t(translation_key, {count: 0})).toEqual("You have no messages");
+          expect(I18n.t(translation_key, {count: 1})).toEqual("You have 1 message");
+          expect(I18n.t(translation_key, {count: 5})).toEqual("You have 5 messages");
+        });
+      });
+      describe("and translation key does NOT contain pluralization", function() {
+        beforeEach(function() {
+          translation_key = "hello";
+        });
+
+        it("return translated string ONLY", function() {
+          expect(I18n.t(translation_key, {count: 0})).toEqual("Hello World!");
+          expect(I18n.t(translation_key, {count: 1})).toEqual("Hello World!");
+          expect(I18n.t(translation_key, {count: 5})).toEqual("Hello World!");
+        });
+      });
+    });
+
+    describe("when count is NOT passed in", function() {
+      describe("and translation key does contain pluralization", function() {
+        beforeEach(function() {
+          translation_key = "inbox";
+        });
+
+        var expected_translation_object = {
+          one : 'You have {{count}} message',
+          other : 'You have {{count}} messages',
+          zero : 'You have no messages'
+        }
+
+        it("return translated and pluralized string", function() {
+          expect(I18n.t(translation_key, {not_count: 0})).toEqual(expected_translation_object);
+          expect(I18n.t(translation_key, {not_count: 1})).toEqual(expected_translation_object);
+          expect(I18n.t(translation_key, {not_count: 5})).toEqual(expected_translation_object);
+        });
+      });
+      describe("and translation key does NOT contain pluralization", function() {
+        beforeEach(function() {
+          translation_key = "hello";
+        });
+
+        it("return translated string ONLY", function() {
+          expect(I18n.t(translation_key, {not_count: 0})).toEqual("Hello World!");
+          expect(I18n.t(translation_key, {not_count: 1})).toEqual("Hello World!");
+          expect(I18n.t(translation_key, {not_count: 5})).toEqual("Hello World!");
+        });
+      });
+    });
   });
 
   it("outputs missing placeholder message if interpolation value is missing", function(){
