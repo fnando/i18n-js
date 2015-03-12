@@ -1,19 +1,18 @@
 
 ## Unreleased
 
-- You can now set `I18n.missingBehavior='guess'` to have the scope string output as text instead of of the
-  "[missing `scope`]" message when no translation is available.
-- Combined that with `I18n.missingTranslationPrefix='SOMETHING'` and you can
-  still identify those missing strings.
-
 ### enhancements
 
-- Force currency number sign to be at first place using `sign_first` option, default to `true`
-- Add option `namespace` & `pretty_print` ([#300](https://github.com/fnando/i18n-js/pull/300))
-- Add option `export_i18n_js` ([#301](https://github.com/fnando/i18n-js/pull/301))
-- Now the gem also detects pre-release versions of `rails`
-- Add `:except` option to exclude certain phrases or groups of phrases from the
+- [JS] Force currency number sign to be at first place using `sign_first` option, default to `true`
+- [Ruby] Add option `namespace` & `pretty_print` ([#300](https://github.com/fnando/i18n-js/pull/300))
+- [Ruby] Add option `export_i18n_js` ([#301](https://github.com/fnando/i18n-js/pull/301))
+- [Ruby] Now the gem also detects pre-release versions of `rails`
+- [Ruby] Add `:except` option to exclude certain phrases or groups of phrases from the
   outputted translations ([#312](https://github.com/fnando/i18n-js/pull/312))
+- [JS] You can now set `I18n.missingBehavior='guess'` to have the scope string output as text instead of of the
+  "[missing `scope`]" message when no translation is available.
+- [JS] Combined that with `I18n.missingTranslationPrefix='SOMETHING'` and you can
+  still identify those missing strings.
 
 ### bug fixes
 
