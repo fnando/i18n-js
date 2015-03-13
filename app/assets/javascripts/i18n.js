@@ -18,7 +18,8 @@
     module.exports = factory(this);
   } else if (typeof define === 'function' && define.amd) {
     // AMD
-    define('i18n', (function(global){ return function(){ return factory(global); }})(this));
+    var global=this;
+    define('i18n', function(){ return factory(global);});
   } else {
     // Browser globals
     this.I18n = factory(this);
