@@ -143,7 +143,7 @@ export_i18n_js: "my/path"
 
 translations:
   - ...
-``
+```
 
 To find more examples on how to use the configuration file please refer to the tests.
 
