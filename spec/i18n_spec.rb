@@ -63,13 +63,13 @@ describe SimplesIdeias::I18n do
     set_config "default.yml"
     SimplesIdeias::I18n.setup!
 
-    SimplesIdeias::I18n.config?.should be_true
+    SimplesIdeias::I18n.config?.should eq true
     SimplesIdeias::I18n.config.should be_kind_of(HashWithIndifferentAccess)
     SimplesIdeias::I18n.config.should_not be_empty
   end
 
   it "sets empty hash as configuration when no file is found" do
-    SimplesIdeias::I18n.config?.should be_false
+    SimplesIdeias::I18n.config?.should eq false
     SimplesIdeias::I18n.config.should == {}
   end
 

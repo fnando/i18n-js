@@ -6,6 +6,7 @@ require "pathname"
 require "i18n"
 require "json"
 require "fakeweb"
+require "yaml"
 
 FakeWeb.allow_net_connect = false
 
