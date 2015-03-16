@@ -17,9 +17,10 @@
 - [Ruby] Add `:except` option to exclude certain phrases or groups of phrases from the
   outputted translations ([#312](https://github.com/fnando/i18n-js/pull/312))
 - [JS] You can now set `I18n.missingBehavior='guess'` to have the scope string output as text instead of of the
-  "[missing `scope`]" message when no translation is available.
-- [JS] Combined that with `I18n.missingTranslationPrefix='SOMETHING'` and you can
+  "[missing `scope`]" message when no translation is available.  
+  Combined that with `I18n.missingTranslationPrefix='SOMETHING'` and you can
   still identify those missing strings.
+  ([#304](https://github.com/fnando/i18n-js/pull/304))
 
 ### bug fixes
 
