@@ -29,6 +29,16 @@ module I18n
           end
         end
       end
+
+      def self.deep_key_sort(hash, &block)
+        hash.keys.sort(&block).reduce({}) do |seed, key|
+          seed[key] = hash[key]
+          if seed[key].is_a?(Hash)
+            seed[key] = deep_key_sort(seed[key], &block)
+          end
+          seed
+        end
+      end
     end
   end
 end

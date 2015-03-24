@@ -14,5 +14,5 @@
 }(function(I18n) {
   "use strict";
 
-  I18n.translations = <%= I18n::JS.filtered_translations.to_json %>;
+  I18n.translations = <%= I18n::JS::Utils.deep_key_sort(I18n::JS.filtered_translations).to_json %>;
 }));

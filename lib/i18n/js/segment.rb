@@ -28,10 +28,11 @@ module I18n
 
       # Outputs pretty or ugly JSON depending on :pretty_print option
       def print_json(translations)
+        sorted_translations = Utils.deep_key_sort(translations)
         if pretty_print
-          JSON.pretty_generate(translations)
+          JSON.pretty_generate(sorted_translations)
         else
-          translations.to_json
+          sorted_translations.to_json
         end
       end
     end
