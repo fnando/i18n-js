@@ -55,7 +55,7 @@ describe I18n::JS::Segment do
   end
 
   describe "#save!" do
-    before { allow(I18n::JS).to receive(:export_i18n_js_dir_path).and_return(temp_path) }
+    before { allow(I18n::JS::Exporter).to receive(:export_i18n_js_dir_path).and_return(temp_path) }
     before { subject.save! }
 
     it "should write the file" do

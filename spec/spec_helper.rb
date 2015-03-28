@@ -8,12 +8,12 @@ module Helpers
   # Set the configuration as the current one
   def set_config(path)
     config_file_path = File.dirname(__FILE__) + "/fixtures/#{path}"
-    I18n::JS.stub(:config? => true, :config_file_path => config_file_path)
+    I18n::JS::Exporter.stub(:config? => true, :config_file_path => config_file_path)
   end
 
-  # Shortcut to I18n::JS.translations
+  # Shortcut to I18n::JS::Exporter.translations
   def translations
-    I18n::JS.translations
+    I18n::JS::Exporter.translations
   end
 
   def file_should_exist(name)
