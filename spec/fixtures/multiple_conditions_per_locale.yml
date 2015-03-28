@@ -1,5 +1,7 @@
+fallbacks: false
+
 translations:
   - file: "tmp/i18n-js/bits.%{locale}.js"
     only:
-      - "date.formats"
-      - "number.currency"
+      - "*.date.formats.*"
+      - "*.number.currency.*"

@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe I18n::JS do
+
   describe '.config_file_path' do
     let(:default_path) { I18n::JS::DEFAULT_CONFIG_PATH }
     let(:new_path) { File.join("tmp", default_path) }
@@ -62,6 +63,19 @@ describe I18n::JS do
 
       file_should_exist "en.js"
       file_should_exist "fr.js"
+
+      en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
+      expect(en_output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations["en"] = {"date":{"formats":{"default":"%Y-%m-%d","short":"%b %d","long":"%B %d, %Y"},"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},"admin":{"show":{"title":"Show","note":"more details"},"edit":{"title":"Edit"}}};
+EOS
+)
+      fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "fr.js"))
+      expect(fr_output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations["fr"] = {"date":{"formats":{"default":"%d/%m/%Y","short":"%e %b","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e"},"day_names":["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],"abbr_day_names":["dim","lun","mar","mer","jeu","ven","sam"],"month_names":[null,"janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],"abbr_month_names":[null,"jan.","fév.","mar.","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."]},"admin":{"show":{"title":"Visualiser","note":"plus de détails"},"edit":{"title":"Editer"}}};
+EOS
+)
     end
 
     it "exports with multiple conditions" do
@@ -77,13 +91,22 @@ describe I18n::JS do
       set_config "multiple_conditions_per_locale.yml"
 
       result = I18n::JS.translation_segments
-      result.map(&:file).should eql(["tmp/i18n-js/bits.en.js", "tmp/i18n-js/bits.fr.js"])
+      result.map(&:file).should eql(["tmp/i18n-js/bits.%{locale}.js"])
 
-      %w(en fr).each do |lang|
-        segment = result.select{|s| s.file == "tmp/i18n-js/bits.#{lang}.js"}.first
-        segment.translations.keys.should eql([lang.to_sym])
-        segment.translations[lang.to_sym].keys.sort.should eql([:date, :number])
-      end
+      result.map(&:save!)
+
+      en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.en.js"))
+      expect(en_output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations["en"] = {"date":{"formats":{"default":"%Y-%m-%d","short":"%b %d","long":"%B %d, %Y"}},"number":{"currency":{"format":{"format":"%u%n","unit":"$","separator":".","delimiter":",","precision":2}}}};
+EOS
+)
+      fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.fr.js"))
+      expect(fr_output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations["fr"] = {"date":{"formats":{"default":"%d/%m/%Y","short":"%e %b","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e"}},"number":{"currency":{"format":{"unit":"€","precision":2,"format":"%n %u"}}}};
+EOS
+)
     end
 
     it "exports with :except condition" do
@@ -177,30 +200,27 @@ describe I18n::JS do
 
   context "fallbacks" do
     subject do
-      I18n::JS.translation_segments.inject({}) do |hash, segment|
-        hash[segment.file] = segment.translations
-        hash
-      end
+      I18n::JS.translation_segments.first.translations
     end
 
     it "exports without fallback when disabled" do
       set_config "js_file_per_locale_without_fallbacks.yml"
-      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql(nil)
+      subject[:fr][:fallback_test].should eql(nil)
     end
 
     it "exports with default_locale as fallback when enabled" do
       set_config "js_file_per_locale_with_fallbacks_enabled.yml"
-      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+      subject[:fr][:fallback_test].should eql("Success")
     end
 
     it "exports with default_locale as fallback when enabled with :default_locale" do
       set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
-      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+      subject[:fr][:fallback_test].should eql("Success")
     end
 
     it "exports with given locale as fallback" do
       set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
-      subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+      subject[:fr][:fallback_test].should eql("Erfolg")
     end
 
     context "with I18n::Fallbacks enabled" do
@@ -215,17 +235,17 @@ describe I18n::JS do
 
       it "exports with defined locale as fallback when enabled" do
         set_config "js_file_per_locale_with_fallbacks_enabled.yml"
-        subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+        subject[:fr][:fallback_test].should eql("Erfolg")
       end
 
       it "exports with defined locale as fallback when enabled with :default_locale" do
         set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
-        subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Success")
+        subject[:fr][:fallback_test].should eql("Success")
       end
 
       it "exports with Fallbacks as Hash" do
         set_config "js_file_per_locale_with_fallbacks_as_hash.yml"
-        subject["tmp/i18n-js/fr.js"][:fr][:fallback_test].should eql("Erfolg")
+        subject[:fr][:fallback_test].should eql("Erfolg")
       end
     end
   end
@@ -263,6 +283,8 @@ EOS
   end
 
   context "I18n.available_locales" do
+    # before { allow(I18n::JS).to receive(:fallbacks).and_return(false) }
+
     context "when I18n.available_locales is not set" do
       it "should allow all locales" do
         result = I18n::JS.scoped_translations("*.admin.*.title")
