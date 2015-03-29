@@ -283,7 +283,6 @@ EOS
   end
 
   context "I18n.available_locales" do
-    # before { allow(I18n::JS).to receive(:fallbacks).and_return(false) }
 
     context "when I18n.available_locales is not set" do
       it "should allow all locales" do

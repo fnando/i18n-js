@@ -107,9 +107,9 @@ module I18n
 
       [scopes].flatten.each do |scope|
         translations_without_exceptions = exclude(translations, exceptions)
-        filtered_translations = filter(translations_without_exceptions, scope)
+        filtered_translations = filter(translations_without_exceptions, scope) || {}
 
-        Utils.deep_merge! result, filtered_translations || {}
+        Utils.deep_merge!(result, filtered_translations)
       end
 
       result

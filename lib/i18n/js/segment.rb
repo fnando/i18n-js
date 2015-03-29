@@ -16,16 +16,18 @@ module I18n
 
       # Saves JSON file containing translations
       def save!
-        if file =~ LOCALE_INTERPOLATOR
+        if self.file =~ LOCALE_INTERPOLATOR
           I18n.available_locales.each do |locale|
             write_file(file_for_locale(locale), self.translations.slice(locale))
           end
         else
-          write_file(self.file, self.translations)
+          write_file
         end
       end
 
-      def write_file(_file, _translations)
+      protected
+
+      def write_file(_file = self.file, _translations = self.translations)
         FileUtils.mkdir_p File.dirname(_file)
         File.open(_file, "w+") do |f|
           f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
@@ -34,8 +36,6 @@ module I18n
           end
         end
       end
-
-      protected
 
       # Outputs pretty or ugly JSON depending on :pretty_print option
       def print_json(translations)
