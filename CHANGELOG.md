@@ -8,6 +8,10 @@
 
 ## 3.0.0.rc9
 
+### breaking changes
+
+- [Ruby] In `config/i18n-js.yml`, if you are using `%{locale}` in your filename and are referencing specific translations keys, please add `*.` to the beginning of those keys. ([#320](https://github.com/fnando/i18n-js/pull/320))
+
 ### enhancements
 
 - [JS] Force currency number sign to be at first place using `sign_first` option, default to `true`
@@ -21,6 +25,8 @@
   Combined that with `I18n.missingTranslationPrefix='SOMETHING'` and you can
   still identify those missing strings.
   ([#304](https://github.com/fnando/i18n-js/pull/304))
+- [Ruby] Make handling of per-locale and not-per-locale exporting to be more consistent ([#320](https://github.com/fnando/i18n-js/pull/320))
+- [Ruby] Fix fallback logic to work with not-per-locale files ([#320](https://github.com/fnando/i18n-js/pull/320))
 
 ### bug fixes
 
