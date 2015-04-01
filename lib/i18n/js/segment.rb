@@ -5,6 +5,8 @@ module I18n
     class Segment
       attr_accessor :file, :translations, :namespace, :pretty_print
 
+      LOCALE_INTERPOLATOR = /%\{locale\}/
+
       def initialize(file, translations, options = {})
         @file         = file
         @translations = translations
@@ -14,17 +16,26 @@ module I18n
 
       # Saves JSON file containing translations
       def save!
-        FileUtils.mkdir_p File.dirname(self.file)
-
-        File.open(self.file, "w+") do |f|
-          f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
-          self.translations.each do |locale, translations|
-            f << %(#{self.namespace}.translations["#{locale}"] = #{print_json(translations)};\n);
+        if self.file =~ LOCALE_INTERPOLATOR
+          I18n.available_locales.each do |locale|
+            write_file(file_for_locale(locale), self.translations.slice(locale))
           end
+        else
+          write_file
         end
       end
 
       protected
+
+      def write_file(_file = self.file, _translations = self.translations)
+        FileUtils.mkdir_p File.dirname(_file)
+        File.open(_file, "w+") do |f|
+          f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
+          _translations.each do |locale, translations_for_locale|
+            f << %(#{self.namespace}.translations["#{locale}"] = #{print_json(translations_for_locale)};\n);
+          end
+        end
+      end
 
       # Outputs pretty or ugly JSON depending on :pretty_print option
       def print_json(translations)
@@ -33,6 +44,11 @@ module I18n
         else
           translations.to_json
         end
+      end
+
+      # interpolates filename
+      def file_for_locale(locale)
+        self.file.gsub(LOCALE_INTERPOLATOR, locale.to_s)
       end
     end
   end
