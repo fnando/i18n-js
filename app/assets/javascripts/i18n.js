@@ -331,7 +331,7 @@
   //
   I18n.prepareOptions = function() {
     var args = slice.call(arguments)
-      , options = {}
+      , options = {count: 1}
       , subject
     ;
 
@@ -344,10 +344,6 @@
 
       for (var attr in subject) {
         if (!subject.hasOwnProperty(attr)) {
-          continue;
-        }
-
-        if (this.isSet(options[attr])) {
           continue;
         }
 
