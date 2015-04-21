@@ -3,7 +3,7 @@ require "spec_helper"
 describe I18n::JS::Segment do
 
   let(:file)        { "tmp/i18n-js/segment.js" }
-  let(:translations){ { "en" => { "test" => "Test", "alphabetical_test" => "Test" }, "fr" => { "test" => "Test2" } } }
+  let(:translations){ { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
   let(:namespace)   { "MyNamespace" }
   let(:pretty_print){ nil }
   let(:options)     { {namespace: namespace, pretty_print: pretty_print} }
@@ -58,14 +58,35 @@ describe I18n::JS::Segment do
     before { allow(I18n::JS).to receive(:export_i18n_js_dir_path).and_return(temp_path) }
     before { subject.save! }
 
-    it "should write the file" do
-      file_should_exist "segment.js"
+    context "when file does not include %{locale}" do
+      it "should write the file" do
+        file_should_exist "segment.js"
 
-      File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = {"alphabetical_test":"Test","test":"Test"};
+MyNamespace.translations["en"] = {"test":"Test"};
 MyNamespace.translations["fr"] = {"test":"Test2"};
-EOF
+        EOF
+      end
+    end
+
+    context "when file includes %{locale}" do
+      let(:file){ "tmp/i18n-js/%{locale}.js" }
+
+      it "should write files" do
+        file_should_exist "en.js"
+        file_should_exist "fr.js"
+
+        File.open(File.join(temp_path, "en.js")){|f| f.read}.should eql <<-EOF
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = {"test":"Test"};
+        EOF
+
+        File.open(File.join(temp_path, "fr.js")){|f| f.read}.should eql <<-EOF
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["fr"] = {"test":"Test2"};
+        EOF
+      end
     end
   end
 end

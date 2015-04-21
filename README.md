@@ -97,7 +97,7 @@ translations:
 - file: "public/javascripts/i18n/%{locale}.js"
   only: '*'
 - file: "public/javascripts/frontend/i18n/%{locale}.js"
-  only: ['frontend', 'users']
+  only: ['*.frontend', '*.users.*']
 ```
 
 You can also include ERB in your config file.

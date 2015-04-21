@@ -34,17 +34,6 @@ module I18n
       translation_segments.each(&:save!)
     end
 
-    def self.segments_per_locale(pattern, scope, exceptions, options)
-      I18n.available_locales.each_with_object([]) do |locale, segments|
-        scope = [scope] unless scope.respond_to?(:each)
-        result = scoped_translations(scope.collect{|s| "#{locale}.#{s}"}, exceptions)
-        merge_with_fallbacks!(result, locale, scope, exceptions) if use_fallbacks?
-
-        next if result.empty?
-        segments << Segment.new(::I18n.interpolate(pattern, {:locale => locale}), result, options)
-      end
-    end
-
     def self.segment_for_scope(scope, exceptions)
       if scope == "*"
         exclude(translations, exceptions)
@@ -61,14 +50,23 @@ module I18n
 
         segment_options = options.slice(:namespace, :pretty_print)
 
-        if file =~ ::I18n::INTERPOLATION_PATTERN
-          segments += segments_per_locale(file, only, exceptions, segment_options)
-        else
-          result = segment_for_scope(only, exceptions)
-          segments << Segment.new(file, result, segment_options) unless result.empty?
-        end
+        result = segment_for_scope(only, exceptions)
+
+        merge_with_fallbacks!(result) if fallbacks
+
+        segments << Segment.new(file, result, segment_options) unless result.empty?
 
         segments
+      end
+    end
+
+    # deep_merge! given result with result for fallback locale
+    def self.merge_with_fallbacks!(result)
+      I18n.available_locales.each do |locale|
+        fallback_locales = FallbackLocales.new(fallbacks, locale)
+        fallback_locales.each do |fallback_locale|
+          result[locale] = Utils.deep_merge(result[fallback_locale], result[locale] || {})
+        end
       end
     end
 
@@ -110,9 +108,9 @@ module I18n
 
       [scopes].flatten.each do |scope|
         translations_without_exceptions = exclude(translations, exceptions)
-        filtered_translations = filter(translations_without_exceptions, scope)
+        filtered_translations = filter(translations_without_exceptions, scope) || {}
 
-        Utils.deep_merge! result, filtered_translations
+        Utils.deep_merge!(result, filtered_translations)
       end
 
       result
@@ -164,17 +162,6 @@ module I18n
       config.fetch(:fallbacks) do
         # default value
         true
-      end
-    end
-
-    # deep_merge! given result with result for fallback locale
-    def self.merge_with_fallbacks!(result, locale, scope, exceptions)
-      result[locale] ||= {}
-      fallback_locales = FallbackLocales.new(fallbacks, locale)
-
-      fallback_locales.each do |fallback_locale|
-        fallback_result = scoped_translations(scope.collect{|s| "#{fallback_locale}.#{s}"}, exceptions) # NOTE: Duplicated code here
-        result[locale] = Utils.deep_merge(fallback_result[fallback_locale], result[locale])
       end
     end
 
