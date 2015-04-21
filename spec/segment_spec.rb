@@ -3,7 +3,7 @@ require "spec_helper"
 describe I18n::JS::Segment do
 
   let(:file)        { "tmp/i18n-js/segment.js" }
-  let(:translations){ { "en" => { "test" => "Test" }, "fr" => { "test" => "Test2" } } }
+  let(:translations){ { "en" => { "test" => "Test", "alphabetical_test" => "Test" }, "fr" => { "test" => "Test2" } } }
   let(:namespace)   { "MyNamespace" }
   let(:pretty_print){ nil }
   let(:options)     { {namespace: namespace, pretty_print: pretty_print} }
@@ -63,7 +63,7 @@ describe I18n::JS::Segment do
 
       File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = {"test":"Test"};
+MyNamespace.translations["en"] = {"alphabetical_test":"Test","test":"Test"};
 MyNamespace.translations["fr"] = {"test":"Test2"};
 EOF
     end

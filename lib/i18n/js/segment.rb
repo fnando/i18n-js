@@ -19,7 +19,8 @@ module I18n
         File.open(self.file, "w+") do |f|
           f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
           self.translations.each do |locale, translations|
-            f << %(#{self.namespace}.translations["#{locale}"] = #{print_json(translations)};\n);
+            output_translations = I18n::JS.sort_translation_keys? ? Utils.deep_key_sort(translations) : translations
+            f << %(#{self.namespace}.translations["#{locale}"] = #{print_json(output_translations)};\n);
           end
         end
       end
@@ -28,11 +29,10 @@ module I18n
 
       # Outputs pretty or ugly JSON depending on :pretty_print option
       def print_json(translations)
-        sorted_translations = Utils.deep_key_sort(translations)
         if pretty_print
-          JSON.pretty_generate(sorted_translations)
+          JSON.pretty_generate(translations)
         else
-          sorted_translations.to_json
+          translations.to_json
         end
       end
     end

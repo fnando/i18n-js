@@ -73,11 +73,12 @@ module I18n
     end
 
     def self.filtered_translations
-      {}.tap do |result|
+      translations = {}.tap do |result|
         translation_segments.each do |segment|
           Utils.deep_merge!(result, segment.translations)
         end
       end
+      Utils.deep_key_sort(translations) if I18n::JS.sort_translation_keys?
     end
 
     def self.translation_segments
@@ -175,6 +176,16 @@ module I18n
         fallback_result = scoped_translations(scope.collect{|s| "#{fallback_locale}.#{s}"}, exceptions) # NOTE: Duplicated code here
         result[locale] = Utils.deep_merge(fallback_result[fallback_locale], result[locale])
       end
+    end
+
+    def self.sort_translation_keys?
+      @sort_translation_keys ||= (config[:sort_translation_keys]) if config.has_key?(:sort_translation_keys)
+      @sort_translation_keys = true if @sort_translation_keys.nil?
+      @sort_translation_keys
+    end
+
+    def self.sort_translation_keys=(value)
+      @sort_translation_keys = !!value
     end
 
     ### Export i18n.js

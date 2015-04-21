@@ -401,4 +401,78 @@ EOS
       end
     end
   end
+
+  describe "translation key sorting" do
+
+    describe ".sort_translation_keys with config" do
+
+      subject { described_class.sort_translation_keys? }
+
+      context 'when :sort_translation_keys is not set in config' do
+        before { set_config "default.yml"}
+
+        it { should eq true }
+      end
+
+      context 'when :sort_translation_keys set to true in config' do
+        before { set_config "js_sort_translation_keys_true.yml"}
+
+        it { should eq true }
+      end
+
+      context 'when :sort_translation_keys set to false in config' do
+        before { set_config "js_sort_translation_keys_false.yml"}
+
+        it { should eq true }
+      end
+    end
+
+    describe '.sort_translation_keys?' do
+      after { described_class.send(:remove_instance_variable, :@sort_translation_keys) }
+
+      subject { described_class.sort_translation_keys? }
+
+      context "when it is not set" do
+        it { should eq true }
+      end
+
+      context "when it is set to true" do
+        before { described_class.sort_translation_keys = true }
+
+        it { should eq true }
+      end
+
+      context "when it is set to false" do
+        before { described_class.sort_translation_keys = false }
+
+        it { should eq false }
+      end
+    end
+
+    context "sort_translation_keys option" do
+
+      subject {
+        I18n::JS.export
+        file_should_exist "en.js"
+        File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
+      }
+
+      before do
+        stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+      end
+
+      context 'true' do
+        before :each do
+          set_config "js_sort_translation_keys_true.yml"
+        end
+
+        it "exports with the keys sorted" do
+          correct_output = File.read(File.dirname(__FILE__) + "/fixtures/js_sort_translation_keys_true_output.js")
+
+          expect(subject).to eq correct_output
+        end
+      end
+    end
+
+  end
 end

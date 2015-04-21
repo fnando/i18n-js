@@ -134,12 +134,21 @@ translations:
   - Any `String`: considered as a relative path for a folder to `Rails.root` and export `i18n.js` to that folder for `rake i18n:js:export`
   - Any non-`String` (`nil`, `false`, `:none`, etc): Disable `i18n.js` exporting
 
-- You may also set `export_i18n_js` in your config file, e.g.:
+- `I18n::JS.sort_translation_keys`
+  Expected Type: `Boolean`
+  Default: `true`
+  Behaviour:
+  - Sets whether or not to deep sort all translation keys in order to generate identical output for the same translations
+  - Set to true to ensure identical asset fingerprints for the asset pipeline
+
+- You may also set `export_i18n_js` and `sort_translation_keys` in your config file, e.g.:
 
 ```yaml
 export_i18n_js_: false
 # OR
 export_i18n_js: "my/path"
+
+sort_translation_keys: false
 
 translations:
   - ...
