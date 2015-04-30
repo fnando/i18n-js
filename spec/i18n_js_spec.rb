@@ -426,31 +426,36 @@ EOS
   describe "translation key sorting" do
 
     describe ".sort_translation_keys with config" do
-
+      after { described_class.send(:remove_instance_variable, :@sort_translation_keys) }
       subject { described_class.sort_translation_keys? }
 
       context 'when :sort_translation_keys is not set in config' do
-        before { set_config "default.yml"}
+        before :each do
+          set_config "default.yml"
+        end
 
         it { should eq true }
       end
 
       context 'when :sort_translation_keys set to true in config' do
-        before { set_config "js_sort_translation_keys_true.yml"}
+        before :each do
+          set_config "js_sort_translation_keys_true.yml"
+        end
 
         it { should eq true }
       end
 
       context 'when :sort_translation_keys set to false in config' do
-        before { set_config "js_sort_translation_keys_false.yml"}
+        before :each do
+          set_config "js_sort_translation_keys_false.yml"
+        end
 
-        it { should eq true }
+        it { should eq false }
       end
     end
 
     describe '.sort_translation_keys?' do
       after { described_class.send(:remove_instance_variable, :@sort_translation_keys) }
-
       subject { described_class.sort_translation_keys? }
 
       context "when it is not set" do
@@ -472,11 +477,11 @@ EOS
 
     context "sort_translation_keys option" do
 
-      subject {
+      subject do
         I18n::JS.export
         file_should_exist "en.js"
         File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
-      }
+      end
 
       before do
         stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)

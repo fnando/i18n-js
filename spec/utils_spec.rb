@@ -68,21 +68,12 @@ describe I18n::JS::Utils do
   end
 
   describe ".deep_key_sort" do
-    it "performs a deep keys sort" do
-      hash = {:z => {:b => 1, :a => 2}, :y => 3}
-
-      result = described_class.deep_key_sort(hash)
-
-      result.should eql({:y => 3, :z => {:a => 2, :b => 1}})
-    end
+    let(:unsorted_hash) { {:z => {:b => 1, :a => 2}, :y => 3} }
+    subject { described_class.deep_key_sort(unsorted_hash) }
 
     it "performs a deep keys sort without changing the original hash" do
-      hash = {:z => {:b => 1, :a => 2}, :y => 3}
-
-      result = described_class.deep_key_sort(hash)
-
-      result.should eql({:y => 3, :z => {:a => 2, :b => 1}})
-      hash.should eql({:z => {:b => 1, :a => 2}, :y => 3})
+      should eql({:y => 3, :z => {:a => 2, :b => 1}})
+      unsorted_hash.should eql({:z => {:b => 1, :a => 2}, :y => 3})
     end
   end
 end
