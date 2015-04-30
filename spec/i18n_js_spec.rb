@@ -425,58 +425,59 @@ EOS
 
   describe "translation key sorting" do
 
-    describe ".sort_translation_keys with config" do
+    describe ".sort_translation_keys?" do
       after { described_class.send(:remove_instance_variable, :@sort_translation_keys) }
       subject { described_class.sort_translation_keys? }
 
-      context 'when :sort_translation_keys is not set in config' do
-        before :each do
-          set_config "default.yml"
+
+      context "set with config" do
+
+        context 'when :sort_translation_keys is not set in config' do
+          before :each do
+            set_config "default.yml"
+          end
+
+          it { should eq true }
         end
 
-        it { should eq true }
+        context 'when :sort_translation_keys set to true in config' do
+          before :each do
+            set_config "js_sort_translation_keys_true.yml"
+          end
+
+          it { should eq true }
+        end
+
+        context 'when :sort_translation_keys set to false in config' do
+          before :each do
+            set_config "js_sort_translation_keys_false.yml"
+          end
+
+          it { should eq false }
+        end
       end
 
-      context 'when :sort_translation_keys set to true in config' do
-        before :each do
-          set_config "js_sort_translation_keys_true.yml"
+      context 'set by .sort_translation_keys' do
+
+        context "when it is not set" do
+          it { should eq true }
         end
 
-        it { should eq true }
-      end
+        context "when it is set to true" do
+          before { described_class.sort_translation_keys = true }
 
-      context 'when :sort_translation_keys set to false in config' do
-        before :each do
-          set_config "js_sort_translation_keys_false.yml"
+          it { should eq true }
         end
 
-        it { should eq false }
+        context "when it is set to false" do
+          before { described_class.sort_translation_keys = false }
+
+          it { should eq false }
+        end
       end
     end
 
-    describe '.sort_translation_keys?' do
-      after { described_class.send(:remove_instance_variable, :@sort_translation_keys) }
-      subject { described_class.sort_translation_keys? }
-
-      context "when it is not set" do
-        it { should eq true }
-      end
-
-      context "when it is set to true" do
-        before { described_class.sort_translation_keys = true }
-
-        it { should eq true }
-      end
-
-      context "when it is set to false" do
-        before { described_class.sort_translation_keys = false }
-
-        it { should eq false }
-      end
-    end
-
-    context "sort_translation_keys option" do
-
+    context "exporting" do
       subject do
         I18n::JS.export
         file_should_exist "en.js"
@@ -487,7 +488,7 @@ EOS
         stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
       end
 
-      context 'true' do
+      context 'sort_translation_keys is true' do
         before :each do
           set_config "js_sort_translation_keys_true.yml"
         end
