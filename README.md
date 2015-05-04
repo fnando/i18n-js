@@ -358,14 +358,21 @@ becomes "what is your favorite Christmas present"
 
 In order to still detect untranslated strings, you can
 i18n.missingTranslationPrefix to something like:
-
-  I18n.missingTranslationPrefix = 'EE: '
+```javascript
+I18n.missingTranslationPrefix = 'EE: ';
+```
 
 And result will be:
-
-    "EE: what is your favorite Christmas present"
+```javascript
+"EE: what is your favorite Christmas present"
+```
 
 This will help you doing automated tests against your localisation assets.
+
+Some people prefer returning `null` for missing translation:
+```javascript
+I18n.missingTranslation = function () { return undefined; };
+```
 
 Pluralization is possible as well and by default provides English rules:
 
