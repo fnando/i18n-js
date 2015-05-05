@@ -8,6 +8,7 @@
 ### enhancements
 
 - [Ruby] Make handling of per-locale and not-per-locale exporting to be more consistent ([#320](https://github.com/fnando/i18n-js/pull/320))
+- [Ruby] Add option `sort_translation_keys` to sort translation keys alphabetically ([#318](https://github.com/fnando/i18n-js/pull/318))
 
 ### bug fixes
 
