@@ -226,6 +226,19 @@ EOS
       result[:fr][:admin][:edit].should be_empty
     end
 
+    it "does not include scopes listed in the exceptions list" do
+      result = I18n::JS.scoped_translations("*", ['de.*', '*.admin', '*.*.currency'])
+
+      result[:de].should be_empty
+
+      result[:en][:admin].should be_nil
+      result[:fr][:admin].should be_nil
+      result[:ja][:admin].should be_nil
+
+      result[:en][:number][:currency].should be_nil
+      result[:fr][:number][:currency].should be_nil
+    end
+
     it "does not include a key listed in the exceptions list and respecs the 'only' option" do
       result = I18n::JS.scoped_translations("fr.*", ['date', 'time', 'number', 'show'])
 

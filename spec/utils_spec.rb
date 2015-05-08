@@ -76,4 +76,19 @@ describe I18n::JS::Utils do
       unsorted_hash.should eql({:z => {:b => 1, :a => 2}, :y => 3})
     end
   end
+
+  describe ".scopes_match?" do
+    it "performs a comparison of literal scopes" do
+      described_class.scopes_match?([:a, :b], [:a, :b, :c]).should_not eql true
+      described_class.scopes_match?([:a, :b, :c], [:a, :b, :c]).should eql true
+      described_class.scopes_match?([:a, :b, :c], [:a, :b, :d]).should_not eql true
+    end
+
+    it "performs a comparison of wildcard scopes" do
+      described_class.scopes_match?([:a, '*'], [:a, :b, :c]).should_not eql true
+      described_class.scopes_match?([:a, '*', :c], [:a, :b, :c]).should eql true
+      described_class.scopes_match?([:a, :b, :c], [:a, '*', :c]).should eql true
+      described_class.scopes_match?([:a, :b, :c], [:a, '*', '*']).should eql true
+    end
+  end
 end

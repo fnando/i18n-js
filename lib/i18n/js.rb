@@ -122,8 +122,9 @@ module I18n
       return translations if exceptions.empty?
 
       exceptions.inject(translations) do |memo, exception|
-        Utils.deep_reject(memo) do |key, value|
-          key.to_s == exception.to_s
+        exception_scopes = exception.to_s.split(".")
+        Utils.deep_reject(memo) do |key, value, scopes|
+          key.to_s == exception.to_s or Utils.scopes_match?(scopes, exception_scopes)
         end
       end
     end
