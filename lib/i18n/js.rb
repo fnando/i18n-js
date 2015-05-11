@@ -124,7 +124,7 @@ module I18n
       exceptions.inject(translations) do |memo, exception|
         exception_scopes = exception.to_s.split(".")
         Utils.deep_reject(memo) do |key, value, scopes|
-          key.to_s == exception.to_s || Utils.scopes_match?(scopes, exception_scopes)
+          Utils.scopes_match?(scopes, exception_scopes)
         end
       end
     end

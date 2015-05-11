@@ -208,24 +208,6 @@ EOS
   end
 
   context "exceptions" do
-    it "does not include a key listed in the exceptions list" do
-      result = I18n::JS.scoped_translations("*", ['admin'])
-
-      result[:en][:admin].should be_nil
-      result[:fr][:admin].should be_nil
-    end
-
-    it "does not include multiple keys listed in the exceptions list" do
-      result = I18n::JS.scoped_translations("*", ['title', 'note'])
-
-      result[:en][:admin][:show].should be_empty
-      result[:en][:admin][:edit].should be_empty
-
-      result[:fr][:admin][:show].should be_empty
-      result[:fr][:admin][:show].should be_empty
-      result[:fr][:admin][:edit].should be_empty
-    end
-
     it "does not include scopes listed in the exceptions list" do
       result = I18n::JS.scoped_translations("*", ['de.*', '*.admin', '*.*.currency'])
 
@@ -239,19 +221,40 @@ EOS
       result[:fr][:number][:currency].should be_nil
     end
 
-    it "does not include a key listed in the exceptions list and respecs the 'only' option" do
-      result = I18n::JS.scoped_translations("fr.*", ['date', 'time', 'number', 'show'])
+    it "does not include scopes listed in the exceptions list and respects the 'only' option" do
+      result = I18n::JS.scoped_translations("fr.*", ['*.admin', '*.*.currency'])
 
       result[:en].should be_nil
       result[:de].should be_nil
       result[:ja].should be_nil
 
-      result[:fr][:date].should be_nil
-      result[:fr][:time].should be_nil
-      result[:fr][:number].should be_nil
-      result[:fr][:admin][:show].should be_nil
+      result[:fr][:admin].should be_nil
+      result[:fr][:number][:currency].should be_nil
 
-      result[:fr][:admin][:edit][:title].should be_a(String)
+      result[:fr][:time][:am].should be_a(String)
+    end
+
+    it "does exclude absolute scopes listed in the exceptions list" do
+      result = I18n::JS.scoped_translations("*", ['de', 'en.admin', 'fr.number.currency'])
+
+      result[:de].should be_nil
+
+      result[:en].should be_a(Hash)
+      result[:en][:admin].should be_nil
+
+      result[:fr][:number].should be_a(Hash)
+      result[:fr][:number][:currency].should be_nil
+    end
+
+    it "does not exclude non-absolute scopes listed in the exceptions list" do
+      result = I18n::JS.scoped_translations("*", ['admin', 'currency'])
+
+      result[:en][:admin].should be_a(Hash)
+      result[:fr][:admin].should be_a(Hash)
+      result[:ja][:admin].should be_a(Hash)
+
+      result[:en][:number][:currency].should be_a(Hash)
+      result[:fr][:number][:currency].should be_a(Hash)
     end
   end
 

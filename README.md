@@ -116,7 +116,7 @@ keys listed in `except` configuration param:
 
 ```yaml
 translations:
-  - except: ['active_admin', 'ransack']
+  - except: ['*.active_admin', '*.ransack', '*.activerecord.errors']
 ```
 
 
