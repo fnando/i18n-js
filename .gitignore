@@ -1,5 +1,5 @@
-doc
-coverage
 pkg
-spec/tmp
-.DS_Store
+node_modules
+Gemfile.lock
+.idea/
+gemfiles/*.gemfile.lock
