@@ -33,7 +33,7 @@ module I18n
       def self.scopes_match?(scopes1, scopes2)
         if scopes1.length == scopes2.length
           [scopes1, scopes2].transpose.all? do |scope1, scope2|
-            scope1.to_s == '*' or scope2.to_s == '*' or scope1.to_s == scope2.to_s
+            scope1.to_s == '*' || scope2.to_s == '*' || scope1.to_s == scope2.to_s
           end
         end
       end
