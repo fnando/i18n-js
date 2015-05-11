@@ -161,6 +161,50 @@ EOS
       result[:en][:admin][:edit][:title].should eql("Edit")
       result[:fr][:admin][:edit][:title].should eql("Editer")
     end
+
+    describe ".filtered_translations" do
+      subject do
+        I18n::JS.filtered_translations
+      end
+
+      let!(:old_sort_translation_keys) { I18n::JS.sort_translation_keys? }
+      before { I18n::JS.sort_translation_keys = sort_translation_keys_value }
+      after { I18n::JS.sort_translation_keys = old_sort_translation_keys }
+      before { expect(I18n::JS.sort_translation_keys?).to eq(sort_translation_keys_value) }
+
+      let(:sorted_hash) do
+        {sorted: :hash}
+      end
+      before do
+        allow(I18n::JS::Utils).
+          to receive(:deep_key_sort).
+          and_return(sorted_hash)
+      end
+
+      shared_examples_for ".filtered_translations" do
+        subject do
+          I18n::JS.filtered_translations
+        end
+
+        # This example is to prevent the regression from
+        # PR https://github.com/fnando/i18n-js/pull/318
+        it {should be_a(Hash)}
+        # Might need to test the keys... or not
+      end
+
+      context "when translation keys SHOULD be sorted" do
+        let(:sort_translation_keys_value) { true }
+
+        it_behaves_like ".filtered_translations"
+        it {should eq(sorted_hash)}
+      end
+      context "when translation keys should NOT be sorted" do
+        let(:sort_translation_keys_value) { false }
+
+        it_behaves_like ".filtered_translations"
+        it {should_not eq(sorted_hash)}
+      end
+    end
   end
 
   context "exceptions" do

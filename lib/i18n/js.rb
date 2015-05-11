@@ -76,7 +76,8 @@ module I18n
           Utils.deep_merge!(result, segment.translations)
         end
       end
-      Utils.deep_key_sort(translations) if I18n::JS.sort_translation_keys?
+      return Utils.deep_key_sort(translations) if I18n::JS.sort_translation_keys?
+      translations
     end
 
     def self.translation_segments
