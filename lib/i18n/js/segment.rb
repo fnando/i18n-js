@@ -32,7 +32,8 @@ module I18n
         File.open(_file, "w+") do |f|
           f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
           _translations.each do |locale, translations_for_locale|
-            f << %(#{self.namespace}.translations["#{locale}"] = #{print_json(translations_for_locale)};\n);
+            output_translations = I18n::JS.sort_translation_keys? ? Utils.deep_key_sort(translations_for_locale) : translations_for_locale
+            f << %(#{self.namespace}.translations["#{locale}"] = #{print_json(output_translations)};\n);
           end
         end
       end
