@@ -4,6 +4,7 @@
 ### breaking changes
 
 - [Ruby] In `config/i18n-js.yml`, if you are using `%{locale}` in your filename and are referencing specific translations keys, please add `*.` to the beginning of those keys. ([#320](https://github.com/fnando/i18n-js/pull/320))
+- [Ruby] The `:except` option to exclude certain phrases now (only) accepts the same patterns the `:only` option accepts
 
 ### enhancements
 
