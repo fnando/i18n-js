@@ -31,7 +31,7 @@ module I18n
       end
 
       def save_cache(new_cache)
-        FileUtils.mkdir_p(cache_dir)
+        FileUtils.mkdir_p(cache_dir) unless File.exists?(cache_dir)
         File.open(cache_path, "w+") do |file|
           file << new_cache.to_yaml
         end
