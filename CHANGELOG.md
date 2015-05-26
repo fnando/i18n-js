@@ -35,6 +35,7 @@
 ### bug fixes
 
 - [JS] Fix missing translation message when scope is passed in options
+- [Ruby] Fix save cache directory verification when path is a symbolic link ([#329](https://github.com/fnando/i18n-js/pull/329))
 
 
 ## 3.0.0.rc8
