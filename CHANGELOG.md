@@ -27,7 +27,7 @@
 - [Ruby] Add `:except` option to exclude certain phrases or groups of phrases from the
   outputted translations ([#312](https://github.com/fnando/i18n-js/pull/312))
 - [JS] You can now set `I18n.missingBehavior='guess'` to have the scope string output as text instead of of the
-  "[missing `scope`]" message when no translation is available.
+  "[missing `scope`]" message when no translation is available.  
   Combined that with `I18n.missingTranslationPrefix='SOMETHING'` and you can
   still identify those missing strings.
   ([#304](https://github.com/fnando/i18n-js/pull/304))
@@ -43,8 +43,8 @@
 ### enhancements
 
 - Add support for loading via AMD and CommonJS module loaders ([#266](https://github.com/fnando/i18n-js/pull/266))
-- Add `I18n.nullPlaceholder`
-  Defaults to I18n.missingPlaceholder (`[missing {{name}} value]`)
+- Add `I18n.nullPlaceholder`  
+  Defaults to I18n.missingPlaceholder (`[missing {{name}} value]`)  
   Set to `function() {return "";}` to match Ruby `I18n.t("name: %{name}", name: nil)`
 - For date formatting, you can now also add placeholders to the date format, see README for detail
 - Add fallbacks option to `i18n-js.yml`, defaults to `true`
@@ -54,8 +54,8 @@
 - Fix factory initialization so that the Node/CommonJS branch only gets executed if the environment is Node/CommonJS
   (it currently will execute if module is defined in the global scope, which occurs with QUnit, for example)
 - Fix pluralization rules selection for negative `count` (e.g. `-1` was lead to use `one` for pluralization) ([#268](https://github.com/fnando/i18n-js/pull/268))
-- Remove check for `Rails.configuration.assets.compile` before telling Sprockets the dependency of translations JS file
-  This might be the reason of many "cache not expired" issues
+- Remove check for `Rails.configuration.assets.compile` before telling Sprockets the dependency of translations JS file  
+  This might be the reason of many "cache not expired" issues  
   Discovered/reported in #277
 
 ## 3.0.0.rc7
@@ -63,11 +63,11 @@
 ### enhancements
 
 - The Rails Engine initializer is now named as `i18n-js.register_preprocessor` (https://github.com/fnando/i18n-js/pull/261)
-- Rename `I18n::JS.config_file` to `I18n::JS.config_file_path` and make it configurable
+- Rename `I18n::JS.config_file` to `I18n::JS.config_file_path` and make it configurable  
   Expected a `String`, default is still `config/i18n-js.yml`
 - When running `rake i18n:js:export`, the `i18n.js` will also be exported to `I18n::JS.export_i18n_js_dir_path` by default
-- Add `I18n::JS.export_i18n_js_dir_path`
-  Expected a `String`, default is `public/javascripts`
+- Add `I18n::JS.export_i18n_js_dir_path`  
+  Expected a `String`, default is `public/javascripts`  
   Set to `nil` will disable exporting `i18n.js`
 
 ### bug fixes
