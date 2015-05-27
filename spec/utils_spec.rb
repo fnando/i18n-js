@@ -69,11 +69,23 @@ describe I18n::JS::Utils do
 
   describe ".deep_key_sort" do
     let(:unsorted_hash) { {:z => {:b => 1, :a => 2}, :y => 3} }
-    subject { described_class.deep_key_sort(unsorted_hash) }
+    subject(:sorting) { described_class.deep_key_sort(unsorted_hash) }
 
     it "performs a deep keys sort without changing the original hash" do
       should eql({:y => 3, :z => {:a => 2, :b => 1}})
       unsorted_hash.should eql({:z => {:b => 1, :a => 2}, :y => 3})
+    end
+
+    # Idea from gem `rails_admin`
+    context "when hash contain non-Symbol as key" do
+      let(:unsorted_hash) { {:z => {1 => 1, true => 2}, :y => 3} }
+
+      it "performs a deep keys sort without error" do
+        expect{ sorting }.to_not raise_error
+      end
+      it "converts keys to symbols" do
+        should eql({:y => 3, :z => {1 => 1, true => 2}})
+      end
     end
   end
 
