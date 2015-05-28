@@ -4,7 +4,7 @@ module I18n
       MAJOR = 3
       MINOR = 0
       PATCH = 0
-      STRING = "#{MAJOR}.#{MINOR}.#{PATCH}.rc9"
+      STRING = "#{MAJOR}.#{MINOR}.#{PATCH}.rc10"
     end
   end
 end
