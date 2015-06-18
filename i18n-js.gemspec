@@ -20,9 +20,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency "i18n", "~> 0.6"
   s.add_development_dependency "appraisal", "~> 2.0"
-  s.add_development_dependency "activesupport", ">= 3"
+  s.add_development_dependency "activesupport", ">= 3.2.22"
   s.add_development_dependency "rspec", "~> 3.0"
-  s.add_development_dependency "rake"
+  s.add_development_dependency "rake", "~> 10.0"
   s.add_development_dependency "gem-release", ">= 0.7"
 
   s.required_ruby_version = ">= 1.9.3"
