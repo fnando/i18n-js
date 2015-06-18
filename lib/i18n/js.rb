@@ -65,7 +65,8 @@ module I18n
       I18n.available_locales.each do |locale|
         fallback_locales = FallbackLocales.new(fallbacks, locale)
         fallback_locales.each do |fallback_locale|
-          result[locale] = Utils.deep_merge(result[fallback_locale], result[locale] || {})
+          # `result[fallback_locale]` could be missing
+          result[locale] = Utils.deep_merge(result[fallback_locale] || {}, result[locale] || {})
         end
       end
     end
