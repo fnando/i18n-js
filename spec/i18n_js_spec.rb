@@ -259,7 +259,7 @@ EOS
   end
 
   context "fallbacks" do
-    subject do
+    subject(:translations) do
       I18n::JS.translation_segments.first.translations
     end
 
@@ -281,6 +281,23 @@ EOS
     it "exports with given locale as fallback" do
       set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
       subject[:fr][:fallback_test].should eql("Erfolg")
+    end
+
+    context "when given locale is in `I18n.available_locales` but its translation is missing" do
+      subject { translations[:fr][:fallback_test] }
+
+      let(:new_locale) { :pirate }
+      let!(:old_available_locales) { I18n.config.available_locales }
+      let!(:new_available_locales) { I18n.config.available_locales + [new_locale] }
+      before do
+        I18n.config.available_locales = new_available_locales
+        set_config "js_file_per_locale_with_fallbacks_as_locale_without_fallback_translations.yml"
+      end
+      after do
+        I18n.config.available_locales = old_available_locales
+      end
+
+      it {should eql(nil)}
     end
 
     context "with I18n::Fallbacks enabled" do
