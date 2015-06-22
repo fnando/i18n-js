@@ -8,6 +8,7 @@
 ### bug fixes
 
 - [Ruby] Handle fallback locale without any translation properly
+- [Ruby] Prevent translation entry with null value to override value in fallback locale(s), if enabled
 
 
 ## 3.0.0.rc10
