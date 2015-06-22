@@ -2,8 +2,9 @@ module I18n
   module JS
     module Utils
       # deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
-      MERGER = proc do |key, v1, v2|
-        Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2
+      # The last result is modified to treat `nil` as missing key
+      MERGER = proc do |_key, v1, v2|
+        Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : (v2.nil? ? v1 : v2)
       end
 
       HASH_NIL_VALUE_CLEANER_PROC = proc do |k, v|
