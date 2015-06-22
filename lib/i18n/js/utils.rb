@@ -3,7 +3,15 @@ module I18n
     module Utils
       # deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
       MERGER = proc do |key, v1, v2|
-        Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2
+        if Hash === v1 && Hash === v2
+          v1.merge(v2, &MERGER)
+        elsif v2.nil?
+          # Don't allow nil values to overwrite values in target hash
+          v1
+        else
+          # Overwrite value in target hash
+          v2
+        end
       end
 
       HASH_NIL_VALUE_CLEANER_PROC = proc do |k, v|
