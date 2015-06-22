@@ -36,9 +36,11 @@ en:
       title: "Edit"
   foo: "Foo"
   fallback_test: "Success"
+  null_test: "fallback for null"
 
 de:
   fallback_test: "Erfolg"
+  null_test: ~
 
 fr:
   date:

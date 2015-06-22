@@ -266,21 +266,29 @@ EOS
     it "exports without fallback when disabled" do
       set_config "js_file_per_locale_without_fallbacks.yml"
       subject[:fr][:fallback_test].should eql(nil)
+      subject[:fr][:null_test].should eql(nil)
+      subject[:de][:null_test].should eql(nil)
     end
 
     it "exports with default_locale as fallback when enabled" do
       set_config "js_file_per_locale_with_fallbacks_enabled.yml"
       subject[:fr][:fallback_test].should eql("Success")
+      subject[:fr][:null_test].should eql("fallback for null")
+      subject[:de][:null_test].should eql("fallback for null")
     end
 
     it "exports with default_locale as fallback when enabled with :default_locale" do
       set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
       subject[:fr][:fallback_test].should eql("Success")
+      subject[:fr][:null_test].should eql("fallback for null")
+      subject[:de][:null_test].should eql("fallback for null")
     end
 
     it "exports with given locale as fallback" do
       set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
       subject[:fr][:fallback_test].should eql("Erfolg")
+      subject[:fr][:null_test].should eql(nil)
+      subject[:de][:null_test].should eql(nil)
     end
 
     context "when given locale is in `I18n.available_locales` but its translation is missing" do
@@ -573,7 +581,7 @@ EOS
         it "exports with the keys sorted" do
           expect(subject).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}};
+I18n.translations["en"] = {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","null_test":"fallback for null","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}};
 EOS
 )
         end
