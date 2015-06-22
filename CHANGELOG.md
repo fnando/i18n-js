@@ -7,8 +7,8 @@
 
 ### bug fixes
 
-- [Ruby] Handle fallback locale without any translation properly
-- [Ruby] Prevent translation entry with null value to override value in fallback locale(s), if enabled
+- [Ruby] Handle fallback locale without any translation properly ([#338](https://github.com/fnando/i18n-js/pull/338))
+- [Ruby] Prevent translation entry with null value to override value in fallback locale(s), if enabled ([#334](https://github.com/fnando/i18n-js/pull/334))
 
 
 ## 3.0.0.rc10
