@@ -37,6 +37,13 @@ describe I18n::JS::Utils do
 
       target[:a].should eql({:b => 1, :c => 2})
     end
+
+    it "ignores nil values" do
+      target = {:a => {:b => 1}}
+      result = described_class.deep_merge(target, {:a => {:b => nil}})
+
+      result[:a].should eql({:b => 1})
+    end
   end
 
   describe ".deep_reject" do
