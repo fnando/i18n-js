@@ -7,6 +7,8 @@
 
 ### bug fixes
 
+- [Ruby] Handle fallback locale without any translation properly
+
 
 ## 3.0.0.rc10
 
