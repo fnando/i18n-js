@@ -22,17 +22,18 @@ Features:
 #### Rails app
 
 Add the gem to your Gemfile.
-
-    source "https://rubygems.org"
-    gem "rails", "your_rails_version"
-    # You only need this RC version constraint during the development of `3.0.0`, once stable version is released you can remove `rc8` suffix
-    # `3.0.0.rc8` is the latest version of released RC version when this entry is changed, you might want to change it later
-    gem "i18n-js", ">= 3.0.0.rc8" 
+```ruby
+source "https://rubygems.org"
+gem "rails", "your_rails_version"
+# You only need this RC version constraint during the development of `3.0.0`, once stable version is released you can remove `rc11` suffix
+# `3.0.0.rc11` is the latest version of released RC version when this entry is changed, you might want to change it later
+gem "i18n-js", ">= 3.0.0.rc11" 
 
 #### Rails app with [Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
 
 If you're using the [asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html),
 then you must add the following line to your `app/assets/javascripts/application.js`.
+```
 
 ```javascript
 //
@@ -296,65 +297,79 @@ I18n.currentLocale();
 
 In practice, you'll have something like the following in your `application.html.erb`:
 
-    <script type="text/javascript">
-      I18n.defaultLocale = "<%= I18n.default_locale %>";
-      I18n.locale = "<%= I18n.locale %>";
-    </script>
+```erb
+<script type="text/javascript">
+  I18n.defaultLocale = "<%= I18n.default_locale %>";
+  I18n.locale = "<%= I18n.locale %>";
+</script>
+```
 
 You can use translate your messages:
 
-    I18n.t("some.scoped.translation");
-    // or translate with explicit setting of locale
-    I18n.t("some.scoped.translation", {locale: "fr"});
+```javascript
+I18n.t("some.scoped.translation");
+// or translate with explicit setting of locale
+I18n.t("some.scoped.translation", {locale: "fr"});
+```
 
 You can also interpolate values:
 
-    I18n.t("hello", {name: "John Doe"});
-
+```javascript
+I18n.t("hello", {name: "John Doe"});
+```
 You can set default values for missing scopes:
+```javascript
+// simple translation
+I18n.t("some.missing.scope", {defaultValue: "A default message"});
 
-    // simple translation
-    I18n.t("some.missing.scope", {defaultValue: "A default message"});
-
-    // with interpolation
-    I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
+// with interpolation
+I18n.t("noun", {defaultValue: "I'm a {{noun}}", noun: "Mac"});
+```
 
 You can also provide a list of default fallbacks for missing scopes:
 
-    // As a scope
-    I18n.t("some.missing.scope", {defaults: [{scope: "some.existing.scope"}]});
+```javascript
+// As a scope
+I18n.t("some.missing.scope", {defaults: [{scope: "some.existing.scope"}]});
 
-    // As a simple translation
-    I18n.t("some.missing.scope", {defaults: [{message: "Some message"}]});
+// As a simple translation
+I18n.t("some.missing.scope", {defaults: [{message: "Some message"}]});
+```
 
-    Default values must be provided as an array of hashs where the key is the
-    type of translation desired, a `scope` or a `message`. The translation returned
-    will be either the first scope recognized, or the first message defined.
+Default values must be provided as an array of hashs where the key is the
+type of translation desired, a `scope` or a `message`. The translation returned
+will be either the first scope recognized, or the first message defined.
 
-    The translation will fallback to the `defaultValue` translation if no scope
-    in `defaults` matches and if no default of type `message` is found.
+The translation will fallback to the `defaultValue` translation if no scope
+in `defaults` matches and if no default of type `message` is found.
 
 Translation fallback can be enabled by enabling the `I18n.fallbacks` option:
 
-    <script type="text/javascript">
-      I18n.fallbacks = true;
-    </script>
+```erb
+<script type="text/javascript">
+  I18n.fallbacks = true;
+</script>
+```
 
 By default missing translations will first be looked for in less
 specific versions of the requested locale and if that fails by taking
 them from your `I18n.defaultLocale`.
 
-    // if I18n.defaultLocale = "en" and translation doesn't exist
-    // for I18n.locale = "de-DE" this key will be taken from "de" locale scope
-    // or, if that also doesn't exist, from "en" locale scope
-    I18n.t("some.missing.scope");
+```javascript
+// if I18n.defaultLocale = "en" and translation doesn't exist
+// for I18n.locale = "de-DE" this key will be taken from "de" locale scope
+// or, if that also doesn't exist, from "en" locale scope
+I18n.t("some.missing.scope");
+```
 
 Custom fallback rules can also be specified for a particular language. There
 are three different ways of doing it so:
 
-    I18n.locales.no = ["nb", "en"];
-    I18n.locales.no = "nb";
-    I18n.locales.no = function(locale){ return ["nb"]; };
+```javascript
+I18n.locales.no = ["nb", "en"];
+I18n.locales.no = "nb";
+I18n.locales.no = function(locale){ return ["nb"]; };
+```
 
 By default a missing translation will be displayed as
 
@@ -363,7 +378,9 @@ By default a missing translation will be displayed as
 While you are developing or if you do not want to provide a translation
 in the default language you can set
 
+```javascript
     I18n.missingBehaviour='guess';
+```
 
 this will take the last section of your scope and guess the intended value.
 Camel case becomes lower cased text and underscores are replaced with space
@@ -392,61 +409,75 @@ I18n.missingTranslation = function () { return undefined; };
 
 Pluralization is possible as well and by default provides English rules:
 
-    I18n.t("inbox.counting", {count: 10}); // You have 10 messages
+```javascript
+I18n.t("inbox.counting", {count: 10}); // You have 10 messages
+```
 
 The sample above expects the following translation:
 
-    en:
-      inbox:
-        counting:
-          one: You have 1 new message
-          other: You have {{count}} new messages
-          zero: You have no messages
+```yaml
+en:
+  inbox:
+    counting:
+      one: You have 1 new message
+      other: You have {{count}} new messages
+      zero: You have no messages
+```
 
 **NOTE:** Rails I18n recognizes the `zero` option.
 
 If you need special rules just define them for your language, for example Russian, just add a new pluralizer:
 
-    I18n.pluralization["ru"] = function (count) {
-      var key = count % 10 == 1 && count % 100 != 11 ? "one" : [2, 3, 4].indexOf(count % 10) >= 0 && [12, 13, 14].indexOf(count % 100) < 0 ? "few" : count % 10 == 0 || [5, 6, 7, 8, 9].indexOf(count % 10) >= 0 || [11, 12, 13, 14].indexOf(count % 100) >= 0 ? "many" : "other";
-      return [key];
-    };
+```javascript
+I18n.pluralization["ru"] = function (count) {
+  var key = count % 10 == 1 && count % 100 != 11 ? "one" : [2, 3, 4].indexOf(count % 10) >= 0 && [12, 13, 14].indexOf(count % 100) < 0 ? "few" : count % 10 == 0 || [5, 6, 7, 8, 9].indexOf(count % 10) >= 0 || [11, 12, 13, 14].indexOf(count % 100) >= 0 ? "many" : "other";
+  return [key];
+};
+```
 
 You can find all rules on <http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html>.
 
 If you're using the same scope over and over again, you may use the `scope` option.
 
-    var options = {scope: "activerecord.attributes.user"};
+```javascript
+var options = {scope: "activerecord.attributes.user"};
 
-    I18n.t("name", options);
-    I18n.t("email", options);
-    I18n.t("username", options);
+I18n.t("name", options);
+I18n.t("email", options);
+I18n.t("username", options);
+```
 
 You can also provide an array as scope.
 
-    // use the greetings.hello scope
-    I18n.t(["greetings", "hello"]);
+```javascript
+// use the greetings.hello scope
+I18n.t(["greetings", "hello"]);
+```
 
 #### Number formatting
 
 Similar to Rails helpers, you have localized number and currency formatting.
 
-    I18n.l("currency", 1990.99);
-    // $1,990.99
+```javascript
+I18n.l("currency", 1990.99);
+// $1,990.99
 
-    I18n.l("number", 1990.99);
-    // 1,990.99
+I18n.l("number", 1990.99);
+// 1,990.99
 
-    I18n.l("percentage", 123.45);
-    // 123.450%
+I18n.l("percentage", 123.45);
+// 123.450%
+```
 
 To have more control over number formatting, you can use the
 `I18n.toNumber`, `I18n.toPercentage`, `I18n.toCurrency` and `I18n.toHumanSize`
 functions.
 
-    I18n.toNumber(1000);     // 1,000.000
-    I18n.toCurrency(1000);   // $1,000.00
-    I18n.toPercentage(100);  // 100.000%
+```javascript
+I18n.toNumber(1000);     // 1,000.000
+I18n.toCurrency(1000);   // $1,000.00
+I18n.toPercentage(100);  // 100.000%
+```
 
 The `toNumber` and `toPercentage` functions accept the following options:
 
@@ -457,9 +488,11 @@ The `toNumber` and `toPercentage` functions accept the following options:
 
 See some number formatting examples:
 
-    I18n.toNumber(1000, {precision: 0});                   // 1,000
-    I18n.toNumber(1000, {delimiter: ".", separator: ","}); // 1.000,000
-    I18n.toNumber(1000, {delimiter: ".", precision: 0});   // 1.000
+```javascript
+I18n.toNumber(1000, {precision: 0});                   // 1,000
+I18n.toNumber(1000, {delimiter: ".", separator: ","}); // 1.000,000
+I18n.toNumber(1000, {delimiter: ".", precision: 0});   // 1.000
+```
 
 The `toCurrency` function accepts the following options:
 
@@ -473,7 +506,9 @@ The `toCurrency` function accepts the following options:
 
 You can provide only the options you want to override:
 
-    I18n.toCurrency(1000, {precision: 0}); // $1,000
+```javascript
+I18n.toCurrency(1000, {precision: 0}); // $1,000
+```
 
 The `toHumanSize` function accepts the following options:
 
@@ -485,35 +520,44 @@ The `toHumanSize` function accepts the following options:
 
 <!---->
 
-    I18n.toHumanSize(1234); // 1KB
-    I18n.toHumanSize(1234 * 1024); // 1MB
+```javascript
+I18n.toHumanSize(1234); // 1KB
+I18n.toHumanSize(1234 * 1024); // 1MB
+```
+
 
 #### Date formatting
 
-    // accepted formats
-    I18n.l("date.formats.short", "2009-09-18");           // yyyy-mm-dd
-    I18n.l("time.formats.short", "2009-09-18 23:12:43");  // yyyy-mm-dd hh:mm:ss
-    I18n.l("time.formats.short", "2009-11-09T18:10:34");  // JSON format with local Timezone (part of ISO-8601)
-    I18n.l("time.formats.short", "2009-11-09T18:10:34Z"); // JSON format in UTC (part of ISO-8601)
-    I18n.l("date.formats.short", 1251862029000);          // Epoch time
-    I18n.l("date.formats.short", "09/18/2009");           // mm/dd/yyyy
-    I18n.l("date.formats.short", (new Date()));           // Date object
+```javascript
+// accepted formats
+I18n.l("date.formats.short", "2009-09-18");           // yyyy-mm-dd
+I18n.l("time.formats.short", "2009-09-18 23:12:43");  // yyyy-mm-dd hh:mm:ss
+I18n.l("time.formats.short", "2009-11-09T18:10:34");  // JSON format with local Timezone (part of ISO-8601)
+I18n.l("time.formats.short", "2009-11-09T18:10:34Z"); // JSON format in UTC (part of ISO-8601)
+I18n.l("date.formats.short", 1251862029000);          // Epoch time
+I18n.l("date.formats.short", "09/18/2009");           // mm/dd/yyyy
+I18n.l("date.formats.short", (new Date()));           // Date object
+```
 
 You can also add placeholders to the date format:
 
-    I18n.translations["en"] = {
-      date: {
-        formats: {
-          ordinal_day: "%B %{day}"
-        }
-      }
+```javascript
+I18n.translations["en"] = {
+  date: {
+    formats: {
+      ordinal_day: "%B %{day}"
     }
-    I18n.l("date.formats.ordinal_day", "2009-09-18", { day: '18th' }); // Sep 18th
+  }
+}
+I18n.l("date.formats.ordinal_day", "2009-09-18", { day: '18th' }); // Sep 18th
+```
 
 If you prefer, you can use the `I18n.strftime` function to format dates.
 
-    var date = new Date();
-    I18n.strftime(date, "%d/%m/%Y");
+```javascript
+var date = new Date();
+I18n.strftime(date, "%d/%m/%Y");
+```
 
 The accepted formats are:
 
@@ -547,15 +591,17 @@ Check out `spec/*.spec.js` files for more examples!
 The JavaScript library is language agnostic; so you can use it with PHP, Python, [your favorite language here].
 The only requirement is that you need to set the `translations` attribute like following:
 
-    I18n.translations = {};
+```javascript
+I18n.translations = {};
 
-    I18n.translations["en"] = {
-      message: "Some special message for you"
-    }
+I18n.translations["en"] = {
+  message: "Some special message for you"
+}
 
-    I18n.translations["pt-BR"] = {
-      message: "Uma mensagem especial para você"
-    }
+I18n.translations["pt-BR"] = {
+  message: "Uma mensagem especial para você"
+}
+```
 
 ## Known Issues
 
@@ -580,7 +626,7 @@ Change `config.assets.version`
 If you are precompiling assets on target machine(s),
 old assets might be removed and cannot be served in cached pages.
 
-Please see issue #213 for detail & related discussion.
+Please see issue [#213](https://github.com/fnando/i18n-js/issues/213) for detail & related discussion.
 
 
 ## Maintainer
