@@ -27,7 +27,7 @@ source "https://rubygems.org"
 gem "rails", "your_rails_version"
 # You only need this RC version constraint during the development of `3.0.0`, once stable version is released you can remove `rc11` suffix
 # `3.0.0.rc11` is the latest version of released RC version when this entry is changed, you might want to change it later
-gem "i18n-js", ">= 3.0.0.rc11" 
+gem "i18n-js", ">= 3.0.0.rc11"
 
 #### Rails app with [Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
 
@@ -67,9 +67,9 @@ Then get the JS files following the instructions below.
 2. If you can't or prefer not to generate this file,
   you can move the middleware line to your `config/environments/development.rb` file
   and run `rake i18n:js:export` before deploying.
-  This will export all translation files, including the custom scopes 
+  This will export all translation files, including the custom scopes
   you may have defined on `config/i18n-js.yml`.  
-  If `I18n.available_locales` is set (e.g. in your Rails `config/application.rb` file) 
+  If `I18n.available_locales` is set (e.g. in your Rails `config/application.rb` file)
   then only the specified locales will be exported.  
   Current version of `i18n.js` will also be exported to avoid version mismatching by downloading.
 
@@ -379,7 +379,7 @@ While you are developing or if you do not want to provide a translation
 in the default language you can set
 
 ```javascript
-    I18n.missingBehaviour='guess';
+I18n.missingBehaviour='guess';
 ```
 
 this will take the last section of your scope and guess the intended value.
