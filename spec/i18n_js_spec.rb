@@ -20,7 +20,7 @@ describe I18n::JS do
 
   context "exporting" do
     before do
-      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+      allow(I18n::JS).to receive(:export_i18n_js_dir_path) { temp_path }
     end
 
     it "exports messages to default path when configuration file doesn't exist" do
@@ -338,7 +338,7 @@ EOS
   context "namespace and pretty_print options" do
 
     before do
-      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+      allow(I18n::JS).to receive(:export_i18n_js_dir_path) { temp_path }
       set_config "js_file_with_namespace_and_pretty_print.yml"
     end
 
@@ -570,7 +570,7 @@ EOS
       end
 
       before do
-        stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+        allow(I18n::JS).to receive(:export_i18n_js_dir_path) { temp_path }
       end
 
       context 'sort_translation_keys is true' do

@@ -85,7 +85,7 @@ module I18n
       if config? && config[:translations]
         configured_segments
       else
-        [Segment.new("#{DEFAULT_EXPORT_DIR_PATH}/translations.js", translations)]
+        [Segment.new("#{export_i18n_js_dir_path}/translations.js", translations)]
       end
     end
 
