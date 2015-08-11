@@ -46,7 +46,7 @@ module I18n
       config[:translations].inject([]) do |segments, options|
         file = options[:file]
         only = options[:only] || '*'
-        exceptions = [options[:except] || []].flatten
+        exceptions = [options[:except] || options[:exclude] || []].flatten
 
         segment_options = options.slice(:namespace, :pretty_print)
 
