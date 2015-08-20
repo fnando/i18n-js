@@ -33,17 +33,24 @@ module I18n
           f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
           _translations.each do |locale, translations_for_locale|
             output_translations = I18n::JS.sort_translation_keys? ? Utils.deep_key_sort(translations_for_locale) : translations_for_locale
-            f << %(#{self.namespace}.translations["#{locale}"] = #{print_json(output_translations)};\n);
+            f << %(#{self.namespace}.translations["#{locale}"] = #{self.namespace}.translations["#{locale}"] || {};\n)
+            output_translations.keys.each do |key|
+              f << %(#{self.namespace}.translations["#{locale}"]["#{key}"] = #{print_json(output_translations[key])};\n);
+            end
           end
         end
       end
 
       # Outputs pretty or ugly JSON depending on :pretty_print option
       def print_json(translations)
-        if pretty_print
-          JSON.pretty_generate(translations)
-        else
-          translations.to_json
+        begin
+          if pretty_print
+            JSON.pretty_generate(translations)
+          else
+            translations.to_json
+          end
+        rescue JSON::GeneratorError
+          return translations.inspect
         end
       end
 

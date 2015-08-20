@@ -64,8 +64,10 @@ describe I18n::JS::Segment do
 
         File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = {"test":"Test"};
-MyNamespace.translations["fr"] = {"test":"Test2"};
+MyNamespace.translations["en"] = MyNamespace.translations["en"] || {};
+MyNamespace.translations["en"]["test"] = "Test";
+MyNamespace.translations["fr"] = MyNamespace.translations["fr"] || {};
+MyNamespace.translations["fr"]["test"] = "Test2";
         EOF
       end
     end
@@ -79,12 +81,14 @@ MyNamespace.translations["fr"] = {"test":"Test2"};
 
         File.open(File.join(temp_path, "en.js")){|f| f.read}.should eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = {"test":"Test"};
+MyNamespace.translations["en"] = MyNamespace.translations["en"] || {};
+MyNamespace.translations["en"]["test"] = "Test";
         EOF
 
         File.open(File.join(temp_path, "fr.js")){|f| f.read}.should eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["fr"] = {"test":"Test2"};
+MyNamespace.translations["fr"] = MyNamespace.translations["fr"] || {};
+MyNamespace.translations["fr"]["test"] = "Test2";
         EOF
       end
     end
@@ -101,7 +105,9 @@ MyNamespace.translations["fr"] = {"test":"Test2"};
 
         File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = {"a":"Test","b":"Test"};
+MyNamespace.translations["en"] = MyNamespace.translations["en"] || {};
+MyNamespace.translations["en"]["a"] = "Test";
+MyNamespace.translations["en"]["b"] = "Test";
         EOF
       end
     end
