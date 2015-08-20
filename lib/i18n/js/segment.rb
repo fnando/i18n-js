@@ -40,14 +40,10 @@ module I18n
 
       # Outputs pretty or ugly JSON depending on :pretty_print option
       def print_json(translations)
-        begin
-          if pretty_print
-            JSON.pretty_generate(translations)
-          else
-            translations.to_json
-          end
-        rescue JSON::GeneratorError
-          return translations.inspect
+        if pretty_print
+          JSON.pretty_generate(translations)
+        else
+          translations.to_json
         end
       end
 
