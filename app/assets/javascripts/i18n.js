@@ -857,7 +857,28 @@
     }
 
     return scope;
-  }
+  };
+  /**
+   * Merge obj1 with obj2
+   * @param {Object} obj1 Default settings
+   * @param {Object} obj2 User obj2
+   * @returns {Object} Merged values of obj1 and obj2
+   */
+  I18n.extend = function ( obj1, obj2 ) {
+    var extended = {};
+    var prop;
+    for (prop in obj1) {
+      if (Object.prototype.hasOwnProperty.call(obj1, prop)) {
+        extended[prop] = obj1[prop];
+      }
+    }
+    for (prop in obj2) {
+      if (Object.prototype.hasOwnProperty.call(obj2, prop)) {
+        extended[prop] = obj2[prop];
+      }
+    }
+    return extended;
+  };
 
   // Set aliases, so we can save some typing.
   I18n.t = I18n.translate;

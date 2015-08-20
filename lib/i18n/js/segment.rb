@@ -33,10 +33,7 @@ module I18n
           f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
           _translations.each do |locale, translations_for_locale|
             output_translations = I18n::JS.sort_translation_keys? ? Utils.deep_key_sort(translations_for_locale) : translations_for_locale
-            f << %(#{self.namespace}.translations["#{locale}"] = #{self.namespace}.translations["#{locale}"] || {};\n)
-            output_translations.keys.each do |key|
-              f << %(#{self.namespace}.translations["#{locale}"]["#{key}"] = #{print_json(output_translations[key])};\n);
-            end
+            f << %(#{self.namespace}.translations["#{locale}"] = I18n.extend((#{self.namespace}.translations["#{locale}"] || {}), #{print_json(output_translations)});\n)
           end
         end
       end
