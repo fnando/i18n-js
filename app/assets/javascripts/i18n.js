@@ -12,19 +12,16 @@
 // See tests for specific formatting like numbers and dates.
 //
 
-;(function(factory) {
-  if (typeof module !== 'undefined' && module.exports) {
-    // Node/CommonJS
-    module.exports = factory(this);
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD
-    var global=this;
-    define('i18n', function(){ return factory(global);});
+(function( global, factory ) {
+
+  if ( typeof module === "object" && typeof module.exports === "object" ) {
+    module.exports = factory(global);
   } else {
-    // Browser globals
-    this.I18n = factory(this);
+    factory( global );
   }
-}(function(global) {
+
+// Pass this if window is not defined yet
+}(typeof window !== "undefined" ? window : this, function( global, noGlobal ) {
   "use strict";
 
   // Use previously defined object if exists in current scope
@@ -884,6 +881,22 @@
   I18n.t = I18n.translate;
   I18n.l = I18n.localize;
   I18n.p = I18n.pluralize;
+
+  if ( typeof define === "function" && define.amd ) {
+    if (require.specified('i18n')) {
+      window.requirejs.undef('i18n');
+    }
+
+    define(function() {
+      return I18n;
+    });
+  }
+
+
+  if ( typeof noGlobal === typeof undefined ) {
+    window.I18n = I18n;
+  }
+
 
   return I18n;
 }));
