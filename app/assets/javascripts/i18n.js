@@ -883,20 +883,14 @@
   I18n.p = I18n.pluralize;
 
   if ( typeof define === "function" && define.amd ) {
-    if (require.specified('i18n')) {
-      window.requirejs.undef('i18n');
-    }
-
     define(function() {
       return I18n;
     });
   }
 
-
   if ( typeof noGlobal === typeof undefined ) {
     window.I18n = I18n;
   }
-
 
   return I18n;
 }));
