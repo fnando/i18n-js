@@ -586,6 +586,130 @@ The accepted formats are:
 
 Check out `spec/*.spec.js` files for more examples!
 
+## Using multiple exported translation files on a page.
+This method is useful for very large apps where a single contained translations.js file is not desirable. Examples would be a global translations file and a more specific route translation file.
+
+### Rails without asset pipeline
+1. Setup your `config/i18n-js.yml` to have multiple files and try to minimize any overlap.
+  ```yaml
+  sort_translation_keys: true
+  fallbacks: false
+
+  translations:
+    + file: "app/assets/javascript/nls/welcome.js"
+      only:
+        + '*.welcome.*'
+      pretty_print: true
+    
+    + file: "app/assets/javascript/nls/albums.js"
+      only:
+        + '*.albums.*'
+      pretty_print: true
+
+    + file: "app/assets/javascript/nls/global.js"
+      only:
+        + '*'
+      # Exempt any routes specific translations from being
+      # included in the global translation file
+      except:
+        + '*.welcome.*'
+        + '*.albums.*'
+      pretty_print: true
+  ```
+  When `rake i18n:js:export` is executed it will create 3 translations files that can be loaded via the `javascript_include_tag`
+
+2. Add the `javascript_include_tag` to your layout and to any route specific files that will require it.
+  ```ruby
+    # views/layouts/application.html.erb
+    <%= javascript_include_tag(
+          "i18n"
+          "nls/global"
+        ) %>
+  ```
+  and in the route specific
+
+  ```ruby
+    # views/welcome/index.html.erb
+    <%= javascript_include_tag(
+          "nls/welcome"
+        ) %>
+  ```
+
+3. Make sure that you add these files to your `config/application.rb`
+
+  ```ruby
+    config.assets.precompile += %w(
+      i18n
+      nls/*
+    )
+  ```
+
+### Using require.js / r.js
+
+To use this with require.js we are only going to change a few things from above.
+
+1. In your `config/i18n-js.yml` we need to add a better location for the i18n to be exported. You want to use this location so that it can be properly precompiled by r.js.
+
+  ```yaml
+  export_i18n_js: "app/assets/javascript/nls"
+  ```
+
+2. In your `config/require.yml` we need to add a map, shim all the translations, and include them into the appropriate modules
+
+  ```yaml
+  # In your maps add (if you do not have this you will need to add it)
+  map:
+    '*':
+      i18n: 'nls/i18n'
+
+  # In your shims
+  shims:
+    nls/welcome:
+      deps:
+        + i18n
+
+    nls/global:
+      deps:
+        + i18n
+
+  # Finally in your modules 
+  modules:
+    + name: 'application'
+      include:
+        + i18n
+        + 'nls/global'
+    
+    + name: 'welcome'
+      exclude:
+        + application
+      include:
+        + 'nls/welcome'
+  ```
+3. When `rake assets:precompile` is executed it will optimize the translations into the correct modules so they are loaded with their assigned module, and loading them with requirejs is as simple as requiring any other shim.
+  ```javascript
+  define(['welcome/other_asset','nls/welcome'], function (otherAsset){
+
+  });
+  ```
+4. (optional) As an additional configuration we can make a task to be run before the requirejs optimizer. This will allow any automated scripts that run the requirejs optimizer to export the strings before we run r.js
+
+  ```rake
+  # lib/tasks/i18n.rake
+  Rake::Task[:'i18n:js:export'].prerequisites.clear
+  task :'i18n:js:export' => :'i18n:js:before_export'
+  task :'requirejs:precompile:external' => :'i18n:js:export'
+
+  namespace :i18n do
+    namespace :js do
+      task :before_export => :'assets:environment' do
+        I18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{yml,rb}')]
+        I18n.backend.load_translations
+      end
+    end
+  end
+
+  ```
+
 ## Using I18n.js with other languages (Python, PHP, ...)
 
 The JavaScript library is language agnostic; so you can use it with PHP, Python, [your favorite language here].
