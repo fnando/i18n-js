@@ -152,7 +152,7 @@ translations:
 - You may also set `export_i18n_js` and `sort_translation_keys` in your config file, e.g.:
 
 ```yaml
-export_i18n_js_: false
+export_i18n_js: false
 # OR
 export_i18n_js: "my/path"
 
