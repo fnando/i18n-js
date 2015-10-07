@@ -856,10 +856,14 @@
     return scope;
   };
   /**
-   * Merge obj1 with obj2
-   * @param {Object} obj1 Default settings
-   * @param {Object} obj2 User obj2
+   * Merge obj1 with obj2 (shallow merge), without modifying inputs
+   * @param {Object} obj1
+   * @param {Object} obj2
    * @returns {Object} Merged values of obj1 and obj2
+   *
+   * In order to support ES3, `Object.prototype.hasOwnProperty.call` is used
+   * Idea is from:
+   * https://stackoverflow.com/questions/8157700/object-has-no-hasownproperty-method-i-e-its-undefined-ie8
    */
   I18n.extend = function ( obj1, obj2 ) {
     var extended = {};
