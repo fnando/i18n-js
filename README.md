@@ -599,12 +599,10 @@ This method is useful for very large apps where a single contained translations.
     + file: "app/assets/javascript/nls/welcome.js"
       only:
         + '*.welcome.*'
-      pretty_print: true
     
     + file: "app/assets/javascript/nls/albums.js"
       only:
         + '*.albums.*'
-      pretty_print: true
 
     + file: "app/assets/javascript/nls/global.js"
       only:
@@ -614,7 +612,6 @@ This method is useful for very large apps where a single contained translations.
       except:
         + '*.welcome.*'
         + '*.albums.*'
-      pretty_print: true
   ```
   When `rake i18n:js:export` is executed it will create 3 translations files that can be loaded via the `javascript_include_tag`
 
