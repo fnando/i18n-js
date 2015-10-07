@@ -12,19 +12,16 @@
 // See tests for specific formatting like numbers and dates.
 //
 
-;(function(factory) {
-  if (typeof module !== 'undefined' && module.exports) {
-    // Node/CommonJS
-    module.exports = factory(this);
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD
-    var global=this;
-    define('i18n', function(){ return factory(global);});
+(function( global, factory ) {
+
+  if ( typeof module === "object" && typeof module.exports === "object" ) {
+    module.exports = factory(global);
   } else {
-    // Browser globals
-    this.I18n = factory(this);
+    factory( global );
   }
-}(function(global) {
+
+// Pass this if window is not defined yet
+}(typeof window !== "undefined" ? window : this, function( global, noGlobal ) {
   "use strict";
 
   // Use previously defined object if exists in current scope
@@ -857,12 +854,43 @@
     }
 
     return scope;
-  }
+  };
+  /**
+   * Merge obj1 with obj2
+   * @param {Object} obj1 Default settings
+   * @param {Object} obj2 User obj2
+   * @returns {Object} Merged values of obj1 and obj2
+   */
+  I18n.extend = function ( obj1, obj2 ) {
+    var extended = {};
+    var prop;
+    for (prop in obj1) {
+      if (Object.prototype.hasOwnProperty.call(obj1, prop)) {
+        extended[prop] = obj1[prop];
+      }
+    }
+    for (prop in obj2) {
+      if (Object.prototype.hasOwnProperty.call(obj2, prop)) {
+        extended[prop] = obj2[prop];
+      }
+    }
+    return extended;
+  };
 
   // Set aliases, so we can save some typing.
   I18n.t = I18n.translate;
   I18n.l = I18n.localize;
   I18n.p = I18n.pluralize;
+
+  if ( typeof define === "function" && define.amd ) {
+    define(function() {
+      return I18n;
+    });
+  }
+
+  if ( typeof noGlobal === typeof undefined ) {
+    window.I18n = I18n;
+  }
 
   return I18n;
 }));

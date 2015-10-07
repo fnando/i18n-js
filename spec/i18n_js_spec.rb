@@ -67,13 +67,13 @@ describe I18n::JS do
       en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]}};
+I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]}});
 EOS
 )
       fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["fr"] = {"admin":{"edit":{"title":"Editer"},"show":{"note":"plus de détails","title":"Visualiser"}},"date":{"abbr_day_names":["dim","lun","mar","mer","jeu","ven","sam"],"abbr_month_names":[null,"jan.","fév.","mar.","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],"day_names":["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"},"month_names":[null,"janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]}};
+I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"admin":{"edit":{"title":"Editer"},"show":{"note":"plus de détails","title":"Visualiser"}},"date":{"abbr_day_names":["dim","lun","mar","mer","jeu","ven","sam"],"abbr_month_names":[null,"jan.","fév.","mar.","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],"day_names":["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"},"month_names":[null,"janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]}});
 EOS
 )
     end
@@ -98,13 +98,13 @@ EOS
       en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = {"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}};
+I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}});
 EOS
 )
       fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["fr"] = {"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}};
+I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}});
 EOS
 )
     end
@@ -581,7 +581,7 @@ EOS
         it "exports with the keys sorted" do
           expect(subject).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","null_test":"fallback for null","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}};
+I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","null_test":"fallback for null","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}});
 EOS
 )
         end

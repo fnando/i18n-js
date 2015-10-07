@@ -4,6 +4,7 @@
 ### breaking changes
 
 ### enhancements
+  - [JS] Allow extending of translation files ([#354](https://github.com/fnando/i18n-js/pull/354))
 
 ### bug fixes
 
