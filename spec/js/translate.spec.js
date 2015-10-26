@@ -103,7 +103,7 @@ describe("Translate", function(){
     expect(I18n.t("hello")).toEqual("Hei Verden!");
   });
 
-  describe("when provided default valutes", function() {
+  describe("when provided default values", function() {
     it("uses scope provided in defaults if scope doesn't exist", function() {
       actual = I18n.t("Hello!", {defaults: [{scope: "greetings.stranger"}]});
       expect(actual).toEqual("Hello stranger!");
