@@ -73,7 +73,7 @@ module I18n
       #   This ignores option `I18n.enforce_available_locales`
       def ensure_valid_locales!(locales)
         if locales.any? { |locale| !::I18n.available_locales.include?(locale) }
-          fail ArgumentError, "Valid locales: #{::I18n.available_locales} - Given Locales: #{locales}"
+          fail ArgumentError, "Valid locales: #{::I18n.available_locales.join(", ")} - Given Locales: #{locales.join(", ")}"
         end
       end
     end
