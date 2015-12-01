@@ -146,12 +146,12 @@ module I18n
       # Copy i18n.js
       def self.export_i18n_js
         return unless configuration.export_i18n_js?
-        export_i18n_js_dir_path = configuration.export_i18n_js_dir_path
+        i18n_js_export_path = configuration.i18n_js_export_path
 
-        FileUtils.mkdir_p(export_i18n_js_dir_path)
+        FileUtils.mkdir_p(i18n_js_export_path)
 
         i18n_js_path = File.expand_path('../../../app/assets/javascripts/i18n.js', __FILE__)
-        FileUtils.cp(i18n_js_path, export_i18n_js_dir_path)
+        FileUtils.cp(i18n_js_path, i18n_js_export_path)
       end
     end
   end

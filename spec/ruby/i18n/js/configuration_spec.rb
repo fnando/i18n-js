@@ -59,8 +59,8 @@ describe I18n::JS::Configuration do
     end
 
 
-    describe "#export_i18n_js_dir_path" do
-      subject { instance.export_i18n_js_dir_path }
+    describe "#i18n_js_export_path" do
+      subject { instance.i18n_js_export_path }
 
       let(:instance) { described_class.new }
 
@@ -71,12 +71,12 @@ describe I18n::JS::Configuration do
         it { should eq default_path }
       end
       context "when it is set to another path already" do
-        before { instance.export_i18n_js_dir_path = new_path }
+        before { instance.i18n_js_export_path = new_path }
 
         it { should eq new_path }
       end
       context "when it is set to nil already" do
-        before { instance.export_i18n_js_dir_path = nil }
+        before { instance.i18n_js_export_path = nil }
 
         it { should eq nil }
       end

@@ -99,13 +99,13 @@ describe I18n::JS do
       file_should_exist "en.js"
       file_should_exist "fr.js"
 
-      en_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "en.js"))
+      en_output = File.read(File.join(I18n::JS.configuration.i18n_js_export_path, "en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]}});
 EOS
 )
-      fr_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "fr.js"))
+      fr_output = File.read(File.join(I18n::JS.configuration.i18n_js_export_path, "fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"admin":{"edit":{"title":"Editer"},"show":{"note":"plus de détails","title":"Visualiser"}},"date":{"abbr_day_names":["dim","lun","mar","mer","jeu","ven","sam"],"abbr_month_names":[null,"jan.","fév.","mar.","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],"day_names":["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"},"month_names":[null,"janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]}});
@@ -149,13 +149,13 @@ EOS
 
       result.map(&:save!)
 
-      en_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "bits.en.js"))
+      en_output = File.read(File.join(I18n::JS.configuration.i18n_js_export_path, "bits.en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}});
 EOS
 )
-      fr_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "bits.fr.js"))
+      fr_output = File.read(File.join(I18n::JS.configuration.i18n_js_export_path, "bits.fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}});
@@ -467,7 +467,7 @@ EOS
     it "exports with defined locale as fallback when enabled" do
       I18n::JS.export
       file_should_exist "en.js"
-      output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "en.js"))
+      output = File.read(File.join(I18n::JS.configuration.i18n_js_export_path, "en.js"))
       expect(output).to match(/^#{
 <<EOS
 Foo.translations || (Foo.translations = {});
@@ -517,7 +517,7 @@ EOS
   describe "i18n.js exporting" do
     after do
       begin
-        described_class.configuration.send(:remove_instance_variable, :@export_i18n_js_dir_path)
+        described_class.configuration.send(:remove_instance_variable, :@i18n_js_export_path)
       rescue
       end
     end
@@ -527,26 +527,26 @@ EOS
         allow(FileUtils).to receive(:mkdir_p).and_call_original
         allow(FileUtils).to receive(:cp).and_call_original
 
-        allow(described_class.configuration).to receive(:export_i18n_js_dir_path).and_return(export_i18n_js_dir_path)
+        allow(described_class.configuration).to receive(:i18n_js_export_path).and_return(i18n_js_export_path)
         I18n::JS.export_i18n_js
       end
 
-      context 'when .export_i18n_js_dir_path returns something' do
-        let(:export_i18n_js_dir_path) { temp_path }
+      context 'when .i18n_js_export_path returns something' do
+        let(:i18n_js_export_path) { temp_path }
 
         it "does create the folder before copying" do
-          expect(FileUtils).to have_received(:mkdir_p).with(export_i18n_js_dir_path).once
+          expect(FileUtils).to have_received(:mkdir_p).with(i18n_js_export_path).once
         end
         it "does copy the file with FileUtils.cp" do
           expect(FileUtils).to have_received(:cp).once
         end
         it "exports the file" do
-          File.should be_file(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "i18n.js"))
+          File.should be_file(File.join(I18n::JS.configuration.i18n_js_export_path, "i18n.js"))
         end
       end
 
-      context 'when .export_i18n_js_dir_path is set to nil' do
-        let(:export_i18n_js_dir_path) { nil }
+      context 'when .i18n_js_export_path is set to nil' do
+        let(:i18n_js_export_path) { nil }
 
         it "does NOT create the folder before copying" do
           expect(FileUtils).to_not have_received(:mkdir_p)
@@ -568,7 +568,7 @@ EOS
       context 'when :export_i18n_js set in config' do
         before do
           I18n::JS.configuration.fallbacks = false
-          I18n::JS.configuration.export_i18n_js_dir_path = "tmp/i18n-js/foo"
+          I18n::JS.configuration.i18n_js_export_path = "tmp/i18n-js/foo"
           I18n::JS.configuration.translation_segment_settings =  [
             {
               file: "tmp/i18n-js/%{locale}.js",
@@ -578,7 +578,7 @@ EOS
 
           export_action
         end
-        let(:export_i18n_js_dir_path) { temp_path }
+        let(:i18n_js_export_path) { temp_path }
         let(:config_export_path) { "tmp/i18n-js/foo" }
 
         it "does create the folder before copying" do
@@ -592,10 +592,10 @@ EOS
         end
       end
 
-      context 'when .export_i18n_js_dir_path is set to false' do
+      context 'when .i18n_js_export_path is set to false' do
         before do
           I18n::JS.configuration.fallbacks = false
-          I18n::JS.configuration.export_i18n_js_dir_path = false
+          I18n::JS.configuration.i18n_js_export_path = false
           I18n::JS.configuration.translation_segment_settings =  [
             {
               file: "tmp/i18n-js/%{locale}.js",
@@ -622,7 +622,7 @@ EOS
       subject do
         I18n::JS.export
         file_should_exist "en.js"
-        File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "en.js"))
+        File.read(File.join(I18n::JS.configuration.i18n_js_export_path, "en.js"))
       end
 
       context 'sort_translation_keys is true' do

@@ -11,7 +11,7 @@ module I18n
       def reset!
         @fallbacks                = true
         @sort_translation_keys    = true
-        @export_i18n_js_dir_path  = DEFAULT_EXPORT_DIR_PATH
+        @i18n_js_export_path  = DEFAULT_EXPORT_DIR_PATH
         @translation_segment_settings = [
           {
             file: "#{DEFAULT_EXPORT_DIR_PATH}/translations.js",
@@ -23,18 +23,18 @@ module I18n
       attr_accessor(*[
         :fallbacks,
         :translation_segment_settings,
-        :export_i18n_js_dir_path,
+        :i18n_js_export_path,
       ])
 
       # Custom accessors
       def export_i18n_js?
-        export_i18n_js_dir_path.is_a?(String)
+        i18n_js_export_path.is_a?(String)
       end
 
       ## Setting this to nil would disable i18n.js exporting
-      def export_i18n_js_dir_path=(new_path)
+      def i18n_js_export_path=(new_path)
         new_path = nil unless new_path.is_a?(String)
-        @export_i18n_js_dir_path = new_path
+        @i18n_js_export_path = new_path
       end
 
       def sort_translation_keys?

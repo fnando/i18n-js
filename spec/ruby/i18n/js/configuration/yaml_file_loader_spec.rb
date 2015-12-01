@@ -166,7 +166,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
 
     describe "export_i18n_js" do
       let(:actual_subject) do
-        configuration.export_i18n_js_dir_path
+        configuration.i18n_js_export_path
       end
 
       context "when key does not exist" do
@@ -175,7 +175,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
         end
 
         it "returns the default value" do
-          should eq(configuration_with_default_values.export_i18n_js_dir_path)
+          should eq(configuration_with_default_values.i18n_js_export_path)
         end
       end
 

@@ -27,7 +27,7 @@ module I18n
         #   When file does not exists
         def load
           if config_from_file.key?(:export_i18n_js)
-            configuration.export_i18n_js_dir_path = config_from_file.fetch(:export_i18n_js)
+            configuration.i18n_js_export_path = config_from_file.fetch(:export_i18n_js)
           end
 
           if config_from_file.key?(:sort_translation_keys)
