@@ -9,6 +9,10 @@ describe I18n::JS::Segment do
   let(:options)     { {namespace: namespace, pretty_print: pretty_print} }
   subject { I18n::JS::Segment.new(file, translations, options) }
 
+  let!(:gem_config_setup) do
+    # empty
+  end
+
   describe ".new" do
 
     it "should persist the file path variable" do
@@ -55,7 +59,6 @@ describe I18n::JS::Segment do
   end
 
   describe "#save!" do
-    before { allow(I18n::JS).to receive(:export_i18n_js_dir_path).and_return(temp_path) }
     before { subject.save! }
 
     context "when file does not include %{locale}" do
@@ -90,8 +93,8 @@ MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || 
     end
 
     context "when sort_translation_keys? is true" do
-      before :each do
-        I18n::JS.sort_translation_keys = true
+      let(:gem_config_setup) do
+        I18n::JS.configuration.sort_translation_keys = true
       end
 
       let(:translations){ { en: { "b" => "Test", "a" => "Test" } } }

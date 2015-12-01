@@ -2,75 +2,110 @@ require "spec_helper"
 
 describe I18n::JS do
 
-  describe '.config_file_path' do
-    let(:default_path) { I18n::JS::DEFAULT_CONFIG_PATH }
-    let(:new_path) { File.join("tmp", default_path) }
+  before do
+    stub_const("I18n::JS::Configuration::DEFAULT_EXPORT_DIR_PATH", temp_path)
+    ::I18n::JS.configuration.reset!
+  end
 
-    subject { described_class.config_file_path }
+  describe "configuration" do
+    describe ".configuration" do
+      subject { described_class.configuration }
 
-    context "when it is not set" do
-      it { should eq default_path }
+      it { should be_a(I18n::JS::Configuration) }
+      it "returns the same instance when called twice" do
+        is_expected.to eql(described_class.configuration)
+      end
     end
-    context "when it is set already" do
-      before { described_class.config_file_path = new_path }
 
-      it { should eq new_path }
+    describe ".configure" do
+      it "requires a block to be passed" do
+        expect { described_class.configure }.to raise_error(LocalJumpError)
+      end
+      it "passes the config object to the block passed in" do
+        described_class.configure do |config|
+          expect(config).to eql(described_class.configuration)
+        end
+      end
     end
   end
 
   context "exporting" do
-    before do
-      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
-    end
-
-    it "exports messages to default path when configuration file doesn't exist" do
+    it "exports messages to default path when configuration contains default values only" do
       I18n::JS.export
       file_should_exist "translations.js"
     end
 
     it "exports messages using custom output path" do
-      set_config "custom_path.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/all.js",
+          only: "*",
+        },
+      ]
+
       I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
-      set_config "no_scope.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/no_scope.js",
+          only: "*",
+        },
+      ]
+
       I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "exports to multiple files" do
-      set_config "multiple_files.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/all.js",
+          only: "*",
+        },
+        {
+          file: "tmp/i18n-js/tudo.js",
+          only: "*",
+        },
+      ]
+
       I18n::JS.export
 
       file_should_exist "all.js"
       file_should_exist "tudo.js"
     end
 
-    it "ignores an empty config file" do
-      set_config "no_config.yml"
-      I18n::JS.export
-
-      file_should_exist "translations.js"
-    end
-
     it "exports to a JS file per available locale" do
-      set_config "js_file_per_locale.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings = [
+        {
+          file: temp_path("%{locale}.js"),
+          only: [
+            "*.date.*",
+            "*.admin.*",
+          ],
+        },
+      ]
+
       I18n::JS.export
 
       file_should_exist "en.js"
       file_should_exist "fr.js"
 
-      en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
+      en_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]}});
 EOS
 )
-      fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "fr.js"))
+      fr_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"admin":{"edit":{"title":"Editer"},"show":{"note":"plus de détails","title":"Visualiser"}},"date":{"abbr_day_names":["dim","lun","mar","mer","jeu","ven","sam"],"abbr_month_names":[null,"jan.","fév.","mar.","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],"day_names":["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"},"month_names":[null,"janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]}});
@@ -79,7 +114,17 @@ EOS
     end
 
     it "exports with multiple conditions" do
-      set_config "multiple_conditions.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/bitsnpieces.js",
+          only: [
+            "*.date.formats",
+            "*.number.currency",
+          ],
+        },
+      ]
+
       I18n::JS.export
 
       file_should_exist "bitsnpieces.js"
@@ -88,20 +133,29 @@ EOS
     it "exports with multiple conditions to a JS file per available locale" do
       allow(::I18n).to receive(:available_locales){ [:en, :fr] }
 
-      set_config "multiple_conditions_per_locale.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/bits.%{locale}.js",
+          only: [
+            "*.date.formats.*",
+            "*.number.currency.*",
+          ],
+        },
+      ]
 
       result = I18n::JS.translation_segments
       result.map(&:file).should eql(["tmp/i18n-js/bits.%{locale}.js"])
 
       result.map(&:save!)
 
-      en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.en.js"))
+      en_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "bits.en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}});
 EOS
 )
-      fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.fr.js"))
+      fr_output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "bits.fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}});
@@ -110,7 +164,17 @@ EOS
     end
 
     it "exports with :except condition" do
-      set_config "except_condition.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/trimmed.js",
+          except: [
+            "active_admin",
+            "mailers",
+          ],
+        },
+      ]
+
       I18n::JS.export
 
       file_should_exist "trimmed.js"
@@ -167,10 +231,10 @@ EOS
         I18n::JS.filtered_translations
       end
 
-      let!(:old_sort_translation_keys) { I18n::JS.sort_translation_keys? }
-      before { I18n::JS.sort_translation_keys = sort_translation_keys_value }
-      after { I18n::JS.sort_translation_keys = old_sort_translation_keys }
-      before { expect(I18n::JS.sort_translation_keys?).to eq(sort_translation_keys_value) }
+      let!(:old_sort_translation_keys) { I18n::JS.configuration.sort_translation_keys? }
+      before { I18n::JS.configuration.sort_translation_keys = sort_translation_keys_value }
+      after { I18n::JS.configuration.sort_translation_keys = old_sort_translation_keys }
+      before { expect(I18n::JS.configuration.sort_translation_keys?).to eq(sort_translation_keys_value) }
 
       let(:sorted_hash) do
         {sorted: :hash}
@@ -264,28 +328,52 @@ EOS
     end
 
     it "exports without fallback when disabled" do
-      set_config "js_file_per_locale_without_fallbacks.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/%{locale}.js",
+        },
+      ]
+
       subject[:fr][:fallback_test].should eql(nil)
       subject[:fr][:null_test].should eql(nil)
       subject[:de][:null_test].should eql(nil)
     end
 
     it "exports with default_locale as fallback when enabled" do
-      set_config "js_file_per_locale_with_fallbacks_enabled.yml"
+      I18n::JS.configuration.fallbacks = true
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/%{locale}.js",
+        },
+      ]
+
       subject[:fr][:fallback_test].should eql("Success")
       subject[:fr][:null_test].should eql("fallback for null")
       subject[:de][:null_test].should eql("fallback for null")
     end
 
     it "exports with default_locale as fallback when enabled with :default_locale" do
-      set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
+      I18n::JS.configuration.fallbacks = :default_locale
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/%{locale}.js",
+        },
+      ]
+
       subject[:fr][:fallback_test].should eql("Success")
       subject[:fr][:null_test].should eql("fallback for null")
       subject[:de][:null_test].should eql("fallback for null")
     end
 
     it "exports with given locale as fallback" do
-      set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
+      I18n::JS.configuration.fallbacks = :de
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/%{locale}.js",
+        },
+      ]
+
       subject[:fr][:fallback_test].should eql("Erfolg")
       subject[:fr][:null_test].should eql(nil)
       subject[:de][:null_test].should eql(nil)
@@ -299,7 +387,13 @@ EOS
       let!(:new_available_locales) { I18n.config.available_locales + [new_locale] }
       before do
         I18n.config.available_locales = new_available_locales
-        set_config "js_file_per_locale_with_fallbacks_as_locale_without_fallback_translations.yml"
+
+        I18n::JS.configuration.fallbacks = :pirate
+        I18n::JS.configuration.translation_segment_settings =  [
+          {
+            file: "tmp/i18n-js/%{locale}.js",
+          },
+        ]
       end
       after do
         I18n.config.available_locales = old_available_locales
@@ -319,17 +413,38 @@ EOS
       after { I18n.backend = old_backebad }
 
       it "exports with defined locale as fallback when enabled" do
-        set_config "js_file_per_locale_with_fallbacks_enabled.yml"
+        I18n::JS.configuration.fallbacks = true
+        I18n::JS.configuration.translation_segment_settings =  [
+          {
+            file: "tmp/i18n-js/%{locale}.js",
+          },
+        ]
+
         subject[:fr][:fallback_test].should eql("Erfolg")
       end
 
       it "exports with defined locale as fallback when enabled with :default_locale" do
-        set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
+        I18n::JS.configuration.fallbacks = :default_locale
+        I18n::JS.configuration.translation_segment_settings =  [
+          {
+            file: "tmp/i18n-js/%{locale}.js",
+          },
+        ]
+
         subject[:fr][:fallback_test].should eql("Success")
       end
 
       it "exports with Fallbacks as Hash" do
-        set_config "js_file_per_locale_with_fallbacks_as_hash.yml"
+        I18n::JS.configuration.fallbacks = {
+          fr: ["de", "en"],
+          de: "en",
+        }
+        I18n::JS.configuration.translation_segment_settings =  [
+          {
+            file: "tmp/i18n-js/%{locale}.js",
+          },
+        ]
+
         subject[:fr][:fallback_test].should eql("Erfolg")
       end
     end
@@ -338,14 +453,21 @@ EOS
   context "namespace and pretty_print options" do
 
     before do
-      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
-      set_config "js_file_with_namespace_and_pretty_print.yml"
+      I18n::JS.configuration.fallbacks = false
+      I18n::JS.configuration.translation_segment_settings =  [
+        {
+          file: "tmp/i18n-js/%{locale}.js",
+          only: "*",
+          namespace: "Foo",
+          pretty_print: true,
+        },
+      ]
     end
 
     it "exports with defined locale as fallback when enabled" do
       I18n::JS.export
       file_should_exist "en.js"
-      output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
+      output = File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "en.js"))
       expect(output).to match(/^#{
 <<EOS
 Foo.translations || (Foo.translations = {});
@@ -392,33 +514,20 @@ EOS
     end
   end
 
-  context "general" do
-    it "sets export directory" do
-      I18n::JS::DEFAULT_EXPORT_DIR_PATH.should eql("public/javascripts")
-    end
-
-    it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config?.should eql(false)
-      I18n::JS.config.should eql({})
-    end
-
-    it "executes erb in config file" do
-      set_config "erb.yml"
-
-      config_entry = I18n::JS.config["translations"].first
-      config_entry["only"].should eq("*.date.formats")
-    end
-  end
-
   describe "i18n.js exporting" do
-    after { begin described_class.send(:remove_instance_variable, :@export_i18n_js_dir_path); rescue; end }
+    after do
+      begin
+        described_class.configuration.send(:remove_instance_variable, :@export_i18n_js_dir_path)
+      rescue
+      end
+    end
 
     describe ".export_i18n_js with global variable" do
       before do
         allow(FileUtils).to receive(:mkdir_p).and_call_original
         allow(FileUtils).to receive(:cp).and_call_original
 
-        described_class.stub(:export_i18n_js_dir_path).and_return(export_i18n_js_dir_path)
+        allow(described_class.configuration).to receive(:export_i18n_js_dir_path).and_return(export_i18n_js_dir_path)
         I18n::JS.export_i18n_js
       end
 
@@ -432,7 +541,7 @@ EOS
           expect(FileUtils).to have_received(:cp).once
         end
         it "exports the file" do
-          File.should be_file(File.join(I18n::JS.export_i18n_js_dir_path, "i18n.js"))
+          File.should be_file(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "i18n.js"))
         end
       end
 
@@ -457,7 +566,18 @@ EOS
       end
 
       context 'when :export_i18n_js set in config' do
-        before { set_config "js_export_dir_custom.yml"; export_action }
+        before do
+          I18n::JS.configuration.fallbacks = false
+          I18n::JS.configuration.export_i18n_js_dir_path = "tmp/i18n-js/foo"
+          I18n::JS.configuration.translation_segment_settings =  [
+            {
+              file: "tmp/i18n-js/%{locale}.js",
+              only: "*",
+            },
+          ]
+
+          export_action
+        end
         let(:export_i18n_js_dir_path) { temp_path }
         let(:config_export_path) { "tmp/i18n-js/foo" }
 
@@ -473,7 +593,18 @@ EOS
       end
 
       context 'when .export_i18n_js_dir_path is set to false' do
-        before { set_config "js_export_dir_none.yml"; export_action }
+        before do
+          I18n::JS.configuration.fallbacks = false
+          I18n::JS.configuration.export_i18n_js_dir_path = false
+          I18n::JS.configuration.translation_segment_settings =  [
+            {
+              file: "tmp/i18n-js/%{locale}.js",
+              only: "*",
+            },
+          ]
+
+          export_action
+        end
 
         it "does NOT create the folder before copying" do
           expect(FileUtils).to_not have_received(:mkdir_p)
@@ -484,98 +615,25 @@ EOS
         end
       end
     end
-
-    describe '.export_i18n_js_dir_path' do
-      let(:default_path) { I18n::JS::DEFAULT_EXPORT_DIR_PATH }
-      let(:new_path) { File.join("tmp", default_path) }
-      after { described_class.send(:remove_instance_variable, :@export_i18n_js_dir_path) }
-
-      subject { described_class.export_i18n_js_dir_path }
-
-      context "when it is not set" do
-        it { should eq default_path }
-      end
-      context "when it is set to another path already" do
-        before { described_class.export_i18n_js_dir_path = new_path }
-
-        it { should eq new_path }
-      end
-      context "when it is set to nil already" do
-        before { described_class.export_i18n_js_dir_path = nil }
-
-        it { should eq :none }
-      end
-    end
   end
 
   describe "translation key sorting" do
-
-    describe ".sort_translation_keys?" do
-      after { described_class.send(:remove_instance_variable, :@sort_translation_keys) }
-      subject { described_class.sort_translation_keys? }
-
-
-      context "set with config" do
-
-        context 'when :sort_translation_keys is not set in config' do
-          before :each do
-            set_config "default.yml"
-          end
-
-          it { should eq true }
-        end
-
-        context 'when :sort_translation_keys set to true in config' do
-          before :each do
-            set_config "js_sort_translation_keys_true.yml"
-          end
-
-          it { should eq true }
-        end
-
-        context 'when :sort_translation_keys set to false in config' do
-          before :each do
-            set_config "js_sort_translation_keys_false.yml"
-          end
-
-          it { should eq false }
-        end
-      end
-
-      context 'set by .sort_translation_keys' do
-
-        context "when it is not set" do
-          it { should eq true }
-        end
-
-        context "when it is set to true" do
-          before { described_class.sort_translation_keys = true }
-
-          it { should eq true }
-        end
-
-        context "when it is set to false" do
-          before { described_class.sort_translation_keys = false }
-
-          it { should eq false }
-        end
-      end
-    end
-
     context "exporting" do
       subject do
         I18n::JS.export
         file_should_exist "en.js"
-        File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
-      end
-
-      before do
-        stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+        File.read(File.join(I18n::JS.configuration.export_i18n_js_dir_path, "en.js"))
       end
 
       context 'sort_translation_keys is true' do
         before :each do
-          set_config "js_sort_translation_keys_true.yml"
+          I18n::JS.configuration.sort_translation_keys = true
+          I18n::JS.configuration.translation_segment_settings = [
+            {
+              file: "tmp/i18n-js/%{locale}.js",
+              only: "*",
+            },
+          ]
         end
 
         it "exports with the keys sorted" do
@@ -587,6 +645,5 @@ EOS
         end
       end
     end
-
   end
 end
