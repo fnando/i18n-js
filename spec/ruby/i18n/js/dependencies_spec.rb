@@ -1,3 +1,4 @@
+require "spec_helper"
 
 describe I18n::JS::Dependencies, ".sprockets_supports_register_preprocessor?" do
 
