@@ -591,6 +591,7 @@ This method is useful for very large apps where a single contained translations.
 
 ### Rails without asset pipeline
 1. Setup your `config/i18n-js.yml` to have multiple files and try to minimize any overlap.
+
   ```yaml
   sort_translation_keys: true
   fallbacks: false
@@ -683,9 +684,10 @@ To use this with require.js we are only going to change a few things from above.
         + 'nls/welcome'
   ```
 3. When `rake assets:precompile` is executed it will optimize the translations into the correct modules so they are loaded with their assigned module, and loading them with requirejs is as simple as requiring any other shim.
+
   ```javascript
   define(['welcome/other_asset','nls/welcome'], function (otherAsset){
-
+      // ...
   });
   ```
 4. (optional) As an additional configuration we can make a task to be run before the requirejs optimizer. This will allow any automated scripts that run the requirejs optimizer to export the strings before we run r.js
@@ -704,7 +706,6 @@ To use this with require.js we are only going to change a few things from above.
       end
     end
   end
-
   ```
 
 ## Using I18n.js with other languages (Python, PHP, ...)
@@ -729,26 +730,32 @@ I18n.translations["pt-BR"] = {
 ### Missing translations in precompiled file(s) after adding any new locale file
 
 Due to the design of `sprockets`:
+
 - `depend_on` only takes file paths, not directory paths
-- registered `preprocessors` are only run when fingerprint of any asset file, including `.erb` files, is changed
+- registered `preprocessors` are only run when the fingerprint of any asset file, including `.erb` files, is changed
 
-New locale files won't be picked up unless any existing locale file content is changed.  
-You can workaround it manually by running
-```bash
-$ rake assets:clobber
-```
-to clear the asset cache.  
-**Or**  
-Change something in existing locale file.  
-**Or**  
-Change `config.assets.version`  
+This means that new locale files will not be detected, and so they will not trigger a i18n-js refresh. There are a few approaches to work around this:
 
-**Note:** `rake assets:clobber` will also remove all fingerprinted assets.  
-If you are precompiling assets on target machine(s),
-old assets might be removed and cannot be served in cached pages.
+1. You can force i18n-js to update its translations by completely clearing the assets cache. Use one of the following:
 
-Please see issue [#213](https://github.com/fnando/i18n-js/issues/213) for detail & related discussion.
+  ```bash
+  $ rake assets:clobber
+  # Or, with older versions of Rails:
+  $ rake tmp:cache:clear
+  ```
 
+    These commands will remove *all* fingerprinted assets, and you will have to recompile them with
+
+    ```
+    $ rake assets:precompile
+    ```
+    or similar commands.  If you are precompiling assets on the target machine(s), cached pages may be broken by this, so they will need to be refreshed.
+    
+2. You can change something in a different locale file.
+
+3. Finally, you can change `config.assets.version`.
+
+**Note:** See issue [#213](https://github.com/fnando/i18n-js/issues/213) for more details and discussion of this issue.
 
 ## Maintainer
 
