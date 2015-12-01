@@ -18,7 +18,7 @@ module Helpers
 
   def file_should_exist(name)
     file_path = File.join(temp_path, name)
-    File.should be_file(file_path)
+    expect(File.file?(file_path)).to eq(true)
   end
 
   def temp_path(file_name = "")
