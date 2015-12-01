@@ -2,6 +2,7 @@ require "yaml"
 require "i18n"
 require "fileutils"
 require "i18n/js/configuration"
+require "i18n/js/configuration/yaml_file_loader"
 require "i18n/js/utils"
 
 module I18n
