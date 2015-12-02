@@ -7,7 +7,7 @@
   - [JS] Allow extending of translation files ([#354](https://github.com/fnando/i18n-js/pull/354))
 
 ### bug fixes
-
+- [Ruby] Fix of missing initializer at sprockets. ([#371](https://github.com/fnando/i18n-js/pull/371))
 
 
 ## 3.0.0.rc11
