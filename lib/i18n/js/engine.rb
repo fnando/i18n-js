@@ -3,7 +3,7 @@ require "i18n/js"
 module I18n
   module JS
     class Engine < ::Rails::Engine
-      initializer "i18n-js.register_preprocessor", :after => "sprockets.environment" do
+      initializer "i18n-js.register_preprocessor", after: :engines_blank_point, before: :finisher_hook do
         next unless JS::Dependencies.using_asset_pipeline?
         next unless JS::Dependencies.sprockets_supports_register_preprocessor?
 
