@@ -26,8 +26,8 @@ module I18n
         # @raise [Errors::FileNotFound]
         #   When file does not exists
         def load
-          if config_from_file.key?(:export_i18n_js)
-            configuration.i18n_js_export_path = config_from_file.fetch(:export_i18n_js)
+          if config_from_file.key?(:i18n_js_export_path)
+            configuration.i18n_js_export_path = config_from_file.fetch(:i18n_js_export_path)
           end
 
           if config_from_file.key?(:sort_translation_keys)
@@ -38,8 +38,8 @@ module I18n
             configuration.fallbacks = config_from_file.fetch(:fallbacks)
           end
 
-          if config_from_file.key?(:translations)
-            configuration.translation_segment_settings = config_from_file.fetch(:translations)
+          if config_from_file.key?(:translation_segment_settings)
+            configuration.translation_segment_settings = config_from_file.fetch(:translation_segment_settings)
           end
         end
 

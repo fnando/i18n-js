@@ -164,7 +164,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
       end
     end
 
-    describe "export_i18n_js" do
+    describe "i18n_js_export_path" do
       let(:actual_subject) do
         configuration.i18n_js_export_path
       end
@@ -182,7 +182,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
       context "when value is false" do
         let(:yaml_file_content) do
           <<-YAML
-          export_i18n_js: false
+          i18n_js_export_path: false
           YAML
         end
 
@@ -192,7 +192,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
       context "when value is a string" do
         let(:yaml_file_content) do
           <<-YAML
-          export_i18n_js: tmp/i18n.js
+          i18n_js_export_path: tmp/i18n.js
           YAML
         end
 
@@ -236,7 +236,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
       end
     end
 
-    describe "translations" do
+    describe "translation_segment_settings" do
       let(:actual_subject) do
         configuration.translation_segment_settings
       end
@@ -254,7 +254,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
       context "when value is empty" do
         let(:yaml_file_content) do
           <<-YAML
-          translations: []
+          translation_segment_settings: []
           YAML
         end
 
@@ -264,7 +264,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
       context "when value is an array" do
         let(:yaml_file_content) do
           <<-YAML
-          translations:
+          translation_segment_settings:
           - file: "tmp/translations.js"
             only: ["*.abc.*"]
             except: ["*.efg.*"]
