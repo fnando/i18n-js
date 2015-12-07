@@ -241,6 +241,22 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
         configuration.translation_segment_settings
       end
 
+      shared_context "when existing custom settings exists" do
+        before do
+          configuration.translation_segment_settings = existing_translation_segment_settings
+        end
+
+        let(:existing_translation_segment_settings) do
+          [
+            {
+              "file" => "tmp/engine_translations.js",
+              "namespace" => "Engine",
+              "pretty_print" => false,
+            }
+          ]
+        end
+      end
+
       context "when key does not exist" do
         let(:yaml_file_content) do
           ""
@@ -248,6 +264,14 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
 
         it "returns the default value" do
           should eq(configuration_with_default_values.translation_segment_settings)
+        end
+
+        context "when existing custom settings exists" do
+          include_context "when existing custom settings exists"
+
+          it "returns the existing value" do
+            should eq(existing_translation_segment_settings)
+          end
         end
       end
 
@@ -258,7 +282,17 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
           YAML
         end
 
-        it { should eq [] }
+        it "returns the new value from YAML" do
+          should eq []
+        end
+
+        context "when existing custom settings exists" do
+          include_context "when existing custom settings exists"
+
+          it "returns the new value from YAML" do
+            should eq []
+          end
+        end
       end
 
       context "when value is an array" do
@@ -272,15 +306,27 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
             pretty_print: true
           YAML
         end
-
-        it do
-          should eq([{
+        
+        let(:new_translation_segment_settings) do
+          [{
             "file" => "tmp/translations.js",
             "only" => ["*.abc.*"],
             "except" => ["*.efg.*"],
             "namespace" => "MyNamespace",
             "pretty_print" => true,
-          }])
+          }]
+        end
+
+        it "returns the new value from YAML" do
+          should eq(new_translation_segment_settings)
+        end
+
+        context "when existing custom settings exists" do
+          include_context "when existing custom settings exists"
+
+          it "returns the new value from YAML" do
+            should eq(new_translation_segment_settings)
+          end
         end
       end
     end
