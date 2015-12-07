@@ -761,27 +761,20 @@ I18n.translations["pt-BR"] = {
 ## Using YAML file as config store
 Earlier versions of this gem was mainly using YAML config file for loading file.  
 And it was changed to have Ruby object as core configuration implementation.  
-For those using YAML config file and don't want to convert it into an initialzer,
+For those using YAML config file and don't want to convert all the content into Ruby code,
 A loader class is created for loading such file.
-YAML config file will be supported for `3.x`, but might deprecated and removed in next major release.
 
 ### Usage
 ```ruby
 # Yes you still need some ruby code to load the YAML file,
-# but it should be easier than converting the whole YAML if it's large.
+# but it should be easier than converting all YAML file content.
 
 require "i18n-js"
 ::I18n::JS::Configuration::YamlFileLoader.new(
   # Change this to be the path of your YAML config file
-  Rails.root.join("config", "i18n-js.yml"),
+  ::Rails.root.join("config", "i18n-js.yml"),
 ).load
 ```
-
-### YAML key names to Ruby config attribute name Mappings
-- `sort_translation_keys` => `sort_translation_keys`
-- `fallbacks` => `fallbacks`
-- `translations` => `translation_segment_settings`
-- `export_i18n_js` => `i18n_js_export_path`
 
 ## Known Issues
 
