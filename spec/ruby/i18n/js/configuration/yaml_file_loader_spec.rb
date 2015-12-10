@@ -238,7 +238,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
 
     describe "translation_segment_settings" do
       let(:actual_subject) do
-        configuration.translation_segment_settings
+        configuration.translation_segment_settings.to_a
       end
 
       shared_context "when existing custom settings exists" do
@@ -249,9 +249,9 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
         let(:existing_translation_segment_settings) do
           [
             {
-              "file" => "tmp/engine_translations.js",
-              "namespace" => "Engine",
-              "pretty_print" => false,
+              file: "tmp/engine_translations.js",
+              namespace: "Engine",
+              pretty_print: false,
             }
           ]
         end
@@ -263,7 +263,7 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
         end
 
         it "returns the default value" do
-          should eq(configuration_with_default_values.translation_segment_settings)
+          should eq(configuration_with_default_values.translation_segment_settings.to_a)
         end
 
         context "when existing custom settings exists" do
@@ -308,13 +308,15 @@ RSpec.describe ::I18n::JS::Configuration::YamlFileLoader do
         end
         
         let(:new_translation_segment_settings) do
-          [{
-            "file" => "tmp/translations.js",
-            "only" => ["*.abc.*"],
-            "except" => ["*.efg.*"],
-            "namespace" => "MyNamespace",
-            "pretty_print" => true,
-          }]
+          [
+            {
+              file: "tmp/translations.js",
+              only: ["*.abc.*"],
+              except: ["*.efg.*"],
+              namespace: "MyNamespace",
+              pretty_print: true,
+            }
+          ]
         end
 
         it "returns the new value from YAML" do

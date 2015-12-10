@@ -1,6 +1,7 @@
+require "i18n/js/private/hash_with_symbol_keys"
+
 module I18n
   module JS
-
     # Class which enscapulates a translations hash and outputs a single JSON translation file
     class Segment
       attr_accessor :file, :translations, :namespace, :pretty_print
@@ -10,8 +11,11 @@ module I18n
       def initialize(file, translations, options = {})
         @file         = file
         @translations = translations
-        @namespace    = options[:namespace] || 'I18n'
-        @pretty_print = !!options[:pretty_print]
+
+        options_with_indifferent_read = Private::HashWithSymbolKeys.new(options)
+
+        @namespace    = options_with_indifferent_read[:namespace] || 'I18n'
+        @pretty_print = !!options_with_indifferent_read[:pretty_print]
       end
 
       # Saves JSON file containing translations

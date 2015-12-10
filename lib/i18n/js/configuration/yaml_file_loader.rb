@@ -1,5 +1,6 @@
 require "erb"
 require "yaml"
+require "i18n/js/private/hash_with_symbol_keys"
 
 module I18n
   module JS
@@ -54,9 +55,9 @@ module I18n
         #   With non Active Support indifferent access
         def config_from_file
           @config_from_file ||= begin
-            (::YAML.load(erb_result_from_yaml_file) || {}).tap do |hash|
-              hash.extend HashWithIndifferentReadExtension
-            end.freeze
+            Private::HashWithSymbolKeys.new(
+              (::YAML.load(erb_result_from_yaml_file) || {})
+            ).freeze
           end
         end
 
@@ -69,41 +70,6 @@ module I18n
             raise Errors::FileNotFound, "file with path #{yaml_file_path} is absent"
           end
         end
-
-        # Hash with indifferent access with partial implementation only
-        # Assuming the keys are already strings,
-        # since they are read from YAML files
-        #
-        # @api private
-        module HashWithIndifferentReadExtension
-          # If `#[]` cannot read value with symbol key, try string key
-          def default(key = nil)
-            if key.is_a?(Symbol) && key?(key = key.to_s)
-              self[key]
-            else
-              super
-            end
-          end
-
-          def fetch(key, *extras)
-            super(convert_key(key), *extras)
-          end
-
-          def key?(key)
-            super(convert_key(key))
-          end
-
-          alias_method :include?, :key?
-          alias_method :has_key?, :key?
-          alias_method :member?, :key?
-
-          private
-
-          def convert_key(key)
-            key.is_a?(::Symbol) ? key.to_s : key
-          end
-        end
-        private_constant :HashWithIndifferentReadExtension
       end
     end
   end

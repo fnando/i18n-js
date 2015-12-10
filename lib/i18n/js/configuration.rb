@@ -12,12 +12,12 @@ module I18n
         @fallbacks                = true
         @sort_translation_keys    = true
         @i18n_js_export_path  = DEFAULT_EXPORT_DIR_PATH
-        @translation_segment_settings = [
+        @translation_segment_settings = TranslationSegmentSettings.new([
           {
             file: "#{DEFAULT_EXPORT_DIR_PATH}/translations.js",
             only: "*",
           },
-        ]
+        ])
       end
 
       attr_accessor(*[
@@ -25,6 +25,10 @@ module I18n
         :translation_segment_settings,
         :i18n_js_export_path,
       ])
+
+      def translation_segment_settings=(new_settings)
+        @translation_segment_settings = TranslationSegmentSettings.new(new_settings)
+      end
 
       # Custom accessors
       def export_i18n_js?
@@ -47,6 +51,34 @@ module I18n
 
       def use_fallbacks?
         !!fallbacks
+      end
+
+      class TranslationSegmentSettings
+        def initialize(array_of_options)
+          self.array_of_options = array_of_options
+        end
+
+        def to_a
+          array_of_options.dup
+        end
+
+        protected
+
+        def array_of_options=(new_array_of_options)
+          @array_of_options = new_array_of_options.map do |options|
+            convert_options(options)
+          end
+        end
+
+        private
+
+        attr_reader :array_of_options
+
+        def convert_options(options)
+          raise TypeError unless options.is_a?(Hash)
+
+          Private::HashWithSymbolKeys.new(options)
+        end
       end
     end
   end

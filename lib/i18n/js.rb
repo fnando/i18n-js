@@ -71,7 +71,7 @@ module I18n
     end
 
     def self.translation_segments
-      configuration.translation_segment_settings.inject([]) do |segments, options|
+      configuration.translation_segment_settings.to_a.inject([]) do |segments, options|
         file = options[:file]
         only = options[:only] || '*'
         exceptions = [options[:except] || []].flatten

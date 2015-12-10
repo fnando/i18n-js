@@ -1,59 +1,96 @@
 require "spec_helper"
 
 describe I18n::JS::Segment do
-
   let(:file)        { "tmp/i18n-js/segment.js" }
   let(:translations){ { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
   let(:namespace)   { "MyNamespace" }
   let(:pretty_print){ nil }
   let(:options)     { {namespace: namespace, pretty_print: pretty_print} }
-  subject { I18n::JS::Segment.new(file, translations, options) }
+  subject(:instance) { I18n::JS::Segment.new(file, translations, options) }
 
   let!(:gem_config_setup) do
     # empty
   end
 
   describe ".new" do
+    describe "attribute `file`" do
+      subject { instance.file }
 
-    it "should persist the file path variable" do
-      subject.file.should eql("tmp/i18n-js/segment.js")
-    end
-
-    it "should persist the translations variable" do
-      subject.translations.should eql(translations)
-    end
-
-    it "should persist the namespace variable" do
-      subject.namespace.should eql("MyNamespace")
-    end
-
-    context "when namespace is nil" do
-      let(:namespace){ nil }
-
-      it "should default namespace to `I18n`" do
-        subject.namespace.should eql("I18n")
+      it "does return value from argument" do
+        should eql("tmp/i18n-js/segment.js")
       end
     end
 
-    context "when namespace is not set" do
-      subject { I18n::JS::Segment.new(file, translations) }
+    describe "attribute `translations`" do
+      subject { instance.translations }
 
-      it "should default namespace to `I18n`" do
-        subject.namespace.should eql("I18n")
+      it "does return value from argument" do
+        should eql(translations)
       end
     end
 
-    context "when pretty_print is nil" do
-      it "should set pretty_print to false" do
-        subject.pretty_print.should be false
+    describe "option `namespace`" do
+      subject { instance.namespace }
+
+      it "does return value from options" do
+        should eql(namespace)
+      end
+
+      context "when namespace is nil" do
+        let(:namespace) { nil }
+
+        it "does return `I18n`" do
+          should eql("I18n")
+        end
       end
     end
 
-    context "when pretty_print is truthy" do
-      let(:pretty_print){ 1 }
+    describe "option `pretty_print`" do
+      subject { instance.pretty_print }
 
-      it "should set pretty_print to true" do
-        subject.pretty_print.should be true
+      context "when pretty_print is nil" do
+        let(:pretty_print) { nil }
+
+        it "does return `false`" do
+          should eql(false)
+        end
+      end
+
+      context "when pretty_print is truthy" do
+        let(:pretty_print) { 1 }
+
+        it "does return value from options" do
+          should eql(true)
+        end
+      end
+    end
+
+
+    describe "when options with string keys are used" do
+      let(:options) do
+        {
+          "namespace".freeze    => namespace,
+          "pretty_print".freeze => pretty_print,
+        }
+      end
+
+      let(:namespace) { "MyNamespace" }
+      let(:pretty_print) { 1 }
+
+      describe "option `namespace`" do
+        subject { instance.namespace }
+
+        it "does return value from options" do
+          should eql(namespace)
+        end
+      end
+
+      describe "option `pretty_print`" do
+        subject { instance.pretty_print }
+
+        it "does return value from options" do
+          should eql(true)
+        end
       end
     end
   end
