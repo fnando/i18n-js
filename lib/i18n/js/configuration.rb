@@ -22,8 +22,11 @@ module I18n
 
       attr_accessor(*[
         :fallbacks,
-        :translation_segment_settings,
+      ])
+
+      attr_reader(*[
         :i18n_js_export_path,
+        :translation_segment_settings,
       ])
 
       def translation_segment_settings=(new_settings)
