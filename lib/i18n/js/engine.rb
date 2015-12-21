@@ -20,6 +20,12 @@ module I18n
         next unless JS::Dependencies.using_asset_pipeline?
         next unless JS::Dependencies.sprockets_supports_register_preprocessor?
 
+        # From README of 2.x & 3.x of `sprockets-rails`
+        # It seems the `configure` block is preferred way to call `register_preprocessor`
+        # Not sure if this will break older versions of rails
+        #
+        # https://github.com/rails/sprockets-rails/blob/v2.3.3/README.md
+        # https://github.com/rails/sprockets-rails/blob/v3.0.0/README.md
         Rails.application.config.assets.configure do |config|
           config.register_preprocessor "application/javascript", :"i18n-js_dependencies" do |context, source|
             if context.logical_path == "i18n/filtered"

@@ -8,6 +8,7 @@
 
 ### bug fixes
 - [Ruby] Fix of missing initializer at sprockets. ([#371](https://github.com/fnando/i18n-js/pull/371))
+- [Ruby] Use proper method to register preprocessor documented by sprockets-rails. ([#376](https://github.com/fnando/i18n-js/pull/376))
 - [JS] Correctly round unprecise floating point numbers.
 
 
