@@ -44,6 +44,22 @@
     return decimalAdjust('round', number, -precision).toFixed(precision);
   };
 
+  // Is a given variable an object?
+  // Borrowed from Underscore.js
+  var isObject = function(obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
+  };
+
+  // Is a given value an array?
+  // Borrowed from Underscore.js
+  var isArray = function(obj) {
+    if (Array.isArray) {
+      return Array.isArray(obj);
+    };
+    return Object.prototype.toString.call(obj) === '[object Array]';
+  };
+
   var decimalAdjust = function(type, value, exp) {
     // If the exp is undefined or zero...
     if (typeof exp === 'undefined' || +exp === 0) {
@@ -204,7 +220,7 @@
       result = result(locale);
     }
 
-    if (result instanceof Array === false) {
+    if (isArray(result) === false) {
       result = [result];
     }
 
@@ -433,7 +449,7 @@
 
     if (typeof(translation) === "string") {
       translation = this.interpolate(translation, options);
-    } else if (translation instanceof Object && this.isSet(options.count)) {
+    } else if (isObject(translation) && this.isSet(options.count)) {
       translation = this.pluralize(options.count, translation, options);
     }
 
@@ -482,7 +498,7 @@
     options = this.prepareOptions(options);
     var translations, pluralizer, keys, key, message;
 
-    if (scope instanceof Object) {
+    if (isObject(scope)) {
       translations = scope;
     } else {
       translations = this.lookup(scope, options);
