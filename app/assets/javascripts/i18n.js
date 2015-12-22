@@ -479,9 +479,9 @@
       if (this.isSet(options[name])) {
         value = options[name].toString().replace(/\$/gm, "_#$#_");
       } else if (name in options) {
-        value = this.nullPlaceholder(placeholder, message);
+        value = this.nullPlaceholder(placeholder, message, options);
       } else {
-        value = this.missingPlaceholder(placeholder, message);
+        value = this.missingPlaceholder(placeholder, message, options);
       }
 
       regex = new RegExp(placeholder.replace(/\{/gm, "\\{").replace(/\}/gm, "\\}"));
@@ -543,7 +543,7 @@
   };
 
   // Return a missing placeholder message for given parameters
-  I18n.missingPlaceholder = function(placeholder, message) {
+  I18n.missingPlaceholder = function(placeholder, message, options) {
     return "[missing " + placeholder + " value]";
   };
 

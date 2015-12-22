@@ -97,4 +97,17 @@ describe("Interpolation", function(){
     expect(actual).toEqual("Hello !");
     I18n.nullPlaceholder = orig;
   });
+
+  it("provides missingPlaceholder with the placeholder, message, and options object", function(){
+    var orig = I18n.missingPlaceholder;
+    I18n.missingPlaceholder = function(placeholder, message, options) {
+      expect(placeholder).toEqual('{{name}}');
+      expect(message).toEqual('Hello {{name}}!');
+      expect(options.debugScope).toEqual('landing-page');
+      return '[missing-placeholder-debug]';
+    };
+    actual = I18n.t("greetings.name", {debugScope: 'landing-page'});
+    expect(actual).toEqual("Hello [missing-placeholder-debug]!");
+    I18n.missingPlaceholder = orig;
+  });
 });

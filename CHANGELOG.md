@@ -5,6 +5,7 @@
 
 ### enhancements
   - [JS] Allow extending of translation files ([#354](https://github.com/fnando/i18n-js/pull/354))
+  - [JS] Allow missingPlaceholder to receive extra data for debugging ([#380](https://github.com/fnando/i18n-js/pull/380))
 
 ### bug fixes
 - [Ruby] Fix of missing initializer at sprockets. ([#371](https://github.com/fnando/i18n-js/pull/371))
