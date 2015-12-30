@@ -1,13 +1,35 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [Unreleased]
 
-### breaking changes
+### Added
 
-### enhancements
-  - [JS] Allow extending of translation files ([#354](https://github.com/fnando/i18n-js/pull/354))
-  - [JS] Allow missingPlaceholder to receive extra data for debugging ([#380](https://github.com/fnando/i18n-js/pull/380))
+- Nothing
 
-### bug fixes
+### Changed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
+
+## [3.0.0.rc12] - 2015-12-30
+
+### Added
+
+- [JS] Allow extending of translation files ([#354](https://github.com/fnando/i18n-js/pull/354))
+- [JS] Allow missingPlaceholder to receive extra data for debugging ([#380](https://github.com/fnando/i18n-js/pull/380))
+
+### Changed
+
+- Nothing
+
+### Fixed
+
 - [Ruby] Fix of missing initializer at sprockets. ([#371](https://github.com/fnando/i18n-js/pull/371))
 - [Ruby] Use proper method to register preprocessor documented by sprockets-rails. ([#376](https://github.com/fnando/i18n-js/pull/376))
 - [JS] Correctly round unprecise floating point numbers.
@@ -133,3 +155,8 @@
 ## Before 3.0.0.rc5
 
 - Things happened.
+
+
+
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc12...HEAD
+[3.0.0.rc12]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc11...v3.0.0.rc12
