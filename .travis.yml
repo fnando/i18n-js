@@ -8,6 +8,9 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
+  # Since the Travis Build Env does not recognize `2.3` alias yet
+  # We need to specify the version precisely
+  - 2.3.0
   - ruby-head
 before_install: # Need to install something extra to test JS
 - npm install jasmine-node@1.14.2
