@@ -772,6 +772,10 @@
 
     options = this.prepareOptions(options, DATE);
 
+    if (isNaN(date.getTime())) {
+      throw new Error('I18n.strftime() requires a valid date object, but received an invalid date.');
+    }
+
     var weekDay = date.getDay()
       , day = date.getDate()
       , year = date.getFullYear()
