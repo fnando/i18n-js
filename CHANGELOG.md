@@ -14,7 +14,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Nothing
+- [JS] Throw an error when `I18n.strftime()` takes an invalid date ([#383](https://github.com/fnando/i18n-js/pull/383))
+
 
 
 ## [3.0.0.rc12] - 2015-12-30
