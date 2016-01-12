@@ -15,6 +15,10 @@ Features:
 - Asset pipeline support
 - Lots more! :)
 
+## Version Notice
+The `master` branch (including this README) is for latest `3.0.0.rc` instead of `2.x`.
+
+
 ## Usage
 
 ### Installation
