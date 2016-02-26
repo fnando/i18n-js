@@ -496,7 +496,8 @@
   // which will be retrieved from `options`.
   I18n.pluralize = function(count, scope, options) {
     options = this.prepareOptions(options);
-    var translations, pluralizer, keys, key, message;
+    var translations, pluralizer, keys, key;
+    var message = '';
 
     if (isObject(scope)) {
       translations = scope;
