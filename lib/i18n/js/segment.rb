@@ -3,22 +3,25 @@ module I18n
 
     # Class which enscapulates a translations hash and outputs a single JSON translation file
     class Segment
-      attr_accessor :file, :translations, :namespace, :pretty_print
-
+      OPTIONS = [:namespace, :pretty_print, :js_extend, :sort_translation_keys]
       LOCALE_INTERPOLATOR = /%\{locale\}/
+
+      attr_reader *([:file, :translations] | OPTIONS)
 
       def initialize(file, translations, options = {})
         @file         = file
         @translations = translations
         @namespace    = options[:namespace] || 'I18n'
         @pretty_print = !!options[:pretty_print]
+        @js_extend    = options.has_key?(:js_extend) ? !!options[:js_extend] : true
+        @sort_translation_keys = options.has_key?(:sort_translation_keys) ? !!options[:sort_translation_keys] : true
       end
 
       # Saves JSON file containing translations
       def save!
-        if self.file =~ LOCALE_INTERPOLATOR
+        if @file =~ LOCALE_INTERPOLATOR
           I18n.available_locales.each do |locale|
-            write_file(file_for_locale(locale), self.translations.slice(locale))
+            write_file(file_for_locale(locale), @translations.slice(locale))
           end
         else
           write_file
@@ -27,20 +30,37 @@ module I18n
 
       protected
 
-      def write_file(_file = self.file, _translations = self.translations)
+      def write_file(_file = @file, _translations = @translations)
         FileUtils.mkdir_p File.dirname(_file)
         File.open(_file, "w+") do |f|
-          f << %(#{self.namespace}.translations || (#{self.namespace}.translations = {});\n)
+          f << js_header
           _translations.each do |locale, translations_for_locale|
-            output_translations = I18n::JS.sort_translation_keys? ? Utils.deep_key_sort(translations_for_locale) : translations_for_locale
-            f << %(#{self.namespace}.translations["#{locale}"] = I18n.extend((#{self.namespace}.translations["#{locale}"] || {}), #{print_json(output_translations)});\n)
+            f << js_translations(locale, translations_for_locale)
           end
+        end
+      end
+
+      def js_header
+        %(#{@namespace}.translations || (#{@namespace}.translations = {});\n)
+      end
+
+      def js_translations(locale, translations)
+        translations = Utils.deep_key_sort(translations) if @sort_translation_keys
+        translations = print_json(translations)
+        js_translations_line(locale, translations)
+      end
+
+      def js_translations_line(locale, translations)
+        if @js_extend
+          %(#{@namespace}.translations["#{locale}"] = I18n.extend((#{@namespace}.translations["#{locale}"] || {}), #{translations});\n)
+        else
+          %(#{@namespace}.translations["#{locale}"] = #{translations};\n)
         end
       end
 
       # Outputs pretty or ugly JSON depending on :pretty_print option
       def print_json(translations)
-        if pretty_print
+        if @pretty_print
           JSON.pretty_generate(translations)
         else
           translations.to_json
@@ -49,7 +69,7 @@ module I18n
 
       # interpolates filename
       def file_for_locale(locale)
-        self.file.gsub(LOCALE_INTERPOLATOR, locale.to_s)
+        @file.gsub(LOCALE_INTERPOLATOR, locale.to_s)
       end
     end
   end

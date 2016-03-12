@@ -48,13 +48,11 @@ module I18n
         only = options[:only] || '*'
         exceptions = [options[:except] || []].flatten
 
-        segment_options = options.slice(:namespace, :pretty_print)
-
         result = segment_for_scope(only, exceptions)
 
         merge_with_fallbacks!(result) if fallbacks
 
-        segments << Segment.new(file, result, segment_options) unless result.empty?
+        segments << Segment.new(file, result, extract_segment_options(options)) unless result.empty?
 
         segments
       end
@@ -168,6 +166,13 @@ module I18n
       end
     end
 
+    def self.js_extend
+      config.fetch(:js_extend) do
+        # default value
+        true
+      end
+    end
+
     def self.sort_translation_keys?
       @sort_translation_keys ||= (config[:sort_translation_keys]) if config.has_key?(:sort_translation_keys)
       @sort_translation_keys = true if @sort_translation_keys.nil?
@@ -176,6 +181,11 @@ module I18n
 
     def self.sort_translation_keys=(value)
       @sort_translation_keys = !!value
+    end
+
+    def self.extract_segment_options(options)
+      segment_options = {js_extend: js_extend, sort_translation_keys: sort_translation_keys?}.with_indifferent_access
+      segment_options.merge(options.slice(*Segment::OPTIONS))
     end
 
     ### Export i18n.js

@@ -30,14 +30,14 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {}).and_call_original
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {js_extend: true, sort_translation_keys: true}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {}).and_call_original
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {js_extend: true, sort_translation_keys: true}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
@@ -587,6 +587,41 @@ EOS
         end
       end
     end
+  end
 
+  describe "js_extend option" do
+    before do
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+    end
+
+    it "exports with js_extend option at parent level" do
+      set_config "js_extend_parent.yml"
+      I18n::JS.export
+
+      file_should_exist "js_extend_parent.js"
+
+      output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "js_extend_parent.js"))
+      expect(output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations[\"en\"] = {\"date\":{\"formats\":{\"default\":\"%Y-%m-%d\",\"long\":\"%B %d, %Y\",\"short\":\"%b %d\"}}};
+I18n.translations[\"fr\"] = {\"date\":{\"formats\":{\"default\":\"%d/%m/%Y\",\"long\":\"%e %B %Y\",\"long_ordinal\":\"%e %B %Y\",\"only_day\":\"%e\",\"short\":\"%e %b\"}}};
+EOS
+)
+    end
+
+    it "exports with js_extend option at segment level" do
+      set_config "js_extend_segment.yml"
+      I18n::JS.export
+
+      file_should_exist "js_extend_segment.js"
+
+      output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "js_extend_segment.js"))
+      expect(output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations[\"en\"] = {\"date\":{\"formats\":{\"default\":\"%Y-%m-%d\",\"long\":\"%B %d, %Y\",\"short\":\"%b %d\"}}};
+I18n.translations[\"fr\"] = {\"date\":{\"formats\":{\"default\":\"%d/%m/%Y\",\"long\":\"%e %B %Y\",\"long_ordinal\":\"%e %B %Y\",\"only_day\":\"%e\",\"short\":\"%e %b\"}}};
+EOS
+)
+    end
   end
 end
