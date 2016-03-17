@@ -256,6 +256,20 @@ translations:
 ```
 
 
+#### Javscript Deep Merge (:js_extend option)
+
+By default, the output file Javascript will call the `I18n.extend` method to ensure that newly loaded locale
+files are deep-merged with any locale data already in memory. To disable this either globally or per-file,
+set the `js_extend` option to false
+
+```yaml
+js_extend: false  # this will disable Javascript I18n.extend globally
+translations:
+- file: "public/javascripts/i18n/translations.js"
+  js_extend: false  # this will disable Javascript I18n.extend for this file
+```
+
+
 #### Vanilla JavaScript
 
 Just add the `i18n.js` file to your page. You'll have to build the translations object

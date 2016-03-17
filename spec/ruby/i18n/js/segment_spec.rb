@@ -6,7 +6,12 @@ describe I18n::JS::Segment do
   let(:translations){ { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
   let(:namespace)   { "MyNamespace" }
   let(:pretty_print){ nil }
-  let(:options)     { {namespace: namespace, pretty_print: pretty_print} }
+  let(:js_extend)  { nil }
+  let(:sort_translation_keys){ nil }
+  let(:options)     { { namespace: namespace,
+                        pretty_print: pretty_print,
+                        js_extend: js_extend,
+                        sort_translation_keys: sort_translation_keys }.delete_if{|k,v| v.nil?} }
   subject { I18n::JS::Segment.new(file, translations, options) }
 
   describe ".new" do
@@ -89,10 +94,8 @@ MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || 
       end
     end
 
-    context "when sort_translation_keys? is true" do
-      before :each do
-        I18n::JS.sort_translation_keys = true
-      end
+    context "when js_extend is true" do
+      let(:js_extend){ true }
 
       let(:translations){ { en: { "b" => "Test", "a" => "Test" } } }
 
@@ -102,6 +105,51 @@ MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || 
         File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"a":"Test","b":"Test"});
+        EOF
+      end
+    end
+
+    context "when js_extend is false" do
+      let(:js_extend){ false }
+
+      let(:translations){ { en: { "b" => "Test", "a" => "Test" } } }
+
+      it 'should output the keys as sorted' do
+        file_should_exist "segment.js"
+
+        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = {"a":"Test","b":"Test"};
+        EOF
+      end
+    end
+
+    context "when sort_translation_keys is true" do
+      let(:sort_translation_keys){ true }
+
+      let(:translations){ { en: { "b" => "Test", "a" => "Test" } } }
+
+      it 'should output the keys as sorted' do
+        file_should_exist "segment.js"
+
+        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"a":"Test","b":"Test"});
+        EOF
+      end
+    end
+
+    context "when sort_translation_keys is false" do
+      let(:sort_translation_keys){ false }
+
+      let(:translations){ { en: { "b" => "Test", "a" => "Test" } } }
+
+      it 'should output the keys as sorted' do
+        file_should_exist "segment.js"
+
+        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"b":"Test","a":"Test"});
         EOF
       end
     end

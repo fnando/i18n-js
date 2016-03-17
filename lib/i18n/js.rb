@@ -48,13 +48,11 @@ module I18n
         only = options[:only] || '*'
         exceptions = [options[:except] || []].flatten
 
-        segment_options = options.slice(:namespace, :pretty_print)
-
         result = segment_for_scope(only, exceptions)
 
         merge_with_fallbacks!(result) if fallbacks
 
-        segments << Segment.new(file, result, segment_options) unless result.empty?
+        segments << Segment.new(file, result, extract_segment_options(options)) unless result.empty?
 
         segments
       end
@@ -143,7 +141,7 @@ module I18n
           results[scope.to_sym] = tmp unless tmp.nil?
         end
         return results
-      elsif translations.respond_to?(:has_key?) && translations.has_key?(scope.to_sym)
+      elsif translations.respond_to?(:key?) && translations.key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
       end
       nil
@@ -168,14 +166,26 @@ module I18n
       end
     end
 
+    def self.js_extend
+      config.fetch(:js_extend) do
+        # default value
+        true
+      end
+    end
+
     def self.sort_translation_keys?
-      @sort_translation_keys ||= (config[:sort_translation_keys]) if config.has_key?(:sort_translation_keys)
+      @sort_translation_keys ||= (config[:sort_translation_keys]) if config.key?(:sort_translation_keys)
       @sort_translation_keys = true if @sort_translation_keys.nil?
       @sort_translation_keys
     end
 
     def self.sort_translation_keys=(value)
       @sort_translation_keys = !!value
+    end
+
+    def self.extract_segment_options(options)
+      segment_options = {js_extend: js_extend, sort_translation_keys: sort_translation_keys?}.with_indifferent_access
+      segment_options.merge(options.slice(*Segment::OPTIONS))
     end
 
     ### Export i18n.js
@@ -192,7 +202,7 @@ module I18n
       end
 
       def self.export_i18n_js_dir_path
-        @export_i18n_js_dir_path ||= (config[:export_i18n_js] || :none) if config.has_key?(:export_i18n_js)
+        @export_i18n_js_dir_path ||= (config[:export_i18n_js] || :none) if config.key?(:export_i18n_js)
         @export_i18n_js_dir_path ||= DEFAULT_EXPORT_DIR_PATH
         @export_i18n_js_dir_path
       end
