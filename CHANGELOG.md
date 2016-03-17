@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Nothing
+- [Ruby] Added option `js_extend` to not generate JS code for translations with usage of `I18n.extend` ([#397](https://github.com/fnando/i18n-js/pull/397))
 
 ### Changed
 
@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- [JS] Initialize option `missingBehaviour` & `missingTranslationPrefix` with default values ([#398](https://github.com/fnando/i18n-js/pull/398))
 - [JS] Throw an error when `I18n.strftime()` takes an invalid date ([#383](https://github.com/fnando/i18n-js/pull/383))
 
 
