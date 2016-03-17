@@ -263,10 +263,10 @@ files are deep-merged with any locale data already in memory. To disable this ei
 set the `js_extend` option to false
 
 ```yaml
-js_extend: false # can set here
+js_extend: false  # this will disable Javascript I18n.extend globally
 translations:
 - file: "public/javascripts/i18n/translations.js"
-  js_extend: false # also here
+  js_extend: false  # this will disable Javascript I18n.extend for this file
 ```
 
 

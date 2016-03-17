@@ -141,7 +141,7 @@ module I18n
           results[scope.to_sym] = tmp unless tmp.nil?
         end
         return results
-      elsif translations.respond_to?(:has_key?) && translations.has_key?(scope.to_sym)
+      elsif translations.respond_to?(:key?) && translations.key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
       end
       nil
@@ -174,7 +174,7 @@ module I18n
     end
 
     def self.sort_translation_keys?
-      @sort_translation_keys ||= (config[:sort_translation_keys]) if config.has_key?(:sort_translation_keys)
+      @sort_translation_keys ||= (config[:sort_translation_keys]) if config.key?(:sort_translation_keys)
       @sort_translation_keys = true if @sort_translation_keys.nil?
       @sort_translation_keys
     end
@@ -202,7 +202,7 @@ module I18n
       end
 
       def self.export_i18n_js_dir_path
-        @export_i18n_js_dir_path ||= (config[:export_i18n_js] || :none) if config.has_key?(:export_i18n_js)
+        @export_i18n_js_dir_path ||= (config[:export_i18n_js] || :none) if config.key?(:export_i18n_js)
         @export_i18n_js_dir_path ||= DEFAULT_EXPORT_DIR_PATH
         @export_i18n_js_dir_path
       end
