@@ -191,6 +191,12 @@
 
     if (typeof(this.translations) === "undefined" && this.translations !== null)
       this.translations = DEFAULT_OPTIONS.translations;
+      
+    if (typeof(this.missingBehaviour) === "undefined" && this.missingBehaviour !== null)
+      this.missingBehaviour = DEFAULT_OPTIONS.missingBehaviour;
+
+    if (typeof(this.missingTranslationPrefix) === "undefined" && this.missingTranslationPrefix !== null)
+      this.missingTranslationPrefix = DEFAULT_OPTIONS.missingTranslationPrefix;
   };
   I18n.initializeOptions();
 
