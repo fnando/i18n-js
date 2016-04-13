@@ -3,6 +3,7 @@ module I18n
     class Middleware
       def initialize(app)
         @app = app
+        clear_cache
       end
 
       def call(env)
@@ -28,6 +29,10 @@ module I18n
             {}
           end
         end
+      end
+
+      def clear_cache
+        File.delete(cache_path) if File.exist?(cache_path)
       end
 
       def save_cache(new_cache)
