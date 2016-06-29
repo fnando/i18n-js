@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - [JS] Initialize option `missingBehaviour` & `missingTranslationPrefix` with default values ([#398](https://github.com/fnando/i18n-js/pull/398))
 - [JS] Throw an error when `I18n.strftime()` takes an invalid date ([#383](https://github.com/fnando/i18n-js/pull/383))
+- [JS] Fix default error message when translation missing to consider locale passed in options
 - [Ruby] Reset middleware cache on rails startup 
 ([#402](https://github.com/fnando/i18n-js/pull/402))
 
