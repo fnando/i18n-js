@@ -6,6 +6,20 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Nothing
+
+### Changed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
+## [3.0.0.rc13] - 2016-06-29
+
+### Added
+
 - [Ruby] Added option `js_extend` to not generate JS code for translations with usage of `I18n.extend` ([#397](https://github.com/fnando/i18n-js/pull/397))
 
 ### Changed
@@ -162,5 +176,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc12...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc13...HEAD
+[3.0.0.rc13]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc12...v3.0.0.rc13
 [3.0.0.rc12]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc11...v3.0.0.rc12
