@@ -24,6 +24,12 @@ describe("Translate", function(){
     expect(actual).toEqual(expected);
   });
 
+  it("returns missing message translation with provided locale for invalid scope", function(){
+    actual = I18n.t("invalid.scope", { locale: "ja" });
+    expected = '[missing "ja.invalid.scope" translation]';
+    expect(actual).toEqual(expected);
+  });
+
   it("returns guessed translation if missingBehaviour is set to guess", function(){
     I18n.missingBehaviour = 'guess'
     actual = I18n.t("invalid.thisIsAutomaticallyGeneratedTranslation");

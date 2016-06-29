@@ -191,7 +191,7 @@
 
     if (typeof(this.translations) === "undefined" && this.translations !== null)
       this.translations = DEFAULT_OPTIONS.translations;
-      
+
     if (typeof(this.missingBehaviour) === "undefined" && this.missingBehaviour !== null)
       this.missingBehaviour = DEFAULT_OPTIONS.missingBehaviour;
 
@@ -542,8 +542,9 @@
           function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
     }
 
+    var localeForTranslation = (options != null && options.locale != null) ? options.locale : this.currentLocale();
     var fullScope           = this.getFullScope(scope, options);
-    var fullScopeWithLocale = [this.currentLocale(), fullScope].join(this.defaultSeparator);
+    var fullScopeWithLocale = [localeForTranslation, fullScope].join(this.defaultSeparator);
 
     return '[missing "' + fullScopeWithLocale + '" translation]';
   };
