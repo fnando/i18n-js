@@ -10,20 +10,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Nothing
-
-### Fixed
-
-- Nothing
-
-## [3.0.0.rc13] - 2016-08-10
-
-### Added
-
-- Nothing
-
-### Changed
-
 - [JS] Method `I18n.extend()` behave as deep merging instead of shallow merging.
 
 ### Fixed
