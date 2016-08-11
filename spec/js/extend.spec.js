@@ -38,4 +38,25 @@ describe("Extend", function () {
 
     expect(I18n.extend(obj1,obj2)).toEqual(expected);
   });
+
+  it("should merge deeply from obj1 with the same key of obj2", function() {
+    var obj1 = {
+      test1: {
+        test2: "abc"
+      }
+    }
+    , obj2 = {
+      test1: {
+        test3: "xyz"
+      }
+    }
+    , expected = {
+      test1: {
+        test2: "abc"
+        , test3: "xyz"
+      }
+    }
+
+    expect(I18n.extend(obj1, obj2)).toEqual(expected);
+  })
 });
