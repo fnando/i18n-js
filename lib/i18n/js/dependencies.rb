@@ -28,6 +28,10 @@ module I18n
           safe_gem_check("rails", '>= 3.0.0.beta')
         end
 
+        # This cannot be called at class definition time
+        # Since not all libraries are loaded
+        #
+        # Call this in an initializer
         def using_asset_pipeline?
           assets_pipeline_available =
             (rails3? || rails4? || rails5?) &&
