@@ -10,7 +10,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [JS] Method `I18n.extend()` behave as deep merging instead of shallow merging.
+- [JS] Method `I18n.extend()` behave as deep merging instead of shallow merging. (https://github.com/fnando/i18n-js/pull/416)
+- [Ruby] Use object/class instead of block when registering Sprockets preprocessor (https://github.com/fnando/i18n-js/pull/418)  
+  To ensure that your cache will expire properly based on locale file content after upgrading,  
+  you should run `rake assets:clobber` and/or other rake tasks that clear the asset cache once gem updated
+- [Ruby] Detect & support rails 5 (https://github.com/fnando/i18n-js/pull/413)
 
 ### Fixed
 
