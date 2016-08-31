@@ -32,8 +32,11 @@ module I18n
         #
         # For detail see Pull Request:
         # https://github.com/fnando/i18n-js/pull/371
+        #
+        # Not using -> for JRuby compatibility
+        # See https://github.com/fnando/i18n-js/issues/419
         initializer_args = case sprockets_version
-        when -> (v) { v2_only.match?("", v) || v3_plus.match?("", v) }
+        when lambda {|v| v2_only.match?("", v) || v3_plus.match?("", v) }
           { after: :engines_blank_point, before: :finisher_hook }
         else
           raise StandardError, "Sprockets version #{sprockets_version} is not supported"
