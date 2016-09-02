@@ -53,11 +53,19 @@
 
   // Is a given value an array?
   // Borrowed from Underscore.js
-  var isArray = function(obj) {
+  var isArray = function(val) {
     if (Array.isArray) {
-      return Array.isArray(obj);
+      return Array.isArray(val);
     };
-    return Object.prototype.toString.call(obj) === '[object Array]';
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+
+  var isString = function(val) {
+    return typeof value == 'string' || Object.prototype.toString.call(val) === '[object String]'
+  };
+
+  var isNumber = function(val) {
+    return typeof val == 'number' || Object.prototype.toString.call(val) === '[object Number]'
   };
 
   var decimalAdjust = function(type, value, exp) {
@@ -83,7 +91,7 @@
     var key, value;
     for (key in obj) if (obj.hasOwnProperty(key)) {
       value = obj[key];
-      if (Object.prototype.toString.call(value) === '[object String]') {
+      if (isString(value) || isNumber(value)) {
         dest[key] = value;
       } else {
         if (dest[key] == null) dest[key] = {};

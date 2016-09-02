@@ -58,5 +58,26 @@ describe("Extend", function () {
     }
 
     expect(I18n.extend(obj1, obj2)).toEqual(expected);
-  })
+  });
+
+  it("should merge both numbers and string", function() {
+    var obj1 = {
+      test1: {
+        test2: 43
+      }
+    }
+    , obj2 = {
+      test1: {
+        test3: 23
+      }
+    }
+    , expected = {
+      test1: {
+        test2: 43
+        , test3: 23
+      }
+    }
+
+    expect(I18n.extend(obj1, obj2)).toEqual(expected);
+  });
 });
