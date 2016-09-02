@@ -61,11 +61,15 @@
   };
 
   var isString = function(val) {
-    return typeof value == 'string' || Object.prototype.toString.call(val) === '[object String]'
+    return typeof value == 'string' || Object.prototype.toString.call(val) === '[object String]';
   };
 
   var isNumber = function(val) {
-    return typeof val == 'number' || Object.prototype.toString.call(val) === '[object Number]'
+    return typeof val == 'number' || Object.prototype.toString.call(val) === '[object Number]';
+  };
+
+  var isBoolean = function(val) {
+    return val === true || val === false;
   };
 
   var decimalAdjust = function(type, value, exp) {
@@ -91,7 +95,7 @@
     var key, value;
     for (key in obj) if (obj.hasOwnProperty(key)) {
       value = obj[key];
-      if (isString(value) || isNumber(value)) {
+      if (isString(value) || isNumber(value) || isBoolean(value)) {
         dest[key] = value;
       } else {
         if (dest[key] == null) dest[key] = {};
