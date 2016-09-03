@@ -95,6 +95,8 @@ translations:
 
 If `only` is omitted all the translations will be saved. Also, make sure you add that initial `*`; it specifies that all languages will be exported. If you want to export only one language, you can do something like this:
 ```yaml
+fallbacks: false
+
 translations:
 - file: 'public/javascripts/en.js'
   only: 'en.*'
