@@ -83,7 +83,7 @@
     var key, value;
     for (key in obj) if (obj.hasOwnProperty(key)) {
       value = obj[key];
-      valueType = Object.prototype.toString.call(value);
+      var valueType = Object.prototype.toString.call(value);
       if (valueType === '[object String]' || valueType === '[object Array]' || valueType === '[object Number]') {
         dest[key] = value;
       } else {
