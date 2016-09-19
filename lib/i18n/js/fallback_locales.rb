@@ -32,7 +32,6 @@ module I18n
                   end
 
         locales.map! { |locale| locale.to_sym }
-        ensure_valid_locales!(locales)
         locales
       end
 
@@ -65,16 +64,6 @@ module I18n
         return if fallbacks.all? { |e| e.is_a?(String) || e.is_a?(Symbol) }
 
         fail ArgumentError, "If fallbacks is passed as Array, it must ony include Strings or Symbols. Given: #{fallbacks}"
-      end
-
-      # Ensures that only valid locales are returned.
-      #
-      # @note
-      #   This ignores option `I18n.enforce_available_locales`
-      def ensure_valid_locales!(locales)
-        if locales.any? { |locale| !::I18n.available_locales.include?(locale) }
-          fail ArgumentError, "Valid locales: #{::I18n.available_locales.join(", ")} - Given Locales: #{locales.join(", ")}"
-        end
       end
     end
   end

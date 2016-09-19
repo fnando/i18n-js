@@ -42,21 +42,11 @@ describe I18n::JS::FallbackLocales do
 
     context "when given a invalid locale as fallbacks" do
       let(:fallbacks) { :invalid_locale }
-      it { expect(fetching_locales).to raise_error(ArgumentError) }
+      it { should eq([:invalid_locale]) }
     end
 
     context "when given a invalid type as fallbacks" do
       let(:fallbacks) { 42 }
-      it { expect(fetching_locales).to raise_error(ArgumentError) }
-    end
-
-    context "when given an invalid Array as fallbacks" do
-      let(:fallbacks) { [:de, :en, :invalid_locale] }
-      it { expect(fetching_locales).to raise_error(ArgumentError) }
-    end
-
-    context "when given a invalid Hash as fallbacks" do
-      let(:fallbacks) do { :fr => [:de, :en, :invalid_locale] } end
       it { expect(fetching_locales).to raise_error(ArgumentError) }
     end
 
