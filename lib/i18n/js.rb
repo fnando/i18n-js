@@ -60,7 +60,7 @@ module I18n
 
     # deep_merge! given result with result for fallback locale
     def self.merge_with_fallbacks!(result)
-      I18n.available_locales.each do |locale|
+      locales.each do |locale|
         fallback_locales = FallbackLocales.new(fallbacks, locale)
         fallback_locales.each do |fallback_locale|
           # `result[fallback_locale]` could be missing
@@ -151,8 +151,16 @@ module I18n
     def self.translations
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
-        translations.slice(*::I18n.available_locales)
+        translations.slice(*I18n::JS::locales)
       end
+    end
+
+    def self.locales
+      locale_source = config.fetch(:locale_source) do
+                        # default value
+                        '::I18n.available_locales'
+                      end
+      eval(locale_source)
     end
 
     def self.use_fallbacks?
