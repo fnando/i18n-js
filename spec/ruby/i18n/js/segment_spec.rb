@@ -2,16 +2,20 @@ require "spec_helper"
 
 describe I18n::JS::Segment do
 
-  let(:file)        { "tmp/i18n-js/segment.js" }
-  let(:translations){ { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
-  let(:namespace)   { "MyNamespace" }
-  let(:pretty_print){ nil }
-  let(:js_extend)  { nil }
+  let(:file)          { "tmp/i18n-js/segment.js" }
+  let(:translations)  { { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
+  let(:namespace)     { "MyNamespace" }
+  let(:pretty_print)  { nil }
+  let(:js_extend)     { nil }
   let(:sort_translation_keys){ nil }
-  let(:options)     { { namespace: namespace,
-                        pretty_print: pretty_print,
-                        js_extend: js_extend,
-                        sort_translation_keys: sort_translation_keys }.delete_if{|k,v| v.nil?} }
+  let(:locale_source) { nil }
+  let(:options)       { {
+                          namespace: namespace,
+                          pretty_print: pretty_print,
+                          js_extend: js_extend,
+                          sort_translation_keys: sort_translation_keys,
+                          locale_source: locale_source
+                        }.delete_if { |k, v| v.nil? } }
   subject { I18n::JS::Segment.new(file, translations, options) }
 
   describe ".new" do
@@ -55,6 +59,28 @@ describe I18n::JS::Segment do
 
       it "should set pretty_print to true" do
         subject.pretty_print.should be true
+      end
+    end
+
+    context "when locale_source is set" do
+      let(:locale_source) { "MyLocaleSource" }
+
+      it "should persist locale_source" do
+        subject.locale_source.should eql("MyLocaleSource")
+      end
+    end
+
+    context "when locale_source is nil" do
+      it "should default locale_source to `I18n.available_locales`" do
+        subject.locale_source.should eq "I18n.available_locales"
+      end
+    end
+
+    context "when locale_source is not set" do
+      subject { I18n::JS::Segment.new(file, translations) }
+
+      it "should default locale_source to `I18n.available_locales`" do
+        subject.locale_source.should eq "I18n.available_locales"
       end
     end
   end
