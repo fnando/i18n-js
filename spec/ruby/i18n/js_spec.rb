@@ -405,7 +405,7 @@ EOS
     it "executes erb in config file" do
       set_config "erb.yml"
 
-      config_entry = I18n::JS.config["translations"].first
+      config_entry = I18n::JS.config[:translations].first
       config_entry["only"].should eq("*.date.formats")
     end
   end
