@@ -162,7 +162,14 @@ module I18n
     def self.translations
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
-        translations.slice(*::I18n.available_locales)
+        # When activesupport is absent,
+        # the core extension (`#slice`) from `i18n` gem will be used instead
+        # And it's causing errors (at least in test)
+        #
+        # So the input is wrapped by our class for better `#slice`
+        Private::HashWithSymbolKeys.new(translations).
+          slice(*::I18n.available_locales).
+          to_h
       end
     end
 

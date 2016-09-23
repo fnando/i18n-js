@@ -1,3 +1,5 @@
+require "i18n/js/private/hash_with_symbol_keys"
+
 module I18n
   module JS
 
@@ -10,7 +12,13 @@ module I18n
 
       def initialize(file, translations, options = {})
         @file         = file
-        @translations = translations
+        # `#slice` will be used
+        # But when activesupport is absent,
+        # the core extension from `i18n` gem will be used instead
+        # And it's causing errors (at least in test)
+        #
+        # So the input is wrapped by our class for better `#slice`
+        @translations = Private::HashWithSymbolKeys.new(translations)
         @namespace    = options[:namespace] || 'I18n'
         @pretty_print = !!options[:pretty_print]
         @js_extend    = options.key?(:js_extend) ? !!options[:js_extend] : true
