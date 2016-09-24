@@ -2,16 +2,24 @@ require "spec_helper"
 
 describe I18n::JS::Segment do
 
-  let(:file)        { "tmp/i18n-js/segment.js" }
-  let(:translations){ { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
-  let(:namespace)   { "MyNamespace" }
-  let(:pretty_print){ nil }
-  let(:js_extend)  { nil }
-  let(:sort_translation_keys){ nil }
-  let(:options)     { { namespace: namespace,
-                        pretty_print: pretty_print,
-                        js_extend: js_extend,
-                        sort_translation_keys: sort_translation_keys }.delete_if{|k,v| v.nil?} }
+  let(:file)                  { "tmp/i18n-js/segment.js" }
+  let(:translations)          { { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
+  let(:namespace)             { "MyNamespace" }
+  let(:pretty_print)          { nil }
+  let(:js_extend)             { nil }
+  let(:sort_translation_keys) { nil }
+  let(:available_locales)     { %w(en fr de it) }
+
+  let(:options) do
+    {
+      namespace: namespace,
+      pretty_print: pretty_print,
+      js_extend: js_extend,
+      sort_translation_keys: sort_translation_keys,
+      available_locales: available_locales
+    }.delete_if { |_k, v| v.nil? }
+  end
+
   subject { I18n::JS::Segment.new(file, translations, options) }
 
   describe ".new" do
@@ -26,6 +34,10 @@ describe I18n::JS::Segment do
 
     it "should persist the namespace variable" do
       subject.namespace.should eql("MyNamespace")
+    end
+
+    it "should persist the available locales variable" do
+      subject.available_locales.should eql(%w(en fr de it))
     end
 
     context "when namespace is nil" do
@@ -57,11 +69,29 @@ describe I18n::JS::Segment do
         subject.pretty_print.should be true
       end
     end
+
+    context "when available_locales is not set" do
+      let(:available_locales) { nil }
+
+      it "should set available_locales to I18n.available_locales" do
+        subject.available_locales.should eql(I18n.available_locales)
+      end
+
+      context "when I18n does not have a available_locales method" do
+        before { allow(I18n).to receive(:available_locales).and_raise(NoMethodError) }
+
+        it "should set available_locales to an empty array" do
+          subject.available_locales.should eql([])
+        end
+      end
+    end
   end
 
   describe "#save!" do
     before { allow(I18n::JS).to receive(:export_i18n_js_dir_path).and_return(temp_path) }
     before { subject.save! }
+
+    let(:available_locales) { nil } # Fall back to I18n.available_locales
 
     context "when file does not include %{locale}" do
       it "should write the file" do

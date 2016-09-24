@@ -3,24 +3,25 @@ module I18n
 
     # Class which enscapulates a translations hash and outputs a single JSON translation file
     class Segment
-      OPTIONS = [:namespace, :pretty_print, :js_extend, :sort_translation_keys].freeze
+      OPTIONS = [:namespace, :pretty_print, :js_extend, :sort_translation_keys, :available_locales].freeze
       LOCALE_INTERPOLATOR = /%\{locale\}/
 
       attr_reader *([:file, :translations] | OPTIONS)
 
       def initialize(file, translations, options = {})
-        @file         = file
-        @translations = translations
-        @namespace    = options[:namespace] || 'I18n'
-        @pretty_print = !!options[:pretty_print]
-        @js_extend    = options.key?(:js_extend) ? !!options[:js_extend] : true
+        @file                  = file
+        @translations          = translations
+        @namespace             = options[:namespace] || 'I18n'
+        @pretty_print          = !!options[:pretty_print]
+        @js_extend             = options.key?(:js_extend) ? !!options[:js_extend] : true
         @sort_translation_keys = options.key?(:sort_translation_keys) ? !!options[:sort_translation_keys] : true
+        @available_locales     = options[:available_locales] || I18n.available_locales rescue []
       end
 
       # Saves JSON file containing translations
       def save!
         if @file =~ LOCALE_INTERPOLATOR
-          I18n.available_locales.each do |locale|
+          available_locales.each do |locale|
             write_file(file_for_locale(locale), @translations.slice(locale))
           end
         else
