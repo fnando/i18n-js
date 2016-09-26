@@ -367,9 +367,11 @@ EOS
     end
   end
 
-  context "I18n.available_locales" do
+  context "available_locales" do
 
-    context "when I18n.available_locales is not set" do
+    context "when available_locales is not set" do
+      before { allow(I18n::JS).to receive(:available_locales).and_return([]) }
+
       it "should allow all locales" do
         result = I18n::JS.scoped_translations("*.admin.*.title")
 
@@ -379,8 +381,8 @@ EOS
       end
     end
 
-    context "when I18n.available_locales is set" do
-      before { allow(::I18n).to receive(:available_locales){ [:en, :fr] } }
+    context "when available_locales is set" do
+      before { allow(I18n::JS).to receive(:available_locales) { [:en, :fr] } }
 
       it "should ignore non-valid locales" do
         result = I18n::JS.scoped_translations("*.admin.*.title")

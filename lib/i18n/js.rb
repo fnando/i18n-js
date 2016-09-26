@@ -60,7 +60,7 @@ module I18n
 
     # deep_merge! given result with result for fallback locale
     def self.merge_with_fallbacks!(result)
-      I18n.available_locales.each do |locale|
+      available_locales.each do |locale|
         fallback_locales = FallbackLocales.new(fallbacks, locale)
         fallback_locales.each do |fallback_locale|
           # `result[fallback_locale]` could be missing
@@ -149,10 +149,13 @@ module I18n
 
     # Initialize and return translations
     def self.translations
-      ::I18n.backend.instance_eval do
+      backend_translations = ::I18n.backend.instance_eval do
         init_translations unless initialized?
-        translations.slice(*::I18n.available_locales)
+        translations
       end
+
+      return backend_translations if available_locales.empty?
+      backend_translations.slice(*available_locales)
     end
 
     def self.use_fallbacks?
@@ -186,6 +189,13 @@ module I18n
     def self.extract_segment_options(options)
       segment_options = {js_extend: js_extend, sort_translation_keys: sort_translation_keys?}.with_indifferent_access
       segment_options.merge(options.slice(*Segment::OPTIONS))
+    end
+
+    def self.available_locales
+      config.fetch(:available_locales) do
+        # default value
+        I18n.available_locales rescue []
+      end
     end
 
     ### Export i18n.js

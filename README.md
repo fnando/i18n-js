@@ -256,7 +256,7 @@ translations:
 ```
 
 
-#### Javscript Deep Merge (:js_extend option)
+#### Javascript Deep Merge (:js_extend option)
 
 By default, the output file Javascript will call the `I18n.extend` method to ensure that newly loaded locale
 files are deep-merged with any locale data already in memory. To disable this either globally or per-file,
@@ -267,6 +267,17 @@ js_extend: false  # this will disable Javascript I18n.extend globally
 translations:
 - file: "public/javascripts/i18n/translations.js"
   js_extend: false  # this will disable Javascript I18n.extend for this file
+```
+
+#### Specify locales to be used in Javascript
+
+If you want to specify locales for Javascript, use the `available_locales` option (default: `I18n.available_locales`).
+
+```yaml
+available_locales:
+  - en
+  - fr
+  - it
 ```
 
 
