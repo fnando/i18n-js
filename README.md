@@ -742,6 +742,7 @@ I18n.translations["pt-BR"] = {
 }
 ```
 
+
 ## Known Issues
 
 ### Missing translations in precompiled file(s) after adding any new locale file
@@ -773,6 +774,16 @@ This means that new locale files will not be detected, and so they will not trig
 3. Finally, you can change `config.assets.version`.
 
 **Note:** See issue [#213](https://github.com/fnando/i18n-js/issues/213) for more details and discussion of this issue.
+
+### Translations in JS are not updated when Sprockets not loaded before this gem
+
+The "rails engine" declaration will try to detect existence of "sprockets" before adding the initailizer
+If sprockets is loaded after this gem, the preprocessor for 
+making JS translations file cache to depend on content of locale files will not be hooked.
+So ensure sprockets is loaded before this gem like moving entry of sprockets in Gemfile or adding "require" statements for sprockets somewhere.
+
+**Note:** See issue [#404](https://github.com/fnando/i18n-js/issues/404) for more details and discussion of this issue.
+
 
 ## Maintainer
 
