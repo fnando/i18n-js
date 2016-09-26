@@ -10,11 +10,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Nothing
+- [Ruby] Stop validating the fallback locales against `I18n.available_locales`  
+  This allows some locales to be used as fallback locales, but not to be generated in JS.  
+  (PR: https://github.com/fnando/i18n-js/pull/425)  
 
 ### Fixed
 
-- Nothing
+- [JS] Stop converting numeric & boolean values into objects  
+  when merging objects with `I18n.extend`  
+  (PR: https://github.com/fnando/i18n-js/pull/420)  
+- [Ruby] Use old syntax to define lambda for compatibility with older Rubies  
+  (Issue: https://github.com/fnando/i18n-js/issues/419)  
 
 
 ## [3.0.0.rc14] - 2016-08-29
