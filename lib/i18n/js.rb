@@ -1,7 +1,9 @@
 require "yaml"
-require "i18n"
 require "fileutils"
+require "i18n"
+
 require "i18n/js/utils"
+require "i18n/js/private/hash_with_symbol_keys"
 
 module I18n
   module JS
@@ -43,16 +45,23 @@ module I18n
     end
 
     def self.configured_segments
-      config[:translations].inject([]) do |segments, options|
-        file = options[:file]
-        only = options[:only] || '*'
-        exceptions = [options[:except] || []].flatten
+      config[:translations].inject([]) do |segments, options_hash|
+        options_hash_with_symbol_keys = Private::HashWithSymbolKeys.new(options_hash)
+        file = options_hash_with_symbol_keys[:file]
+        only = options_hash_with_symbol_keys[:only] || '*'
+        exceptions = [options_hash_with_symbol_keys[:except] || []].flatten
 
         result = segment_for_scope(only, exceptions)
 
         merge_with_fallbacks!(result) if fallbacks
 
-        segments << Segment.new(file, result, extract_segment_options(options)) unless result.empty?
+        unless result.empty?
+          segments << Segment.new(
+            file,
+            result,
+            extract_segment_options(options_hash_with_symbol_keys),
+          )
+        end
 
         segments
       end
@@ -91,11 +100,13 @@ module I18n
     # custom output directory
     def self.config
       if config?
-        erb = ERB.new(File.read(config_file_path)).result
-        (YAML.load(erb) || {}).with_indifferent_access
+        erb_result_from_yaml_file = ERB.new(File.read(config_file_path)).result
+        Private::HashWithSymbolKeys.new(
+          (::YAML.load(erb_result_from_yaml_file) || {})
+        )
       else
-        {}
-      end
+        Private::HashWithSymbolKeys.new({})
+      end.freeze
     end
 
     # Check if configuration file exist
@@ -151,7 +162,14 @@ module I18n
     def self.translations
       ::I18n.backend.instance_eval do
         init_translations unless initialized?
-        translations.slice(*::I18n.available_locales)
+        # When activesupport is absent,
+        # the core extension (`#slice`) from `i18n` gem will be used instead
+        # And it's causing errors (at least in test)
+        #
+        # So the input is wrapped by our class for better `#slice`
+        Private::HashWithSymbolKeys.new(translations).
+          slice(*::I18n.available_locales).
+          to_h
       end
     end
 
@@ -184,7 +202,10 @@ module I18n
     end
 
     def self.extract_segment_options(options)
-      segment_options = {js_extend: js_extend, sort_translation_keys: sort_translation_keys?}.with_indifferent_access
+      segment_options = Private::HashWithSymbolKeys.new({
+        js_extend: js_extend,
+        sort_translation_keys: sort_translation_keys?,
+      }).freeze
       segment_options.merge(options.slice(*Segment::OPTIONS))
     end
 
