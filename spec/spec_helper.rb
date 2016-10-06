@@ -1,14 +1,16 @@
 require "i18n"
 require "json"
 
-require "active_support/all"
 require "i18n/js"
 
 module Helpers
   # Set the configuration as the current one
   def set_config(path)
     config_file_path = File.dirname(__FILE__) + "/fixtures/#{path}"
-    I18n::JS.stub(:config? => true, :config_file_path => config_file_path)
+    allow(I18n::JS).to receive_messages(
+      :config? => true,
+      :config_file_path => config_file_path,
+    )
   end
 
   # Shortcut to I18n::JS.translations

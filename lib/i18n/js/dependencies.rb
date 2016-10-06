@@ -12,6 +12,10 @@ module I18n
           safe_gem_check("rails", "~> 4.0", ">= 4.0.0.beta1") && running_rails4?
         end
 
+        def rails5?
+          safe_gem_check("rails", "~> 5.0", ">= 5.0.0.beta1") && running_rails5?
+        end
+
         def sprockets_supports_register_preprocessor?
           defined?(Sprockets) && Sprockets.respond_to?(:register_preprocessor)
         end
@@ -24,9 +28,13 @@ module I18n
           safe_gem_check("rails", '>= 3.0.0.beta')
         end
 
+        # This cannot be called at class definition time
+        # Since not all libraries are loaded
+        #
+        # Call this in an initializer
         def using_asset_pipeline?
           assets_pipeline_available =
-            (rails3? || rails4?) &&
+            (rails3? || rails4? || rails5?) &&
             Rails.respond_to?(:application) &&
             Rails.application.respond_to?(:assets)
           rails3_assets_enabled =
@@ -34,7 +42,7 @@ module I18n
             assets_pipeline_available &&
             Rails.application.config.assets.enabled != false
 
-          assets_pipeline_available && (rails4? || rails3_assets_enabled)
+          assets_pipeline_available && (rails4? || rails5? || rails3_assets_enabled)
         end
 
         private
@@ -45,6 +53,10 @@ module I18n
 
         def running_rails4?
           running_rails? && Rails.version.to_i == 4
+        end
+
+        def running_rails5?
+          running_rails? && Rails.version.to_i == 5
         end
 
         def running_rails?

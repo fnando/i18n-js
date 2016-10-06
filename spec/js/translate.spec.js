@@ -24,6 +24,12 @@ describe("Translate", function(){
     expect(actual).toEqual(expected);
   });
 
+  it("returns missing message translation with provided locale for invalid scope", function(){
+    actual = I18n.t("invalid.scope", { locale: "ja" });
+    expected = '[missing "ja.invalid.scope" translation]';
+    expect(actual).toEqual(expected);
+  });
+
   it("returns guessed translation if missingBehaviour is set to guess", function(){
     I18n.missingBehaviour = 'guess'
     actual = I18n.t("invalid.thisIsAutomaticallyGeneratedTranslation");
@@ -180,6 +186,7 @@ describe("Translate", function(){
   it("escapes $ when doing substitution (IE)", function(){
     I18n.locale = "en";
 
+    expect(I18n.t("paid", {price: "$0"})).toEqual("You were paid $0");
     expect(I18n.t("paid", {price: "$0.12"})).toEqual("You were paid $0.12");
     expect(I18n.t("paid", {price: "$1.35"})).toEqual("You were paid $1.35");
   });

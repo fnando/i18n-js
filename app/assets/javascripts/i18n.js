@@ -53,11 +53,23 @@
 
   // Is a given value an array?
   // Borrowed from Underscore.js
-  var isArray = function(obj) {
+  var isArray = function(val) {
     if (Array.isArray) {
-      return Array.isArray(obj);
+      return Array.isArray(val);
     };
-    return Object.prototype.toString.call(obj) === '[object Array]';
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+
+  var isString = function(val) {
+    return typeof value == 'string' || Object.prototype.toString.call(val) === '[object String]';
+  };
+
+  var isNumber = function(val) {
+    return typeof val == 'number' || Object.prototype.toString.call(val) === '[object Number]';
+  };
+
+  var isBoolean = function(val) {
+    return val === true || val === false;
   };
 
   var decimalAdjust = function(type, value, exp) {
@@ -78,6 +90,20 @@
     value = value.toString().split('e');
     return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
   }
+
+  var merge = function (dest, obj) {
+    var key, value;
+    for (key in obj) if (obj.hasOwnProperty(key)) {
+      value = obj[key];
+      if (isString(value) || isNumber(value) || isBoolean(value)) {
+        dest[key] = value;
+      } else {
+        if (dest[key] == null) dest[key] = {};
+        merge(dest[key], value);
+      }
+    }
+    return dest;
+  };
 
   // Set default days/months translations.
   var DATE = {
@@ -191,6 +217,12 @@
 
     if (typeof(this.translations) === "undefined" && this.translations !== null)
       this.translations = DEFAULT_OPTIONS.translations;
+
+    if (typeof(this.missingBehaviour) === "undefined" && this.missingBehaviour !== null)
+      this.missingBehaviour = DEFAULT_OPTIONS.missingBehaviour;
+
+    if (typeof(this.missingTranslationPrefix) === "undefined" && this.missingTranslationPrefix !== null)
+      this.missingTranslationPrefix = DEFAULT_OPTIONS.missingTranslationPrefix;
   };
   I18n.initializeOptions();
 
@@ -537,8 +569,9 @@
           function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
     }
 
+    var localeForTranslation = (options != null && options.locale != null) ? options.locale : this.currentLocale();
     var fullScope           = this.getFullScope(scope, options);
-    var fullScopeWithLocale = [this.currentLocale(), fullScope].join(this.defaultSeparator);
+    var fullScopeWithLocale = [localeForTranslation, fullScope].join(this.defaultSeparator);
 
     return '[missing "' + fullScopeWithLocale + '" translation]';
   };
@@ -915,19 +948,10 @@
    * https://stackoverflow.com/questions/8157700/object-has-no-hasownproperty-method-i-e-its-undefined-ie8
    */
   I18n.extend = function ( obj1, obj2 ) {
-    var extended = {};
-    var prop;
-    for (prop in obj1) {
-      if (Object.prototype.hasOwnProperty.call(obj1, prop)) {
-        extended[prop] = obj1[prop];
-      }
+    if (typeof(obj1) === "undefined" && typeof(obj2) === "undefined") {
+      return {};
     }
-    for (prop in obj2) {
-      if (Object.prototype.hasOwnProperty.call(obj2, prop)) {
-        extended[prop] = obj2[prop];
-      }
-    }
-    return extended;
+    return merge(obj1, obj2);
   };
 
   // Set aliases, so we can save some typing.
