@@ -52,9 +52,9 @@ describe("Interpolation", function(){
         });
 
         it("return empty string", function() {
-          expect(I18n.t(translation_key, {count: 0})).toEqual("");
-          expect(I18n.t(translation_key, {count: 1})).toEqual("");
-          expect(I18n.t(translation_key, {count: 5})).toEqual("");
+          expect(I18n.t(translation_key, {count: 0})).toEqual('[missing "en.sent.zero" translation]');
+          expect(I18n.t(translation_key, {count: 1})).toEqual('[missing "en.sent.one" translation]');
+          expect(I18n.t(translation_key, {count: 5})).toEqual('[missing "en.sent.other" translation]');
         });
       });
     });
