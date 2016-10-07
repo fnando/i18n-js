@@ -30,6 +30,12 @@ var DEBUG = false;
           , zero: "You have no messages"
         }
 
+      , sent: {
+            one: null
+          , other: null
+          , zero: null
+        }
+
       , unread: {
             one: "You have 1 new message ({{unread}} unread)"
           , other: "You have {{count}} new messages ({{unread}} unread)"

@@ -46,6 +46,17 @@ describe("Interpolation", function(){
           expect(I18n.t(translation_key, {count: 5})).toEqual("Hello World!");
         });
       });
+      describe("and translation key does contain pluralization with null content", function() {
+        beforeEach(function() {
+          translation_key = "sent";
+        });
+
+        it("return empty string", function() {
+          expect(I18n.t(translation_key, {count: 0})).toEqual('[missing "en.sent.zero" translation]');
+          expect(I18n.t(translation_key, {count: 1})).toEqual('[missing "en.sent.one" translation]');
+          expect(I18n.t(translation_key, {count: 5})).toEqual('[missing "en.sent.other" translation]');
+        });
+      });
     });
 
     describe("when count is NOT passed in", function() {

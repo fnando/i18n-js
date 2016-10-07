@@ -57,6 +57,16 @@ describe("Pluralization", function(){
     expect(I18n.p(0, "inbox")).toEqual("");
   });
 
+  it("returns missing message on null values", function(){
+    I18n.translations["en"]["sent"]["zero"]  = null;
+    I18n.translations["en"]["sent"]["one"]   = null;
+    I18n.translations["en"]["sent"]["other"] = null;
+
+    expect(I18n.p(0, "sent")).toEqual('[missing "en.sent.zero" translation]');
+    expect(I18n.p(1, "sent")).toEqual('[missing "en.sent.one" translation]');
+    expect(I18n.p(5, "sent")).toEqual('[missing "en.sent.other" translation]');
+  });
+
   it("pluralizes using custom rules", function() {
     I18n.locale = "custom";
 

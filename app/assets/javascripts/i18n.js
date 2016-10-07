@@ -482,7 +482,7 @@
     if (typeof(translation) === "string") {
       translation = this.interpolate(translation, options);
     } else if (isObject(translation) && this.isSet(options.count)) {
-      translation = this.pluralize(options.count, translation, options);
+      translation = this.pluralize(options.count, scope, options);
     }
 
     return translation;
@@ -530,11 +530,7 @@
     options = this.prepareOptions(options);
     var translations, pluralizer, keys, key, message;
 
-    if (isObject(scope)) {
-      translations = scope;
-    } else {
-      translations = this.lookup(scope, options);
-    }
+    translations = this.lookup(scope, options);
 
     if (!translations) {
       return this.missingTranslation(scope, options);
@@ -553,7 +549,13 @@
     }
 
     options.count = String(count);
-    return this.interpolate(message, options);
+
+    if (message != undefined) {
+      return this.interpolate(message, options);
+    }
+    else {
+      return this.missingTranslation(scope + '.' + pluralizer(count)[0], options);
+    }
   };
 
   // Return a missing translation message for the given parameters.
