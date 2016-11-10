@@ -347,6 +347,8 @@
       , locale
       , scopes
       , translations
+      , keys
+      , key
     ;
 
     scope = this.getFullScope(scope, options);
@@ -360,16 +362,37 @@
         continue;
       }
 
-      while (scopes.length) {
-        translations = translations[scopes.shift()];
+      if (this.isSet(options.count)) {
+        while (scopes.length) {
+          translations = translations[scopes.shift()];
 
-        if (translations === undefined || translations === null) {
-          break;
+          if (scopes.length == 0 && isObject(translations)) {
+            var hasAllMessages = true;
+            keys = Object.keys(translations);
+            while (keys.length) {
+              key = keys.shift();
+              if (translations[key] === undefined || translations[key] === null) {
+                hasAllMessages = false;
+                break;
+              }
+            }
+            if (hasAllMessages) {
+              return translations;
+            }
+          }
         }
-      }
+      } else {
+        while (scopes.length) {
+          translations = translations[scopes.shift()];
 
-      if (translations !== undefined && translations !== null) {
-        return translations;
+          if (translations === undefined || translations === null) {
+            break;
+          }
+        }
+
+        if (translations !== undefined && translations !== null) {
+          return translations;
+        }
       }
     }
 
