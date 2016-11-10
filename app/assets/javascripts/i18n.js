@@ -347,8 +347,6 @@
       , locale
       , scopes
       , translations
-      , keys
-      , key
     ;
 
     scope = this.getFullScope(scope, options);
@@ -361,37 +359,61 @@
       if (!translations) {
         continue;
       }
+      while (scopes.length) {
+        translations = translations[scopes.shift()];
 
-      if (this.isSet(options.count)) {
-        while (scopes.length) {
-          translations = translations[scopes.shift()];
+        if (translations === undefined || translations === null) {
+          break;
+        }
+      }
 
-          if (scopes.length == 0 && isObject(translations)) {
-            var hasAllMessages = true;
-            keys = Object.keys(translations);
-            while (keys.length) {
-              key = keys.shift();
-              if (translations[key] === undefined || translations[key] === null) {
-                hasAllMessages = false;
-                break;
-              }
-            }
-            if (hasAllMessages) {
-              return translations;
+      if (translations !== undefined && translations !== null) {
+        return translations;
+      }
+    }
+
+    if (this.isSet(options.defaultValue)) {
+      return options.defaultValue;
+    }
+  };
+
+  I18n.lookupForCount = function(scope, options) {
+    options = this.prepareOptions(options);
+
+    var locales = this.locales.get(options.locale).slice()
+      , requestedLocale = locales[0]
+      , locale
+      , scopes
+      , translations
+      , keys
+      , key
+    ;
+    scope = this.getFullScope(scope, options);
+
+    while (locales.length) {
+      locale = locales.shift();
+      scopes = scope.split(this.defaultSeparator);
+      translations = this.translations[locale];
+
+      if (!translations) {
+        continue;
+      }
+      while (scopes.length) {
+        translations = translations[scopes.shift()];
+
+        if (scopes.length == 0 && isObject(translations)) {
+          var hasAtLeastOneMessage = false;
+          keys = Object.keys(translations);
+          while (keys.length) {
+            key = keys.shift();
+            if (translations[key] !== undefined && translations[key] !== null) {
+              hasAtLeastOneMessage = true;
+              break;
             }
           }
-        }
-      } else {
-        while (scopes.length) {
-          translations = translations[scopes.shift()];
-
-          if (translations === undefined || translations === null) {
-            break;
+          if (hasAtLeastOneMessage) {
+            return translations;
           }
-        }
-
-        if (translations !== undefined && translations !== null) {
-          return translations;
         }
       }
     }
@@ -399,6 +421,8 @@
     if (this.isSet(options.defaultValue)) {
       return options.defaultValue;
     }
+
+    return translations;
   };
 
   // Rails changed the way the meridian is stored.
@@ -553,7 +577,7 @@
     options = this.prepareOptions(options);
     var translations, pluralizer, keys, key, message;
 
-    translations = this.lookup(scope, options);
+    translations = this.lookupForCount(scope, options);
 
     if (!translations) {
       return this.missingTranslation(scope, options);
