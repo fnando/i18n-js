@@ -126,4 +126,72 @@ describe("Pluralization", function(){
     expect(I18n.p(1, "inbox", { count: 1 })).toEqual("You have 1 message");
     expect(I18n.p(5, "inbox", { count: 5 })).toEqual("You have 5 messages");
   });
+
+  it("fallback to default locale when I18n.fallbacks is enabled", function() {
+    I18n.locale = "pt-BR";
+    I18n.fallbacks = true;
+    I18n.translations["pt-BR"].inbox= {
+        one: "Você tem uma mensagem"
+      , other: null
+      , zero: "Você não tem nenhuma mensagem"
+    };
+    expect(I18n.p(0, "inbox", { count: 0 })).toEqual("Você não tem nenhuma mensagem");
+    expect(I18n.p(1, "inbox", { count: 1 })).toEqual("Você tem uma mensagem");
+    expect(I18n.p(5, "inbox", { count: 5 })).toEqual('You have 5 messages');
+  });
+
+  it("fallback to 'other' scope", function() {
+    I18n.locale = "pt-BR";
+    I18n.fallbacks = true;
+    I18n.translations["pt-BR"].inbox= {
+        one: "Você tem uma mensagem"
+      , other: "Você tem {{count}} mensagens"
+      , zero: null
+    }
+    expect(I18n.p(0, "inbox", { count: 0 })).toEqual("Você tem 0 mensagens");
+    expect(I18n.p(1, "inbox", { count: 1 })).toEqual("Você tem uma mensagem");
+    expect(I18n.p(5, "inbox", { count: 5 })).toEqual("Você tem 5 mensagens");
+  });
+
+  it("fallback to defaulValue when defaultValue is string", function() {
+    I18n.locale = "pt-BR";
+    I18n.fallbacks = true;
+    I18n.translations["en"]["inbox"]["zero"]  = null;
+    I18n.translations["en"]["inbox"]["one"]   = null;
+    I18n.translations["en"]["inbox"]["other"] = null;
+    I18n.translations["pt-BR"].inbox= {
+        one: "Você tem uma mensagem"
+      , other: null
+      , zero: null
+    }
+    options = {
+      defaultValue: "default message"
+    };
+    expect(I18n.p(0, "inbox", options)).toEqual("default message");
+    expect(I18n.p(1, "inbox", options)).toEqual("Você tem uma mensagem");
+    expect(I18n.p(5, "inbox", options)).toEqual("default message");
+  });
+
+  it("fallback to defaulValue when defaultValue is an object", function() {
+    I18n.locale = "pt-BR";
+    I18n.fallbacks = true;
+    I18n.translations["en"]["inbox"]["zero"]  = null;
+    I18n.translations["en"]["inbox"]["one"]   = null;
+    I18n.translations["en"]["inbox"]["other"] = null;
+    I18n.translations["pt-BR"].inbox= {
+        one: "Você tem uma mensagem"
+      , other: null
+      , zero: null
+    }
+    options = {
+      defaultValue: {
+        zero: "default message for no message"
+        , one: "default message for 1 message"
+        , other: "default message for {{count}} messages"
+      }
+    };
+    expect(I18n.p(0, "inbox", options)).toEqual("default message for no message");
+    expect(I18n.p(1, "inbox", options)).toEqual("Você tem uma mensagem");
+    expect(I18n.p(5, "inbox", options)).toEqual("default message for 5 messages");
+  });
 });
