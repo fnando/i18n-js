@@ -359,7 +359,6 @@
       if (!translations) {
         continue;
       }
-
       while (scopes.length) {
         translations = translations[scopes.shift()];
 
@@ -376,6 +375,72 @@
     if (this.isSet(options.defaultValue)) {
       return options.defaultValue;
     }
+  };
+
+  // lookup pluralization rule key into translations
+  I18n.pluralizationLookupWithoutFallback = function(count, locale, translations) {
+    var pluralizer = this.pluralization.get(locale)
+      , pluralizerKeys = pluralizer(count)
+      , pluralizerKey
+      , message;
+
+    if (isObject(translations)) {
+      while (pluralizerKeys.length) {
+        pluralizerKey = pluralizerKeys.shift();
+        if (this.isSet(translations[pluralizerKey])) {
+          message = translations[pluralizerKey];
+          break;
+        }
+      }
+    }
+
+    return message;
+  };
+
+  // Lookup dedicated to pluralization
+  I18n.pluralizationLookup = function(count, scope, options) {
+    options = this.prepareOptions(options);
+    var locales = this.locales.get(options.locale).slice()
+      , requestedLocale = locales[0]
+      , locale
+      , scopes
+      , translations
+      , message
+    ;
+    scope = this.getFullScope(scope, options);
+
+    while (locales.length) {
+      locale = locales.shift();
+      scopes = scope.split(this.defaultSeparator);
+      translations = this.translations[locale];
+
+      if (!translations) {
+        continue;
+      }
+
+      while (scopes.length) {
+        translations = translations[scopes.shift()];
+        if (scopes.length == 0 && isObject(translations)) {
+          message = this.pluralizationLookupWithoutFallback(count, locale, translations);
+        }
+      }
+      if (message != null && message != undefined) {
+        break;
+      }
+    }
+
+    if (message == null || message == undefined) {
+      if (this.isSet(options.defaultValue)) {
+        if (isObject(options.defaultValue)) {
+          message = this.pluralizationLookupWithoutFallback(count, options.locale, options.defaultValue);
+        } else {
+          message = options.defaultValue;
+        }
+        translations = options.defaultValue;
+      }
+    }
+
+    return { message: message, translations: translations };
   };
 
   // Rails changed the way the meridian is stored.
@@ -528,32 +593,20 @@
   // which will be retrieved from `options`.
   I18n.pluralize = function(count, scope, options) {
     options = this.prepareOptions(options);
-    var translations, pluralizer, keys, key, message;
+    var pluralizer, message, result;
 
-    translations = this.lookup(scope, options);
-
-    if (!translations) {
+    result = this.pluralizationLookup(count, scope, options);
+    if (result.translations == undefined || result.translations == null) {
       return this.missingTranslation(scope, options);
-    }
-
-    pluralizer = this.pluralization.get(options.locale);
-    keys = pluralizer(count);
-
-    while (keys.length) {
-      key = keys.shift();
-
-      if (this.isSet(translations[key])) {
-        message = translations[key];
-        break;
-      }
     }
 
     options.count = String(count);
 
-    if (message != undefined) {
-      return this.interpolate(message, options);
+    if (result.message != undefined && result.message != null) {
+      return this.interpolate(result.message, options);
     }
     else {
+      pluralizer = this.pluralization.get(options.locale);
       return this.missingTranslation(scope + '.' + pluralizer(count)[0], options);
     }
   };
