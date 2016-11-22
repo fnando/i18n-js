@@ -48,9 +48,10 @@ module SimplesIdeias
       end
     end
 
-    def segments_per_locale(pattern,scope)
+    def segments_per_locale(pattern, scopes)
       ::I18n.available_locales.each_with_object({}) do |locale,segments|
-        result = scoped_translations("#{locale}.#{scope}")
+        scopes = to_array(scopes).map { |scope| "#{locale}.#{scope}" }
+        result = scoped_translations(scopes)
         unless result.empty?
           segment_name = ::I18n.interpolate(pattern,{:locale => locale})
           segments[segment_name] = result
@@ -131,7 +132,7 @@ module SimplesIdeias
     def scoped_translations(scopes) # :nodoc:
       result = {}
 
-      [scopes].flatten.each do |scope|
+      to_array(scopes).each do |scope|
         deep_merge! result, filter(translations, scope)
       end
 
@@ -171,6 +172,11 @@ module SimplesIdeias
 
     def deep_merge!(target, hash) # :nodoc:
       target.merge!(hash, &MERGER)
+    end
+
+    private
+    def to_array(value)
+      [value].flatten
     end
   end
 end
