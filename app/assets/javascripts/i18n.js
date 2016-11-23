@@ -420,7 +420,10 @@
 
       while (scopes.length) {
         translations = translations[scopes.shift()];
-        if (scopes.length == 0 && isObject(translations)) {
+        if (!isObject(translations)) {
+          break;
+        }
+        if (scopes.length == 0) {
           message = this.pluralizationLookupWithoutFallback(count, locale, translations);
         }
       }
