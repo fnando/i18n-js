@@ -1,3 +1,5 @@
+require "fileutils"
+
 module I18n
   module JS
     class Middleware
@@ -32,7 +34,13 @@ module I18n
       end
 
       def clear_cache
-        File.delete(cache_path) if File.exist?(cache_path)
+        # `File.delete` will raise error when "multiple worker"
+        # Are running at the same time, like in a parallel test
+        #
+        # `FileUtils.rm_f` is tested manually
+        #
+        # See https://github.com/fnando/i18n-js/issues/436
+        FileUtils.rm_f(cache_path) if File.exist?(cache_path)
       end
 
       def save_cache(new_cache)
