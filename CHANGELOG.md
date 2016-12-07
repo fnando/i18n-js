@@ -11,6 +11,21 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- Nothing
+
+### Fixed
+
+- Nothing
+
+
+## [3.0.0.rc15] - 2016-12-07
+
+### Added
+
+- Nothing
+
+### Changed
+
 - [JS] Allow `defaultValue` to work in pluralization  
   (PR: https://github.com/fnando/i18n-js/pull/433)  
 - [Ruby] Stop validating the fallback locales against `I18n.available_locales`  
@@ -202,7 +217,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc14...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc15...HEAD
+[3.0.0.rc15]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc14...v3.0.0.rc15
 [3.0.0.rc14]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc13...v3.0.0.rc14
 [3.0.0.rc13]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc12...v3.0.0.rc13
 [3.0.0.rc12]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc11...v3.0.0.rc12
