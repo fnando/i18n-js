@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+
 ## [Unreleased]
 
 ### Added
@@ -10,17 +11,24 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- [JS] Allow `defaultValue` to work in pluralization  
+  (PR: https://github.com/fnando/i18n-js/pull/433)  
 - [Ruby] Stop validating the fallback locales against `I18n.available_locales`  
   This allows some locales to be used as fallback locales, but not to be generated in JS.  
   (PR: https://github.com/fnando/i18n-js/pull/425)  
+- [Ruby] Remove dependency on gem `activesupport`  
 
 ### Fixed
 
 - [JS] Stop converting numeric & boolean values into objects  
   when merging objects with `I18n.extend`  
   (PR: https://github.com/fnando/i18n-js/pull/420)  
+- [JS] Fix I18n pluralization fallback when tree is empty  
+  (PR: https://github.com/fnando/i18n-js/pull/435)  
 - [Ruby] Use old syntax to define lambda for compatibility with older Rubies  
   (Issue: https://github.com/fnando/i18n-js/issues/419)  
+- [Ruby] Fix error raised in middleware cache cleaning in parallel test   
+  (Issue: https://github.com/fnando/i18n-js/issues/436)  
 
 
 ## [3.0.0.rc14] - 2016-08-29
