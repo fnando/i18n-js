@@ -525,6 +525,7 @@
   I18n.translate = function(scope, options) {
     options = this.prepareOptions(options);
 
+    var copiedOptions = this.prepareOptions(options);
     var translationOptions = this.createTranslationOptions(scope, options);
 
     var translation;
@@ -550,7 +551,7 @@
     if (typeof(translation) === "string") {
       translation = this.interpolate(translation, options);
     } else if (isObject(translation) && this.isSet(options.count)) {
-      translation = this.pluralize(options.count, scope, options);
+      translation = this.pluralize(options.count, scope, copiedOptions);
     }
 
     return translation;

@@ -152,6 +152,11 @@ describe("Translate", function(){
     expect(actual).toEqual("Warning!");
   });
 
+  it("uses default value for plural translation", function(){
+    actual = I18n.t("message", {defaultValue: { one: '%{count} message', other: '%{count} messages'}, count: 1});
+    expect(actual).toEqual("1 message");
+  });
+
   it("uses default value for unknown locale", function(){
     I18n.locale = "fr";
     actual = I18n.t("warning", {defaultValue: "Warning!"});
