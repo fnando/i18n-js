@@ -621,7 +621,7 @@ You can do this:
 var point_in_number = 1000;
 I18n.t('point', { count: point_in_number, formatted_number: I18n.toNumber(point_in_number) });
 ```
-Outout should be `1,000 points`
+Output should be `1,000 points`
 
 
 ## Using multiple exported translation files on a page.
