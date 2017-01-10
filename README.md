@@ -603,6 +603,27 @@ The accepted formats are:
 
 Check out `spec/*.spec.js` files for more examples!
 
+#### Using pluralization and number formatting together
+Sometimes you might want to display translation with formatted number, like adding thousand delimiters to displayed number  
+You can do this:  
+```json
+{
+  "en": {
+    "point": {
+      "one": "1 Point",
+      "other": "{{formatted_number}} Points",
+      "zero": "0 Points"
+    }
+  }
+}
+```
+```js
+var point_in_number = 1000;
+I18n.t('point', { count: point_in_number, formatted_number: I18n.toNumber(point_in_number) });
+```
+Outout should be `1,000 points`
+
+
 ## Using multiple exported translation files on a page.
 This method is useful for very large apps where a single contained translations.js file is not desirable. Examples would be a global translations file and a more specific route translation file.
 
