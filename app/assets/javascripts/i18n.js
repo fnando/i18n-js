@@ -534,7 +534,7 @@
     var translationFound =
       translationOptions.some(function(translationOption) {
         if (this.isSet(translationOption.scope)) {
-          translation = this.lookup(translationOption.scope, options);
+          translation = this.lookup(translationOption.scope, copiedOptions);
         } else if (this.isSet(translationOption.message)) {
           translation = translationOption.message;
         }
