@@ -12,19 +12,23 @@
 // See tests for specific formatting like numbers and dates.
 //
 
-;(function(factory) {
-  if (typeof module !== 'undefined' && module.exports) {
-    // Node/CommonJS
-    module.exports = factory(this);
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD
-    var global=this;
-    define('i18n', function(){ return factory(global);});
+// Using UMD pattern from
+// https://github.com/umdjs/umd#regular-module
+// `returnExports.js` version
+;(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define("i18n", function(){ return factory(root);});
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory(root);
   } else {
-    // Browser globals
-    this.I18n = factory(this);
+    // Browser globals (root is window)
+    root.I18n = factory(root);
   }
-}(function(global) {
+}(this, function(global) {
   "use strict";
 
   // Use previously defined object if exists in current scope
