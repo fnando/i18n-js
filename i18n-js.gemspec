@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake", "~> 12.0"
   s.add_development_dependency "gem-release", ">= 0.7"
 
-  s.required_ruby_version = ">= 1.9.3"
+  s.required_ruby_version = ">= 2.1.0"
 end
