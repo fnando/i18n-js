@@ -2,7 +2,7 @@
   "name": "i18n-js",
   "version": "0.0.0",
   "devDependencies": {
-    "jasmine-node": "*"
+    "jasmine-node": "^1.14.5"
   },
   "main": "app/assets/javascripts/i18n.js",
   "scripts": {
