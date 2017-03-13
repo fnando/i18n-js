@@ -18,6 +18,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.0.rc16] - 2017-03-13
+
+### Changed
+
+- [Ruby] Drop support for Ruby < `2.1.0`
+
+### Fixed
+
+- [JS] Make defaultValue works on plural translation
+- [JS] Fix UMD pattern so the global/root won’t be undefined
+
+
 ## [3.0.0.rc15] - 2016-12-07
 
 ### Added
@@ -217,7 +229,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc15...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc16...HEAD
+[3.0.0.rc16]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc15...v3.0.0.rc16
 [3.0.0.rc15]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc14...v3.0.0.rc15
 [3.0.0.rc14]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc13...v3.0.0.rc14
 [3.0.0.rc13]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc12...v3.0.0.rc13
