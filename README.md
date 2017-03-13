@@ -1,7 +1,12 @@
 # I18n.js
 
+[![Gem Version](http://img.shields.io/gem/v/i18n-js.svg?style=flat-square)](http://badge.fury.io/rb/i18n-js)
+[![License](https://img.shields.io/github/license/fnando/i18n-js.svg?style=flat-square)](http://badge.fury.io/rb/i18n-js)
+
 [![Build Status](http://img.shields.io/travis/fnando/i18n-js.svg?style=flat-square)](https://travis-ci.org/fnando/i18n-js)
+[![Dependency Status](http://img.shields.io/gemnasium/fnando/i18n-js.svg?style=flat-square)](https://gemnasium.com/fnando/i18n-js)
 [![Code Climate](http://img.shields.io/codeclimate/github/fnando/i18n-js.svg?style=flat-square)](https://codeclimate.com/github/fnando/i18n-js)
+
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat-1dce73.svg?style=flat-square)](https://gitter.im/fnando/i18n-js)
 
 It's a small library to provide the Rails I18n translations on the JavaScript.
