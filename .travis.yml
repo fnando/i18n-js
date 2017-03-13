@@ -5,9 +5,8 @@ language: ruby
 cache:
   - bundler
 rvm:
-  - 2.0
-  - 2.1
-  - 2.2
+  - 2.1.10
+  - 2.2.5
   # Since the Travis Build Env does not recognize `2.3` alias yet
   # We need to specify the version precisely
   - 2.3.3
