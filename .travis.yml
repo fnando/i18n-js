@@ -19,6 +19,7 @@ before_install:
 gemfile:
   - gemfiles/i18n_0_6.gemfile
   - gemfiles/i18n_0_7.gemfile
+  - gemfiles/i18n_0_8.gemfile
 matrix:
   fast_finish: true
   allow_failures:
