@@ -1,7 +1,7 @@
 # I18n.js
 
 [![Gem Version](http://img.shields.io/gem/v/i18n-js.svg?style=flat-square)](http://badge.fury.io/rb/i18n-js)
-[![License](https://img.shields.io/github/license/fnando/i18n-js.svg?style=flat-square)](http://badge.fury.io/rb/i18n-js)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![Build Status](http://img.shields.io/travis/fnando/i18n-js.svg?style=flat-square)](https://travis-ci.org/fnando/i18n-js)
 [![Dependency Status](http://img.shields.io/gemnasium/fnando/i18n-js.svg?style=flat-square)](https://gemnasium.com/fnando/i18n-js)
