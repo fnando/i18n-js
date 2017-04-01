@@ -4,7 +4,7 @@ require "i18n/js/version"
 
 Gem::Specification.new do |s|
   s.name        = "i18n-js"
-  s.version     = I18n::JS::Version::STRING
+  s.version     = I18n::JS::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nando Vieira"]
   s.email       = ["fnando.vieira@gmail.com"]

@@ -18,6 +18,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.0] - 2017-04-01
+
+This is a fake official release, the *real* one will be `3.0.0.rc17`  
+And today is not April Fools' Day  
+
+### Fixed
+
+- Ends the longest Release Candidate period among all ruby gems  
+  (v3.0.0.rc1 released at 2012-05-10)  
+
+
 ## [3.0.0.rc16] - 2017-03-13
 
 ### Changed
@@ -229,7 +240,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc16...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0...HEAD
+[3.0.0]:      https://github.com/fnando/i18n-js/compare/v3.0.0.rc16...v3.0.0
 [3.0.0.rc16]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc15...v3.0.0.rc16
 [3.0.0.rc15]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc14...v3.0.0.rc15
 [3.0.0.rc14]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc13...v3.0.0.rc14

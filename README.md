@@ -32,11 +32,7 @@ The `master` branch (including this README) is for latest `3.0.0.rc` instead of 
 
 Add the gem to your Gemfile.
 ```ruby
-source "https://rubygems.org"
-gem "rails", "your_rails_version"
-# You only need this RC version constraint during the development of `3.0.0`, once stable version is released you can remove `rc11` suffix
-# `3.0.0.rc11` is the latest version of released RC version when this entry is changed, you might want to change it later
-gem "i18n-js", ">= 3.0.0.rc11"
+gem "i18n-js"
 ```
 
 #### Rails app with [Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
