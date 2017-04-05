@@ -178,60 +178,21 @@
     , missingTranslationPrefix: ''
   };
 
+  // Set default locale. This locale will be used when fallback is enabled and
+  // the translation doesn't exist in a particular locale.
   I18n.reset = function() {
-    // Set default locale. This locale will be used when fallback is enabled and
-    // the translation doesn't exist in a particular locale.
-    this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
-
-    // Set the current locale to `en`.
-    this.locale = DEFAULT_OPTIONS.locale;
-
-    // Set the translation key separator.
-    this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
-
-    // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
-    this.placeholder = DEFAULT_OPTIONS.placeholder;
-
-    // Set if engine should fallback to the default locale when a translation
-    // is missing.
-    this.fallbacks = DEFAULT_OPTIONS.fallbacks;
-
-    // Set the default translation object.
-    this.translations = DEFAULT_OPTIONS.translations;
-
-    // Set the default missing behaviour
-    this.missingBehaviour = DEFAULT_OPTIONS.missingBehaviour;
-
-    // Set the default missing string prefix for guess behaviour
-    this.missingTranslationPrefix = DEFAULT_OPTIONS.missingTranslationPrefix;
-
+    var key;
+    for (key in DEFAULT_OPTIONS) {
+      this[key] = DEFAULT_OPTIONS[key];
+    }
   };
 
   // Much like `reset`, but only assign options if not already assigned
   I18n.initializeOptions = function() {
-    if (typeof(this.defaultLocale) === "undefined" && this.defaultLocale !== null)
-      this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
-
-    if (typeof(this.locale) === "undefined" && this.locale !== null)
-      this.locale = DEFAULT_OPTIONS.locale;
-
-    if (typeof(this.defaultSeparator) === "undefined" && this.defaultSeparator !== null)
-      this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
-
-    if (typeof(this.placeholder) === "undefined" && this.placeholder !== null)
-      this.placeholder = DEFAULT_OPTIONS.placeholder;
-
-    if (typeof(this.fallbacks) === "undefined" && this.fallbacks !== null)
-      this.fallbacks = DEFAULT_OPTIONS.fallbacks;
-
-    if (typeof(this.translations) === "undefined" && this.translations !== null)
-      this.translations = DEFAULT_OPTIONS.translations;
-
-    if (typeof(this.missingBehaviour) === "undefined" && this.missingBehaviour !== null)
-      this.missingBehaviour = DEFAULT_OPTIONS.missingBehaviour;
-
-    if (typeof(this.missingTranslationPrefix) === "undefined" && this.missingTranslationPrefix !== null)
-      this.missingTranslationPrefix = DEFAULT_OPTIONS.missingTranslationPrefix;
+    var key;
+    for (key in DEFAULT_OPTIONS) if (!isSet(this[key])) {
+      this[key] = DEFAULT_OPTIONS[key];
+    }
   };
   I18n.initializeOptions();
 
