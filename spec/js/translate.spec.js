@@ -146,6 +146,15 @@ describe("Translate", function(){
       expect(actual).toEqual("Hello all!");
     });
 
+    it("uses default scope over default value if default scope is found", function() {
+      var options = {
+          defaults: [{scope: "hello"}]
+        , defaultValue: "Hello all!"
+      };
+      actual = I18n.t("foo", options);
+      expect(actual).toEqual("Hello World!");
+    })
+
     it("uses default value with lazy evaluation", function () {
       var options = {
           defaults: [{scope: "bar"}]

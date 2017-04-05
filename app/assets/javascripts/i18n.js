@@ -497,7 +497,6 @@
     // insert it in to the translation options as such.
     if (isSet(options.defaultValue)) {
       translationOptions.push({ message: options.defaultValue });
-      delete options.defaultValue;
     }
 
     return translationOptions;
@@ -507,16 +506,19 @@
   I18n.translate = function(scope, options) {
     options = options || {}
 
-    var copiedOptions = this.prepareOptions(options);
     var translationOptions = this.createTranslationOptions(scope, options);
 
     var translation;
+
+    var optionsWithoutDefault = this.prepareOptions(options)
+    delete optionsWithoutDefault.defaultValue
+
     // Iterate through the translation options until a translation
     // or message is found.
     var translationFound =
       translationOptions.some(function(translationOption) {
         if (isSet(translationOption.scope)) {
-          translation = this.lookup(translationOption.scope, options);
+          translation = this.lookup(translationOption.scope, optionsWithoutDefault);
         } else if (isSet(translationOption.message)) {
           translation = lazyEvaluate(translationOption.message, scope);
         }
@@ -533,7 +535,7 @@
     if (typeof(translation) === "string") {
       translation = this.interpolate(translation, options);
     } else if (isObject(translation) && isSet(options.count)) {
-      translation = this.pluralize(options.count, scope, copiedOptions);
+      translation = this.pluralize(options.count, scope, options);
     }
 
     return translation;
@@ -578,15 +580,13 @@
   // The pluralized translation may have other placeholders,
   // which will be retrieved from `options`.
   I18n.pluralize = function(count, scope, options) {
-    options = this.prepareOptions(options);
+    options = this.prepareOptions({count: String(count)}, options)
     var pluralizer, message, result;
 
     result = this.pluralizationLookup(count, scope, options);
     if (result.translations == undefined || result.translations == null) {
       return this.missingTranslation(scope, options);
     }
-
-    options.count = String(count);
 
     if (result.message != undefined && result.message != null) {
       return this.interpolate(result.message, options);
