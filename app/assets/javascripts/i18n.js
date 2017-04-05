@@ -321,7 +321,7 @@
   // This is used internally by some functions and should not be used as an
   // public API.
   I18n.lookup = function(scope, options) {
-    options = this.prepareOptions(options);
+    options = options || {}
 
     var locales = this.locales.get(options.locale).slice()
       , requestedLocale = locales[0]
@@ -381,7 +381,7 @@
 
   // Lookup dedicated to pluralization
   I18n.pluralizationLookup = function(count, scope, options) {
-    options = this.prepareOptions(options);
+    options = options || {}
     var locales = this.locales.get(options.locale).slice()
       , requestedLocale = locales[0]
       , locale
@@ -505,7 +505,7 @@
 
   // Translate the given scope with the provided options.
   I18n.translate = function(scope, options) {
-    options = this.prepareOptions(options);
+    options = options || {}
 
     var copiedOptions = this.prepareOptions(options);
     var translationOptions = this.createTranslationOptions(scope, options);
@@ -541,7 +541,7 @@
 
   // This function interpolates the all variables in the given message.
   I18n.interpolate = function(message, options) {
-    options = this.prepareOptions(options);
+    options = options || {}
     var matches = message.match(this.placeholder)
       , placeholder
       , value
@@ -960,7 +960,7 @@
   };
 
   I18n.getFullScope = function(scope, options) {
-    options = this.prepareOptions(options);
+    options = options || {}
 
     // Deal with the scope as an array.
     if (isArray(scope)) {
