@@ -55,6 +55,11 @@
     return type === 'function' || type === 'object' && !!obj;
   };
 
+  // Check if value is different than undefined and null;
+  var isSet = function(value) {
+    return typeof(value) !== 'undefined' && value !== null;
+  };
+
   // Is a given value an array?
   // Borrowed from Underscore.js
   var isArray = function(val) {
@@ -336,9 +341,7 @@
   };
 
   // Check if value is different than undefined and null;
-  I18n.isSet = function(value) {
-    return value !== undefined && value !== null;
-  };
+  I18n.isSet = isSet;
 
   // Find and process the translation using the provided scope and options.
   // This is used internally by some functions and should not be used as an
@@ -376,7 +379,7 @@
       }
     }
 
-    if (this.isSet(options.defaultValue)) {
+    if (isSet(options.defaultValue)) {
       return options.defaultValue;
     }
   };
@@ -391,7 +394,7 @@
     if (isObject(translations)) {
       while (pluralizerKeys.length) {
         pluralizerKey = pluralizerKeys.shift();
-        if (this.isSet(translations[pluralizerKey])) {
+        if (isSet(translations[pluralizerKey])) {
           message = translations[pluralizerKey];
           break;
         }
@@ -437,7 +440,7 @@
     }
 
     if (message == null || message == undefined) {
-      if (this.isSet(options.defaultValue)) {
+      if (isSet(options.defaultValue)) {
         if (isObject(options.defaultValue)) {
           message = this.pluralizationLookupWithoutFallback(count, options.locale, options.defaultValue);
         } else {
@@ -492,7 +495,7 @@
           continue;
         }
 
-        if (this.isSet(options[attr])) {
+        if (isSet(options[attr])) {
           continue;
         }
 
@@ -511,13 +514,13 @@
 
     // Defaults should be an array of hashes containing either
     // fallback scopes or messages
-    if (this.isSet(options.defaults)) {
+    if (isSet(options.defaults)) {
       translationOptions = translationOptions.concat(options.defaults);
     }
 
     // Maintain support for defaultValue. Since it is always a message
     // insert it in to the translation options as such.
-    if (this.isSet(options.defaultValue)) {
+    if (isSet(options.defaultValue)) {
       translationOptions.push({ message: options.defaultValue });
       delete options.defaultValue;
     }
@@ -537,9 +540,9 @@
     // or message is found.
     var translationFound =
       translationOptions.some(function(translationOption) {
-        if (this.isSet(translationOption.scope)) {
+        if (isSet(translationOption.scope)) {
           translation = this.lookup(translationOption.scope, options);
-        } else if (this.isSet(translationOption.message)) {
+        } else if (isSet(translationOption.message)) {
           translation = translationOption.message;
         }
 
@@ -554,7 +557,7 @@
 
     if (typeof(translation) === "string") {
       translation = this.interpolate(translation, options);
-    } else if (isObject(translation) && this.isSet(options.count)) {
+    } else if (isObject(translation) && isSet(options.count)) {
       translation = this.pluralize(options.count, scope, copiedOptions);
     }
 
@@ -581,7 +584,7 @@
       placeholder = matches.shift();
       name = placeholder.replace(this.placeholder, "$1");
 
-      if (this.isSet(options[name])) {
+      if (isSet(options[name])) {
         value = options[name].toString().replace(/\$/gm, "_#$#_");
       } else if (name in options) {
         value = this.nullPlaceholder(placeholder, message, options);
@@ -985,7 +988,7 @@
     options = this.prepareOptions(options);
 
     // Deal with the scope as an array.
-    if (scope.constructor === Array) {
+    if (isArray(scope)) {
       scope = scope.join(this.defaultSeparator);
     }
 
