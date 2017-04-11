@@ -145,6 +145,17 @@ describe("Translate", function(){
       actual = I18n.t("foo", options);
       expect(actual).toEqual("Hello all!");
     });
+
+    it("uses default value with lazy evaluation", function () {
+      var options = {
+          defaults: [{scope: "bar"}]
+        , defaultValue: function(scope) {
+          return scope.toUpperCase();
+        }
+      };
+      actual = I18n.t("foo", options);
+      expect(actual).toEqual("FOO");
+    })
   });
 
   it("uses default value for simple translation", function(){

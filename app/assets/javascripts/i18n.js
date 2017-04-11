@@ -52,7 +52,12 @@
   // Borrowed from Underscore.js
   var isObject = function(obj) {
     var type = typeof obj;
-    return type === 'function' || type === 'object' && !!obj;
+    return type === 'function' || type === 'object'
+  };
+
+  var isFunction = function(func) {
+    var type = typeof func;
+    return type === 'function'
   };
 
   // Check if value is different than undefined and null;
@@ -98,6 +103,14 @@
     // Shift back
     value = value.toString().split('e');
     return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+  }
+
+  var lazyEvaluate = function(message, scope) {
+    if (isFunction(message)) {
+      return message(scope);
+    } else {
+      return message;
+    }
   }
 
   var merge = function (dest, obj) {
@@ -218,7 +231,7 @@
   I18n.locales.get = function(locale) {
     var result = this[locale] || this[I18n.locale] || this["default"];
 
-    if (typeof(result) === "function") {
+    if (isFunction(result)) {
       result = result(locale);
     }
 
@@ -256,7 +269,7 @@
     // Compute each locale with its country code.
     // So this will return an array containing both
     // `de-DE` and `de` locales.
-    locales.forEach(function(locale){
+    locales.forEach(function(locale) {
       countryCode = locale.split("-")[0];
 
       if (!~list.indexOf(locale)) {
@@ -314,14 +327,15 @@
       , requestedLocale = locales[0]
       , locale
       , scopes
+      , fullScope
       , translations
     ;
 
-    scope = this.getFullScope(scope, options);
+    fullScope = this.getFullScope(scope, options);
 
     while (locales.length) {
       locale = locales.shift();
-      scopes = scope.split(this.defaultSeparator);
+      scopes = fullScope.split(this.defaultSeparator);
       translations = this.translations[locale];
 
       if (!translations) {
@@ -341,7 +355,7 @@
     }
 
     if (isSet(options.defaultValue)) {
-      return options.defaultValue;
+      return lazyEvaluate(options.defaultValue, scope);
     }
   };
 
@@ -504,7 +518,7 @@
         if (isSet(translationOption.scope)) {
           translation = this.lookup(translationOption.scope, options);
         } else if (isSet(translationOption.message)) {
-          translation = translationOption.message;
+          translation = lazyEvaluate(translationOption.message, scope);
         }
 
         if (translation !== undefined && translation !== null) {
