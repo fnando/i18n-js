@@ -16,8 +16,8 @@ module I18n
           safe_gem_check("rails", "~> 5.0", ">= 5.0.0.beta1") && running_rails5?
         end
 
-        def sprockets_supports_register_preprocessor?
-          defined?(Sprockets) && Sprockets.respond_to?(:register_preprocessor)
+        def sprockets_rails_v2_plus?
+          safe_gem_check("sprockets-rails", ">= 2")
         end
 
         def rails?
