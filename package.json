@@ -1,6 +1,6 @@
 {
   "name": "i18n-js",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "devDependencies": {
     "jasmine-node": "^1.14.5"
   },
