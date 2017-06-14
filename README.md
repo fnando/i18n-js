@@ -453,7 +453,7 @@ I18n.pluralization["ru"] = function (count) {
 };
 ```
 
-You can find all rules on <http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html>.
+You can find all rules on <http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html>.
 
 If you're using the same scope over and over again, you may use the `scope` option.
 
