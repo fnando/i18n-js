@@ -246,8 +246,6 @@
   I18n.locales["default"] = function(locale) {
     var locales = []
       , list = []
-      , countryCode
-      , count
     ;
 
     // Handle the inline locale option that can be provided to
@@ -266,19 +264,85 @@
       locales.push(I18n.defaultLocale);
     }
 
-    // Compute each locale with its country code.
-    // So this will return an array containing both
-    // `de-DE` and `de` locales.
-    locales.forEach(function(locale) {
-      countryCode = locale.split("-")[0];
+    // Locale code format 1:
+    // According to RFC4646 (http://www.ietf.org/rfc/rfc4646.txt)
+    // language codes for Traditional Chinese should be `zh-Hant`
+    //
+    // But due to backward compatibility
+    // We use older version of IETF language tag
+    // @see http://www.w3.org/TR/html401/struct/dirlang.html
+    // @see http://en.wikipedia.org/wiki/IETF_language_tag
+    //
+    // Format: `language-code = primary-code ( "-" subcode )*`
+    //
+    // primary-code uses ISO639-1
+    // @see http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+    // @see http://www.iso.org/iso/home/standards/language_codes.htm
+    //
+    // subcode uses ISO 3166-1 alpha-2
+    // @see http://en.wikipedia.org/wiki/ISO_3166
+    // @see http://www.iso.org/iso/country_codes.htm
+    //
+    // @note
+    //   subcode can be in upper case or lower case
+    //   defining it in upper case is a convention only
 
-      if (!~list.indexOf(locale)) {
+
+    // Locale code format 2:
+    // Format: `code = primary-code ( "-" region-code )*`
+    // primary-code uses ISO 639-1
+    // script-code uses ISO 15924
+    // region-code uses ISO 3166-1 alpha-2
+    // Example: zh-Hant-TW, en-HK, zh-Hant-CN
+    //
+    // It is similar to RFC4646 (or actually the same),
+    // but seems to be limited to language, script, region
+
+    // Compute each locale with its country code.
+    // So this will return an array containing
+    // `de-DE` and `de`
+    // or
+    // `zh-hans-tw`, `zh-hans`, `zh`
+    // locales.
+    locales.forEach(function(locale) {
+      var localeParts = locale.split("-");
+      var firstFallback = null;
+      var secondFallback = null;
+      if (localeParts.length === 3) {
+        firstFallback = localeParts[0];
+        secondFallback = [
+          localeParts[0],
+          localeParts[1]
+        ].join("-");
+      }
+      else if (localeParts.length === 2) {
+        firstFallback = localeParts[0];
+      }
+
+      if (list.indexOf(locale) === -1) {
         list.push(locale);
       }
 
-      if (I18n.fallbacks && countryCode && countryCode !== locale && !~list.indexOf(countryCode)) {
-        list.push(countryCode);
+      if (! I18n.fallbacks) {
+        return;
       }
+
+      [
+        firstFallback,
+        secondFallback
+      ].forEach(function(nullableFallbackLocale) {
+        // We don't want null values
+        if (typeof nullableFallbackLocale === "undefined") { return; }
+        if (nullableFallbackLocale === null) { return; }
+        // We don't want duplicate values
+        //
+        // Comparing with `locale` first is faster than
+        // checking whether value's presence in the list
+        if (nullableFallbackLocale === locale) { return; }
+        if (list.indexOf(nullableFallbackLocale) !== -1) { return; }
+
+        list.push(nullableFallbackLocale);
+      });
     });
 
     // No locales set? English it is.
