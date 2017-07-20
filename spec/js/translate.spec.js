@@ -65,7 +65,7 @@ describe("Translate", function(){
     expect(I18n.t("hello", {locale: "pt-BR"})).toEqual("Olá Mundo!");
   });
 
-  it("fallbacks to the default locale when I18n.fallbackss is enabled", function(){
+  it("fallbacks to the default locale when I18n.fallbacks is enabled", function(){
     I18n.locale = "pt-BR";
     I18n.fallbacks = true;
     expect(I18n.t("greetings.stranger")).toEqual("Hello stranger!");
@@ -81,6 +81,21 @@ describe("Translate", function(){
     I18n.locale = "de-DE";
     I18n.fallbacks = true;
     expect(I18n.t("hello")).toEqual("Hallo Welt!");
+  });
+
+  describe("when a 3-part locale is used", function(){
+    beforeEach(function(){
+      I18n.locale = "zh-Hant-TW";
+      I18n.fallbacks = true;
+    });
+
+    it("fallbacks to 2-part locale when absent", function(){
+      expect(I18n.t("cat")).toEqual("貓");
+    });
+
+    it("fallbacks to 1-part locale when 2-part missing requested translation", function(){
+      expect(I18n.t("dog")).toEqual("狗");
+    });
   });
 
   it("fallbacks using custom rules (function)", function(){

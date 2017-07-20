@@ -130,6 +130,14 @@ var DEBUG = false;
       hello: "Hei Verden!"
     };
 
+    Translations["zh-Hant"] = {
+      cat: "貓"
+    };
+
+    Translations["zh"] = {
+      dog: "狗"
+    };
+
     return Translations;
   };
 
