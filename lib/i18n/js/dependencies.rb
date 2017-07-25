@@ -4,28 +4,12 @@ module I18n
     # we need to specify pre-release version suffix in version constraint
     module Dependencies
       class << self
-        def rails3?
-          safe_gem_check("rails", "~> 3.0") && running_rails3?
-        end
-
-        def rails4?
-          safe_gem_check("rails", "~> 4.0", ">= 4.0.0.beta1") && running_rails4?
-        end
-
-        def rails5?
-          safe_gem_check("rails", "~> 5.0", ">= 5.0.0.beta1") && running_rails5?
+        def rails?
+          defined?(Rails) && Rails.respond_to?(:version)
         end
 
         def sprockets_rails_v2_plus?
           safe_gem_check("sprockets-rails", ">= 2")
-        end
-
-        def rails?
-          rails_available? && running_rails?
-        end
-
-        def rails_available?
-          safe_gem_check("rails", '>= 3.0.0.beta')
         end
 
         # This cannot be called at class definition time
@@ -47,20 +31,16 @@ module I18n
 
         private
 
-        def running_rails3?
-          running_rails? && Rails.version.to_i == 3
+        def rails3?
+          rails? && Rails.version.to_i == 3
         end
 
-        def running_rails4?
-          running_rails? && Rails.version.to_i == 4
+        def rails4?
+          rails? && Rails.version.to_i == 4
         end
 
-        def running_rails5?
-          running_rails? && Rails.version.to_i == 5
-        end
-
-        def running_rails?
-          defined?(Rails) && Rails.respond_to?(:version)
+        def rails5?
+          rails? && Rails.version.to_i == 5
         end
 
         def safe_gem_check(*args)
