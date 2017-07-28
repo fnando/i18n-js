@@ -11,7 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Nothing
+- [Ruby] Relax Rails detection code to work with alternative installation methods
+  (PR: https://github.com/fnando/i18n-js/pull/467)
 
 ### Fixed
 
