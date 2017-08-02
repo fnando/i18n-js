@@ -11,7 +11,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [Ruby] Relax Rails detection code to work with alternative installation methods
+- [Ruby] Relax Rails detection code to work with alternative installation methods  
+  (PR: https://github.com/fnando/i18n-js/pull/467)
+- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
+  It fallbacks to `zh` only before, now it fallbacks to `zh-Hant`  
   (PR: https://github.com/fnando/i18n-js/pull/467)
 
 ### Fixed
