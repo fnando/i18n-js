@@ -11,15 +11,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [Ruby] Relax Rails detection code to work with alternative installation methods  
-  (PR: https://github.com/fnando/i18n-js/pull/467)
-- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
-  It fallbacks to `zh` only before, now it fallbacks to `zh-Hant`  
-  (PR: https://github.com/fnando/i18n-js/pull/467)
+- Nothing
 
 ### Fixed
 
 - Nothing
+
+
+## [3.0.1] - 2017-08-02
+
+### Changed
+
+- [Ruby] Relax Rails detection code to work with alternative installation methods  
+  (PR: https://github.com/fnando/i18n-js/pull/467)
+- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
+  It fallbacks to `zh` only before, now it fallbacks to `zh-Hant`  
+  (PR: https://github.com/fnando/i18n-js/pull/465)
 
 
 ## [3.0.0] - 2017-04-01
@@ -244,7 +251,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.1...HEAD
+[3.0.1]:      https://github.com/fnando/i18n-js/compare/v3.0.0...v3.0.1
 [3.0.0]:      https://github.com/fnando/i18n-js/compare/v3.0.0.rc16...v3.0.0
 [3.0.0.rc16]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc15...v3.0.0.rc16
 [3.0.0.rc15]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc14...v3.0.0.rc15
