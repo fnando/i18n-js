@@ -17,6 +17,7 @@ coverage
 .editorconfig
 
 # Ruby code
+app/assets/javascripts/i18n/
 gemfiles
 lib
 Gemfile*
