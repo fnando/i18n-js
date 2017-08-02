@@ -21,7 +21,7 @@ Features:
 - Lots more! :)
 
 ## Version Notice
-The `master` branch (including this README) is for latest `3.0.0.rc` instead of `2.x`.
+The `master` branch (including this README) is for latest `3.0.0` instead of `2.x`.
 
 
 ## Usage
@@ -279,9 +279,15 @@ by hand or using your favorite programming language. More info below.
 
 #### Via NPM with webpack and CommonJS
 
-Add the following line to your package.json dependencies (where version is the version you want - n.b. npm install requires it to be the gzipped tarball, see [npm install](https://www.npmjs.org/doc/cli/npm-install.html))
+
+Add the following line to your package.json dependencies  
+where version is the version you want  
 ```javascript
-"i18n-js": "http://github.com/fnando/i18n-js/archive/v3.0.0.rc12.tar.gz"
+"i18n-js": "{version_constraint}"
+
+// Or if you want unreleased version
+// npm install requires it to be the gzipped tarball, see [npm install](https://www.npmjs.org/doc/cli/npm-install.html)
+"i18n-js": "https://github.com/fnando/i18n-js/archive/{tag_name_or_branch_name_or_commit_sha}.tar.gz"
 ```
 Run npm install then use via
 ```javascript
