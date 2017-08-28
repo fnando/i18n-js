@@ -783,19 +783,20 @@ Due to the design of `sprockets`:
 This means that new locale files will not be detected, and so they will not trigger a i18n-js refresh. There are a few approaches to work around this:
 
 1. You can force i18n-js to update its translations by completely clearing the assets cache. Use one of the following:
+  
+```bash
+$ rake assets:clobber
+# Or, with older versions of Rails:
+$ rake tmp:cache:clear
+```
 
-  ```bash
-  $ rake assets:clobber
-  # Or, with older versions of Rails:
-  $ rake tmp:cache:clear
-  ```
+These commands will remove *all* fingerprinted assets, and you will have to recompile them with
 
-    These commands will remove *all* fingerprinted assets, and you will have to recompile them with
+```bash
+$ rake assets:precompile
+```
 
-    ```
-    $ rake assets:precompile
-    ```
-    or similar commands.  If you are precompiling assets on the target machine(s), cached pages may be broken by this, so they will need to be refreshed.
+or similar commands.  If you are precompiling assets on the target machine(s), cached pages may be broken by this, so they will need to be refreshed.
 
 2. You can change something in a different locale file.
 
