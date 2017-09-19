@@ -1,7 +1,7 @@
 module I18n
   module JS
     module Utils
-      PLURAL_KEYS = %i[zero one two few many other]
+      PLURAL_KEYS = %i[zero one two few many other].freeze
 
       # deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
       # The last result is modified to treat `nil` as missing key
