@@ -219,6 +219,9 @@ module I18n
         FileUtils.mkdir_p(export_i18n_js_dir_path)
 
         i18n_js_path = File.expand_path('../../../app/assets/javascripts/i18n.js', __FILE__)
+        destination_path = File.expand_path("i18n.js", export_i18n_js_dir_path)
+        return if File.exist?(destination_path) && File.identical?(i18n_js_path, destination_path)
+
         FileUtils.cp(i18n_js_path, export_i18n_js_dir_path)
       end
 

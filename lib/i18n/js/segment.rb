@@ -40,11 +40,15 @@ module I18n
 
       def write_file(_file = @file, _translations = @translations)
         FileUtils.mkdir_p File.dirname(_file)
+        contents = js_header
+        _translations.each do |locale, translations_for_locale|
+          contents << js_translations(locale, translations_for_locale)
+        end
+
+        return if File.exist?(_file) && File.read(_file) == contents
+
         File.open(_file, "w+") do |f|
-          f << js_header
-          _translations.each do |locale, translations_for_locale|
-            f << js_translations(locale, translations_for_locale)
-          end
+          f << contents
         end
       end
 
