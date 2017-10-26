@@ -96,6 +96,10 @@ describe("Translate", function(){
     it("fallbacks to 1-part locale when 2-part missing requested translation", function(){
       expect(I18n.t("dog")).toEqual("狗");
     });
+
+    it("fallbacks to 2-part for the first time", function(){
+      expect(I18n.t("dragon")).toEqual("龍");
+    });
   });
 
   it("fallbacks using custom rules (function)", function(){

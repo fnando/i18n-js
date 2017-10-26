@@ -309,11 +309,11 @@
       var firstFallback = null;
       var secondFallback = null;
       if (localeParts.length === 3) {
-        firstFallback = localeParts[0];
-        secondFallback = [
+        firstFallback = [
           localeParts[0],
           localeParts[1]
         ].join("-");
+        secondFallback = localeParts[0];
       }
       else if (localeParts.length === 2) {
         firstFallback = localeParts[0];

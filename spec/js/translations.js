@@ -131,11 +131,13 @@ var DEBUG = false;
     };
 
     Translations["zh-Hant"] = {
-      cat: "貓"
+        cat: "貓"
+      , dragon: "龍"
     };
 
     Translations["zh"] = {
-      dog: "狗"
+        dog: "狗"
+      , dragon: "龙"
     };
 
     return Translations;
