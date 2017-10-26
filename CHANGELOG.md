@@ -20,10 +20,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.0.2] - 2017-10-26
 
-### Added
-
-- Nothing
-
 ### Changed
 
 - [Ruby] Avoid writing new file if a file with same content already exists  
@@ -31,10 +27,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
   It was falling back to `zh` first instead of `zh-Hant` (see new test case added)  
   (PR: https://github.com/fnando/i18n-js/pull/475)
-
-### Fixed
-
-- Nothing
 
 
 ## [3.0.1] - 2017-08-02
