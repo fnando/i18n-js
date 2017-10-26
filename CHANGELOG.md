@@ -18,6 +18,25 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.2] - 2017-10-26
+
+### Added
+
+- Nothing
+
+### Changed
+
+- [Ruby] Avoid writing new file if a file with same content already exists  
+  (PR: https://github.com/fnando/i18n-js/pull/473)
+- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
+  It was falling back to `zh` first instead of `zh-Hant` (see new test case added)  
+  (PR: https://github.com/fnando/i18n-js/pull/475)
+
+### Fixed
+
+- Nothing
+
+
 ## [3.0.1] - 2017-08-02
 
 ### Changed
@@ -251,7 +270,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.1...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.2...HEAD
+[3.0.2]:      https://github.com/fnando/i18n-js/compare/v3.0.1...v3.0.2
 [3.0.1]:      https://github.com/fnando/i18n-js/compare/v3.0.0...v3.0.1
 [3.0.0]:      https://github.com/fnando/i18n-js/compare/v3.0.0.rc16...v3.0.0
 [3.0.0.rc16]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc15...v3.0.0.rc16
