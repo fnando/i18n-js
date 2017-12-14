@@ -61,7 +61,7 @@ Then get the JS files following the instructions below.
 <%# This is just an example, you can put `i18n.js` and `translations.js` anywhere you like %>
 <%# Unlike the Asset Pipeline example, you need to require both **in order** %>
 <%= javascript_include_tag "i18n" %>
-<%= javascript_include_tag "translations" %>
+<%= javascript_include_tag "translations", skip_pipeline: true %>
 ```
 
 **There are two ways to get `translations.js`.**
