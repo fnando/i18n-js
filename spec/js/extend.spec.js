@@ -82,4 +82,27 @@ describe("Extend", function () {
 
     expect(I18n.extend(obj1, obj2)).toEqual(expected);
   });
+
+  it("should merge array values", function() {
+    var obj1 = {
+      array1: [1, 2]
+    },
+    obj2 = {
+      array2: [1, 2],
+      obj3: {
+        array3: [1, 2],
+        array4: [{obj4: 1}, 2]
+      }
+    },
+    expected = {
+      array1: [1, 2],
+      array2: [1, 2],
+      obj3: {
+        array3: [1, 2],
+        array4: [{obj4: 1}, 2]
+      }
+    }
+
+    expect(JSON.stringify(I18n.extend(obj1, obj2))).toEqual(JSON.stringify(expected));
+  });
 });
