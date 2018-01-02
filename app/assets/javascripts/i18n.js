@@ -117,7 +117,7 @@
     var key, value;
     for (key in obj) if (obj.hasOwnProperty(key)) {
       value = obj[key];
-      if (isString(value) || isNumber(value) || isBoolean(value)) {
+      if (isString(value) || isNumber(value) || isBoolean(value) || isArray(value)) {
         dest[key] = value;
       } else {
         if (dest[key] == null) dest[key] = {};
