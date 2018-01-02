@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.3] - 2018-01-02
+
+### Fixed
+
+- [Ruby] Fix extend method when translations has array values  
+  (PR: https://github.com/fnando/i18n-js/pull/487)
+
+
 ## [3.0.2] - 2017-10-26
 
 ### Changed
@@ -262,7 +270,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.2...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.3...HEAD
+[3.0.3]:      https://github.com/fnando/i18n-js/compare/v3.0.2...v3.0.3
 [3.0.2]:      https://github.com/fnando/i18n-js/compare/v3.0.1...v3.0.2
 [3.0.1]:      https://github.com/fnando/i18n-js/compare/v3.0.0...v3.0.1
 [3.0.0]:      https://github.com/fnando/i18n-js/compare/v3.0.0.rc16...v3.0.0
