@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.4] - 2018-01-26
+
+### Fixed
+
+- [Ruby] Fix `JS::Dependencies.using_asset_pipeline?` returning true when sprockets installed but disabled  
+  (PR: https://github.com/fnando/i18n-js/pull/488)
+
+
 ## [3.0.3] - 2018-01-02
 
 ### Fixed
@@ -270,7 +278,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.3...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.4...HEAD
+[3.0.3]:      https://github.com/fnando/i18n-js/compare/v3.0.3...v3.0.4
 [3.0.3]:      https://github.com/fnando/i18n-js/compare/v3.0.2...v3.0.3
 [3.0.2]:      https://github.com/fnando/i18n-js/compare/v3.0.1...v3.0.2
 [3.0.1]:      https://github.com/fnando/i18n-js/compare/v3.0.0...v3.0.1
