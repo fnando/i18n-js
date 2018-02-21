@@ -4,7 +4,9 @@
   "description": "A javascript library similar to Ruby on Rails i18n gem",
   "author": "Nando Vieira",
   "license": "MIT",
-  "keywords": ["i18n"],
+  "keywords": [
+    "i18n"
+  ],
   "devDependencies": {
     "jasmine-node": "^1.14.5"
   },
