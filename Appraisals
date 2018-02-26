@@ -16,5 +16,5 @@ appraise "i18n_0_9" do
 end
 
 appraise "i18n_1_0" do
-  gem "i18n", "~> 1.0"
+  gem "i18n", "~> 1.0.0"
 end

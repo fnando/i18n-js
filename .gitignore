@@ -3,3 +3,4 @@ node_modules
 Gemfile.lock
 .idea/
 gemfiles/*.gemfile.lock
+gemfiles/.bundle
