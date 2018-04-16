@@ -29,3 +29,6 @@ matrix:
   fast_finish: true
   allow_failures:
     - rvm: ruby-head
+notifications:
+  webhooks: https://www.travisbuddy.com/
+  on_success: never
