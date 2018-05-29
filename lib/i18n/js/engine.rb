@@ -60,6 +60,7 @@ module I18n
       def self.run(filename, source, context)
         if context.logical_path == "i18n/filtered"
           ::I18n.load_path.each { |path| context.depend_on(File.expand_path(path)) }
+          context.depend_on(File.expand_path(I18n::JS.config_file_path))
         end
 
         source
