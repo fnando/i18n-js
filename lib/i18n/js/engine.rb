@@ -64,9 +64,11 @@ module I18n
           # Absolute path is required or
           # Sprockets assumes it's a logical path
           #
-          # Also it's fine to depend on an absent file
-          # Sprocket will ignore paths of absent files
-          context.depend_on(File.expand_path(I18n::JS.config_file_path))
+          # Calling `depend on` with an absent file
+          # will invoke `resolve` and will throw an error in the end
+          if I18n::JS.config_file_exists?
+            context.depend_on(File.expand_path(I18n::JS.config_file_path))
+          end
         end
 
         source
