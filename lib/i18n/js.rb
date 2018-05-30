@@ -89,7 +89,7 @@ module I18n
     end
 
     def self.translation_segments
-      if config? && config[:translations]
+      if config_file_exists? && config[:translations]
         configured_segments
       else
         [Segment.new("#{DEFAULT_EXPORT_DIR_PATH}/translations.js", translations)]
@@ -99,7 +99,7 @@ module I18n
     # Load configuration file for partial exporting and
     # custom output directory
     def self.config
-      if config?
+      if config_file_exists?
         erb_result_from_yaml_file = ERB.new(File.read(config_file_path)).result
         Private::HashWithSymbolKeys.new(
           (::YAML.load(erb_result_from_yaml_file) || {})
@@ -109,8 +109,9 @@ module I18n
       end.freeze
     end
 
+    # @api private
     # Check if configuration file exist
-    def self.config?
+    def self.config_file_exists?
       File.file? config_file_path
     end
 

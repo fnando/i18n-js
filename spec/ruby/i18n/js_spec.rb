@@ -398,7 +398,7 @@ EOS
     end
 
     it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config?.should eql(false)
+      I18n::JS.config_file_exists?.should eql(false)
       I18n::JS.config.should eql({})
     end
 

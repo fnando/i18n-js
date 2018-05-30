@@ -8,7 +8,7 @@ module Helpers
   def set_config(path)
     config_file_path = File.dirname(__FILE__) + "/fixtures/#{path}"
     allow(I18n::JS).to receive_messages(
-      :config? => true,
+      :config_file_exists? => true,
       :config_file_path => config_file_path,
     )
   end
