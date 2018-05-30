@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.6] - 2018-05-30
+
+### Fixed
+
+- [Ruby] Make JS `i18n/filtered` depends on i18n-js config too
+  (PR: https://github.com/fnando/i18n-js/pull/497)
+
+
 ## [3.0.5] - 2018-02-26
 
 ### Changed
@@ -286,7 +294,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.5...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.6...HEAD
+[3.0.6]:      https://github.com/fnando/i18n-js/compare/v3.0.5...v3.0.6
 [3.0.5]:      https://github.com/fnando/i18n-js/compare/v3.0.4...v3.0.5
 [3.0.4]:      https://github.com/fnando/i18n-js/compare/v3.0.3...v3.0.4
 [3.0.3]:      https://github.com/fnando/i18n-js/compare/v3.0.2...v3.0.3
