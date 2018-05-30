@@ -18,6 +18,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.7] - 2018-05-30
+
+### Fixed
+
+- [Ruby] Fix new bug occuring when config file is absent
+
+
 ## [3.0.6] - 2018-05-30
 
 ### Fixed
@@ -294,7 +301,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.6...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.7...HEAD
+[3.0.7]:      https://github.com/fnando/i18n-js/compare/v3.0.6...v3.0.7
 [3.0.6]:      https://github.com/fnando/i18n-js/compare/v3.0.5...v3.0.6
 [3.0.5]:      https://github.com/fnando/i18n-js/compare/v3.0.4...v3.0.5
 [3.0.4]:      https://github.com/fnando/i18n-js/compare/v3.0.3...v3.0.4
