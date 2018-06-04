@@ -598,6 +598,8 @@
 
     if (typeof(translation) === "string") {
       translation = this.interpolate(translation, options);
+    } else if (isArray(translation)) {
+      translation = translation.map((t) => this.interpolate(t, options));
     } else if (isObject(translation) && isSet(options.count)) {
       translation = this.pluralize(options.count, scope, options);
     }
