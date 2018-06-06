@@ -58,6 +58,12 @@ var DEBUG = false;
             }
           }
         }
+
+      , arrayWithParams: [
+        "An item with a param of {{value}}",
+        "Another item with a param of {{value}}",
+        "A last item with a param of {{value}}",
+      ]
     };
 
     Translations["en-US"] = {
