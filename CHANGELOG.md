@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.8] - 2018-06-06
+
+### Changed
+
+- [JS] Interpolate translation array too
+  (PR: https://github.com/fnando/i18n-js/pull/498)
+
+
 ## [3.0.7] - 2018-05-30
 
 ### Fixed
@@ -301,7 +309,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.7...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.8...HEAD
+[3.0.8]:      https://github.com/fnando/i18n-js/compare/v3.0.7...v3.0.8
 [3.0.7]:      https://github.com/fnando/i18n-js/compare/v3.0.6...v3.0.7
 [3.0.6]:      https://github.com/fnando/i18n-js/compare/v3.0.5...v3.0.6
 [3.0.5]:      https://github.com/fnando/i18n-js/compare/v3.0.4...v3.0.5
