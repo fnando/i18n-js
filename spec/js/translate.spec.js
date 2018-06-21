@@ -18,6 +18,12 @@ describe("Translate", function(){
     expect(I18n.t("greetings")).toEqual(I18n.translations.en.greetings);
   });
 
+  it("returns missing message translation for valid scope with null", function(){
+    actual = I18n.t("null_key");
+    expected = '[missing "en.null_key" translation]';
+    expect(actual).toEqual(expected);
+  });
+
   it("returns missing message translation for invalid scope", function(){
     actual = I18n.t("invalid.scope");
     expected = '[missing "en.invalid.scope" translation]';

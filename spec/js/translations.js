@@ -65,6 +65,8 @@ var DEBUG = false;
         "Another item with a param of {{value}}",
         "A last item with a param of {{value}}"
       ]
+
+      , null_key: null
     };
 
     Translations["en-US"] = {
