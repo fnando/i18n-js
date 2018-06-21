@@ -609,6 +609,10 @@
 
   // This function interpolates the all variables in the given message.
   I18n.interpolate = function(message, options) {
+    if (message === null) {
+      return message;
+    }
+
     options = options || {}
     var matches = message.match(this.placeholder)
       , placeholder

@@ -260,6 +260,7 @@ describe("Translate", function(){
   it("returns an array with values interpolated", function(){
     var options = {value: 314};
     expect(I18n.t("arrayWithParams", options)).toEqual([
+      null,
       "An item with a param of " + options.value,
       "Another item with a param of " + options.value,
       "A last item with a param of " + options.value
