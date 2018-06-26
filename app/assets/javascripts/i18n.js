@@ -75,11 +75,11 @@
   };
 
   var isString = function(val) {
-    return typeof value == 'string' || Object.prototype.toString.call(val) === '[object String]';
+    return typeof val === 'string' || Object.prototype.toString.call(val) === '[object String]';
   };
 
   var isNumber = function(val) {
-    return typeof val == 'number' || Object.prototype.toString.call(val) === '[object Number]';
+    return typeof val === 'number' || Object.prototype.toString.call(val) === '[object Number]';
   };
 
   var isBoolean = function(val) {
