@@ -86,6 +86,10 @@
     return val === true || val === false;
   };
 
+  var isNull = function(val) {
+    return val === null;
+  };
+
   var decimalAdjust = function(type, value, exp) {
     // If the exp is undefined or zero...
     if (typeof exp === 'undefined' || +exp === 0) {
@@ -117,7 +121,7 @@
     var key, value;
     for (key in obj) if (obj.hasOwnProperty(key)) {
       value = obj[key];
-      if (isString(value) || isNumber(value) || isBoolean(value) || isArray(value)) {
+      if (isString(value) || isNumber(value) || isBoolean(value) || isArray(value) || isNull(value)) {
         dest[key] = value;
       } else {
         if (dest[key] == null) dest[key] = {};

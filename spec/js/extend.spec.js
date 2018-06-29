@@ -60,7 +60,7 @@ describe("Extend", function () {
     expect(I18n.extend(obj1, obj2)).toEqual(expected);
   });
 
-  it("should correctly merge string, numberic and boolean values", function() {
+  it("should correctly merge string, numberic, boolean, and null values", function() {
     var obj1 = {
       test1: {
         test2: false
@@ -69,7 +69,8 @@ describe("Extend", function () {
     , obj2 = {
       test1: {
         test3: 23,
-        test4: 'abc'
+        test4: 'abc',
+        test5: null
       }
     }
     , expected = {
@@ -77,6 +78,7 @@ describe("Extend", function () {
         test2: false
         , test3: 23
         , test4: 'abc'
+        , test5: null
       }
     }
 
