@@ -63,7 +63,9 @@ var DEBUG = false;
         null,
         "An item with a param of {{value}}",
         "Another item with a param of {{value}}",
-        "A last item with a param of {{value}}"
+        "A last item with a param of {{value}}",
+        ["An", "array", "of", "strings"],
+        {foo: "bar"}
       ]
 
       , null_key: null
