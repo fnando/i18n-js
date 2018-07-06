@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.0.11] - 2018-07-06
+
+### Fixed
+
+- [JS] Fix interpolation for array with non string/null elements
+  (PR: https://github.com/fnando/i18n-js/pull/505)
+
+
 ## [3.0.10] - 2018-06-21
 
 ### Fixed
@@ -326,7 +334,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.10...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.11...HEAD
+[3.0.11]:     https://github.com/fnando/i18n-js/compare/v3.0.10...v3.0.11
 [3.0.10]:     https://github.com/fnando/i18n-js/compare/v3.0.9...v3.0.10
 [3.0.9]:      https://github.com/fnando/i18n-js/compare/v3.0.8...v3.0.9
 [3.0.8]:      https://github.com/fnando/i18n-js/compare/v3.0.7...v3.0.8
