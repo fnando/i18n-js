@@ -602,7 +602,7 @@
       translation = this.interpolate(translation, options);
     } else if (isArray(translation)) {
       translation = translation.map(function(t) {
-        return this.interpolate(t, options);
+        return (typeof(t) === "string" ? this.interpolate(t, options) : t);
       }, this);
     } else if (isObject(translation) && isSet(options.count)) {
       translation = this.pluralize(options.count, scope, options);
