@@ -576,14 +576,16 @@ I18n.translations["en"] = {
 I18n.l("date.formats.ordinal_day", "2009-09-18", { day: '18th' }); // Sep 18th
 ```
 
-If you prefer, you can use the `I18n.strftime` function to format dates.
+If you prefer, you can use the `I18n.toTime` and `I18n.strftime` functions to format dates.
 
 ```javascript
 var date = new Date();
+I18n.toTime("date.formats.short", "2009-09-18");
+I18n.toTime("date.formats.short", date);
 I18n.strftime(date, "%d/%m/%Y");
 ```
 
-The accepted formats are:
+The accepted formats for `I18n.strftime` are:
 
     %a  - The abbreviated weekday name (Sun)
     %A  - The full weekday name (Sunday)
