@@ -339,7 +339,12 @@ I18n.t("some.scoped.translation", {locale: "fr"});
 You can also interpolate values:
 
 ```javascript
-I18n.t("greeting", {name: "John Doe"});  // greeting = "Hello %{name}"
+// You need the `translations` object setup first
+I18n.translations["en"] = {
+  greeting: "Hello %{name}"
+}
+
+I18n.t("greeting", {name: "John Doe"});
 ```
 You can set default values for missing scopes:
 ```javascript
