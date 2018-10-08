@@ -815,6 +815,13 @@ So ensure sprockets is loaded before this gem like moving entry of sprockets in 
 
 **Note:** See issue [#404](https://github.com/fnando/i18n-js/issues/404) for more details and discussion of this issue.
 
+### JS `I18n.toCurrency` & `I18n.toNumber` cannot handle large integers
+
+The above methods use `toFixed` and it only supports 53 bit integers.  
+Ref: http://2ality.com/2012/07/large-integers.html
+
+Feel free to find & discuss possible solution(s) at issue [#511](https://github.com/fnando/i18n-js/issues/511)
+
 
 ## Maintainer
 
