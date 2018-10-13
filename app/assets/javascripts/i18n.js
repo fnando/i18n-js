@@ -575,6 +575,7 @@
     var translationOptions = this.createTranslationOptions(scope, options);
 
     var translation;
+    var usedScope = scope;
 
     var optionsWithoutDefault = this.prepareOptions(options)
     delete optionsWithoutDefault.defaultValue
@@ -584,7 +585,8 @@
     var translationFound =
       translationOptions.some(function(translationOption) {
         if (isSet(translationOption.scope)) {
-          translation = this.lookup(translationOption.scope, optionsWithoutDefault);
+          usedScope = translationOption.scope;
+          translation = this.lookup(usedScope, optionsWithoutDefault);
         } else if (isSet(translationOption.message)) {
           translation = lazyEvaluate(translationOption.message, scope);
         }
@@ -605,7 +607,7 @@
         return (typeof(t) === "string" ? this.interpolate(t, options) : t);
       }, this);
     } else if (isObject(translation) && isSet(options.count)) {
-      translation = this.pluralize(options.count, scope, options);
+      translation = this.pluralize(options.count, usedScope, options);
     }
 
     return translation;

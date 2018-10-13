@@ -15,7 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Nothing
+- [JS] fix missing translation when pluralizing with default scopes
 
 
 ## [3.0.11] - 2018-07-06
@@ -70,7 +70,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [Ruby] Support `I18n` `1.0.x`  
+- [Ruby] Support `I18n` `1.0.x`
   (PR: https://github.com/fnando/i18n-js/pull/492)
 
 
@@ -78,7 +78,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- [Ruby] Fix `JS::Dependencies.using_asset_pipeline?` returning true when sprockets installed but disabled  
+- [Ruby] Fix `JS::Dependencies.using_asset_pipeline?` returning true when sprockets installed but disabled
   (PR: https://github.com/fnando/i18n-js/pull/488)
 
 
@@ -86,7 +86,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- [Ruby] Fix extend method when translations has array values  
+- [Ruby] Fix extend method when translations has array values
   (PR: https://github.com/fnando/i18n-js/pull/487)
 
 
@@ -94,10 +94,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [Ruby] Avoid writing new file if a file with same content already exists  
+- [Ruby] Avoid writing new file if a file with same content already exists
   (PR: https://github.com/fnando/i18n-js/pull/473)
-- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
-  It was falling back to `zh` first instead of `zh-Hant` (see new test case added)  
+- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used
+  It was falling back to `zh` first instead of `zh-Hant` (see new test case added)
   (PR: https://github.com/fnando/i18n-js/pull/475)
 
 
@@ -105,22 +105,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [Ruby] Relax Rails detection code to work with alternative installation methods  
+- [Ruby] Relax Rails detection code to work with alternative installation methods
   (PR: https://github.com/fnando/i18n-js/pull/467)
-- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
-  It fallbacks to `zh` only before, now it fallbacks to `zh-Hant`  
+- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used
+  It fallbacks to `zh` only before, now it fallbacks to `zh-Hant`
   (PR: https://github.com/fnando/i18n-js/pull/465)
 
 
 ## [3.0.0] - 2017-04-01
 
-This is a fake official release, the *real* one will be `3.0.0.rc17`  
-And today is not April Fools' Day  
+This is a fake official release, the *real* one will be `3.0.0.rc17`
+And today is not April Fools' Day
 
 ### Fixed
 
-- Ends the longest Release Candidate period among all ruby gems  
-  (v3.0.0.rc1 released at 2012-05-10)  
+- Ends the longest Release Candidate period among all ruby gems
+  (v3.0.0.rc1 released at 2012-05-10)
 
 
 ## [3.0.0.rc16] - 2017-03-13
@@ -143,24 +143,24 @@ And today is not April Fools' Day
 
 ### Changed
 
-- [JS] Allow `defaultValue` to work in pluralization  
-  (PR: https://github.com/fnando/i18n-js/pull/433)  
-- [Ruby] Stop validating the fallback locales against `I18n.available_locales`  
-  This allows some locales to be used as fallback locales, but not to be generated in JS.  
-  (PR: https://github.com/fnando/i18n-js/pull/425)  
-- [Ruby] Remove dependency on gem `activesupport`  
+- [JS] Allow `defaultValue` to work in pluralization
+  (PR: https://github.com/fnando/i18n-js/pull/433)
+- [Ruby] Stop validating the fallback locales against `I18n.available_locales`
+  This allows some locales to be used as fallback locales, but not to be generated in JS.
+  (PR: https://github.com/fnando/i18n-js/pull/425)
+- [Ruby] Remove dependency on gem `activesupport`
 
 ### Fixed
 
-- [JS] Stop converting numeric & boolean values into objects  
-  when merging objects with `I18n.extend`  
-  (PR: https://github.com/fnando/i18n-js/pull/420)  
-- [JS] Fix I18n pluralization fallback when tree is empty  
-  (PR: https://github.com/fnando/i18n-js/pull/435)  
-- [Ruby] Use old syntax to define lambda for compatibility with older Rubies  
-  (Issue: https://github.com/fnando/i18n-js/issues/419)  
-- [Ruby] Fix error raised in middleware cache cleaning in parallel test   
-  (Issue: https://github.com/fnando/i18n-js/issues/436)  
+- [JS] Stop converting numeric & boolean values into objects
+  when merging objects with `I18n.extend`
+  (PR: https://github.com/fnando/i18n-js/pull/420)
+- [JS] Fix I18n pluralization fallback when tree is empty
+  (PR: https://github.com/fnando/i18n-js/pull/435)
+- [Ruby] Use old syntax to define lambda for compatibility with older Rubies
+  (Issue: https://github.com/fnando/i18n-js/issues/419)
+- [Ruby] Fix error raised in middleware cache cleaning in parallel test
+  (Issue: https://github.com/fnando/i18n-js/issues/436)
 
 
 ## [3.0.0.rc14] - 2016-08-29
@@ -168,8 +168,8 @@ And today is not April Fools' Day
 ### Changed
 
 - [JS] Method `I18n.extend()` behave as deep merging instead of shallow merging. (https://github.com/fnando/i18n-js/pull/416)
-- [Ruby] Use object/class instead of block when registering Sprockets preprocessor (https://github.com/fnando/i18n-js/pull/418)  
-  To ensure that your cache will expire properly based on locale file content after upgrading,  
+- [Ruby] Use object/class instead of block when registering Sprockets preprocessor (https://github.com/fnando/i18n-js/pull/418)
+  To ensure that your cache will expire properly based on locale file content after upgrading,
   you should run `rake assets:clobber` and/or other rake tasks that clear the asset cache once gem updated
 - [Ruby] Detect & support rails 5 (https://github.com/fnando/i18n-js/pull/413)
 
