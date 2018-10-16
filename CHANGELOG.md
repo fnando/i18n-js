@@ -15,7 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Nothing
+- [JS] fix missing translation when pluralizing with default scopes
 
 
 ## [3.0.11] - 2018-07-06

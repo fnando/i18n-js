@@ -190,6 +190,13 @@ describe("Translate", function(){
       actual = I18n.t("foo", options);
       expect(actual).toEqual("FOO");
     })
+
+    it("pluralizes using the correct scope if translation is found within default scope", function() {
+      expect(I18n.translations["en"]["mailbox"]).toEqual(undefined);
+      actual = I18n.t("mailbox.inbox", {count: 1, defaults: [{scope: "inbox"}]});
+      expected = I18n.t("inbox", {count: 1})
+      expect(actual).toEqual(expected)
+    })
   });
 
   it("uses default value for simple translation", function(){
