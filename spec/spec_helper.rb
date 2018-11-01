@@ -1,14 +1,26 @@
+require 'rubygems'
+require 'bundler'
+
+begin
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter 'spec'
+  end
+rescue LoadError
+  # SimpleCov ain't available - continue
+end
+
+if ENV["TRAVIS"]
+  require "coveralls"
+  Coveralls.wear!("rails")
+end
+
 require "i18n"
 require "json"
 
 require "i18n/js"
 
 require "rspec"
-
-if ENV["TRAVIS"]
-  require "coveralls"
-  Coveralls.wear!
-end
 
 module Helpers
   # Set the configuration as the current one
