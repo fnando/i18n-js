@@ -4,8 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 [![Build Status](http://img.shields.io/travis/fnando/i18n-js.svg?style=flat-square)](https://travis-ci.org/fnando/i18n-js)
-[![Dependency Status](http://img.shields.io/gemnasium/fnando/i18n-js.svg?style=flat-square)](https://gemnasium.com/fnando/i18n-js)
-[![Code Climate](http://img.shields.io/codeclimate/github/fnando/i18n-js.svg?style=flat-square)](https://codeclimate.com/github/fnando/i18n-js)
+[![Coverage Status](http://img.shields.io/coveralls/fnando/i18n-js.svg?style=flat-square)](https://coveralls.io/r/fnando/i18n-js)
 
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat-1dce73.svg?style=flat-square)](https://gitter.im/fnando/i18n-js)
 
