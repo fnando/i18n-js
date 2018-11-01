@@ -55,10 +55,10 @@ describe I18n::JS::FallbackLocales do
       let(:backend_with_fallbacks) { backend_class_with_fallbacks.new }
 
       before do
-        I18n.backend = backend_with_fallbacks
+        I18n::JS.backend = backend_with_fallbacks
         I18n.fallbacks[:fr] = [:de, :en]
       end
-      after { I18n.backend = I18n::Backend::Simple.new }
+      after { I18n::JS.backend = I18n::Backend::Simple.new }
 
       context "given true as fallbacks" do
         let(:fallbacks) { true }

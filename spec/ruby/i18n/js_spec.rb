@@ -313,10 +313,10 @@ EOS
       let!(:old_backebad) { I18n.backend }
 
       before do
-        I18n.backend = backend_with_fallbacks
+        I18n::JS.backend = backend_with_fallbacks
         I18n.fallbacks[:fr] = [:de, :en]
       end
-      after { I18n.backend = old_backebad }
+      after { I18n::JS.backend = old_backebad }
 
       it "exports with defined locale as fallback when enabled" do
         set_config "js_file_per_locale_with_fallbacks_enabled.yml"

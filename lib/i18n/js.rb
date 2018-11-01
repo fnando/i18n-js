@@ -28,6 +28,15 @@ module I18n
       @config_file_path = new_path
     end
 
+    # Allow using a different backend than the one globally configured
+    def self.backend
+      @backend ||= I18n.backend
+    end
+
+    def self.backend=(alternative_backend)
+      @backend = alternative_backend
+    end
+
     # Export translations to JavaScript, considering settings
     # from configuration file
     def self.export
@@ -161,7 +170,7 @@ module I18n
 
     # Initialize and return translations
     def self.translations
-      ::I18n.backend.instance_eval do
+      self.backend.instance_eval do
         init_translations unless initialized?
         # When activesupport is absent,
         # the core extension (`#slice`) from `i18n` gem will be used instead
