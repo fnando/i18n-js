@@ -15,7 +15,20 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- [JS] fix missing translation when pluralizing with default scopes
+- Nothing
+
+
+## [3.1.0] - 2018-11-01
+
+### Added
+
+- [Ruby] Add option to allow setting a different I18n backend
+  (PR: https://github.com/fnando/i18n-js/pull/519)
+
+### Fixed
+
+- [JS] Fix missing translation when pluralizing with default scopes
+  (PR: https://github.com/fnando/i18n-js/pull/516)
 
 
 ## [3.0.11] - 2018-07-06
@@ -334,7 +347,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.11...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.1.0...HEAD
+[3.1.0]:     https://github.com/fnando/i18n-js/compare/v3.0.11...v3.1.0
 [3.0.11]:     https://github.com/fnando/i18n-js/compare/v3.0.10...v3.0.11
 [3.0.10]:     https://github.com/fnando/i18n-js/compare/v3.0.9...v3.0.10
 [3.0.9]:      https://github.com/fnando/i18n-js/compare/v3.0.8...v3.0.9
