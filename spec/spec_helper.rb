@@ -3,6 +3,13 @@ require "json"
 
 require "i18n/js"
 
+require "rspec"
+
+if ENV["TRAVIS"]
+  require "coveralls"
+  Coveralls.wear!
+end
+
 module Helpers
   # Set the configuration as the current one
   def set_config(path)
