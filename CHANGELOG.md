@@ -22,12 +22,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- [Ruby] Add option to allow setting a different I18n backend
+- [Ruby] Add option to allow setting a different I18n backend  
   (PR: https://github.com/fnando/i18n-js/pull/519)
 
 ### Fixed
 
-- [JS] Fix missing translation when pluralizing with default scopes
+- [JS] Fix missing translation when pluralizing with default scopes  
   (PR: https://github.com/fnando/i18n-js/pull/516)
 
 
@@ -35,7 +35,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- [JS] Fix interpolation for array with non string/null elements
+- [JS] Fix interpolation for array with non string/null elements  
   (PR: https://github.com/fnando/i18n-js/pull/505)
 
 
@@ -43,9 +43,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- [JS] Fix extend method changing keys with `null` to empty objects
+- [JS] Fix extend method changing keys with `null` to empty objects  
   (PR: https://github.com/fnando/i18n-js/pull/503)
-- [JS] Fix variable name in an internal method
+- [JS] Fix variable name in an internal method  
   (PR: https://github.com/fnando/i18n-js/pull/501)
 
 
@@ -60,7 +60,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [JS] Interpolate translation array too
+- [JS] Interpolate translation array too  
   (PR: https://github.com/fnando/i18n-js/pull/498)
 
 
@@ -75,7 +75,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- [Ruby] Make JS `i18n/filtered` depends on i18n-js config too
+- [Ruby] Make JS `i18n/filtered` depends on i18n-js config too  
   (PR: https://github.com/fnando/i18n-js/pull/497)
 
 
