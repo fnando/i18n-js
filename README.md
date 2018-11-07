@@ -826,6 +826,24 @@ Ref: http://2ality.com/2012/07/large-integers.html
 
 Feel free to find & discuss possible solution(s) at issue [#511](https://github.com/fnando/i18n-js/issues/511)
 
+### Cannot be used with different backends
+
+If you set `I18n.backend` to something other than the default `Simple` backend, you will likely get an exception like this:
+
+```
+Undefined method 'initialized?' for <your backend class>
+```
+
+For now, i18n-js is only compatible with the `Simple` backend.
+If you need a more sophisticated backend for your rails application, like `I18n::Backend::ActiveRecord`, you can setup i18n-js to get translations from a separate `Simple` backend, by adding the following in an initializer:
+
+```ruby
+I18n::JS.backend = I18n::Backend::Simple.new
+```
+
+This means however, that only translations from your static locale files will be present in JavaScript.
+
+See issue [#428](https://github.com/fnando/i18n-js/issues/428) for more details and discussion of this issue.
 
 ## Maintainer
 
