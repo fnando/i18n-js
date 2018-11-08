@@ -826,6 +826,46 @@ Ref: http://2ality.com/2012/07/large-integers.html
 
 Feel free to find & discuss possible solution(s) at issue [#511](https://github.com/fnando/i18n-js/issues/511)
 
+### Only works with `Simple` backend
+
+If you set `I18n.backend` to something other than the default `Simple` backend, you will likely get an exception like this:
+
+```
+Undefined method 'initialized?' for <your backend class>
+```
+
+For now, i18n-js is only compatible with the `Simple` backend.
+If you need a more sophisticated backend for your rails application, like `I18n::Backend::ActiveRecord`, you can setup i18n-js to get translations from a separate `Simple` backend, by adding the following in an initializer:
+
+```ruby
+I18n::JS.backend = I18n.backend
+I18n.backend = I18n::Backend::Chain.new(<your other backend(s)>, I18n.backend)
+```
+
+This will use your backend with the default `Simple` backend as fallback, while i18n-js only sees and uses the simple backend.
+This means however, that only translations from your static locale files will be present in JavaScript.
+
+If you do cannot use a `Chain`-Backend for some reason, you can also set
+
+```ruby
+I18n::JS.backend = I18n::Backend::Simple.new
+I18n.backend = <something different>
+```
+
+However, the automatic reloading of translations in developement will not work in this case.
+This is because Rails calls `I18n.reload!` for each request in development, but `reload!` will not be called on `I18n::JS.backend`, since it is a different object.
+One option would be to patch `I18n.reload!` in an initializer:
+
+```ruby
+module I18n
+  def self.reload!
+    I18n::JS.backend.reload!
+    super
+  end
+end
+```
+
+See issue [#428](https://github.com/fnando/i18n-js/issues/428) for more details and discussion of this issue.
 
 ## Maintainer
 
