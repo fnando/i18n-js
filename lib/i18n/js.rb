@@ -187,6 +187,13 @@ module I18n
       fallbacks != false
     end
 
+    def self.json_only
+      config.fetch(:json_only) do
+        # default value
+        false
+      end
+    end
+
     def self.fallbacks
       config.fetch(:fallbacks) do
         # default value
@@ -215,6 +222,7 @@ module I18n
       segment_options = Private::HashWithSymbolKeys.new({
         js_extend: js_extend,
         sort_translation_keys: sort_translation_keys?,
+        json_only: json_only
       }).freeze
       segment_options.merge(options.slice(*Segment::OPTIONS))
     end
