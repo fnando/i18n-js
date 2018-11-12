@@ -867,6 +867,12 @@ end
 
 See issue [#428](https://github.com/fnando/i18n-js/issues/428) for more details and discussion of this issue.
 
+## Development
+
+- Install Docker <https://www.docker.com/get-started>
+- Install container: `docker build -t i18n-js .`
+- Run tests: `docker run -it i18n-js .`
+
 ## Maintainer
 
 - Nando Vieira - <http://nandovieira.com.br>
