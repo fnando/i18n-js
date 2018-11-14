@@ -30,14 +30,14 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {js_extend: true, sort_translation_keys: true}).and_call_original
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {js_extend: true, sort_translation_keys: true}).and_call_original
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
@@ -107,6 +107,22 @@ I18n.translations || (I18n.translations = {});
 I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}});
 EOS
 )
+    end
+
+    it "exports as json only" do
+      set_config "json_only.yml"
+      I18n::JS.export
+      en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "json_only.en.js"))
+      fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "json_only.fr.js"))
+      expect(en_output).to eq (<<EOS
+{"en":{"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}}}
+EOS
+).chop
+      expect(fr_output).to eq (<<EOS
+{"fr":{"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}}}
+EOS
+).chop
+      expect(JSON.parse(en_output).keys.first).to eq 'en'
     end
 
     it "exports with :except condition" do

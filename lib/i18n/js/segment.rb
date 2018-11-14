@@ -1,11 +1,12 @@
 require "i18n/js/private/hash_with_symbol_keys"
+require "i18n/js/errors"
 
 module I18n
   module JS
 
     # Class which enscapulates a translations hash and outputs a single JSON translation file
     class Segment
-      OPTIONS = [:namespace, :pretty_print, :js_extend, :sort_translation_keys].freeze
+      OPTIONS = [:namespace, :pretty_print, :js_extend, :sort_translation_keys, :json_only].freeze
       LOCALE_INTERPOLATOR = /%\{locale\}/
 
       attr_reader *([:file, :translations] | OPTIONS)
@@ -23,6 +24,7 @@ module I18n
         @pretty_print = !!options[:pretty_print]
         @js_extend    = options.key?(:js_extend) ? !!options[:js_extend] : true
         @sort_translation_keys = options.key?(:sort_translation_keys) ? !!options[:sort_translation_keys] : true
+        @json_only = options.key?(:json_only) ? !!options[:json_only] : false
       end
 
       # Saves JSON file containing translations
@@ -32,6 +34,9 @@ module I18n
             write_file(file_for_locale(locale), @translations.slice(locale))
           end
         else
+          if @json_only
+            raise I18n::JS::JsonOnlyLocaleRequiredError
+          end
           write_file
         end
       end
@@ -53,7 +58,11 @@ module I18n
       end
 
       def js_header
-        %(#{@namespace}.translations || (#{@namespace}.translations = {});\n)
+        if @json_only
+          ''
+        else
+          %(#{@namespace}.translations || (#{@namespace}.translations = {});\n)
+        end
       end
 
       def js_translations(locale, translations)
@@ -63,7 +72,9 @@ module I18n
       end
 
       def js_translations_line(locale, translations)
-        if @js_extend
+        if @json_only
+          %({"#{locale}":#{translations}})
+        elsif @js_extend
           %(#{@namespace}.translations["#{locale}"] = I18n.extend((#{@namespace}.translations["#{locale}"] || {}), #{translations});\n)
         else
           %(#{@namespace}.translations["#{locale}"] = #{translations};\n)
