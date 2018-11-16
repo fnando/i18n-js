@@ -2,6 +2,6 @@
 
 module I18n
   module JS
-    VERSION = "3.1.0"
+    VERSION = "3.2.0"
   end
 end

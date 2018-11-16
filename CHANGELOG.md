@@ -18,6 +18,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.2.0] - 2018-11-16
+
+### Added
+
+- [Ruby] Add option `json_only` to generate translations in JSON  
+  (PR: https://github.com/fnando/i18n-js/pull/524)
+
+### Changed
+
+- [Ruby] Requires `i18n` to be `>= 0.8.0` for CVE-2014-10077
+
+
 ## [3.1.0] - 2018-11-01
 
 ### Added
@@ -347,8 +359,9 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.1.0...HEAD
-[3.1.0]:     https://github.com/fnando/i18n-js/compare/v3.0.11...v3.1.0
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.2.0...HEAD
+[3.2.0]:      https://github.com/fnando/i18n-js/compare/v3.1.0...v3.2.0
+[3.1.0]:      https://github.com/fnando/i18n-js/compare/v3.0.11...v3.1.0
 [3.0.11]:     https://github.com/fnando/i18n-js/compare/v3.0.10...v3.0.11
 [3.0.10]:     https://github.com/fnando/i18n-js/compare/v3.0.9...v3.0.10
 [3.0.9]:      https://github.com/fnando/i18n-js/compare/v3.0.8...v3.0.9
