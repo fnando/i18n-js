@@ -645,7 +645,7 @@
         value = this.missingPlaceholder(placeholder, message, options);
       }
 
-      regex = new RegExp(placeholder.replace(/\{/gm, "\\{").replace(/\}/gm, "\\}"));
+      regex = new RegExp(placeholder.replace(/{/gm, "\\{").replace(/}/gm, "\\}"));
       message = message.replace(regex, value);
     }
 
