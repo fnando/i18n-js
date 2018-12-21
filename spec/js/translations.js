@@ -1,4 +1,3 @@
-var DEBUG = false;
 
 ;(function(){
   var generator = function() {

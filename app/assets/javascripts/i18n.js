@@ -107,7 +107,7 @@
     // Shift back
     value = value.toString().split('e');
     return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-  }
+  };
 
   var lazyEvaluate = function(message, scope) {
     if (isFunction(message)) {
@@ -115,7 +115,7 @@
     } else {
       return message;
     }
-  }
+  };
 
   var merge = function (dest, obj) {
     var key, value;
@@ -389,7 +389,7 @@
   // This is used internally by some functions and should not be used as an
   // public API.
   I18n.lookup = function(scope, options) {
-    options = options || {}
+    options = options || {};
 
     var locales = this.locales.get(options.locale).slice()
       , locale
@@ -448,7 +448,7 @@
 
   // Lookup dedicated to pluralization
   I18n.pluralizationLookup = function(count, scope, options) {
-    options = options || {}
+    options = options || {};
     var locales = this.locales.get(options.locale).slice()
       , locale
       , scopes
@@ -570,7 +570,7 @@
 
   // Translate the given scope with the provided options.
   I18n.translate = function(scope, options) {
-    options = options || {}
+    options = options || {};
 
     var translationOptions = this.createTranslationOptions(scope, options);
 
@@ -619,7 +619,7 @@
       return message;
     }
 
-    options = options || {}
+    options = options || {};
     var matches = message.match(this.placeholder)
       , placeholder
       , value
@@ -655,7 +655,7 @@
   // which will be retrieved from `options`.
   I18n.pluralize = function(count, scope, options) {
     options = this.prepareOptions({count: String(count)}, options)
-    var pluralizer, message, result;
+    var pluralizer, result;
 
     result = this.pluralizationLookup(count, scope, options);
     if (typeof result.translations === "undefined" || result.translations == null) {
@@ -1034,7 +1034,7 @@
   };
 
   I18n.getFullScope = function(scope, options) {
-    options = options || {}
+    options = options || {};
 
     // Deal with the scope as an array.
     if (isArray(scope)) {
