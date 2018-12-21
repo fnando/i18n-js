@@ -471,16 +471,16 @@
         if (!isObject(translations)) {
           break;
         }
-        if (scopes.length == 0) {
+        if (scopes.length === 0) {
           message = this.pluralizationLookupWithoutFallback(count, locale, translations);
         }
       }
-      if (message != null && message != undefined) {
+      if (typeof message !== "undefined" && message !== null) {
         break;
       }
     }
 
-    if (message == null || message == undefined) {
+    if (typeof message === "undefined" || message === null) {
       if (isSet(options.defaultValue)) {
         if (isObject(options.defaultValue)) {
           message = this.pluralizationLookupWithoutFallback(count, options.locale, options.defaultValue);
@@ -631,8 +631,6 @@
       return message;
     }
 
-    var value;
-
     while (matches.length) {
       placeholder = matches.shift();
       name = placeholder.replace(this.placeholder, "$1");
@@ -660,11 +658,11 @@
     var pluralizer, message, result;
 
     result = this.pluralizationLookup(count, scope, options);
-    if (result.translations == undefined || result.translations == null) {
+    if (typeof result.translations === "undefined" || result.translations == null) {
       return this.missingTranslation(scope, options);
     }
 
-    if (result.message != undefined && result.message != null) {
+    if (typeof result.message !== "undefined" && result.message != null) {
       return this.interpolate(result.message, options);
     }
     else {
@@ -676,7 +674,7 @@
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function(scope, options) {
     //guess intended string
-    if(this.missingBehaviour == 'guess'){
+    if(this.missingBehaviour === 'guess'){
       //get only the last portion of the scope
       var s = scope.split('.').slice(-1)[0];
       //replace underscore with space && camelcase with space and lowercase letter
@@ -838,7 +836,7 @@
     // we have a date, so just return it.
     if (typeof(date) == "object") {
       return date;
-    };
+    }
 
     matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2})([\.,]\d{1,3})?)?(Z|\+00:?00)?/);
 
