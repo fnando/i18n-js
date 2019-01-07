@@ -27,6 +27,7 @@ gemfile:
   - gemfiles/i18n_1_2.gemfile
   - gemfiles/i18n_1_3.gemfile
   - gemfiles/i18n_1_4.gemfile
+  - gemfiles/i18n_1_5.gemfile
 matrix:
   fast_finish: true
   allow_failures:
