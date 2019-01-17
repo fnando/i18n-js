@@ -12,19 +12,23 @@
 // See tests for specific formatting like numbers and dates.
 //
 
-;(function(factory) {
-  if (typeof module !== 'undefined' && module.exports) {
-    // Node/CommonJS
-    module.exports = factory(this);
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD
-    var global=this;
-    define('i18n', function(){ return factory(global);});
+// Using UMD pattern from
+// https://github.com/umdjs/umd#regular-module
+// `returnExports.js` version
+;(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define("i18n", function(){ return factory(root);});
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory(root);
   } else {
-    // Browser globals
-    this.I18n = factory(this);
+    // Browser globals (root is window)
+    root.I18n = factory(root);
   }
-}(function(global) {
+}(this, function(global) {
   "use strict";
 
   // Use previously defined object if exists in current scope
@@ -36,6 +40,95 @@
   // Apply number padding.
   var padding = function(number) {
     return ("0" + number.toString()).substr(-2);
+  };
+
+  // Improved toFixed number rounding function with support for unprecise floating points
+  // JavaScript's standard toFixed function does not round certain numbers correctly (for example 0.105 with precision 2).
+  var toFixed = function(number, precision) {
+    return decimalAdjust('round', number, -precision).toFixed(precision);
+  };
+
+  // Is a given variable an object?
+  // Borrowed from Underscore.js
+  var isObject = function(obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object'
+  };
+
+  var isFunction = function(func) {
+    var type = typeof func;
+    return type === 'function'
+  };
+
+  // Check if value is different than undefined and null;
+  var isSet = function(value) {
+    return typeof(value) !== 'undefined' && value !== null;
+  };
+
+  // Is a given value an array?
+  // Borrowed from Underscore.js
+  var isArray = function(val) {
+    if (Array.isArray) {
+      return Array.isArray(val);
+    }
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
+
+  var isString = function(val) {
+    return typeof val === 'string' || Object.prototype.toString.call(val) === '[object String]';
+  };
+
+  var isNumber = function(val) {
+    return typeof val === 'number' || Object.prototype.toString.call(val) === '[object Number]';
+  };
+
+  var isBoolean = function(val) {
+    return val === true || val === false;
+  };
+
+  var isNull = function(val) {
+    return val === null;
+  };
+
+  var decimalAdjust = function(type, value, exp) {
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+      return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+  };
+
+  var lazyEvaluate = function(message, scope) {
+    if (isFunction(message)) {
+      return message(scope);
+    } else {
+      return message;
+    }
+  };
+
+  var merge = function (dest, obj) {
+    var key, value;
+    for (key in obj) if (obj.hasOwnProperty(key)) {
+      value = obj[key];
+      if (isString(value) || isNumber(value) || isBoolean(value) || isArray(value) || isNull(value)) {
+        dest[key] = value;
+      } else {
+        if (dest[key] == null) dest[key] = {};
+        merge(dest[key], value);
+      }
+    }
+    return dest;
   };
 
   // Set default days/months translations.
@@ -86,7 +179,7 @@
     , locale: "en"
     // Set the translation key separator.
     , defaultSeparator: "."
-    // Set the placeholder format. Accepts `{placeholder}}` and `%{placeholder}`.}
+    // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
     , placeholder: /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm
     // Set if engine should fallback to the default locale when a translation
     // is missing.
@@ -102,54 +195,21 @@
     , missingTranslationPrefix: ''
   };
 
+  // Set default locale. This locale will be used when fallback is enabled and
+  // the translation doesn't exist in a particular locale.
   I18n.reset = function() {
-    // Set default locale. This locale will be used when fallback is enabled and
-    // the translation doesn't exist in a particular locale.
-    this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
-
-    // Set the current locale to `en`.
-    this.locale = DEFAULT_OPTIONS.locale;
-
-    // Set the translation key separator.
-    this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
-
-    // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
-    this.placeholder = DEFAULT_OPTIONS.placeholder;
-
-    // Set if engine should fallback to the default locale when a translation
-    // is missing.
-    this.fallbacks = DEFAULT_OPTIONS.fallbacks;
-
-    // Set the default translation object.
-    this.translations = DEFAULT_OPTIONS.translations;
-
-    // Set the default missing behaviour
-    this.missingBehaviour = DEFAULT_OPTIONS.missingBehaviour;
-
-    // Set the default missing string prefix for guess behaviour
-    this.missingTranslationPrefix = DEFAULT_OPTIONS.missingTranslationPrefix;
-
+    var key;
+    for (key in DEFAULT_OPTIONS) {
+      this[key] = DEFAULT_OPTIONS[key];
+    }
   };
 
   // Much like `reset`, but only assign options if not already assigned
   I18n.initializeOptions = function() {
-    if (typeof(this.defaultLocale) === "undefined" && this.defaultLocale !== null)
-      this.defaultLocale = DEFAULT_OPTIONS.defaultLocale;
-
-    if (typeof(this.locale) === "undefined" && this.locale !== null)
-      this.locale = DEFAULT_OPTIONS.locale;
-
-    if (typeof(this.defaultSeparator) === "undefined" && this.defaultSeparator !== null)
-      this.defaultSeparator = DEFAULT_OPTIONS.defaultSeparator;
-
-    if (typeof(this.placeholder) === "undefined" && this.placeholder !== null)
-      this.placeholder = DEFAULT_OPTIONS.placeholder;
-
-    if (typeof(this.fallbacks) === "undefined" && this.fallbacks !== null)
-      this.fallbacks = DEFAULT_OPTIONS.fallbacks;
-
-    if (typeof(this.translations) === "undefined" && this.translations !== null)
-      this.translations = DEFAULT_OPTIONS.translations;
+    var key;
+    for (key in DEFAULT_OPTIONS) if (!isSet(this[key])) {
+      this[key] = DEFAULT_OPTIONS[key];
+    }
   };
   I18n.initializeOptions();
 
@@ -175,11 +235,11 @@
   I18n.locales.get = function(locale) {
     var result = this[locale] || this[I18n.locale] || this["default"];
 
-    if (typeof(result) === "function") {
+    if (isFunction(result)) {
       result = result(locale);
     }
 
-    if (result instanceof Array === false) {
+    if (isArray(result) === false) {
       result = [result];
     }
 
@@ -190,8 +250,6 @@
   I18n.locales["default"] = function(locale) {
     var locales = []
       , list = []
-      , countryCode
-      , count
     ;
 
     // Handle the inline locale option that can be provided to
@@ -210,19 +268,85 @@
       locales.push(I18n.defaultLocale);
     }
 
-    // Compute each locale with its country code.
-    // So this will return an array containing both
-    // `de-DE` and `de` locales.
-    locales.forEach(function(locale){
-      countryCode = locale.split("-")[0];
+    // Locale code format 1:
+    // According to RFC4646 (http://www.ietf.org/rfc/rfc4646.txt)
+    // language codes for Traditional Chinese should be `zh-Hant`
+    //
+    // But due to backward compatibility
+    // We use older version of IETF language tag
+    // @see http://www.w3.org/TR/html401/struct/dirlang.html
+    // @see http://en.wikipedia.org/wiki/IETF_language_tag
+    //
+    // Format: `language-code = primary-code ( "-" subcode )*`
+    //
+    // primary-code uses ISO639-1
+    // @see http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+    // @see http://www.iso.org/iso/home/standards/language_codes.htm
+    //
+    // subcode uses ISO 3166-1 alpha-2
+    // @see http://en.wikipedia.org/wiki/ISO_3166
+    // @see http://www.iso.org/iso/country_codes.htm
+    //
+    // @note
+    //   subcode can be in upper case or lower case
+    //   defining it in upper case is a convention only
 
-      if (!~list.indexOf(locale)) {
+
+    // Locale code format 2:
+    // Format: `code = primary-code ( "-" region-code )*`
+    // primary-code uses ISO 639-1
+    // script-code uses ISO 15924
+    // region-code uses ISO 3166-1 alpha-2
+    // Example: zh-Hant-TW, en-HK, zh-Hant-CN
+    //
+    // It is similar to RFC4646 (or actually the same),
+    // but seems to be limited to language, script, region
+
+    // Compute each locale with its country code.
+    // So this will return an array containing
+    // `de-DE` and `de`
+    // or
+    // `zh-hans-tw`, `zh-hans`, `zh`
+    // locales.
+    locales.forEach(function(locale) {
+      var localeParts = locale.split("-");
+      var firstFallback = null;
+      var secondFallback = null;
+      if (localeParts.length === 3) {
+        firstFallback = [
+          localeParts[0],
+          localeParts[1]
+        ].join("-");
+        secondFallback = localeParts[0];
+      }
+      else if (localeParts.length === 2) {
+        firstFallback = localeParts[0];
+      }
+
+      if (list.indexOf(locale) === -1) {
         list.push(locale);
       }
 
-      if (I18n.fallbacks && countryCode && countryCode !== locale && !~list.indexOf(countryCode)) {
-        list.push(countryCode);
+      if (! I18n.fallbacks) {
+        return;
       }
+
+      [
+        firstFallback,
+        secondFallback
+      ].forEach(function(nullableFallbackLocale) {
+        // We don't want null values
+        if (typeof nullableFallbackLocale === "undefined") { return; }
+        if (nullableFallbackLocale === null) { return; }
+        // We don't want duplicate values
+        //
+        // Comparing with `locale` first is faster than
+        // checking whether value's presence in the list
+        if (nullableFallbackLocale === locale) { return; }
+        if (list.indexOf(nullableFallbackLocale) !== -1) { return; }
+
+        list.push(nullableFallbackLocale);
+      });
     });
 
     // No locales set? English it is.
@@ -259,34 +383,31 @@
   };
 
   // Check if value is different than undefined and null;
-  I18n.isSet = function(value) {
-    return value !== undefined && value !== null;
-  };
+  I18n.isSet = isSet;
 
   // Find and process the translation using the provided scope and options.
   // This is used internally by some functions and should not be used as an
   // public API.
   I18n.lookup = function(scope, options) {
-    options = this.prepareOptions(options);
+    options = options || {};
 
     var locales = this.locales.get(options.locale).slice()
-      , requestedLocale = locales[0]
       , locale
       , scopes
+      , fullScope
       , translations
     ;
 
-    scope = this.getFullScope(scope, options);
+    fullScope = this.getFullScope(scope, options);
 
     while (locales.length) {
       locale = locales.shift();
-      scopes = scope.split(this.defaultSeparator);
+      scopes = fullScope.split(this.defaultSeparator);
       translations = this.translations[locale];
 
       if (!translations) {
         continue;
       }
-
       while (scopes.length) {
         translations = translations[scopes.shift()];
 
@@ -300,9 +421,77 @@
       }
     }
 
-    if (this.isSet(options.defaultValue)) {
-      return options.defaultValue;
+    if (isSet(options.defaultValue)) {
+      return lazyEvaluate(options.defaultValue, scope);
     }
+  };
+
+  // lookup pluralization rule key into translations
+  I18n.pluralizationLookupWithoutFallback = function(count, locale, translations) {
+    var pluralizer = this.pluralization.get(locale)
+      , pluralizerKeys = pluralizer(count)
+      , pluralizerKey
+      , message;
+
+    if (isObject(translations)) {
+      while (pluralizerKeys.length) {
+        pluralizerKey = pluralizerKeys.shift();
+        if (isSet(translations[pluralizerKey])) {
+          message = translations[pluralizerKey];
+          break;
+        }
+      }
+    }
+
+    return message;
+  };
+
+  // Lookup dedicated to pluralization
+  I18n.pluralizationLookup = function(count, scope, options) {
+    options = options || {};
+    var locales = this.locales.get(options.locale).slice()
+      , locale
+      , scopes
+      , translations
+      , message
+    ;
+    scope = this.getFullScope(scope, options);
+
+    while (locales.length) {
+      locale = locales.shift();
+      scopes = scope.split(this.defaultSeparator);
+      translations = this.translations[locale];
+
+      if (!translations) {
+        continue;
+      }
+
+      while (scopes.length) {
+        translations = translations[scopes.shift()];
+        if (!isObject(translations)) {
+          break;
+        }
+        if (scopes.length === 0) {
+          message = this.pluralizationLookupWithoutFallback(count, locale, translations);
+        }
+      }
+      if (typeof message !== "undefined" && message !== null) {
+        break;
+      }
+    }
+
+    if (typeof message === "undefined" || message === null) {
+      if (isSet(options.defaultValue)) {
+        if (isObject(options.defaultValue)) {
+          message = this.pluralizationLookupWithoutFallback(count, options.locale, options.defaultValue);
+        } else {
+          message = options.defaultValue;
+        }
+        translations = options.defaultValue;
+      }
+    }
+
+    return { message: message, translations: translations };
   };
 
   // Rails changed the way the meridian is stored.
@@ -347,7 +536,7 @@
           continue;
         }
 
-        if (this.isSet(options[attr])) {
+        if (isSet(options[attr])) {
           continue;
         }
 
@@ -366,15 +555,14 @@
 
     // Defaults should be an array of hashes containing either
     // fallback scopes or messages
-    if (this.isSet(options.defaults)) {
+    if (isSet(options.defaults)) {
       translationOptions = translationOptions.concat(options.defaults);
     }
 
     // Maintain support for defaultValue. Since it is always a message
     // insert it in to the translation options as such.
-    if (this.isSet(options.defaultValue)) {
+    if (isSet(options.defaultValue)) {
       translationOptions.push({ message: options.defaultValue });
-      delete options.defaultValue;
     }
 
     return translationOptions;
@@ -382,19 +570,25 @@
 
   // Translate the given scope with the provided options.
   I18n.translate = function(scope, options) {
-    options = this.prepareOptions(options);
+    options = options || {};
 
     var translationOptions = this.createTranslationOptions(scope, options);
 
     var translation;
+    var usedScope = scope;
+
+    var optionsWithoutDefault = this.prepareOptions(options)
+    delete optionsWithoutDefault.defaultValue
+
     // Iterate through the translation options until a translation
     // or message is found.
     var translationFound =
       translationOptions.some(function(translationOption) {
-        if (this.isSet(translationOption.scope)) {
-          translation = this.lookup(translationOption.scope, options);
-        } else if (this.isSet(translationOption.message)) {
-          translation = translationOption.message;
+        if (isSet(translationOption.scope)) {
+          usedScope = translationOption.scope;
+          translation = this.lookup(usedScope, optionsWithoutDefault);
+        } else if (isSet(translationOption.message)) {
+          translation = lazyEvaluate(translationOption.message, scope);
         }
 
         if (translation !== undefined && translation !== null) {
@@ -408,8 +602,12 @@
 
     if (typeof(translation) === "string") {
       translation = this.interpolate(translation, options);
-    } else if (translation instanceof Object && this.isSet(options.count)) {
-      translation = this.pluralize(options.count, translation, options);
+    } else if (isArray(translation)) {
+      translation = translation.map(function(t) {
+        return (typeof(t) === "string" ? this.interpolate(t, options) : t);
+      }, this);
+    } else if (isObject(translation) && isSet(options.count)) {
+      translation = this.pluralize(options.count, usedScope, options);
     }
 
     return translation;
@@ -417,7 +615,11 @@
 
   // This function interpolates the all variables in the given message.
   I18n.interpolate = function(message, options) {
-    options = this.prepareOptions(options);
+    if (message === null) {
+      return message;
+    }
+
+    options = options || {};
     var matches = message.match(this.placeholder)
       , placeholder
       , value
@@ -429,21 +631,19 @@
       return message;
     }
 
-    var value;
-
     while (matches.length) {
       placeholder = matches.shift();
       name = placeholder.replace(this.placeholder, "$1");
 
-      if (this.isSet(options[name])) {
+      if (isSet(options[name])) {
         value = options[name].toString().replace(/\$/gm, "_#$#_");
       } else if (name in options) {
-        value = this.nullPlaceholder(placeholder, message);
+        value = this.nullPlaceholder(placeholder, message, options);
       } else {
-        value = this.missingPlaceholder(placeholder, message);
+        value = this.missingPlaceholder(placeholder, message, options);
       }
 
-      regex = new RegExp(placeholder.replace(/\{/gm, "\\{").replace(/\}/gm, "\\}"));
+      regex = new RegExp(placeholder.replace(/{/gm, "\\{").replace(/}/gm, "\\}"));
       message = message.replace(regex, value);
     }
 
@@ -454,39 +654,27 @@
   // The pluralized translation may have other placeholders,
   // which will be retrieved from `options`.
   I18n.pluralize = function(count, scope, options) {
-    options = this.prepareOptions(options);
-    var translations, pluralizer, keys, key, message;
+    options = this.prepareOptions({count: String(count)}, options)
+    var pluralizer, result;
 
-    if (scope instanceof Object) {
-      translations = scope;
-    } else {
-      translations = this.lookup(scope, options);
-    }
-
-    if (!translations) {
+    result = this.pluralizationLookup(count, scope, options);
+    if (typeof result.translations === "undefined" || result.translations == null) {
       return this.missingTranslation(scope, options);
     }
 
-    pluralizer = this.pluralization.get(options.locale);
-    keys = pluralizer(count);
-
-    while (keys.length) {
-      key = keys.shift();
-
-      if (this.isSet(translations[key])) {
-        message = translations[key];
-        break;
-      }
+    if (typeof result.message !== "undefined" && result.message != null) {
+      return this.interpolate(result.message, options);
     }
-
-    options.count = String(count);
-    return this.interpolate(message, options);
+    else {
+      pluralizer = this.pluralization.get(options.locale);
+      return this.missingTranslation(scope + '.' + pluralizer(count)[0], options);
+    }
   };
 
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function(scope, options) {
     //guess intended string
-    if(this.missingBehaviour == 'guess'){
+    if(this.missingBehaviour === 'guess'){
       //get only the last portion of the scope
       var s = scope.split('.').slice(-1)[0];
       //replace underscore with space && camelcase with space and lowercase letter
@@ -495,14 +683,15 @@
           function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
     }
 
+    var localeForTranslation = (options != null && options.locale != null) ? options.locale : this.currentLocale();
     var fullScope           = this.getFullScope(scope, options);
-    var fullScopeWithLocale = [this.currentLocale(), fullScope].join(this.defaultSeparator);
+    var fullScopeWithLocale = [localeForTranslation, fullScope].join(this.defaultSeparator);
 
     return '[missing "' + fullScopeWithLocale + '" translation]';
   };
 
   // Return a missing placeholder message for given parameters
-  I18n.missingPlaceholder = function(placeholder, message) {
+  I18n.missingPlaceholder = function(placeholder, message, options) {
     return "[missing " + placeholder + " value]";
   };
 
@@ -529,7 +718,7 @@
     );
 
     var negative = number < 0
-      , string = Math.abs(number).toFixed(options.precision).toString()
+      , string = toFixed(Math.abs(number), options.precision).toString()
       , parts = string.split(".")
       , precision
       , buffer = []
@@ -647,7 +836,7 @@
     // we have a date, so just return it.
     if (typeof(date) == "object") {
       return date;
-    };
+    }
 
     matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2})([\.,]\d{1,3})?)?(Z|\+00:?00)?/);
 
@@ -730,6 +919,10 @@
     }
 
     options = this.prepareOptions(options, DATE);
+
+    if (isNaN(date.getTime())) {
+      throw new Error('I18n.strftime() requires a valid date object, but received an invalid date.');
+    }
 
     var weekDay = date.getDay()
       , day = date.getDate()
@@ -841,10 +1034,10 @@
   };
 
   I18n.getFullScope = function(scope, options) {
-    options = this.prepareOptions(options);
+    options = options || {};
 
     // Deal with the scope as an array.
-    if (scope.constructor === Array) {
+    if (isArray(scope)) {
       scope = scope.join(this.defaultSeparator);
     }
 
@@ -857,7 +1050,23 @@
     }
 
     return scope;
-  }
+  };
+  /**
+   * Merge obj1 with obj2 (shallow merge), without modifying inputs
+   * @param {Object} obj1
+   * @param {Object} obj2
+   * @returns {Object} Merged values of obj1 and obj2
+   *
+   * In order to support ES3, `Object.prototype.hasOwnProperty.call` is used
+   * Idea is from:
+   * https://stackoverflow.com/questions/8157700/object-has-no-hasownproperty-method-i-e-its-undefined-ie8
+   */
+  I18n.extend = function ( obj1, obj2 ) {
+    if (typeof(obj1) === "undefined" && typeof(obj2) === "undefined") {
+      return {};
+    }
+    return merge(obj1, obj2);
+  };
 
   // Set aliases, so we can save some typing.
   I18n.t = I18n.translate;

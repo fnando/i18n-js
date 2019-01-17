@@ -1,4 +1,3 @@
-var DEBUG = false;
 
 ;(function(){
   var generator = function() {
@@ -30,6 +29,12 @@ var DEBUG = false;
           , zero: "You have no messages"
         }
 
+      , sent: {
+            one: null
+          , other: null
+          , zero: null
+        }
+
       , unread: {
             one: "You have 1 new message ({{unread}} unread)"
           , other: "You have {{count}} new messages ({{unread}} unread)"
@@ -52,6 +57,17 @@ var DEBUG = false;
             }
           }
         }
+
+      , arrayWithParams: [
+        null,
+        "An item with a param of {{value}}",
+        "Another item with a param of {{value}}",
+        "A last item with a param of {{value}}",
+        ["An", "array", "of", "strings"],
+        {foo: "bar"}
+      ]
+
+      , null_key: null
     };
 
     Translations["en-US"] = {
@@ -122,6 +138,16 @@ var DEBUG = false;
 
     Translations["nb"] = {
       hello: "Hei Verden!"
+    };
+
+    Translations["zh-Hant"] = {
+        cat: "貓"
+      , dragon: "龍"
+    };
+
+    Translations["zh"] = {
+        dog: "狗"
+      , dragon: "龙"
     };
 
     return Translations;

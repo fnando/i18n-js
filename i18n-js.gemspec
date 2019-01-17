@@ -4,7 +4,7 @@ require "i18n/js/version"
 
 Gem::Specification.new do |s|
   s.name        = "i18n-js"
-  s.version     = I18n::JS::Version::STRING
+  s.version     = I18n::JS::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nando Vieira"]
   s.email       = ["fnando.vieira@gmail.com"]
@@ -18,12 +18,15 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "i18n", "~> 0.6"
-  s.add_development_dependency "appraisal", "~> 2.0"
-  s.add_development_dependency "activesupport", ">= 3.2.22"
-  s.add_development_dependency "rspec", "~> 3.0"
-  s.add_development_dependency "rake", "~> 10.0"
-  s.add_development_dependency "gem-release", ">= 0.7"
+  # CVE-2014-10077 which is fixed for >= 0.8.0
+  # https://nvd.nist.gov/vuln/detail/CVE-2014-10077
+  s.add_dependency "i18n", ">= 0.8.0", "< 2"
 
-  s.required_ruby_version = ">= 1.9.3"
+  s.add_development_dependency "appraisal", "~> 2.0"
+  s.add_development_dependency "rspec", "~> 3.0"
+  s.add_development_dependency "rake", "~> 12.0"
+  s.add_development_dependency "gem-release", ">= 0.7"
+  s.add_development_dependency "coveralls", ">= 0.7"
+
+  s.required_ruby_version = ">= 2.1.0"
 end

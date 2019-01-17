@@ -255,4 +255,11 @@ describe("Dates", function(){
     date = new Date(2009, 3, 26, 7, 35, 44);
     expect(I18n.strftime(date, "%p")).toEqual("de:AM");
   });
+
+  it("fails to format invalid date", function(){
+    var date = new Date('foo');
+    expect(function() {
+      I18n.strftime(date, "%a");
+    }).toThrow('I18n.strftime() requires a valid date object, but received an invalid date.');
+  });
 });

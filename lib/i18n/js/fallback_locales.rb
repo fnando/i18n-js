@@ -32,7 +32,6 @@ module I18n
                   end
 
         locales.map! { |locale| locale.to_sym }
-        ensure_valid_locales!(locales)
         locales
       end
 
@@ -58,23 +57,13 @@ module I18n
       #
       #   Maybe this should be fixed within I18n.
       def using_i18n_fallbacks_module?
-        I18n.backend.class.included_modules.include?(I18n::Backend::Fallbacks)
+        I18n::JS.backend.class.included_modules.include?(I18n::Backend::Fallbacks)
       end
 
       def ensure_valid_fallbacks_as_array!
         return if fallbacks.all? { |e| e.is_a?(String) || e.is_a?(Symbol) }
 
         fail ArgumentError, "If fallbacks is passed as Array, it must ony include Strings or Symbols. Given: #{fallbacks}"
-      end
-
-      # Ensures that only valid locales are returned.
-      #
-      # @note
-      #   This ignores option `I18n.enforce_available_locales`
-      def ensure_valid_locales!(locales)
-        if locales.any? { |locale| !::I18n.available_locales.include?(locale) }
-          fail ArgumentError, "Valid locales: #{::I18n.available_locales} - Given Locales: #{locales}"
-        end
       end
     end
   end

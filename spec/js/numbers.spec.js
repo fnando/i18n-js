@@ -97,6 +97,34 @@ describe("Numbers", function(){
     expect(I18n.toNumber(1.98, options)).toEqual("2");
   });
 
+  it("rounds numbers correctly when precision is given", function(){
+    options = {separator: ".", delimiter: ","};
+
+    options["precision"] = 2;
+    expect(I18n.toNumber(0.104, options)).toEqual("0.10");
+
+    options["precision"] = 2;
+    expect(I18n.toNumber(0.105, options)).toEqual("0.11");
+
+    options["precision"] = 2;
+    expect(I18n.toNumber(1.005, options)).toEqual("1.01");
+
+    options["precision"] = 3;
+    expect(I18n.toNumber(35.855, options)).toEqual("35.855");
+
+    options["precision"] = 2;
+    expect(I18n.toNumber(35.855, options)).toEqual("35.86");
+
+    options["precision"] = 1;
+    expect(I18n.toNumber(35.855, options)).toEqual("35.9");
+
+    options["precision"] = 0;
+    expect(I18n.toNumber(35.855, options)).toEqual("36");
+
+    options["precision"] = 0;
+    expect(I18n.toNumber(0.000000000000001, options)).toEqual("0");
+  });
+
   it("returns number as human size", function(){
     var kb = 1024;
 

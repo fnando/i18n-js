@@ -1,7 +1,9 @@
 require "yaml"
-require "i18n"
 require "fileutils"
+require "i18n"
+
 require "i18n/js/utils"
+require "i18n/js/private/hash_with_symbol_keys"
 
 module I18n
   module JS
@@ -26,6 +28,15 @@ module I18n
       @config_file_path = new_path
     end
 
+    # Allow using a different backend than the one globally configured
+    def self.backend
+      @backend ||= I18n.backend
+    end
+
+    def self.backend=(alternative_backend)
+      @backend = alternative_backend
+    end
+
     # Export translations to JavaScript, considering settings
     # from configuration file
     def self.export
@@ -43,18 +54,23 @@ module I18n
     end
 
     def self.configured_segments
-      config[:translations].inject([]) do |segments, options|
-        file = options[:file]
-        only = options[:only] || '*'
-        exceptions = [options[:except] || options[:exclude] || []].flatten
-
-        segment_options = options.slice(:namespace, :pretty_print)
+      config[:translations].inject([]) do |segments, options_hash|
+        options_hash_with_symbol_keys = Private::HashWithSymbolKeys.new(options_hash)
+        file = options_hash_with_symbol_keys[:file]
+        only = options_hash_with_symbol_keys[:only] || '*'
+        exceptions = [options_hash_with_symbol_keys[:except] || options_hash_with_symbol_keys[:exclude] || []].flatten
 
         result = segment_for_scope(only, exceptions)
 
         merge_with_fallbacks!(result) if fallbacks
 
-        segments << Segment.new(file, result, segment_options) unless result.empty?
+        unless result.empty?
+          segments << Segment.new(
+            file,
+            result,
+            extract_segment_options(options_hash_with_symbol_keys),
+          )
+        end
 
         segments
       end
@@ -82,7 +98,7 @@ module I18n
     end
 
     def self.translation_segments
-      if config? && config[:translations]
+      if config_file_exists? && config[:translations]
         configured_segments
       else
         [Segment.new("#{DEFAULT_EXPORT_DIR_PATH}/translations.js", translations)]
@@ -92,16 +108,19 @@ module I18n
     # Load configuration file for partial exporting and
     # custom output directory
     def self.config
-      if config?
-        erb = ERB.new(File.read(config_file_path)).result
-        (YAML.load(erb) || {}).with_indifferent_access
+      if config_file_exists?
+        erb_result_from_yaml_file = ERB.new(File.read(config_file_path)).result
+        Private::HashWithSymbolKeys.new(
+          (::YAML.load(erb_result_from_yaml_file) || {})
+        )
       else
-        {}
-      end
+        Private::HashWithSymbolKeys.new({})
+      end.freeze
     end
 
+    # @api private
     # Check if configuration file exist
-    def self.config?
+    def self.config_file_exists?
       File.file? config_file_path
     end
 
@@ -143,7 +162,7 @@ module I18n
           results[scope.to_sym] = tmp unless tmp.nil?
         end
         return results
-      elsif translations.respond_to?(:has_key?) && translations.has_key?(scope.to_sym)
+      elsif translations.respond_to?(:key?) && translations.key?(scope.to_sym)
         return {scope.to_sym => scopes.empty? ? translations[scope.to_sym] : filter(translations[scope.to_sym], scopes)}
       end
       nil
@@ -151,14 +170,28 @@ module I18n
 
     # Initialize and return translations
     def self.translations
-      ::I18n.backend.instance_eval do
+      self.backend.instance_eval do
         init_translations unless initialized?
-        translations.slice(*::I18n.available_locales)
+        # When activesupport is absent,
+        # the core extension (`#slice`) from `i18n` gem will be used instead
+        # And it's causing errors (at least in test)
+        #
+        # So the input is wrapped by our class for better `#slice`
+        Private::HashWithSymbolKeys.new(translations).
+          slice(*::I18n.available_locales).
+          to_h
       end
     end
 
     def self.use_fallbacks?
       fallbacks != false
+    end
+
+    def self.json_only
+      config.fetch(:json_only) do
+        # default value
+        false
+      end
     end
 
     def self.fallbacks
@@ -168,14 +201,30 @@ module I18n
       end
     end
 
+    def self.js_extend
+      config.fetch(:js_extend) do
+        # default value
+        true
+      end
+    end
+
     def self.sort_translation_keys?
-      @sort_translation_keys ||= (config[:sort_translation_keys]) if config.has_key?(:sort_translation_keys)
+      @sort_translation_keys ||= (config[:sort_translation_keys]) if config.key?(:sort_translation_keys)
       @sort_translation_keys = true if @sort_translation_keys.nil?
       @sort_translation_keys
     end
 
     def self.sort_translation_keys=(value)
       @sort_translation_keys = !!value
+    end
+
+    def self.extract_segment_options(options)
+      segment_options = Private::HashWithSymbolKeys.new({
+        js_extend: js_extend,
+        sort_translation_keys: sort_translation_keys?,
+        json_only: json_only
+      }).freeze
+      segment_options.merge(options.slice(*Segment::OPTIONS))
     end
 
     ### Export i18n.js
@@ -188,11 +237,14 @@ module I18n
         FileUtils.mkdir_p(export_i18n_js_dir_path)
 
         i18n_js_path = File.expand_path('../../../app/assets/javascripts/i18n.js', __FILE__)
+        destination_path = File.expand_path("i18n.js", export_i18n_js_dir_path)
+        return if File.exist?(destination_path) && FileUtils.identical?(i18n_js_path, destination_path)
+
         FileUtils.cp(i18n_js_path, export_i18n_js_dir_path)
       end
 
       def self.export_i18n_js_dir_path
-        @export_i18n_js_dir_path ||= (config[:export_i18n_js] || :none) if config.has_key?(:export_i18n_js)
+        @export_i18n_js_dir_path ||= (config[:export_i18n_js] || :none) if config.key?(:export_i18n_js)
         @export_i18n_js_dir_path ||= DEFAULT_EXPORT_DIR_PATH
         @export_i18n_js_dir_path
       end

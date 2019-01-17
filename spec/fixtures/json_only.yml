@@ -1,0 +1,8 @@
+fallbacks: false
+json_only: true
+
+translations:
+  - file: "tmp/i18n-js/json_only.%{locale}.js"
+    only:
+      - "*.date.formats.*"
+      - "*.number.currency.*"

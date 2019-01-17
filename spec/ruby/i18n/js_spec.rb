@@ -30,14 +30,14 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {}).and_call_original
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {}).and_call_original
+      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
       I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
       I18n::JS.export
     end
@@ -67,13 +67,13 @@ describe I18n::JS do
       en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]}};
+I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]}});
 EOS
 )
       fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["fr"] = {"admin":{"edit":{"title":"Editer"},"show":{"note":"plus de détails","title":"Visualiser"}},"date":{"abbr_day_names":["dim","lun","mar","mer","jeu","ven","sam"],"abbr_month_names":[null,"jan.","fév.","mar.","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],"day_names":["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"},"month_names":[null,"janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]}};
+I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"admin":{"edit":{"title":"Editer"},"show":{"note":"plus de détails","title":"Visualiser"}},"date":{"abbr_day_names":["dim","lun","mar","mer","jeu","ven","sam"],"abbr_month_names":[null,"jan.","fév.","mar.","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],"day_names":["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"},"month_names":[null,"janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]}});
 EOS
 )
     end
@@ -98,15 +98,31 @@ EOS
       en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.en.js"))
       expect(en_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = {"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}};
+I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}});
 EOS
 )
       fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "bits.fr.js"))
       expect(fr_output).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["fr"] = {"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}};
+I18n.translations["fr"] = I18n.extend((I18n.translations["fr"] || {}), {"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}});
 EOS
 )
+    end
+
+    it "exports as json only" do
+      set_config "json_only.yml"
+      I18n::JS.export
+      en_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "json_only.en.js"))
+      fr_output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "json_only.fr.js"))
+      expect(en_output).to eq (<<EOS
+{"en":{"date":{"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"}},"number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}}}}}
+EOS
+).chop
+      expect(fr_output).to eq (<<EOS
+{"fr":{"date":{"formats":{"default":"%d/%m/%Y","long":"%e %B %Y","long_ordinal":"%e %B %Y","only_day":"%e","short":"%e %b"}},"number":{"currency":{"format":{"format":"%n %u","precision":2,"unit":"€"}}}}}
+EOS
+).chop
+      expect(JSON.parse(en_output).keys.first).to eq 'en'
     end
 
     it "exports with :except condition" do
@@ -313,10 +329,10 @@ EOS
       let!(:old_backebad) { I18n.backend }
 
       before do
-        I18n.backend = backend_with_fallbacks
+        I18n::JS.backend = backend_with_fallbacks
         I18n.fallbacks[:fr] = [:de, :en]
       end
-      after { I18n.backend = old_backebad }
+      after { I18n::JS.backend = old_backebad }
 
       it "exports with defined locale as fallback when enabled" do
         set_config "js_file_per_locale_with_fallbacks_enabled.yml"
@@ -398,14 +414,14 @@ EOS
     end
 
     it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config?.should eql(false)
+      I18n::JS.config_file_exists?.should eql(false)
       I18n::JS.config.should eql({})
     end
 
     it "executes erb in config file" do
       set_config "erb.yml"
 
-      config_entry = I18n::JS.config["translations"].first
+      config_entry = I18n::JS.config[:translations].first
       config_entry["only"].should eq("*.date.formats")
     end
   end
@@ -581,12 +597,47 @@ EOS
         it "exports with the keys sorted" do
           expect(subject).to eq(<<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","null_test":"fallback for null","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}};
+I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","null_test":"fallback for null","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}});
 EOS
 )
         end
       end
     end
+  end
 
+  describe "js_extend option" do
+    before do
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+    end
+
+    it "exports with js_extend option at parent level" do
+      set_config "js_extend_parent.yml"
+      I18n::JS.export
+
+      file_should_exist "js_extend_parent.js"
+
+      output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "js_extend_parent.js"))
+      expect(output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations[\"en\"] = {\"date\":{\"formats\":{\"default\":\"%Y-%m-%d\",\"long\":\"%B %d, %Y\",\"short\":\"%b %d\"}}};
+I18n.translations[\"fr\"] = {\"date\":{\"formats\":{\"default\":\"%d/%m/%Y\",\"long\":\"%e %B %Y\",\"long_ordinal\":\"%e %B %Y\",\"only_day\":\"%e\",\"short\":\"%e %b\"}}};
+EOS
+)
+    end
+
+    it "exports with js_extend option at segment level" do
+      set_config "js_extend_segment.yml"
+      I18n::JS.export
+
+      file_should_exist "js_extend_segment.js"
+
+      output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "js_extend_segment.js"))
+      expect(output).to eq(<<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations[\"en\"] = {\"date\":{\"formats\":{\"default\":\"%Y-%m-%d\",\"long\":\"%B %d, %Y\",\"short\":\"%b %d\"}}};
+I18n.translations[\"fr\"] = {\"date\":{\"formats\":{\"default\":\"%d/%m/%Y\",\"long\":\"%e %B %Y\",\"long_ordinal\":\"%e %B %Y\",\"only_day\":\"%e\",\"short\":\"%e %b\"}}};
+EOS
+)
+    end
   end
 end

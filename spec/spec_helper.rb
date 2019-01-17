@@ -1,14 +1,35 @@
+require 'rubygems'
+require 'bundler'
+
+begin
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter 'spec'
+  end
+rescue LoadError
+  # SimpleCov ain't available - continue
+end
+
+if ENV["TRAVIS"]
+  require "coveralls"
+  Coveralls.wear!("rails")
+end
+
 require "i18n"
 require "json"
 
-require "active_support/all"
 require "i18n/js"
+
+require "rspec"
 
 module Helpers
   # Set the configuration as the current one
   def set_config(path)
     config_file_path = File.dirname(__FILE__) + "/fixtures/#{path}"
-    I18n::JS.stub(:config? => true, :config_file_path => config_file_path)
+    allow(I18n::JS).to receive_messages(
+      :config_file_exists? => true,
+      :config_file_path => config_file_path,
+    )
   end
 
   # Shortcut to I18n::JS.translations
@@ -18,7 +39,7 @@ module Helpers
 
   def file_should_exist(name)
     file_path = File.join(temp_path, name)
-    File.should be_file(file_path)
+    expect(File.file?(file_path)).to eq(true)
   end
 
   def temp_path(file_name = "")

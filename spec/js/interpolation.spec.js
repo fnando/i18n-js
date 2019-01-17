@@ -46,6 +46,17 @@ describe("Interpolation", function(){
           expect(I18n.t(translation_key, {count: 5})).toEqual("Hello World!");
         });
       });
+      describe("and translation key does contain pluralization with null content", function() {
+        beforeEach(function() {
+          translation_key = "sent";
+        });
+
+        it("return empty string", function() {
+          expect(I18n.t(translation_key, {count: 0})).toEqual('[missing "en.sent.zero" translation]');
+          expect(I18n.t(translation_key, {count: 1})).toEqual('[missing "en.sent.one" translation]');
+          expect(I18n.t(translation_key, {count: 5})).toEqual('[missing "en.sent.other" translation]');
+        });
+      });
     });
 
     describe("when count is NOT passed in", function() {
@@ -96,5 +107,18 @@ describe("Interpolation", function(){
     actual = I18n.t("greetings.name", {name: null});
     expect(actual).toEqual("Hello !");
     I18n.nullPlaceholder = orig;
+  });
+
+  it("provides missingPlaceholder with the placeholder, message, and options object", function(){
+    var orig = I18n.missingPlaceholder;
+    I18n.missingPlaceholder = function(placeholder, message, options) {
+      expect(placeholder).toEqual('{{name}}');
+      expect(message).toEqual('Hello {{name}}!');
+      expect(options.debugScope).toEqual('landing-page');
+      return '[missing-placeholder-debug]';
+    };
+    actual = I18n.t("greetings.name", {debugScope: 'landing-page'});
+    expect(actual).toEqual("Hello [missing-placeholder-debug]!");
+    I18n.missingPlaceholder = orig;
   });
 });
