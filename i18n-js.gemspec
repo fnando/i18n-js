@@ -18,9 +18,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  # CVE-2014-10077 which is fixed for >= 0.8.0
-  # https://nvd.nist.gov/vuln/detail/CVE-2014-10077
-  s.add_dependency "i18n", ">= 0.8.0", "< 2"
+  s.add_dependency "i18n"
 
   s.add_development_dependency "appraisal", "~> 2.0"
   s.add_development_dependency "rspec", "~> 3.0"
