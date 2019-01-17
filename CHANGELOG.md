@@ -11,7 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Nothing
+- [Ruby] `json_only` option should allow multiple locales.
+- [Ruby] Simplified and cleaned code related to JS/JSON formatting.
 
 ### Fixed
 
