@@ -15,7 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Nothing
+- [Ruby] Fix merging of plural keys across locales.
 
 
 ## [3.0.1] - 2017-08-02
