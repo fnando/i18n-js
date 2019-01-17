@@ -57,7 +57,7 @@ module I18n
       #
       #   Maybe this should be fixed within I18n.
       def using_i18n_fallbacks_module?
-        I18n.backend.class.included_modules.include?(I18n::Backend::Fallbacks)
+        I18n::JS.backend.class.included_modules.include?(I18n::Backend::Fallbacks)
       end
 
       def ensure_valid_fallbacks_as_array!

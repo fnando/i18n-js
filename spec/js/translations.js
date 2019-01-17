@@ -1,4 +1,3 @@
-var DEBUG = false;
 
 ;(function(){
   var generator = function() {
@@ -58,6 +57,17 @@ var DEBUG = false;
             }
           }
         }
+
+      , arrayWithParams: [
+        null,
+        "An item with a param of {{value}}",
+        "Another item with a param of {{value}}",
+        "A last item with a param of {{value}}",
+        ["An", "array", "of", "strings"],
+        {foo: "bar"}
+      ]
+
+      , null_key: null
     };
 
     Translations["en-US"] = {
@@ -131,11 +141,13 @@ var DEBUG = false;
     };
 
     Translations["zh-Hant"] = {
-      cat: "貓"
+        cat: "貓"
+      , dragon: "龍"
     };
 
     Translations["zh"] = {
-      dog: "狗"
+        dog: "狗"
+      , dragon: "龙"
     };
 
     return Translations;

@@ -28,6 +28,15 @@ module I18n
       @config_file_path = new_path
     end
 
+    # Allow using a different backend than the one globally configured
+    def self.backend
+      @backend ||= I18n.backend
+    end
+
+    def self.backend=(alternative_backend)
+      @backend = alternative_backend
+    end
+
     # Export translations to JavaScript, considering settings
     # from configuration file
     def self.export
@@ -89,7 +98,7 @@ module I18n
     end
 
     def self.translation_segments
-      if config? && config[:translations]
+      if config_file_exists? && config[:translations]
         configured_segments
       else
         [Segment.new("#{DEFAULT_EXPORT_DIR_PATH}/translations.js", translations)]
@@ -99,7 +108,7 @@ module I18n
     # Load configuration file for partial exporting and
     # custom output directory
     def self.config
-      if config?
+      if config_file_exists?
         erb_result_from_yaml_file = ERB.new(File.read(config_file_path)).result
         Private::HashWithSymbolKeys.new(
           (::YAML.load(erb_result_from_yaml_file) || {})
@@ -109,8 +118,9 @@ module I18n
       end.freeze
     end
 
+    # @api private
     # Check if configuration file exist
-    def self.config?
+    def self.config_file_exists?
       File.file? config_file_path
     end
 
@@ -160,7 +170,7 @@ module I18n
 
     # Initialize and return translations
     def self.translations
-      ::I18n.backend.instance_eval do
+      self.backend.instance_eval do
         init_translations unless initialized?
         # When activesupport is absent,
         # the core extension (`#slice`) from `i18n` gem will be used instead
@@ -175,6 +185,13 @@ module I18n
 
     def self.use_fallbacks?
       fallbacks != false
+    end
+
+    def self.json_only
+      config.fetch(:json_only) do
+        # default value
+        false
+      end
     end
 
     def self.fallbacks
@@ -205,6 +222,7 @@ module I18n
       segment_options = Private::HashWithSymbolKeys.new({
         js_extend: js_extend,
         sort_translation_keys: sort_translation_keys?,
+        json_only: json_only
       }).freeze
       segment_options.merge(options.slice(*Segment::OPTIONS))
     end
@@ -219,6 +237,9 @@ module I18n
         FileUtils.mkdir_p(export_i18n_js_dir_path)
 
         i18n_js_path = File.expand_path('../../../app/assets/javascripts/i18n.js', __FILE__)
+        destination_path = File.expand_path("i18n.js", export_i18n_js_dir_path)
+        return if File.exist?(destination_path) && FileUtils.identical?(i18n_js_path, destination_path)
+
         FileUtils.cp(i18n_js_path, export_i18n_js_dir_path)
       end
 

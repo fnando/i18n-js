@@ -18,6 +18,114 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - [Ruby] Fix merging of plural keys across locales.
 
 
+## [3.2.0] - 2018-11-16
+
+### Added
+
+- [Ruby] Add option `json_only` to generate translations in JSON  
+  (PR: https://github.com/fnando/i18n-js/pull/524)
+
+### Changed
+
+- [Ruby] Requires `i18n` to be `>= 0.8.0` for CVE-2014-10077
+
+
+## [3.1.0] - 2018-11-01
+
+### Added
+
+- [Ruby] Add option to allow setting a different I18n backend  
+  (PR: https://github.com/fnando/i18n-js/pull/519)
+
+### Fixed
+
+- [JS] Fix missing translation when pluralizing with default scopes  
+  (PR: https://github.com/fnando/i18n-js/pull/516)
+
+
+## [3.0.11] - 2018-07-06
+
+### Fixed
+
+- [JS] Fix interpolation for array with non string/null elements  
+  (PR: https://github.com/fnando/i18n-js/pull/505)
+
+
+## [3.0.10] - 2018-06-21
+
+### Fixed
+
+- [JS] Fix extend method changing keys with `null` to empty objects  
+  (PR: https://github.com/fnando/i18n-js/pull/503)
+- [JS] Fix variable name in an internal method  
+  (PR: https://github.com/fnando/i18n-js/pull/501)
+
+
+## [3.0.9] - 2018-06-21
+
+### Fixed
+
+- [JS] Fix translation array interpolation for array with null
+
+
+## [3.0.8] - 2018-06-06
+
+### Changed
+
+- [JS] Interpolate translation array too  
+  (PR: https://github.com/fnando/i18n-js/pull/498)
+
+
+## [3.0.7] - 2018-05-30
+
+### Fixed
+
+- [Ruby] Fix new bug occuring when config file is absent
+
+
+## [3.0.6] - 2018-05-30
+
+### Fixed
+
+- [Ruby] Make JS `i18n/filtered` depends on i18n-js config too  
+  (PR: https://github.com/fnando/i18n-js/pull/497)
+
+
+## [3.0.5] - 2018-02-26
+
+### Changed
+
+- [Ruby] Support `I18n` `1.0.x`  
+  (PR: https://github.com/fnando/i18n-js/pull/492)
+
+
+## [3.0.4] - 2018-01-26
+
+### Fixed
+
+- [Ruby] Fix `JS::Dependencies.using_asset_pipeline?` returning true when sprockets installed but disabled  
+  (PR: https://github.com/fnando/i18n-js/pull/488)
+
+
+## [3.0.3] - 2018-01-02
+
+### Fixed
+
+- [Ruby] Fix extend method when translations has array values  
+  (PR: https://github.com/fnando/i18n-js/pull/487)
+
+
+## [3.0.2] - 2017-10-26
+
+### Changed
+
+- [Ruby] Avoid writing new file if a file with same content already exists  
+  (PR: https://github.com/fnando/i18n-js/pull/473)
+- [JS] Fix fallback when "3-part" locale like `zh-Hant-TW` is used  
+  It was falling back to `zh` first instead of `zh-Hant` (see new test case added)  
+  (PR: https://github.com/fnando/i18n-js/pull/475)
+
+
 ## [3.0.1] - 2017-08-02
 
 ### Changed
@@ -251,7 +359,19 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.0.1...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.2.0...HEAD
+[3.2.0]:      https://github.com/fnando/i18n-js/compare/v3.1.0...v3.2.0
+[3.1.0]:      https://github.com/fnando/i18n-js/compare/v3.0.11...v3.1.0
+[3.0.11]:     https://github.com/fnando/i18n-js/compare/v3.0.10...v3.0.11
+[3.0.10]:     https://github.com/fnando/i18n-js/compare/v3.0.9...v3.0.10
+[3.0.9]:      https://github.com/fnando/i18n-js/compare/v3.0.8...v3.0.9
+[3.0.8]:      https://github.com/fnando/i18n-js/compare/v3.0.7...v3.0.8
+[3.0.7]:      https://github.com/fnando/i18n-js/compare/v3.0.6...v3.0.7
+[3.0.6]:      https://github.com/fnando/i18n-js/compare/v3.0.5...v3.0.6
+[3.0.5]:      https://github.com/fnando/i18n-js/compare/v3.0.4...v3.0.5
+[3.0.4]:      https://github.com/fnando/i18n-js/compare/v3.0.3...v3.0.4
+[3.0.3]:      https://github.com/fnando/i18n-js/compare/v3.0.2...v3.0.3
+[3.0.2]:      https://github.com/fnando/i18n-js/compare/v3.0.1...v3.0.2
 [3.0.1]:      https://github.com/fnando/i18n-js/compare/v3.0.0...v3.0.1
 [3.0.0]:      https://github.com/fnando/i18n-js/compare/v3.0.0.rc16...v3.0.0
 [3.0.0.rc16]: https://github.com/fnando/i18n-js/compare/v3.0.0.rc15...v3.0.0.rc16

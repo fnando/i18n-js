@@ -60,6 +60,15 @@ module I18n
       def self.run(filename, source, context)
         if context.logical_path == "i18n/filtered"
           ::I18n.load_path.each { |path| context.depend_on(File.expand_path(path)) }
+
+          # Absolute path is required or
+          # Sprockets assumes it's a logical path
+          #
+          # Calling `depend on` with an absent file
+          # will invoke `resolve` and will throw an error in the end
+          if I18n::JS.config_file_exists?
+            context.depend_on(File.expand_path(I18n::JS.config_file_path))
+          end
         end
 
         source

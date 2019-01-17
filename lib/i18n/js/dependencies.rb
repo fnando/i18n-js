@@ -20,7 +20,7 @@ module I18n
           assets_pipeline_available =
             (rails3? || rails4? || rails5?) &&
             Rails.respond_to?(:application) &&
-            Rails.application.respond_to?(:assets)
+            Rails.application.config.respond_to?(:assets)
           rails3_assets_enabled =
             rails3? &&
             assets_pipeline_available &&

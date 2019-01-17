@@ -6,10 +6,12 @@ describe I18n::JS::Segment do
   let(:translations){ { en: { "test" => "Test" }, fr: { "test" => "Test2" } } }
   let(:namespace)   { "MyNamespace" }
   let(:pretty_print){ nil }
+  let(:json_only)  { nil }
   let(:js_extend)  { nil }
   let(:sort_translation_keys){ nil }
   let(:options)     { { namespace: namespace,
                         pretty_print: pretty_print,
+                        json_only: json_only,
                         js_extend: js_extend,
                         sort_translation_keys: sort_translation_keys }.delete_if{|k,v| v.nil?} }
   subject { I18n::JS::Segment.new(file, translations, options) }
@@ -55,6 +57,36 @@ describe I18n::JS::Segment do
 
       it "should set pretty_print to true" do
         subject.pretty_print.should be true
+      end
+    end
+  end
+
+  describe "#saving!" do
+    before { allow(I18n::JS).to receive(:export_i18n_js_dir_path).and_return(temp_path) }
+
+    context "when json_only is true" do
+      let(:file){ "tmp/i18n-js/%{locale}.js" }
+      let(:json_only){ true }
+      it 'should output the keys as sorted' do
+        subject.save!
+        file_should_exist "en.js"
+        file_should_exist "fr.js"
+
+        File.open(File.join(temp_path, "en.js")){|f| f.read}.should eql(
+          %Q({"en":{"test":"Test"}})
+        )
+
+        File.open(File.join(temp_path, "fr.js")){|f| f.read}.should eql(
+          %Q({"fr":{"test":"Test2"}})
+        )
+      end
+    end
+
+    context "when json_only is true without locale" do
+      let(:file){ "tmp/i18n-js/segment.js" }
+      let(:json_only){ true }
+      it 'should output the keys as sorted' do
+        expect { subject.save! }.to raise_error(I18n::JS::JsonOnlyLocaleRequiredError)
       end
     end
   end

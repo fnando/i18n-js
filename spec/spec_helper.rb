@@ -1,14 +1,33 @@
+require 'rubygems'
+require 'bundler'
+
+begin
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter 'spec'
+  end
+rescue LoadError
+  # SimpleCov ain't available - continue
+end
+
+if ENV["TRAVIS"]
+  require "coveralls"
+  Coveralls.wear!("rails")
+end
+
 require "i18n"
 require "json"
 
 require "i18n/js"
+
+require "rspec"
 
 module Helpers
   # Set the configuration as the current one
   def set_config(path)
     config_file_path = File.dirname(__FILE__) + "/fixtures/#{path}"
     allow(I18n::JS).to receive_messages(
-      :config? => true,
+      :config_file_exists? => true,
       :config_file_path => config_file_path,
     )
   end
