@@ -15,7 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Nothing
+- [Ruby] Rollback `i18n` gem version requirement `>= 0.8.0`
 
 
 ## [3.2.0] - 2018-11-16
