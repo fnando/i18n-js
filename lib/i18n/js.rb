@@ -45,11 +45,11 @@ module I18n
       translation_segments.each(&:save!)
     end
 
-    def self.segment_for_scope(scope, exceptions)
+    def self.segment_for_scope(scope, excludes)
       if scope == "*"
-        exclude(translations, exceptions)
+        exclude(translations, excludes)
       else
-        scoped_translations(scope, exceptions)
+        scoped_translations(scope, excludes)
       end
     end
 
@@ -58,9 +58,10 @@ module I18n
         options_hash_with_symbol_keys = Private::HashWithSymbolKeys.new(options_hash)
         file = options_hash_with_symbol_keys[:file]
         only = options_hash_with_symbol_keys[:only] || '*'
-        exceptions = [options_hash_with_symbol_keys[:except] || options_hash_with_symbol_keys[:exclude] || []].flatten
+        # :except is deprecated
+        excludes = [options_hash_with_symbol_keys[:exclude] || options_hash_with_symbol_keys[:except] || []].flatten
 
-        result = segment_for_scope(only, exceptions)
+        result = segment_for_scope(only, excludes)
 
         merge_with_fallbacks!(result) if fallbacks
 
@@ -124,12 +125,12 @@ module I18n
       File.file? config_file_path
     end
 
-    def self.scoped_translations(scopes, exceptions = []) # :nodoc:
+    def self.scoped_translations(scopes, excludes = []) # :nodoc:
       result = {}
 
       [scopes].flatten.each do |scope|
-        translations_without_exceptions = exclude(translations, exceptions)
-        filtered_translations = filter(translations_without_exceptions, scope) || {}
+        translations_without_excludes = exclude(translations, excludes)
+        filtered_translations = filter(translations_without_excludes, scope) || {}
 
         Utils.deep_merge!(result, filtered_translations)
       end
@@ -137,14 +138,14 @@ module I18n
       result
     end
 
-    # Exclude keys from translations listed in the `except:` section in the config file
-    def self.exclude(translations, exceptions)
-      return translations if exceptions.empty?
+    # Exclude keys from translations listed in the `exclude:` section in the config file
+    def self.exclude(translations, excludes)
+      return translations if excludes.empty?
 
-      exceptions.inject(translations) do |memo, exception|
-        exception_scopes = exception.to_s.split(".")
+      excludes.inject(translations) do |memo, exclude|
+        exclude_scopes = exclude.to_s.split(".")
         Utils.deep_reject(memo) do |key, value, scopes|
-          Utils.scopes_match?(scopes, exception_scopes)
+          Utils.scopes_match?(scopes, exclude_scopes)
         end
       end
     end

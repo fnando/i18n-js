@@ -129,7 +129,8 @@ EOS
       set_config "except_condition.yml"
       I18n::JS.export
 
-      file_should_exist "trimmed.js"
+      file_should_exist "trimmed_except.js"
+      file_should_exist "trimmed_exclude.js"
     end
 
     it "calls .export_i18n_js" do
@@ -223,8 +224,8 @@ EOS
     end
   end
 
-  context "exceptions" do
-    it "does not include scopes listed in the exceptions list" do
+  context "excludes" do
+    it "does not include scopes listed in the excludes list" do
       result = I18n::JS.scoped_translations("*", ['de.*', '*.admin', '*.*.currency'])
 
       result[:de].should be_empty
@@ -237,7 +238,7 @@ EOS
       result[:fr][:number][:currency].should be_nil
     end
 
-    it "does not include scopes listed in the exceptions list and respects the 'only' option" do
+    it "does not include scopes listed in the excludes list and respects the 'only' option" do
       result = I18n::JS.scoped_translations("fr.*", ['*.admin', '*.*.currency'])
 
       result[:en].should be_nil
@@ -250,7 +251,7 @@ EOS
       result[:fr][:time][:am].should be_a(String)
     end
 
-    it "does exclude absolute scopes listed in the exceptions list" do
+    it "does exclude absolute scopes listed in the excludes list" do
       result = I18n::JS.scoped_translations("*", ['de', 'en.admin', 'fr.number.currency'])
 
       result[:de].should be_nil
@@ -262,7 +263,7 @@ EOS
       result[:fr][:number][:currency].should be_nil
     end
 
-    it "does not exclude non-absolute scopes listed in the exceptions list" do
+    it "does not exclude non-absolute scopes listed in the excludes list" do
       result = I18n::JS.scoped_translations("*", ['admin', 'currency'])
 
       result[:en][:admin].should be_a(Hash)

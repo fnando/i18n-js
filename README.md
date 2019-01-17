@@ -127,7 +127,7 @@ keys listed in `except` configuration param:
 
 ```yaml
 translations:
-  - except: ['*.active_admin', '*.ransack', '*.activerecord.errors']
+  - exclude: ['*.active_admin', '*.ransack', '*.activerecord.errors']
 ```
 
 
@@ -661,7 +661,7 @@ This method is useful for very large apps where a single contained translations.
         + '*'
       # Exempt any routes specific translations from being
       # included in the global translation file
-      except:
+      exclude:
         + '*.welcome.*'
         + '*.albums.*'
   ```

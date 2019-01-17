@@ -1,7 +1,13 @@
 fallbacks: false
 
 translations:
-  - file: "tmp/i18n-js/trimmed.js"
+  - file: "tmp/i18n-js/trimmed_exclude.js"
+    exclude:
+      - "active_admin"
+      - "mailers"
+
+  # :except is deprecated
+  - file: "tmp/i18n-js/trimmed_except.js"
     except:
       - "active_admin"
       - "mailers"
