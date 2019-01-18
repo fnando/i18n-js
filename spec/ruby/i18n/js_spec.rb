@@ -524,26 +524,6 @@ EOS
     end
   end
 
-  describe "merging plural keys" do
-    before do
-      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
-      set_config "merge_plurals.yml"
-      I18n::JS.export
-      file_should_exist "merge_plurals.js"
-    end
-
-    subject do
-      File.read(File.join(I18n::JS.export_i18n_js_dir_path, "merge_plurals.js"))
-    end
-
-    it "should correctly merge the plural keys" do
-      expect(subject).to eq <<EOS
-I18n.translations || (I18n.translations = {});
-I18n.translations[\"en\"] = I18n.extend((I18n.translations[\"en\"] || {}), {\"merge_plurals\":{\"one\":\"Apple\",\"other\":\"Apples\"}});\nI18n.translations[\"fr\"] = I18n.extend((I18n.translations[\"fr\"] || {}), {\"merge_plurals\":{\"one\":\"Pomme\",\"other\":\"Pommes\",\"zero\":\"Pomme\"}});
-EOS
-    end
-  end
-
   describe "translation key sorting" do
 
     describe ".sort_translation_keys?" do
@@ -657,6 +637,27 @@ I18n.translations[\"en\"] = {\"date\":{\"formats\":{\"default\":\"%Y-%m-%d\",\"l
 I18n.translations[\"fr\"] = {\"date\":{\"formats\":{\"default\":\"%d/%m/%Y\",\"long\":\"%e %B %Y\",\"long_ordinal\":\"%e %B %Y\",\"only_day\":\"%e\",\"short\":\"%e %b\"}}};
 EOS
 )
+    end
+  end
+
+  describe "merging plural keys" do
+    before do
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+    end
+
+    subject do
+      File.read(File.join(I18n::JS.export_i18n_js_dir_path, "merge_plurals.js"))
+    end
+
+    it "should correctly merge the plural keys" do
+      set_config "merge_plurals.yml"
+      I18n::JS.export
+      file_should_exist "merge_plurals.js"
+
+      expect(subject).to eq <<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations[\"en\"] = I18n.extend((I18n.translations[\"en\"] || {}), {\"merge_plurals\":{\"one\":\"Apple\",\"other\":\"Apples\"}});\nI18n.translations[\"fr\"] = I18n.extend((I18n.translations[\"fr\"] || {}), {\"merge_plurals\":{\"one\":\"Pomme\",\"other\":\"Pommes\",\"zero\":\"Pomme\"}});
+EOS
     end
   end
 end
