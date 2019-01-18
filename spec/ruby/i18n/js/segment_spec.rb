@@ -19,22 +19,22 @@ describe I18n::JS::Segment do
   describe ".new" do
 
     it "should persist the file path variable" do
-      subject.file.should eql("tmp/i18n-js/segment.js")
+      expect(subject.file).to eql("tmp/i18n-js/segment.js")
     end
 
     it "should persist the translations variable" do
-      subject.translations.should eql(translations)
+      expect(subject.translations).to eql(translations)
     end
 
     it "should persist the namespace variable" do
-      subject.namespace.should eql("MyNamespace")
+      expect(subject.namespace).to eql("MyNamespace")
     end
 
     context "when namespace is nil" do
       let(:namespace){ nil }
 
       it "should default namespace to `I18n`" do
-        subject.namespace.should eql("I18n")
+        expect(subject.namespace).to eql("I18n")
       end
     end
 
@@ -42,13 +42,13 @@ describe I18n::JS::Segment do
       subject { I18n::JS::Segment.new(file, translations) }
 
       it "should default namespace to `I18n`" do
-        subject.namespace.should eql("I18n")
+        expect(subject.namespace).to eql("I18n")
       end
     end
 
     context "when pretty_print is nil" do
       it "should set pretty_print to false" do
-        subject.pretty_print.should be false
+        expect(subject.pretty_print).to be false
       end
     end
 
@@ -56,7 +56,7 @@ describe I18n::JS::Segment do
       let(:pretty_print){ 1 }
 
       it "should set pretty_print to true" do
-        subject.pretty_print.should be true
+        expect(subject.pretty_print).to be true
       end
     end
   end
@@ -72,11 +72,11 @@ describe I18n::JS::Segment do
         file_should_exist "en.js"
         file_should_exist "fr.js"
 
-        File.open(File.join(temp_path, "en.js")){|f| f.read}.should eql(
+        expect(File.open(File.join(temp_path, "en.js")){|f| f.read}).to eql(
           %Q({"en":{"test":"Test"}})
         )
 
-        File.open(File.join(temp_path, "fr.js")){|f| f.read}.should eql(
+        expect(File.open(File.join(temp_path, "fr.js")){|f| f.read}).to eql(
           %Q({"fr":{"test":"Test2"}})
         )
       end
@@ -99,7 +99,7 @@ describe I18n::JS::Segment do
       it "should write the file" do
         file_should_exist "segment.js"
 
-        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+        expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"test":"Test"});
 MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), {"test":"Test2"});
@@ -114,12 +114,12 @@ MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || 
         file_should_exist "en.js"
         file_should_exist "fr.js"
 
-        File.open(File.join(temp_path, "en.js")){|f| f.read}.should eql <<-EOF
+        expect(File.open(File.join(temp_path, "en.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"test":"Test"});
         EOF
 
-        File.open(File.join(temp_path, "fr.js")){|f| f.read}.should eql <<-EOF
+        expect(File.open(File.join(temp_path, "fr.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), {"test":"Test2"});
         EOF
@@ -134,7 +134,7 @@ MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || 
       it 'should output the keys as sorted' do
         file_should_exist "segment.js"
 
-        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+        expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"a":"Test","b":"Test"});
         EOF
@@ -149,7 +149,7 @@ MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || 
       it 'should output the keys as sorted' do
         file_should_exist "segment.js"
 
-        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+        expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = {"a":"Test","b":"Test"};
         EOF
@@ -164,7 +164,7 @@ MyNamespace.translations["en"] = {"a":"Test","b":"Test"};
       it 'should output the keys as sorted' do
         file_should_exist "segment.js"
 
-        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+        expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"a":"Test","b":"Test"});
         EOF
@@ -179,7 +179,7 @@ MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || 
       it 'should output the keys as sorted' do
         file_should_exist "segment.js"
 
-        File.open(File.join(temp_path, "segment.js")){|f| f.read}.should eql <<-EOF
+        expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"b":"Test","a":"Test"});
         EOF

@@ -28,14 +28,14 @@ describe I18n::JS::Utils do
       target = {:a => {:b => 1}}
       result = described_class.deep_merge(target, {:a => {:c => 2}})
 
-      result[:a].should eql({:b => 1, :c => 2})
+      expect(result[:a]).to eql({:b => 1, :c => 2})
     end
 
     it "performs a banged deep merge" do
       target = {:a => {:b => 1}}
       described_class.deep_merge!(target, {:a => {:c => 2}})
 
-      target[:a].should eql({:b => 1, :c => 2})
+      expect(target[:a]).to eql({:b => 1, :c => 2})
     end
   end
 
@@ -45,7 +45,7 @@ describe I18n::JS::Utils do
 
       result = described_class.deep_reject(hash) { |k, v| k == :b }
 
-      result.should eql({:a => {}})
+      expect(result).to eql({:a => {}})
     end
 
     it "performs a deep keys rejection prunning the whole tree if necessary" do
@@ -53,7 +53,7 @@ describe I18n::JS::Utils do
 
       result = described_class.deep_reject(hash) { |k, v| k == :b }
 
-      result.should eql({:a => {}})
+      expect(result).to eql({:a => {}})
     end
 
 
@@ -62,8 +62,8 @@ describe I18n::JS::Utils do
 
       result = described_class.deep_reject(hash) { |k, v| k == :b }
 
-      result.should eql({:a => {:c => 2}})
-      hash.should eql({:a => {:b => 1, :c => 2}})
+      expect(result).to eql({:a => {:c => 2}})
+      expect(hash).to eql({:a => {:b => 1, :c => 2}})
     end
   end
 
@@ -73,7 +73,7 @@ describe I18n::JS::Utils do
 
     it "performs a deep keys sort without changing the original hash" do
       should eql({:y => 3, :z => {:a => 2, :b => 1}})
-      unsorted_hash.should eql({:z => {:b => 1, :a => 2}, :y => 3})
+      expect(unsorted_hash).to eql({:z => {:b => 1, :a => 2}, :y => 3})
     end
 
     # Idea from gem `rails_admin`
@@ -91,16 +91,16 @@ describe I18n::JS::Utils do
 
   describe ".scopes_match?" do
     it "performs a comparison of literal scopes" do
-      described_class.scopes_match?([:a, :b], [:a, :b, :c]).should_not eql true
-      described_class.scopes_match?([:a, :b, :c], [:a, :b, :c]).should eql true
-      described_class.scopes_match?([:a, :b, :c], [:a, :b, :d]).should_not eql true
+      expect(described_class.scopes_match?([:a, :b], [:a, :b, :c])).to_not eql true
+      expect(described_class.scopes_match?([:a, :b, :c], [:a, :b, :c])).to eql true
+      expect(described_class.scopes_match?([:a, :b, :c], [:a, :b, :d])).to_not eql true
     end
 
     it "performs a comparison of wildcard scopes" do
-      described_class.scopes_match?([:a, '*'], [:a, :b, :c]).should_not eql true
-      described_class.scopes_match?([:a, '*', :c], [:a, :b, :c]).should eql true
-      described_class.scopes_match?([:a, :b, :c], [:a, '*', :c]).should eql true
-      described_class.scopes_match?([:a, :b, :c], [:a, '*', '*']).should eql true
+      expect(described_class.scopes_match?([:a, '*'], [:a, :b, :c])).to_not eql true
+      expect(described_class.scopes_match?([:a, '*', :c], [:a, :b, :c])).to eql true
+      expect(described_class.scopes_match?([:a, :b, :c], [:a, '*', :c])).to eql true
+      expect(described_class.scopes_match?([:a, :b, :c], [:a, '*', '*'])).to eql true
     end
   end
 end
