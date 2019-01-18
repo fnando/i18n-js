@@ -73,11 +73,11 @@ describe I18n::JS::Segment do
         file_should_exist "en.js"
         file_should_exist "fr.js"
 
-        File.read(File.join(temp_path, "en.js")).should eql(
+        expect(File.read(File.join(temp_path, "en.js"))).to eql(
           %Q({"en":{"test":"Test"}})
         )
 
-        File.read(File.join(temp_path, "fr.js")).should eql(
+        expect(File.read(File.join(temp_path, "fr.js"))).to eql(
           %Q({"fr":{"test":"Test2"}})
         )
       end
@@ -91,7 +91,7 @@ describe I18n::JS::Segment do
         subject.save!
         file_should_exist "segment.js"
 
-        File.read(File.join(temp_path, "segment.js")).should eql(
+        expect(File.read(File.join(temp_path, "segment.js"))).to eql(
           %Q({"en":{"test":"Test"},"fr":{"test":"Test2"}})
         )
       end
@@ -106,7 +106,7 @@ describe I18n::JS::Segment do
         subject.save!
         file_should_exist "segment.js"
 
-        File.read(File.join(temp_path, "segment.js")).should eql <<-EOS
+        expect(File.read(File.join(temp_path, "segment.js"))).to eql <<-EOS
 {
   "en": {
     "test": "Test"
