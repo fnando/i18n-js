@@ -70,10 +70,10 @@ RSpec.configure do |config|
 
   # Remove deprecation warnings
   config.expect_with :rspec do |c|
-    c.syntax = [:should, :expect]
+    c.syntax = [:expect]
   end
   config.mock_with :rspec do |c|
-    c.syntax = [:should, :expect]
+    c.syntax = [:expect]
   end
 end
 

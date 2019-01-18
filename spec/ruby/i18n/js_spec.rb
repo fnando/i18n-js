@@ -30,15 +30,15 @@ describe I18n::JS do
 
     it "exports messages using custom output path" do
       set_config "custom_path.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/all.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
-      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
+      allow(I18n::JS::Segment).to receive(:new).with("tmp/i18n-js/all.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
+      allow_any_instance_of(I18n::JS::Segment).to receive(:save!).with(no_args)
       I18n::JS.export
     end
 
     it "sets default scope to * when not specified" do
       set_config "no_scope.yml"
-      I18n::JS::Segment.should_receive(:new).with("tmp/i18n-js/no_scope.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
-      I18n::JS::Segment.any_instance.should_receive(:save!).with(no_args)
+      allow(I18n::JS::Segment).to receive(:new).with("tmp/i18n-js/no_scope.js", translations, {js_extend: true, sort_translation_keys: true, json_only: false}).and_call_original
+      allow_any_instance_of(I18n::JS::Segment).to receive(:save!).with(no_args)
       I18n::JS.export
     end
 
@@ -91,7 +91,7 @@ EOS
       set_config "multiple_conditions_per_locale.yml"
 
       result = I18n::JS.translation_segments
-      result.map(&:file).should eql(["tmp/i18n-js/bits.%{locale}.js"])
+      expect(result.map(&:file)).to eql(["tmp/i18n-js/bits.%{locale}.js"])
 
       result.map(&:save!)
 
@@ -142,40 +142,40 @@ EOS
   context "filters" do
     it "filters translations using scope *.date.formats" do
       result = I18n::JS.filter(translations, "*.date.formats")
-      result[:en][:date].keys.should eql([:formats])
-      result[:fr][:date].keys.should eql([:formats])
+      expect(result[:en][:date].keys).to eql([:formats])
+      expect(result[:fr][:date].keys).to eql([:formats])
     end
 
     it "filters translations using scope [*.date.formats, *.number.currency.format]" do
       result = I18n::JS.scoped_translations(["*.date.formats", "*.number.currency.format"])
-      result[:en].keys.collect(&:to_s).sort.should eql(%w[ date number ])
-      result[:fr].keys.collect(&:to_s).sort.should eql(%w[ date number ])
+      expect(result[:en].keys.collect(&:to_s).sort).to eql(%w[ date number ])
+      expect(result[:fr].keys.collect(&:to_s).sort).to eql(%w[ date number ])
     end
 
     it "filters translations using multi-star scope" do
       result = I18n::JS.scoped_translations("*.*.formats")
 
-      result[:en].keys.collect(&:to_s).sort.should eql(%w[ date time ])
-      result[:fr].keys.collect(&:to_s).sort.should eql(%w[ date time ])
+      expect(result[:en].keys.collect(&:to_s).sort).to eql(%w[ date time ])
+      expect(result[:fr].keys.collect(&:to_s).sort).to eql(%w[ date time ])
 
-      result[:en][:date].keys.should eql([:formats])
-      result[:en][:time].keys.should eql([:formats])
+      expect(result[:en][:date].keys).to eql([:formats])
+      expect(result[:en][:time].keys).to eql([:formats])
 
-      result[:fr][:date].keys.should eql([:formats])
-      result[:fr][:time].keys.should eql([:formats])
+      expect(result[:fr][:date].keys).to eql([:formats])
+      expect(result[:fr][:time].keys).to eql([:formats])
     end
 
     it "filters translations using alternated stars" do
       result = I18n::JS.scoped_translations("*.admin.*.title")
 
-      result[:en][:admin].keys.collect(&:to_s).sort.should eql(%w[ edit show ])
-      result[:fr][:admin].keys.collect(&:to_s).sort.should eql(%w[ edit show ])
+      expect(result[:en][:admin].keys.collect(&:to_s).sort).to eql(%w[ edit show ])
+      expect(result[:fr][:admin].keys.collect(&:to_s).sort).to eql(%w[ edit show ])
 
-      result[:en][:admin][:show][:title].should eql("Show")
-      result[:fr][:admin][:show][:title].should eql("Visualiser")
+      expect(result[:en][:admin][:show][:title]).to eql("Show")
+      expect(result[:fr][:admin][:show][:title]).to eql("Visualiser")
 
-      result[:en][:admin][:edit][:title].should eql("Edit")
-      result[:fr][:admin][:edit][:title].should eql("Editer")
+      expect(result[:en][:admin][:edit][:title]).to eql("Edit")
+      expect(result[:fr][:admin][:edit][:title]).to eql("Editer")
     end
 
     describe ".filtered_translations" do
@@ -227,50 +227,50 @@ EOS
     it "does not include scopes listed in the exceptions list" do
       result = I18n::JS.scoped_translations("*", ['de.*', '*.admin', '*.*.currency'])
 
-      result[:de].should be_empty
+      expect(result[:de]).to be_empty
 
-      result[:en][:admin].should be_nil
-      result[:fr][:admin].should be_nil
-      result[:ja][:admin].should be_nil
+      expect(result[:en][:admin]).to be_nil
+      expect(result[:fr][:admin]).to be_nil
+      expect(result[:ja][:admin]).to be_nil
 
-      result[:en][:number][:currency].should be_nil
-      result[:fr][:number][:currency].should be_nil
+      expect(result[:en][:number][:currency]).to be_nil
+      expect(result[:fr][:number][:currency]).to be_nil
     end
 
     it "does not include scopes listed in the exceptions list and respects the 'only' option" do
       result = I18n::JS.scoped_translations("fr.*", ['*.admin', '*.*.currency'])
 
-      result[:en].should be_nil
-      result[:de].should be_nil
-      result[:ja].should be_nil
+      expect(result[:en]).to be_nil
+      expect(result[:de]).to be_nil
+      expect(result[:ja]).to be_nil
 
-      result[:fr][:admin].should be_nil
-      result[:fr][:number][:currency].should be_nil
+      expect(result[:fr][:admin]).to be_nil
+      expect(result[:fr][:number][:currency]).to be_nil
 
-      result[:fr][:time][:am].should be_a(String)
+      expect(result[:fr][:time][:am]).to be_a(String)
     end
 
     it "does exclude absolute scopes listed in the exceptions list" do
       result = I18n::JS.scoped_translations("*", ['de', 'en.admin', 'fr.number.currency'])
 
-      result[:de].should be_nil
+      expect(result[:de]).to be_nil
 
-      result[:en].should be_a(Hash)
-      result[:en][:admin].should be_nil
+      expect(result[:en]).to be_a(Hash)
+      expect(result[:en][:admin]).to be_nil
 
-      result[:fr][:number].should be_a(Hash)
-      result[:fr][:number][:currency].should be_nil
+      expect(result[:fr][:number]).to be_a(Hash)
+      expect(result[:fr][:number][:currency]).to be_nil
     end
 
     it "does not exclude non-absolute scopes listed in the exceptions list" do
       result = I18n::JS.scoped_translations("*", ['admin', 'currency'])
 
-      result[:en][:admin].should be_a(Hash)
-      result[:fr][:admin].should be_a(Hash)
-      result[:ja][:admin].should be_a(Hash)
+      expect(result[:en][:admin]).to be_a(Hash)
+      expect(result[:fr][:admin]).to be_a(Hash)
+      expect(result[:ja][:admin]).to be_a(Hash)
 
-      result[:en][:number][:currency].should be_a(Hash)
-      result[:fr][:number][:currency].should be_a(Hash)
+      expect(result[:en][:number][:currency]).to be_a(Hash)
+      expect(result[:fr][:number][:currency]).to be_a(Hash)
     end
   end
 
@@ -281,30 +281,30 @@ EOS
 
     it "exports without fallback when disabled" do
       set_config "js_file_per_locale_without_fallbacks.yml"
-      subject[:fr][:fallback_test].should eql(nil)
-      subject[:fr][:null_test].should eql(nil)
-      subject[:de][:null_test].should eql(nil)
+      expect(subject[:fr][:fallback_test]).to eql(nil)
+      expect(subject[:fr][:null_test]).to eql(nil)
+      expect(subject[:de][:null_test]).to eql(nil)
     end
 
     it "exports with default_locale as fallback when enabled" do
       set_config "js_file_per_locale_with_fallbacks_enabled.yml"
-      subject[:fr][:fallback_test].should eql("Success")
-      subject[:fr][:null_test].should eql("fallback for null")
-      subject[:de][:null_test].should eql("fallback for null")
+      expect(subject[:fr][:fallback_test]).to eql("Success")
+      expect(subject[:fr][:null_test]).to eql("fallback for null")
+      expect(subject[:de][:null_test]).to eql("fallback for null")
     end
 
     it "exports with default_locale as fallback when enabled with :default_locale" do
       set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
-      subject[:fr][:fallback_test].should eql("Success")
-      subject[:fr][:null_test].should eql("fallback for null")
-      subject[:de][:null_test].should eql("fallback for null")
+      expect(subject[:fr][:fallback_test]).to eql("Success")
+      expect(subject[:fr][:null_test]).to eql("fallback for null")
+      expect(subject[:de][:null_test]).to eql("fallback for null")
     end
 
     it "exports with given locale as fallback" do
       set_config "js_file_per_locale_with_fallbacks_as_locale.yml"
-      subject[:fr][:fallback_test].should eql("Erfolg")
-      subject[:fr][:null_test].should eql(nil)
-      subject[:de][:null_test].should eql(nil)
+      expect(subject[:fr][:fallback_test]).to eql("Erfolg")
+      expect(subject[:fr][:null_test]).to eql(nil)
+      expect(subject[:de][:null_test]).to eql(nil)
     end
 
     context "when given locale is in `I18n.available_locales` but its translation is missing" do
@@ -336,17 +336,17 @@ EOS
 
       it "exports with defined locale as fallback when enabled" do
         set_config "js_file_per_locale_with_fallbacks_enabled.yml"
-        subject[:fr][:fallback_test].should eql("Erfolg")
+        expect(subject[:fr][:fallback_test]).to eql("Erfolg")
       end
 
       it "exports with defined locale as fallback when enabled with :default_locale" do
         set_config "js_file_per_locale_with_fallbacks_as_default_locale_symbol.yml"
-        subject[:fr][:fallback_test].should eql("Success")
+        expect(subject[:fr][:fallback_test]).to eql("Success")
       end
 
       it "exports with Fallbacks as Hash" do
         set_config "js_file_per_locale_with_fallbacks_as_hash.yml"
-        subject[:fr][:fallback_test].should eql("Erfolg")
+        expect(subject[:fr][:fallback_test]).to eql("Erfolg")
       end
     end
   end
@@ -389,9 +389,9 @@ EOS
       it "should allow all locales" do
         result = I18n::JS.scoped_translations("*.admin.*.title")
 
-        result[:en][:admin][:show][:title].should eql("Show")
-        result[:fr][:admin][:show][:title].should eql("Visualiser")
-        result[:ja][:admin][:show][:title].should eql("Ignore me")
+        expect(result[:en][:admin][:show][:title]).to eql("Show")
+        expect(result[:fr][:admin][:show][:title]).to eql("Visualiser")
+        expect(result[:ja][:admin][:show][:title]).to eql("Ignore me")
       end
     end
 
@@ -401,28 +401,28 @@ EOS
       it "should ignore non-valid locales" do
         result = I18n::JS.scoped_translations("*.admin.*.title")
 
-        result[:en][:admin][:show][:title].should eql("Show")
-        result[:fr][:admin][:show][:title].should eql("Visualiser")
-        result.keys.include?(:ja).should eql(false)
+        expect(result[:en][:admin][:show][:title]).to eql("Show")
+        expect(result[:fr][:admin][:show][:title]).to eql("Visualiser")
+        expect(result.keys.include?(:ja)).to eql(false)
       end
     end
   end
 
   context "general" do
     it "sets export directory" do
-      I18n::JS::DEFAULT_EXPORT_DIR_PATH.should eql("public/javascripts")
+      expect(I18n::JS::DEFAULT_EXPORT_DIR_PATH).to eql("public/javascripts")
     end
 
     it "sets empty hash as configuration when no file is found" do
-      I18n::JS.config_file_exists?.should eql(false)
-      I18n::JS.config.should eql({})
+      expect(I18n::JS.config_file_exists?).to eql(false)
+      expect(I18n::JS.config).to eql({})
     end
 
     it "executes erb in config file" do
       set_config "erb.yml"
 
       config_entry = I18n::JS.config[:translations].first
-      config_entry["only"].should eq("*.date.formats")
+      expect(config_entry["only"]).to eq("*.date.formats")
     end
   end
 
@@ -434,7 +434,7 @@ EOS
         allow(FileUtils).to receive(:mkdir_p).and_call_original
         allow(FileUtils).to receive(:cp).and_call_original
 
-        described_class.stub(:export_i18n_js_dir_path).and_return(export_i18n_js_dir_path)
+        allow(described_class).to receive(:export_i18n_js_dir_path).and_return(export_i18n_js_dir_path)
         I18n::JS.export_i18n_js
       end
 
@@ -448,7 +448,7 @@ EOS
           expect(FileUtils).to have_received(:cp).once
         end
         it "exports the file" do
-          File.should be_file(File.join(I18n::JS.export_i18n_js_dir_path, "i18n.js"))
+          expect(File).to be_file(File.join(I18n::JS.export_i18n_js_dir_path, "i18n.js"))
         end
       end
 
@@ -484,7 +484,7 @@ EOS
           expect(FileUtils).to have_received(:cp).once
         end
         it "exports the file" do
-          File.should be_file(File.join(config_export_path, "i18n.js"))
+          expect(File).to be_file(File.join(config_export_path, "i18n.js"))
         end
       end
 
