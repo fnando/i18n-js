@@ -37,6 +37,9 @@ en:
   foo: "Foo"
   fallback_test: "Success"
   null_test: "fallback for null"
+  merge_plurals:
+    one: Apple
+    other: Apples
 
 de:
   fallback_test: "Erfolg"
@@ -81,6 +84,10 @@ fr:
       note: "plus de détails"
     edit:
       title: "Editer"
+  merge_plurals:
+    zero: Pomme
+    one: Pomme
+    other: Pommes
 
 ja:
   admin:

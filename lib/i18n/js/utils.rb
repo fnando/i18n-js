@@ -1,10 +1,23 @@
 module I18n
   module JS
     module Utils
-      # deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
-      # The last result is modified to treat `nil` as missing key
+      PLURAL_KEYS = %i[zero one two few many other].freeze
+
+      # Based on deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
+      # This method is used to handle I18n fallbacks. Given two equivalent path nodes in two locale trees:
+      # 1. If the node in the current locale appears to be an I18n pluralization (:one, :other, etc.),
+      #    use the node as-is without merging. This prevents mixing locales with different pluralization schemes.
+      # 2. Else if both nodes are Hashes, combine (merge) the key-value pairs of the two nodes into one, 
+      #    prioritizing the current locale.
+      # 3. Else if either node is nil, use the other node.
       MERGER = proc do |_key, v1, v2|
-        Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : (v2.nil? ? v1 : v2)
+        if Hash === v2 && (v2.keys - PLURAL_KEYS).empty?
+          v2
+        elsif Hash === v1 && Hash === v2
+          v1.merge(v2, &MERGER)
+        else
+          v2.nil? ? v1 : v2
+        end
       end
 
       HASH_NIL_VALUE_CLEANER_PROC = proc do |k, v|

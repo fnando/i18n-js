@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - [Ruby] Rollback `i18n` gem version requirement `>= 0.8.0`
+- [Ruby] Fix merging of plural keys across locales.
 
 
 ## [3.2.0] - 2018-11-16
