@@ -64,19 +64,20 @@ describe I18n::JS::Segment do
   describe "#saving!" do
     before { allow(I18n::JS).to receive(:export_i18n_js_dir_path).and_return(temp_path) }
 
-    context "when json_only is true" do
+    context "when json_only is true with locale" do
       let(:file){ "tmp/i18n-js/%{locale}.js" }
       let(:json_only){ true }
-      it 'should output the keys as sorted' do
+
+      it 'should output JSON files per locale' do
         subject.save!
         file_should_exist "en.js"
         file_should_exist "fr.js"
 
-        expect(File.open(File.join(temp_path, "en.js")){|f| f.read}).to eql(
+        expect(File.read(File.join(temp_path, "en.js"))).to eql(
           %Q({"en":{"test":"Test"}})
         )
 
-        expect(File.open(File.join(temp_path, "fr.js")){|f| f.read}).to eql(
+        expect(File.read(File.join(temp_path, "fr.js"))).to eql(
           %Q({"fr":{"test":"Test2"}})
         )
       end
@@ -85,8 +86,37 @@ describe I18n::JS::Segment do
     context "when json_only is true without locale" do
       let(:file){ "tmp/i18n-js/segment.js" }
       let(:json_only){ true }
-      it 'should output the keys as sorted' do
-        expect { subject.save! }.to raise_error(I18n::JS::JsonOnlyLocaleRequiredError)
+
+      it 'should output one JSON file for all locales' do
+        subject.save!
+        file_should_exist "segment.js"
+
+        expect(File.read(File.join(temp_path, "segment.js"))).to eql(
+          %Q({"en":{"test":"Test"},"fr":{"test":"Test2"}})
+        )
+      end
+    end
+
+    context "when json_only and pretty print are true" do
+      let(:file){ "tmp/i18n-js/segment.js" }
+      let(:json_only){ true }
+      let(:pretty_print){ true }
+
+      it 'should output one JSON file for all locales' do
+        subject.save!
+        file_should_exist "segment.js"
+
+        expect(File.read(File.join(temp_path, "segment.js"))).to eql <<-EOS
+{
+  "en": {
+    "test": "Test"
+  },
+  "fr": {
+    "test": "Test2"
+  }
+}
+EOS
+.chomp
       end
     end
   end

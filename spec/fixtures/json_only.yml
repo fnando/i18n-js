@@ -6,3 +6,13 @@ translations:
     only:
       - "*.date.formats.*"
       - "*.number.currency.*"
+
+  - file: "tmp/i18n-js/json_only_multi.js"
+    only:
+      - "*.date.formats.*"
+      - "*.number.currency.*"
+
+  - file: "tmp/i18n-js/json_only_multi_pretty.js"
+    only:
+      - "*.date.formats.*"
+      - "*.number.currency.*"
