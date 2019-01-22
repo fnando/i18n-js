@@ -11,13 +11,29 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- [Ruby] `json_only` option should allow multiple locales.
-- [Ruby] Simplified and cleaned code related to JS/JSON formatting.
+- Nothing
 
 ### Fixed
 
-- [Ruby] Rollback `i18n` gem version requirement `>= 0.8.0`
-- [Ruby] Fix merging of plural keys across locales.
+- Nothing
+
+
+## [3.2.1] - 2019-01-22
+
+### Changed
+
+- [Ruby] `json_only` option should allow multiple locales.  
+  (PR: https://github.com/fnando/i18n-js/pull/531)
+- [Ruby] Simplified and cleaned code related to JS/JSON formatting.  
+  (PR: https://github.com/fnando/i18n-js/pull/531)
+- [JS] Use strict value comparison
+
+### Fixed
+
+- [Ruby] Relax `i18n` version requirement back to  `>= 0.6.6`  
+  (PR: https://github.com/fnando/i18n-js/pull/530)
+- [Ruby] Fix merging of plural keys across locales.  
+  (PR: https://github.com/fnando/i18n-js/pull/472)
 
 
 ## [3.2.0] - 2018-11-16
@@ -361,7 +377,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.2.1...HEAD
+[3.2.1]:      https://github.com/fnando/i18n-js/compare/v3.2.0...v3.2.1
 [3.2.0]:      https://github.com/fnando/i18n-js/compare/v3.1.0...v3.2.0
 [3.1.0]:      https://github.com/fnando/i18n-js/compare/v3.0.11...v3.1.0
 [3.0.11]:     https://github.com/fnando/i18n-js/compare/v3.0.10...v3.0.11
