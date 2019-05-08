@@ -30,3 +30,7 @@ end
 appraise "i18n_1_5" do
   gem "i18n", "~> 1.5.1"
 end
+
+appraise "i18n_1_6" do
+  gem "i18n", "~> 1.6.0"
+end
