@@ -34,6 +34,12 @@ describe("Localization", function(){
     expect(I18n.l("time.formats.long", "2009-11-29 15:07:59")).toEqual("Domingo, 29 de Novembro de 2009, 15:07 h");
   });
 
+  it("return 'Invalid Date' or original value for invalid input", function(){
+    expect(I18n.l("time.formats.default", "")).toEqual("Invalid Date");
+    expect(I18n.l("time.formats.default", null)).toEqual(null);
+    expect(I18n.l("time.formats.default", undefined)).toEqual(undefined);
+  });
+
   it("localizes date/time strings with placeholders", function(){
     I18n.locale = "pt-BR";
 

@@ -615,7 +615,7 @@
 
   // This function interpolates the all variables in the given message.
   I18n.interpolate = function(message, options) {
-    if (message === null) {
+    if (message == null) {
       return message;
     }
 
@@ -833,8 +833,12 @@
   //
   I18n.parseDate = function(date) {
     var matches, convertedDate, fraction;
+    // A date input of `null` or `undefined` will be returned as-is
+    if (date == null) {
+      return date;
+    }
     // we have a date, so just return it.
-    if (typeof(date) == "object") {
+    if (typeof(date) === "object") {
       return date;
     }
 
@@ -980,12 +984,18 @@
       , format = this.lookup(scope)
     ;
 
-    if (date.toString().match(/invalid/i)) {
-      return date.toString();
+    // A date input of `null` or `undefined` will be returned as-is
+    if (date == null) {
+      return date;
+    }
+
+    var date_string = date.toString()
+    if (date_string.match(/invalid/i)) {
+      return date_string;
     }
 
     if (!format) {
-      return date.toString();
+      return date_string;
     }
 
     return this.strftime(date, format);
