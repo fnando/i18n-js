@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.2.2] - 2019-05-09
+
+### Fixed
+
+- [JS] Return invalid date/time input values (null & undefined) as-is
+  (Commit: https://github.com/fnando/i18n-js/commit/869d1689ed788ff50121de492db354652971c23d)
+
+
 ## [3.2.1] - 2019-01-22
 
 ### Changed
@@ -377,7 +385,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.2.1...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.2.2...HEAD
+[3.2.2]:      https://github.com/fnando/i18n-js/compare/v3.2.1...v3.2.2
 [3.2.1]:      https://github.com/fnando/i18n-js/compare/v3.2.0...v3.2.1
 [3.2.0]:      https://github.com/fnando/i18n-js/compare/v3.1.0...v3.2.0
 [3.1.0]:      https://github.com/fnando/i18n-js/compare/v3.0.11...v3.1.0
