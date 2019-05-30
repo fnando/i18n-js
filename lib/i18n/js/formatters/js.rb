@@ -15,7 +15,8 @@ module I18n
         protected
 
         def header
-          %(#{@namespace}.translations || (#{@namespace}.translations = {});\n)
+          text = @import ? %(import I18n from '#{@import}';\n) : ''
+          text + %(#{@namespace}.translations || (#{@namespace}.translations = {});\n)
         end
 
         def line(locale, translations)
