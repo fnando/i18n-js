@@ -591,28 +591,29 @@ I18n.strftime(date, "%d/%m/%Y");
 
 The accepted formats for `I18n.strftime` are:
 
-    %a  - The abbreviated weekday name (Sun)
-    %A  - The full weekday name (Sunday)
-    %b  - The abbreviated month name (Jan)
-    %B  - The full month name (January)
-    %d  - Day of the month (01..31)
-    %-d - Day of the month (1..31)
-    %H  - Hour of the day, 24-hour clock (00..23)
-    %-H - Hour of the day, 24-hour clock (0..23)
-    %I  - Hour of the day, 12-hour clock (01..12)
-    %-I - Hour of the day, 12-hour clock (1..12)
-    %m  - Month of the year (01..12)
-    %-m - Month of the year (1..12)
-    %M  - Minute of the hour (00..59)
-    %-M - Minute of the hour (0..59)
-    %p  - Meridian indicator (AM  or  PM)
-    %S  - Second of the minute (00..60)
-    %-S - Second of the minute (0..60)
-    %w  - Day of the week (Sunday is 0, 0..6)
-    %y  - Year without a century (00..99)
-    %-y - Year without a century (0..99)
-    %Y  - Year with century
-    %z  - Timezone offset (+0545)
+    %a     - The abbreviated weekday name (Sun)
+    %A     - The full weekday name (Sunday)
+    %b     - The abbreviated month name (Jan)
+    %B     - The full month name (January)
+    %c     - The preferred local date and time representation
+    %d     - Day of the month (01..31)
+    %-d    - Day of the month (1..31)
+    %H     - Hour of the day, 24-hour clock (00..23)
+    %-H    - Hour of the day, 24-hour clock (0..23)
+    %I     - Hour of the day, 12-hour clock (01..12)
+    %-I/%l - Hour of the day, 12-hour clock (1..12)
+    %m     - Month of the year (01..12)
+    %-m    - Month of the year (1..12)
+    %M     - Minute of the hour (00..59)
+    %-M    - Minute of the hour (0..59)
+    %p/%P  - Meridian indicator (AM  or  PM)
+    %S     - Second of the minute (00..60)
+    %-S    - Second of the minute (0..60)
+    %w     - Day of the week (Sunday is 0, 0..6)
+    %y     - Year without a century (00..99)
+    %-y    - Year without a century (0..99)
+    %Y     - Year with century
+    %z/%Z  - Timezone offset (+0545)
 
 Check out `spec/*.spec.js` files for more examples!
 
