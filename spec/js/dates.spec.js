@@ -135,6 +135,7 @@ describe("Dates", function(){
 
     // 12-hour without padding
     expect(I18n.strftime(date, "%-I")).toEqual("7");
+    expect(I18n.strftime(date, "%l")).toEqual("7");
 
     // minutes without padding
     expect(I18n.strftime(date, "%-M")).toEqual("8");
@@ -188,7 +189,9 @@ describe("Dates", function(){
     spyOn(date, "getTimezoneOffset").andReturn(345);
 
     expect(I18n.strftime(date, "%z")).toMatch(/^(\+|-)[\d]{4}$/);
+    expect(I18n.strftime(date, "%Z")).toMatch(/^(\+|-)[\d]{4}$/);
     expect(I18n.strftime(date, "%z")).toEqual("-0545");
+    expect(I18n.strftime(date, "%Z")).toEqual("-0545");
   });
 
   it("formats date with positive time zone", function(){
@@ -198,22 +201,27 @@ describe("Dates", function(){
     spyOn(date, "getTimezoneOffset").andReturn(-345);
 
     expect(I18n.strftime(date, "%z")).toMatch(/^(\+|-)[\d]{4}$/);
+    expect(I18n.strftime(date, "%Z")).toMatch(/^(\+|-)[\d]{4}$/);
     expect(I18n.strftime(date, "%z")).toEqual("+0545");
+    expect(I18n.strftime(date, "%Z")).toEqual("+0545");
   });
 
   it("formats date with custom meridian", function(){
     I18n.locale = "en-US";
     var date = new Date(2009, 3, 26, 19, 35, 44);
     expect(I18n.strftime(date, "%p")).toEqual("pm");
+    expect(I18n.strftime(date, "%P")).toEqual("pm");
   });
 
   it("formats date with meridian boundaries", function(){
     I18n.locale = "en-US";
     var date = new Date(2009, 3, 26, 0, 35, 44);
     expect(I18n.strftime(date, "%p")).toEqual("am");
+    expect(I18n.strftime(date, "%P")).toEqual("am");
 
     date = new Date(2009, 3, 26, 12, 35, 44);
     expect(I18n.strftime(date, "%p")).toEqual("pm");
+    expect(I18n.strftime(date, "%P")).toEqual("pm");
   });
 
   it("formats date using 12-hours format", function(){
@@ -251,9 +259,11 @@ describe("Dates", function(){
 
     var date = new Date(2009, 3, 26, 19, 35, 44);
     expect(I18n.strftime(date, "%p")).toEqual("de:PM");
+    expect(I18n.strftime(date, "%P")).toEqual("de:pm");
 
     date = new Date(2009, 3, 26, 7, 35, 44);
     expect(I18n.strftime(date, "%p")).toEqual("de:AM");
+    expect(I18n.strftime(date, "%P")).toEqual("de:am");
   });
 
   it("fails to format invalid date", function(){

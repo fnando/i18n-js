@@ -889,29 +889,30 @@
   //
   // The accepted formats are:
   //
-  //     %a  - The abbreviated weekday name (Sun)
-  //     %A  - The full weekday name (Sunday)
-  //     %b  - The abbreviated month name (Jan)
-  //     %B  - The full month name (January)
-  //     %c  - The preferred local date and time representation
-  //     %d  - Day of the month (01..31)
-  //     %-d - Day of the month (1..31)
-  //     %H  - Hour of the day, 24-hour clock (00..23)
-  //     %-H - Hour of the day, 24-hour clock (0..23)
-  //     %I  - Hour of the day, 12-hour clock (01..12)
-  //     %-I - Hour of the day, 12-hour clock (1..12)
-  //     %m  - Month of the year (01..12)
-  //     %-m - Month of the year (1..12)
-  //     %M  - Minute of the hour (00..59)
-  //     %-M - Minute of the hour (0..59)
-  //     %p  - Meridian indicator (AM  or  PM)
-  //     %S  - Second of the minute (00..60)
-  //     %-S - Second of the minute (0..60)
-  //     %w  - Day of the week (Sunday is 0, 0..6)
-  //     %y  - Year without a century (00..99)
-  //     %-y - Year without a century (0..99)
-  //     %Y  - Year with century
-  //     %z  - Timezone offset (+0545)
+  //     %a     - The abbreviated weekday name (Sun)
+  //     %A     - The full weekday name (Sunday)
+  //     %b     - The abbreviated month name (Jan)
+  //     %B     - The full month name (January)
+  //     %c     - The preferred local date and time representation
+  //     %d     - Day of the month (01..31)
+  //     %-d    - Day of the month (1..31)
+  //     %H     - Hour of the day, 24-hour clock (00..23)
+  //     %-H    - Hour of the day, 24-hour clock (0..23)
+  //     %I     - Hour of the day, 12-hour clock (01..12)
+  //     %-I/%l - Hour of the day, 12-hour clock (1..12)
+  //     %m     - Month of the year (01..12)
+  //     %-m    - Month of the year (1..12)
+  //     %M     - Minute of the hour (00..59)
+  //     %-M    - Minute of the hour (0..59)
+  //     %p     - Meridian indicator (AM  or  PM)
+  //     %P     - Meridian indicator (am  or  pm)
+  //     %S     - Second of the minute (00..60)
+  //     %-S    - Second of the minute (0..60)
+  //     %w     - Day of the week (Sunday is 0, 0..6)
+  //     %y     - Year without a century (00..99)
+  //     %-y    - Year without a century (0..99)
+  //     %Y     - Year with century
+  //     %z/%Z  - Timezone offset (+0545)
   //
   I18n.strftime = function(date, format) {
     var options = this.lookup("date")
@@ -962,11 +963,13 @@
     format = format.replace("%-H", hour);
     format = format.replace("%I", padding(hour12));
     format = format.replace("%-I", hour12);
+    format = format.replace("%l", hour12);
     format = format.replace("%m", padding(month));
     format = format.replace("%-m", month);
     format = format.replace("%M", padding(mins));
     format = format.replace("%-M", mins);
     format = format.replace("%p", meridianOptions[meridian]);
+    format = format.replace("%P", meridianOptions[meridian].toLowerCase());
     format = format.replace("%S", padding(secs));
     format = format.replace("%-S", secs);
     format = format.replace("%w", weekDay);
@@ -974,6 +977,7 @@
     format = format.replace("%-y", padding(year).replace(/^0+/, ""));
     format = format.replace("%Y", year);
     format = format.replace("%z", timezoneoffset);
+    format = format.replace("%Z", timezoneoffset);
 
     return format;
   };
