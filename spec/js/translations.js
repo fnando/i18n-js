@@ -67,7 +67,11 @@
         {foo: "bar"}
       ]
 
-      , null_key: null
+      , null_key: null,
+
+      sentences_with_dots: {
+          "A implies B means something.": "A implies B means that when A is true, B must be true."
+      }
     };
 
     Translations["en-US"] = {

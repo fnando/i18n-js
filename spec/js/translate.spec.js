@@ -296,4 +296,9 @@ describe("Translate", function(){
       {foo: "bar"}
     ]);
   });
+
+
+  it("returns value with key containing dot but different separator specified", function() {
+    expect(I18n.t(["A implies B means something."], {scope: "sentences_with_dots", separator: "|"})).toEqual("A implies B means that when A is true, B must be true.");
+  });
 });
