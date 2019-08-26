@@ -592,6 +592,14 @@ I18n.toTime("date.formats.short", date);
 I18n.strftime(date, "%d/%m/%Y");
 ```
 
+We have some basic support for formatting durations too.
+
+```javascript
+var duration = new Date(60000); // 1 minute
+I18n.strftime("date.formats.durationHMM", duration, true);
+I18n.strftime(duration, "%-H:%M", true);
+```
+
 The accepted formats for `I18n.strftime` are:
 
     %a     - The abbreviated weekday name (Sun)

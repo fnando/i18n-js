@@ -914,9 +914,10 @@
   //     %Y     - Year with century
   //     %z/%Z  - Timezone offset (+0545)
   //
-  I18n.strftime = function(date, format) {
+  I18n.strftime = function(date, format, durationFlag) {
     var options = this.lookup("date")
       , meridianOptions = I18n.meridian()
+      , duration = !!durationFlag
     ;
 
     if (!options) {
@@ -929,15 +930,15 @@
       throw new Error('I18n.strftime() requires a valid date object, but received an invalid date.');
     }
 
-    var weekDay = date.getDay()
-      , day = date.getDate()
-      , year = date.getFullYear()
-      , month = date.getMonth() + 1
-      , hour = date.getHours()
+    var weekDay = duration ? date.getUTCDay() : date.getDay()
+      , day = duration ? date.getUTCDate() : date.getDate()
+      , year = duration ? date.getUTCFullYear() : date.getFullYear()
+      , month = duration ? date.getUTCMonth() + 1 : date.getMonth() + 1
+      , hour = duration ? date.getUTCHours() : date.getHours()
       , hour12 = hour
       , meridian = hour > 11 ? 1 : 0
-      , secs = date.getSeconds()
-      , mins = date.getMinutes()
+      , secs = duration ? date.getUTCSeconds() : date.getSeconds()
+      , mins = duration ? date.getUTCMinutes() : date.getMinutes()
       , offset = date.getTimezoneOffset()
       , absOffsetHours = Math.floor(Math.abs(offset / 60))
       , absOffsetMinutes = Math.abs(offset) - (absOffsetHours * 60)
@@ -983,7 +984,7 @@
   };
 
   // Convert the given dateString into a formatted date.
-  I18n.toTime = function(scope, dateString) {
+  I18n.toTime = function(scope, dateString, durationFlag) {
     var date = this.parseDate(dateString)
       , format = this.lookup(scope)
     ;
@@ -1002,7 +1003,7 @@
       return date_string;
     }
 
-    return this.strftime(date, format);
+    return this.strftime(date, format, durationFlag);
   };
 
   // Convert a number into a formatted percentage value.

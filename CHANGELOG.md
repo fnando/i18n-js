@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Nothing
+- optional "durationFlag" to strftime(), toTime() functions
 
 ### Changed
 
