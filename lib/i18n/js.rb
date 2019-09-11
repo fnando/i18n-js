@@ -78,7 +78,7 @@ module I18n
 
     # deep_merge! given result with result for fallback locale
     def self.merge_with_fallbacks!(result)
-      I18n.available_locales.each do |locale|
+      backend.available_locales.each do |locale|
         fallback_locales = FallbackLocales.new(fallbacks, locale)
         fallback_locales.each do |fallback_locale|
           # `result[fallback_locale]` could be missing
