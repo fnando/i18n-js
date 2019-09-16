@@ -5,3 +5,4 @@ translations:
     only: '*'
     namespace: "Foo"
     pretty_print: true
+    import: 'random-library'

@@ -351,11 +351,11 @@ EOS
     end
   end
 
-  context "namespace and pretty_print options" do
+  context "namespace, import and pretty_print options" do
 
     before do
       stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
-      set_config "js_file_with_namespace_and_pretty_print.yml"
+      set_config "js_file_with_namespace_import_and_pretty_print.yml"
     end
 
     it "exports with defined locale as fallback when enabled" do
@@ -364,6 +364,7 @@ EOS
       output = File.read(File.join(I18n::JS.export_i18n_js_dir_path, "en.js"))
       expect(output).to match(/^#{
 <<EOS
+import I18n from 'random-library';
 Foo.translations || (Foo.translations = {});
 Foo.translations["en"] = {
   "number": {

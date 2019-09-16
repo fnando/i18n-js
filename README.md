@@ -247,6 +247,25 @@ MyNamespace.translations || (MyNamespace.translations = {});
 MyNamespace.translations["en"] = { ... }
 ```
 
+### Import I18n library in the translations file
+
+Setting the `import: 'i18n-js'` option will add `import I18n from 'i18n-js';`. The name of the package to import can be changed.
+This can be useful to use this gem with the [i18n-js](https://www.npmjs.com/package/i18n-js) npm package, which is quite useful to use it with webpack.
+
+For example:
+
+```yaml
+translations:
+- file: "public/javascripts/i18n/translations.js"
+  import: 'i18n-js'
+```
+
+will create:
+
+```
+import I18n from 'i18n-js';
+I18n.translations || (I18n.translations = {});
+```
 
 #### Pretty Print
 
@@ -282,8 +301,7 @@ by hand or using your favorite programming language. More info below.
 #### Via NPM with webpack and CommonJS
 
 
-Add the following line to your package.json dependencies  
-where version is the version you want  
+Add the following line to your package.json dependencies where version is the version you want
 ```javascript
 "i18n-js": "{version_constraint}"
 
@@ -622,8 +640,8 @@ The accepted formats for `I18n.strftime` are:
 Check out `spec/*.spec.js` files for more examples!
 
 #### Using pluralization and number formatting together
-Sometimes you might want to display translation with formatted number, like adding thousand delimiters to displayed number  
-You can do this:  
+Sometimes you might want to display translation with formatted number, like adding thousand delimiters to displayed number
+You can do this:
 ```json
 {
   "en": {
@@ -794,7 +812,7 @@ Due to the design of `sprockets`:
 This means that new locale files will not be detected, and so they will not trigger a i18n-js refresh. There are a few approaches to work around this:
 
 1. You can force i18n-js to update its translations by completely clearing the assets cache. Use one of the following:
-  
+
 ```bash
 $ rake assets:clobber
 # Or, with older versions of Rails:
@@ -818,7 +836,7 @@ or similar commands.  If you are precompiling assets on the target machine(s), c
 ### Translations in JS are not updated when Sprockets not loaded before this gem
 
 The "rails engine" declaration will try to detect existence of "sprockets" before adding the initailizer
-If sprockets is loaded after this gem, the preprocessor for 
+If sprockets is loaded after this gem, the preprocessor for
 making JS translations file cache to depend on content of locale files will not be hooked.
 So ensure sprockets is loaded before this gem like moving entry of sprockets in Gemfile or adding "require" statements for sprockets somewhere.
 
@@ -826,7 +844,7 @@ So ensure sprockets is loaded before this gem like moving entry of sprockets in 
 
 ### JS `I18n.toCurrency` & `I18n.toNumber` cannot handle large integers
 
-The above methods use `toFixed` and it only supports 53 bit integers.  
+The above methods use `toFixed` and it only supports 53 bit integers.
 Ref: http://2ality.com/2012/07/large-integers.html
 
 Feel free to find & discuss possible solution(s) at issue [#511](https://github.com/fnando/i18n-js/issues/511)
