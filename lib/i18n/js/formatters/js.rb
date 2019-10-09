@@ -15,7 +15,7 @@ module I18n
         protected
 
         def header
-          text = @import ? %(import I18n from '#{@import}';\n) : ''
+          text = @prefix || ''
           text + %(#{@namespace}.translations || (#{@namespace}.translations = {});\n)
         end
 
