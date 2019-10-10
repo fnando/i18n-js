@@ -248,6 +248,27 @@ MyNamespace.translations["en"] = { ... }
 ```
 
 
+### Adding a line at the beggining of the translations file (useful for imports)
+
+Setting the `prefix: "import I18n from 'i18n-js';\n"` option will add the line at the beggining of the resultant translation file.
+This can be useful to use this gem with the [i18n-js](https://www.npmjs.com/package/i18n-js) npm package, which is quite useful to use it with webpack.
+The user should provide the semi-colon and the newline character if needed.
+
+For example:
+
+```yaml
+translations:
+- file: "public/javascripts/i18n/translations.js"
+  prefix: "import I18n from 'i18n-js';\n"
+```
+
+will create:
+
+```
+import I18n from 'i18n-js';
+I18n.translations || (I18n.translations = {});
+
+
 #### Pretty Print
 
 Set the `pretty_print` option if you would like whitespace and indentation in your output file (default: false)
