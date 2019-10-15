@@ -680,8 +680,10 @@ EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations[\"de\"] = I18n.extend((I18n.translations[\"de\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
 I18n.translations[\"en\"] = I18n.extend((I18n.translations[\"en\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
+I18n.translations[\"en-US\"] = I18n.extend((I18n.translations[\"en-US\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
 I18n.translations[\"fr\"] = I18n.extend((I18n.translations[\"fr\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
 I18n.translations[\"ja\"] = I18n.extend((I18n.translations[\"ja\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
+I18n.translations[\"ru\"] = I18n.extend((I18n.translations[\"ru\"] || {}), {\"merge_plurals_with_no_overrides\":{\"few\":\"кошек\",\"many\":\"кошка\",\"one\":\"кот\",\"other\":\"кошек\"}});
 EOS
     end
   end

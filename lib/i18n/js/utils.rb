@@ -10,13 +10,16 @@ module I18n
       # 2. Else if both nodes are Hashes, combine (merge) the key-value pairs of the two nodes into one,
       #    prioritizing the current locale.
       # 3. Else if either node is nil, use the other node.
+      PLURAL_MERGER = proc do |_key, v1, v2|
+        v1 || v2
+      end
       MERGER = proc do |_key, v1, v2|
         if Hash === v2 && (v2.keys - PLURAL_KEYS).empty?
-          v2.merge(v1, &MERGER)
+          v2.merge(v1, &PLURAL_MERGER).slice(*v2.keys)
         elsif Hash === v1 && Hash === v2
           v1.merge(v2, &MERGER)
         else
-          v2.nil? ? v1 : v2
+          v2 || v1
         end
       end
 

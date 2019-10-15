@@ -45,6 +45,13 @@ en:
     one: Apple
     other: Apples
 
+ru:
+  merge_plurals_with_no_overrides:
+    one: кот
+    few: кошек
+    many: кошка
+    other: кошек
+
 de:
   fallback_test: "Erfolg"
   null_test: ~
@@ -92,6 +99,8 @@ fr:
     zero: Pomme
     one: Pomme
     other: Pommes
+
+en-US:
   merge_plurals_with_no_overrides:
     zero:
     one:
