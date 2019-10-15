@@ -40,6 +40,10 @@ en:
   merge_plurals:
     one: Apple
     other: Apples
+  merge_plurals_with_no_overrides:
+    zero: "No Apple"
+    one: Apple
+    other: Apples
 
 de:
   fallback_test: "Erfolg"
@@ -88,6 +92,10 @@ fr:
     zero: Pomme
     one: Pomme
     other: Pommes
+  merge_plurals_with_no_overrides:
+    zero:
+    one:
+    other:
 
 ja:
   admin:
