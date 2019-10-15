@@ -15,7 +15,7 @@ module I18n
       end
       MERGER = proc do |_key, v1, v2|
         if Hash === v2 && (v2.keys - PLURAL_KEYS).empty?
-          v2.merge(v1, &PLURAL_MERGER).slice(*v2.keys)
+          slice(v2.merge(v1, &PLURAL_MERGER), v2.keys)
         elsif Hash === v1 && Hash === v2
           v1.merge(v2, &MERGER)
         else
@@ -25,6 +25,14 @@ module I18n
 
       HASH_NIL_VALUE_CLEANER_PROC = proc do |k, v|
         v.kind_of?(Hash) ? (v.delete_if(&HASH_NIL_VALUE_CLEANER_PROC); false) : v.nil?
+      end
+
+      def self.slice(hash, keys)
+        if hash.respond_to?(:slice) # ruby 2.5 onwards
+          hash.slice(*keys)
+        else
+          hash.select {|key, _| keys.include?(key)}
+        end
       end
 
       def self.strip_keys_with_nil_values(hash)
