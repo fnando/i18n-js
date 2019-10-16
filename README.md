@@ -248,7 +248,7 @@ MyNamespace.translations["en"] = { ... }
 ```
 
 
-### Adding a line at the beggining of the translations file (useful for imports)
+### Adding a line at the beginning of the translations file (useful for imports)
 
 Setting the `prefix: "import I18n from 'i18n-js';\n"` option will add the line at the beggining of the resultant translation file.
 This can be useful to use this gem with the [i18n-js](https://www.npmjs.com/package/i18n-js) npm package, which is quite useful to use it with webpack.
