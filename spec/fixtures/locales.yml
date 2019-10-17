@@ -44,6 +44,9 @@ en:
     zero: "No Apple"
     one: Apple
     other: Apples
+  merge_plurals_with_partial_overrides:
+    one: Cat
+    other: Cats
 
 ru:
   merge_plurals_with_no_overrides:
@@ -104,6 +107,11 @@ en-US:
   merge_plurals_with_no_overrides:
     zero:
     one:
+    other:
+  merge_plurals_with_partial_overrides:
+    one: Cat
+    few:
+    many:
     other:
 
 ja:
