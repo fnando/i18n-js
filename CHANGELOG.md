@@ -18,11 +18,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.4.1] - 2019-11-01
+
+### Fixed
+
+- [Ruby] Fix merging of plural keys to work with fallbacks that aren't overridden  
+  (PR: https://github.com/fnando/i18n-js/pull/551)
+
+
 ## [3.4.0] - 2019-10-15
 
 ### Added
 
-- Allow `prefix` to be added to generated translations files  
+- [Ruby] Allow `prefix` to be added to generated translations files  
   (PR: https://github.com/fnando/i18n-js/pull/549)
 
 
@@ -30,14 +38,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Support for `%P`, `%Z`, and `%l` strftime formats to match Ruby strftime
+- [JS] Support for `%P`, `%Z`, and `%l` strftime formats to match Ruby strftime  
+  (PR: https://github.com/fnando/i18n-js/pull/537)
 
 
 ## [3.2.3] - 2019-05-24
 
 ### Changed
 
-- Allow rails 6 to be used with this gem  
+- [Ruby] Allow rails 6 to be used with this gem  
   (PR: https://github.com/fnando/i18n-js/pull/536)
 
 
@@ -408,7 +417,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.4.0...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.4.1...HEAD
+[3.4.1]:      https://github.com/fnando/i18n-js/compare/v3.4.0...v3.4.1
 [3.4.0]:      https://github.com/fnando/i18n-js/compare/v3.3.0...v3.4.0
 [3.3.0]:      https://github.com/fnando/i18n-js/compare/v3.2.3...v3.3.0
 [3.2.3]:      https://github.com/fnando/i18n-js/compare/v3.2.2...v3.2.3
