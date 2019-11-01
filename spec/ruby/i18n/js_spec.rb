@@ -598,7 +598,7 @@ EOS
         it "exports with the keys sorted" do
           expect(subject).to eq <<EOS
 I18n.translations || (I18n.translations = {});
-I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","merge_plurals":{"one":"Apple","other":"Apples"},"null_test":"fallback for null","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}});
+I18n.translations["en"] = I18n.extend((I18n.translations["en"] || {}), {"admin":{"edit":{"title":"Edit"},"show":{"note":"more details","title":"Show"}},"date":{"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"formats":{"default":"%Y-%m-%d","long":"%B %d, %Y","short":"%b %d"},"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"]},"fallback_test":"Success","foo":"Foo","merge_plurals":{"one":"Apple","other":"Apples"},"merge_plurals_with_no_overrides":{"one":"Apple","other":"Apples","zero":"No Apple"},"merge_plurals_with_partial_overrides":{"one":"Cat","other":"Cats"},"null_test":"fallback for null","number":{"currency":{"format":{"delimiter":",","format":"%u%n","precision":2,"separator":".","unit":"$"}},"format":{"delimiter":",","precision":3,"separator":"."}},"time":{"am":"am","formats":{"default":"%a, %d %b %Y %H:%M:%S %z","long":"%B %d, %Y %H:%M","short":"%d %b %H:%M"},"pm":"pm"}});
 EOS
         end
       end
@@ -658,6 +658,59 @@ EOS
       expect(subject).to eq <<EOS
 I18n.translations || (I18n.translations = {});
 I18n.translations[\"en\"] = I18n.extend((I18n.translations[\"en\"] || {}), {\"merge_plurals\":{\"one\":\"Apple\",\"other\":\"Apples\"}});\nI18n.translations[\"fr\"] = I18n.extend((I18n.translations[\"fr\"] || {}), {\"merge_plurals\":{\"one\":\"Pomme\",\"other\":\"Pommes\",\"zero\":\"Pomme\"}});
+EOS
+    end
+  end
+
+  describe "merging plural keys, with fallbacks" do
+    before do
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+    end
+
+    subject do
+      File.read(File.join(I18n::JS.export_i18n_js_dir_path, "merge_plurals_with_no_overrides.js"))
+    end
+
+    it "should correctly merge the plural keys" do
+      set_config "merge_plurals_with_no_overrides.yml"
+      I18n::JS.export
+      file_should_exist "merge_plurals_with_no_overrides.js"
+
+      expect(subject).to eq <<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations[\"de\"] = I18n.extend((I18n.translations[\"de\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
+I18n.translations[\"en\"] = I18n.extend((I18n.translations[\"en\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
+I18n.translations[\"en-US\"] = I18n.extend((I18n.translations[\"en-US\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
+I18n.translations[\"fr\"] = I18n.extend((I18n.translations[\"fr\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
+I18n.translations[\"ja\"] = I18n.extend((I18n.translations[\"ja\"] || {}), {\"merge_plurals_with_no_overrides\":{\"one\":\"Apple\",\"other\":\"Apples\",\"zero\":\"No Apple\"}});
+I18n.translations[\"ru\"] = I18n.extend((I18n.translations[\"ru\"] || {}), {\"merge_plurals_with_no_overrides\":{\"few\":\"кошек\",\"many\":\"кошка\",\"one\":\"кот\",\"other\":\"кошек\"}});
+EOS
+    end
+  end
+
+  # see discussion @ https://github.com/fnando/i18n-js/pull/551#issuecomment-543205767
+  describe "merging plural keys, with fallbacks, with partial overrides" do
+    before do
+      stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
+    end
+
+    subject do
+      File.read(File.join(I18n::JS.export_i18n_js_dir_path, "merge_plurals_with_partial_overrides.js"))
+    end
+
+    it "should correctly merge the plural keys" do
+      set_config "merge_plurals_with_partial_overrides.yml"
+      I18n::JS.export
+      file_should_exist "merge_plurals_with_partial_overrides.js"
+
+      expect(subject).to eq <<EOS
+I18n.translations || (I18n.translations = {});
+I18n.translations[\"de\"] = I18n.extend((I18n.translations[\"de\"] || {}), {\"merge_plurals_with_partial_overrides\":{\"one\":\"Cat\",\"other\":\"Cats\"}});
+I18n.translations[\"en\"] = I18n.extend((I18n.translations[\"en\"] || {}), {\"merge_plurals_with_partial_overrides\":{\"one\":\"Cat\",\"other\":\"Cats\"}});
+I18n.translations[\"en-US\"] = I18n.extend((I18n.translations[\"en-US\"] || {}), {\"merge_plurals_with_partial_overrides\":{\"few\":null,\"many\":null,\"one\":\"Cat\",\"other\":\"Cats\"}});
+I18n.translations[\"fr\"] = I18n.extend((I18n.translations[\"fr\"] || {}), {\"merge_plurals_with_partial_overrides\":{\"one\":\"Cat\",\"other\":\"Cats\"}});
+I18n.translations[\"ja\"] = I18n.extend((I18n.translations[\"ja\"] || {}), {\"merge_plurals_with_partial_overrides\":{\"one\":\"Cat\",\"other\":\"Cats\"}});
+I18n.translations[\"ru\"] = I18n.extend((I18n.translations[\"ru\"] || {}), {\"merge_plurals_with_partial_overrides\":{\"one\":\"Cat\",\"other\":\"Cats\"}});
 EOS
     end
   end

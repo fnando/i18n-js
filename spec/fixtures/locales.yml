@@ -40,6 +40,20 @@ en:
   merge_plurals:
     one: Apple
     other: Apples
+  merge_plurals_with_no_overrides:
+    zero: "No Apple"
+    one: Apple
+    other: Apples
+  merge_plurals_with_partial_overrides:
+    one: Cat
+    other: Cats
+
+ru:
+  merge_plurals_with_no_overrides:
+    one: кот
+    few: кошек
+    many: кошка
+    other: кошек
 
 de:
   fallback_test: "Erfolg"
@@ -88,6 +102,17 @@ fr:
     zero: Pomme
     one: Pomme
     other: Pommes
+
+en-US:
+  merge_plurals_with_no_overrides:
+    zero:
+    one:
+    other:
+  merge_plurals_with_partial_overrides:
+    one: Cat
+    few:
+    many:
+    other:
 
 ja:
   admin:
