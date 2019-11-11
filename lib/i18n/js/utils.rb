@@ -14,10 +14,12 @@ module I18n
         v1 || v2
       end
       MERGER = proc do |_key, v1, v2|
-        if Hash === v2 && (v2.keys - PLURAL_KEYS).empty?
-          slice(v2.merge(v1, &PLURAL_MERGER), v2.keys)
-        elsif Hash === v1 && Hash === v2
-          v1.merge(v2, &MERGER)
+        if Hash === v1 && Hash === v2
+          if (v2.keys - PLURAL_KEYS).empty?
+            slice(v2.merge(v1, &PLURAL_MERGER), v2.keys)
+          else
+            v1.merge(v2, &MERGER)
+          end
         else
           v2 || v1
         end

@@ -1,5 +1,9 @@
 en:
   number:
+    human:
+      decimal_units:
+        units:
+          million: Million
     format:
       separator: "."
       delimiter: ","
@@ -47,6 +51,15 @@ en:
   merge_plurals_with_partial_overrides:
     one: Cat
     other: Cats
+
+es:
+  number:
+    human:
+      decimal_units:
+        units:
+          million:
+            one: millón
+            other: millones
 
 ru:
   merge_plurals_with_no_overrides:
