@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Support for `%k` strftime format to match Ruby strftime
+- Nothing
 
 ### Changed
 
@@ -16,6 +16,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Nothing
+
+
+## [3.5.0] - 2019-11-12
+
+### Added
+
+- [JS] Support for `%k` strftime format to match Ruby strftime  
+  (PR: https://github.com/fnando/i18n-js/pull/554)
 
 
 ## [3.4.2] - 2019-11-11
@@ -425,8 +433,9 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.4.2...HEAD
-[3.4.1]:      https://github.com/fnando/i18n-js/compare/v3.4.1...v3.4.2
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.5.0...HEAD
+[3.5.0]:      https://github.com/fnando/i18n-js/compare/v3.4.2...v3.5.0
+[3.4.2]:      https://github.com/fnando/i18n-js/compare/v3.4.1...v3.4.2
 [3.4.1]:      https://github.com/fnando/i18n-js/compare/v3.4.0...v3.4.1
 [3.4.0]:      https://github.com/fnando/i18n-js/compare/v3.3.0...v3.4.0
 [3.3.0]:      https://github.com/fnando/i18n-js/compare/v3.2.3...v3.3.0
