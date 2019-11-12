@@ -623,7 +623,7 @@ The accepted formats for `I18n.strftime` are:
     %d     - Day of the month (01..31)
     %-d    - Day of the month (1..31)
     %H     - Hour of the day, 24-hour clock (00..23)
-    %-H    - Hour of the day, 24-hour clock (0..23)
+    %-H/%k - Hour of the day, 24-hour clock (0..23)
     %I     - Hour of the day, 12-hour clock (01..12)
     %-I/%l - Hour of the day, 12-hour clock (1..12)
     %m     - Month of the year (01..12)

@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Nothing
+- Support for `%k` strftime format to match Ruby strftime
 
 ### Changed
 

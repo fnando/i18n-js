@@ -132,6 +132,7 @@ describe("Dates", function(){
 
     // 24-hour without padding
     expect(I18n.strftime(date, "%-H")).toEqual("7");
+    expect(I18n.strftime(date, "%k")).toEqual("7");
 
     // 12-hour without padding
     expect(I18n.strftime(date, "%-I")).toEqual("7");
