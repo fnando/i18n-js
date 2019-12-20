@@ -10,14 +10,22 @@ describe("Pluralization", function(){
     I18n.translations = Translations();
   });
 
-  it("sets alias", function() {
-    expect(I18n.p).toEqual(I18n.pluralize);
+  it("sets bound alias", function() {
+    expect(I18n.p).toEqual(jasmine.any(Function));
+    expect(I18n.p).not.toBe(I18n.pluralize);
   });
 
   it("pluralizes scope", function(){
     expect(I18n.p(0, "inbox")).toEqual("You have no messages");
     expect(I18n.p(1, "inbox")).toEqual("You have 1 message");
     expect(I18n.p(5, "inbox")).toEqual("You have 5 messages");
+  });
+
+  it("pluralizes scope with 'p' shortcut", function(){
+    var p = I18n.p;
+    expect(p(0, "inbox")).toEqual("You have no messages");
+    expect(p(1, "inbox")).toEqual("You have 1 message");
+    expect(p(5, "inbox")).toEqual("You have 5 messages");
   });
 
   it("pluralizes using the 'other' scope", function(){
