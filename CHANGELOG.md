@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.5.1] - 2019-12-21
+
+### Changed
+
+- [JS] Bound shortcut functions  
+  (PR: https://github.com/fnando/i18n-js/pull/560)
+
+
 ## [3.5.0] - 2019-11-12
 
 ### Added
@@ -433,7 +441,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.5.0...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.5.1...HEAD
+[3.5.1]:      https://github.com/fnando/i18n-js/compare/v3.5.0...v3.5.1
 [3.5.0]:      https://github.com/fnando/i18n-js/compare/v3.4.2...v3.5.0
 [3.4.2]:      https://github.com/fnando/i18n-js/compare/v3.4.1...v3.4.2
 [3.4.1]:      https://github.com/fnando/i18n-js/compare/v3.4.0...v3.4.1
