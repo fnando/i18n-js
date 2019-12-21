@@ -1084,9 +1084,9 @@
   };
 
   // Set aliases, so we can save some typing.
-  I18n.t = I18n.translate;
-  I18n.l = I18n.localize;
-  I18n.p = I18n.pluralize;
+  I18n.t = I18n.translate.bind(I18n);
+  I18n.l = I18n.localize.bind(I18n);
+  I18n.p = I18n.pluralize.bind(I18n);
 
   return I18n;
 }));
