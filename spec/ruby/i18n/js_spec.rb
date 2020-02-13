@@ -351,7 +351,7 @@ EOS
     end
   end
 
-  context "namespace, prefix and pretty_print options" do
+  context "namespace, prefix, suffix, and pretty_print options" do
 
     before do
       stub_const('I18n::JS::DEFAULT_EXPORT_DIR_PATH', temp_path)
@@ -379,6 +379,7 @@ EOS
   "foo": "Foo",
   "fallback_test": "Success"
 };
+//test
 EOS
 }$/)
     end

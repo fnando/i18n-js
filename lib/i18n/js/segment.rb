@@ -7,7 +7,7 @@ module I18n
 
     # Class which enscapulates a translations hash and outputs a single JSON translation file
     class Segment
-      OPTIONS = [:namespace, :pretty_print, :js_extend, :prefix, :sort_translation_keys, :json_only].freeze
+      OPTIONS = [:namespace, :pretty_print, :js_extend, :prefix, :suffix, :sort_translation_keys, :json_only].freeze
       LOCALE_INTERPOLATOR = /%\{locale\}/
 
       attr_reader *([:file, :translations] | OPTIONS)
@@ -25,6 +25,7 @@ module I18n
         @pretty_print = !!options[:pretty_print]
         @js_extend    = options.key?(:js_extend) ? !!options[:js_extend] : true
         @prefix       = options.key?(:prefix) ? options[:prefix] : nil
+        @suffix       = options.key?(:suffix) ? options[:suffix] : nil
         @sort_translation_keys = options.key?(:sort_translation_keys) ? !!options[:sort_translation_keys] : true
         @json_only = options.key?(:json_only) ? !!options[:json_only] : false
       end
@@ -70,7 +71,9 @@ module I18n
         { js_extend: @js_extend,
           namespace: @namespace,
           pretty_print: @pretty_print,
-          prefix: @prefix }
+          prefix: @prefix,
+          suffix: @suffix
+        }
       end
     end
   end
