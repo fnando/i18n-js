@@ -9,7 +9,7 @@ module I18n
           translations.each do |locale, translations_for_locale|
             contents << line(locale, format_json(translations_for_locale))
           end
-          contents << footer
+          contents << (@suffix || '')
         end
 
         protected
@@ -17,10 +17,6 @@ module I18n
         def header
           text = @prefix || ''
           text + %(#{@namespace}.translations || (#{@namespace}.translations = {});\n)
-        end
-
-        def footer
-          @suffix || ''
         end
 
         def line(locale, translations)

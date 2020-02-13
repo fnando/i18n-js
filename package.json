@@ -8,7 +8,7 @@
     "i18n"
   ],
   "devDependencies": {
-    "jasmine-node": "^1.16.2"
+    "jasmine-node": "^1.14.5"
   },
   "main": "app/assets/javascripts/i18n.js",
   "scripts": {
