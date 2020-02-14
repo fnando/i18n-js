@@ -248,11 +248,11 @@ MyNamespace.translations["en"] = { ... }
 ```
 
 
-### Adding a line at the beginning of the translations file (useful for imports)
+### Adding prefix & suffix to the translations file(s)
 
-Setting the `prefix: "import I18n from 'i18n-js';\n"` option will add the line at the beggining of the resultant translation file.
+Setting the `prefix: "import I18n from 'i18n-js';\n"` option will add the line at the beginning of the resultant translation file.
 This can be useful to use this gem with the [i18n-js](https://www.npmjs.com/package/i18n-js) npm package, which is quite useful to use it with webpack.
-The user should provide the semi-colon and the newline character if needed. Note, the suffix option may also be used to wrap translations files.
+The user should provide the semi-colon and the newline character if needed.
 
 For example:
 
@@ -267,6 +267,11 @@ will create:
 ```
 import I18n from 'i18n-js';
 I18n.translations || (I18n.translations = {});
+```
+
+
+`suffix` option is added in https://github.com/fnando/i18n-js/pull/561.  
+It's similar to `prefix` so won't explain it in details.
 
 
 #### Pretty Print
