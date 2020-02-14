@@ -6,3 +6,4 @@ translations:
     namespace: "Foo"
     pretty_print: true
     prefix: "import random from 'random-library';\n"
+    suffix: "//test"

@@ -9,7 +9,7 @@ module I18n
           translations.each do |locale, translations_for_locale|
             contents << line(locale, format_json(translations_for_locale))
           end
-          contents
+          contents << (@suffix || '')
         end
 
         protected
