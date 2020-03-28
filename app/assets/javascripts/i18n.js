@@ -189,6 +189,9 @@
     // Set missing translation behavior. 'message' will display a message
     // that the translation is missing, 'guess' will try to guess the string
     , missingBehaviour: 'message'
+    // Set a callback to be called with translations are missing. Can be used to
+    // report missing translations to exception tracking
+    , missingCallback: undefined
     // if you use missingBehaviour with 'message', but want to know that the
     // string is actually missing for testing purposes, you can prefix the
     // guessed string by setting the value here. By default, no prefix!
@@ -673,6 +676,14 @@
 
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function(scope, options) {
+    var localeForTranslation = (options != null && options.locale != null) ? options.locale : this.currentLocale();
+    var fullScope           = this.getFullScope(scope, options);
+    var fullScopeWithLocale = [localeForTranslation, fullScope].join(this.defaultSeparator);
+
+    if (this.missingCallback) {
+      this.missingCallback(fullScopeWithLocale);
+    }
+
     //guess intended string
     if(this.missingBehaviour === 'guess'){
       //get only the last portion of the scope
@@ -682,10 +693,6 @@
           s.replace('_',' ').replace(/([a-z])([A-Z])/g,
           function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
     }
-
-    var localeForTranslation = (options != null && options.locale != null) ? options.locale : this.currentLocale();
-    var fullScope           = this.getFullScope(scope, options);
-    var fullScopeWithLocale = [localeForTranslation, fullScope].join(this.defaultSeparator);
 
     return '[missing "' + fullScopeWithLocale + '" translation]';
   };

@@ -67,6 +67,14 @@ describe("Translate", function(){
     expect(actual).toEqual(expected);
   });
 
+  it("calls the missing callback for missing translation when a callback is defined", function(){
+    var called = false;
+    callback = function() { called = true };
+    I18n.missingCallback = callback;
+    I18n.translate("monster", {scope: "greetings"});
+    expect(called).toBe(true);
+  });
+
   it("returns translation for single scope on a custom locale", function(){
     I18n.locale = "pt-BR";
     expect(I18n.translate("hello")).toEqual("Olá Mundo!");
