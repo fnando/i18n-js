@@ -803,7 +803,7 @@
       case "number":
         scope = this.lookup("number.format", options);
         return this.toNumber(value, scope);
-        case "percentage":
+      case "percentage":
           return this.toPercentage(value, options);
       default:
         var localizedValue;
