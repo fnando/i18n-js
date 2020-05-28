@@ -36,6 +36,20 @@ describe("Localization", function(){
     expect(I18n.localize("date.formats.long", "2009-01-07")).toEqual("07 de Janeiro de 2009");
   });
 
+  it("localizes strings with locale from options", function(){
+    I18n.locale = "en";
+
+    expect(I18n.localize("date.formats.default", "2009-11-29", { locale: "pt-BR" })).toEqual("29/11/2009");
+    expect(I18n.localize("date.formats.short", "2009-01-07", { locale: "pt-BR" })).toEqual("07 de Janeiro");
+    expect(I18n.localize("date.formats.long", "2009-01-07", { locale: "pt-BR" })).toEqual("07 de Janeiro de 2009");
+    expect(I18n.localize("time.formats.default", "2009-11-29 15:07:59", { locale: "pt-BR" })).toEqual("Domingo, 29 de Novembro de 2009, 15:07 h");
+    expect(I18n.localize("time.formats.short", "2009-01-07 09:12:35", { locale: "pt-BR" })).toEqual("07/01, 09:12 h");
+    expect(I18n.localize("time.formats.long", "2009-11-29 15:07:59", { locale: "pt-BR" })).toEqual("Domingo, 29 de Novembro de 2009, 15:07 h");
+    expect(I18n.localize("number", 1234567, { locale: "pt-BR" })).toEqual("1,234,567.000");
+    expect(I18n.localize("currency", 1234567, { locale: "pt-BR" })).toEqual("R$ 1.234.567,00");
+    expect(I18n.localize("percentage", 123.45, { locale: "pt-BR" })).toEqual("123,45%");
+  });
+
   it("localizes time strings", function(){
     I18n.locale = "pt-BR";
 

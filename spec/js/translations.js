@@ -90,7 +90,16 @@
         hello: "Olá Mundo!"
 
       , number: {
-          percentage: {
+          currency: {
+            format: {
+              delimiter: ".",
+              format: "%u %n",
+              precision: 2,
+              separator: ",",
+              unit: "R$"
+            }
+          }
+          , percentage: {
             format: {
                 delimiter: ""
               , separator: ","
