@@ -779,8 +779,8 @@
   I18n.toCurrency = function(number, options) {
     options = this.prepareOptions(
         options
-      , this.lookup("number.currency.format")
-      , this.lookup("number.format")
+      , this.lookup("number.currency.format", options)
+      , this.lookup("number.format", options)
       , CURRENCY_FORMAT
     );
 
@@ -799,17 +799,17 @@
 
     switch (scope) {
       case "currency":
-        return this.toCurrency(value);
+        return this.toCurrency(value, options);
       case "number":
-        scope = this.lookup("number.format");
+        scope = this.lookup("number.format", options);
         return this.toNumber(value, scope);
       case "percentage":
-        return this.toPercentage(value);
+        return this.toPercentage(value, options);
       default:
         var localizedValue;
 
         if (scope.match(/^(date|time)/)) {
-          localizedValue = this.toTime(scope, value);
+          localizedValue = this.toTime(scope, value, options);
         } else {
           localizedValue = value.toString();
         }
@@ -914,8 +914,8 @@
   //     %Y     - Year with century
   //     %z/%Z  - Timezone offset (+0545)
   //
-  I18n.strftime = function(date, format) {
-    var options = this.lookup("date")
+  I18n.strftime = function(date, format, options) {
+    var options = this.lookup("date", options)
       , meridianOptions = I18n.meridian()
     ;
 
@@ -984,9 +984,9 @@
   };
 
   // Convert the given dateString into a formatted date.
-  I18n.toTime = function(scope, dateString) {
+  I18n.toTime = function(scope, dateString, options) {
     var date = this.parseDate(dateString)
-      , format = this.lookup(scope)
+      , format = this.lookup(scope, options)
     ;
 
     // A date input of `null` or `undefined` will be returned as-is
@@ -1003,15 +1003,15 @@
       return date_string;
     }
 
-    return this.strftime(date, format);
+    return this.strftime(date, format, options);
   };
 
   // Convert a number into a formatted percentage value.
   I18n.toPercentage = function(number, options) {
     options = this.prepareOptions(
         options
-      , this.lookup("number.percentage.format")
-      , this.lookup("number.format")
+      , this.lookup("number.percentage.format", options)
+      , this.lookup("number.format", options)
       , PERCENTAGE_FORMAT
     );
 
