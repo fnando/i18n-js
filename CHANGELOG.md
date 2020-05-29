@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.7.0] - 2020-05-29
+
+### Added
+
+- [JS] Allow options to be passed in when calling `I18n.localize`/`I18n.l`  
+  (PR: https://github.com/fnando/i18n-js/pull/570)
+
+
 ## [3.6.0] - 2020-02-14
 
 ### Added
@@ -449,7 +457,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.6.0...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.7.0...HEAD
+[3.6.0]:      https://github.com/fnando/i18n-js/compare/v3.6.0...v3.7.0
 [3.6.0]:      https://github.com/fnando/i18n-js/compare/v3.5.1...v3.6.0
 [3.5.1]:      https://github.com/fnando/i18n-js/compare/v3.5.0...v3.5.1
 [3.5.0]:      https://github.com/fnando/i18n-js/compare/v3.4.2...v3.5.0
