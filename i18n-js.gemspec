@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "i18n", ">= 0.6.6"
 
-  s.add_development_dependency "appraisal", "~> 2.0"
+  s.add_development_dependency "appraisal", "~> 2.3"
   s.add_development_dependency "rspec", "~> 3.0"
   s.add_development_dependency "rake", "~> 12.0"
   s.add_development_dependency "gem-release", ">= 0.7"
