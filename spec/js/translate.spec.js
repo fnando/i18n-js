@@ -48,7 +48,7 @@ describe("Translate", function(){
 
   it("returns guessed translation if missingBehaviour is set to guess", function(){
     I18n.missingBehaviour = 'guess'
-    actual = I18n.translate("invalid.thisIsAutomaticallyGeneratedTranslation");
+    actual = I18n.translate("invalid.this_Is_AutomaticallyGeneratedTranslation");
     expected = 'this is automatically generated translation';
     expect(actual).toEqual(expected);
   });
