@@ -679,7 +679,7 @@
       var s = scope.split('.').slice(-1)[0];
       //replace underscore with space && camelcase with space and lowercase letter
       return (this.missingTranslationPrefix.length > 0 ? this.missingTranslationPrefix : '') +
-          s.replace('_',' ').replace(/([a-z])([A-Z])/g,
+          s.replace(/_/g,' ').replace(/([a-z])([A-Z])/g,
           function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
     }
 
