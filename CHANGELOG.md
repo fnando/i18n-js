@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.7.1] - 2020-06-30
+
+### Fixed
+
+- [JS] For translation missing behaviour `guess`, replace all underscores to spaces properly  
+  (PR: https://github.com/fnando/i18n-js/pull/574)
+
+
 ## [3.7.0] - 2020-05-29
 
 ### Added
@@ -457,8 +465,9 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.7.0...HEAD
-[3.6.0]:      https://github.com/fnando/i18n-js/compare/v3.6.0...v3.7.0
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.7.1...HEAD
+[3.7.1]:      https://github.com/fnando/i18n-js/compare/v3.7.0...v3.7.1
+[3.7.0]:      https://github.com/fnando/i18n-js/compare/v3.6.0...v3.7.0
 [3.6.0]:      https://github.com/fnando/i18n-js/compare/v3.5.1...v3.6.0
 [3.5.1]:      https://github.com/fnando/i18n-js/compare/v3.5.0...v3.5.1
 [3.5.0]:      https://github.com/fnando/i18n-js/compare/v3.4.2...v3.5.0
