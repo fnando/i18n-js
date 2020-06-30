@@ -48,9 +48,14 @@ describe("Translate", function(){
 
   it("returns guessed translation if missingBehaviour is set to guess", function(){
     I18n.missingBehaviour = 'guess'
-    actual = I18n.translate("invalid.this_is_automatically_generated_translation");
-    expected = 'this is automatically generated translation';
-    expect(actual).toEqual(expected);
+
+    var actual_1 = I18n.translate("invalid.thisIsAutomaticallyGeneratedTranslation");
+    var expected_1 = 'this is automatically generated translation';
+    expect(actual_1).toEqual(expected_1);
+
+    var actual_2 = I18n.translate("invalid.this_is_automatically_generated_translation");
+    var expected_2 = 'this is automatically generated translation';
+    expect(actual_2).toEqual(expected_2);
   });
 
   it("returns guessed translation with prefix if missingBehaviour is set to guess and prefix is also provided", function(){
