@@ -54,7 +54,7 @@ describe("Translate", function(){
     expect(actual_1).toEqual(expected_1);
 
     var actual_2 = I18n.translate("invalid.this_is_automatically_generated_translation");
-    var expected_2 = 'this is automatically generated translation';
+    var expected_2 = 'This is automatically generated translation';
     expect(actual_2).toEqual(expected_2);
   });
 
