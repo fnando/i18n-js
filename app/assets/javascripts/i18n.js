@@ -677,10 +677,11 @@
     if(this.missingBehaviour === 'guess'){
       //get only the last portion of the scope
       var s = scope.split('.').slice(-1)[0];
+      s = s.replace(/_/g,' ').replace(/([a-z])([A-Z])/g,
+      function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
+      s = s.charAt(0).toUpperCase() + s.slice(1);
       //replace underscore with space && camelcase with space and lowercase letter
-      return (this.missingTranslationPrefix.length > 0 ? this.missingTranslationPrefix : '') +
-          s.replace(/_/g,' ').replace(/([a-z])([A-Z])/g.charAt(0).toUpperCase() + s.slice(1),
-          function(match, p1, p2) {return p1 + ' ' + p2.toLowerCase()} );
+      return (this.missingTranslationPrefix.length > 0 ? this.missingTranslationPrefix : '') + s;         
     }
 
     var localeForTranslation = (options != null && options.locale != null) ? options.locale : this.currentLocale();
