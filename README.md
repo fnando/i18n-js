@@ -37,6 +37,18 @@ Add the gem to your Gemfile.
 gem "i18n-js"
 ```
 
+#### Rails with [webpacker](https://github.com/rails/webpacker)
+
+If you're using `webpacker`, you may need to add the dependencies to your client with:
+
+```
+yarn add i18n-js
+# or, if you're using npm,
+npm install i18n-js
+```
+
+For more details, see [this gist](https://gist.github.com/bazzel/ecdff4718962e57c2d5569cf01d332fe).
+
 #### Rails app with [Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
 
 If you're using the [asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html),
@@ -78,16 +90,6 @@ Then get the JS files following the instructions below.
   If `I18n.available_locales` is set (e.g. in your Rails `config/application.rb` file)
   then only the specified locales will be exported.
   Current version of `i18n.js` will also be exported to avoid version mismatching by downloading.
-
-#### Rails with [webpacker](https://github.com/rails/webpacker)
-
-If you're using `webpacker`, you may need to add the dependencies to your client with:
-
-```
-yarn add i18n-js
-```
-
-For more details, see [this gist](https://gist.github.com/bazzel/ecdff4718962e57c2d5569cf01d332fe).
 
 #### Export Configuration (For translations)
 
