@@ -337,7 +337,7 @@ var i18n = require("i18n-js");
 
 ### Setting up
 
-You **don't** need to set up a thing. The default settings will work just okay. But if you want to split translations into several files or specify specific contexts, you can follow the rest of this setting up section.
+You **don't** need to set up a thing. The default settings will work just okay. But if you want to split translations into several files or specify contexts, you can follow the rest of this setting up section.
 
 Set your locale is easy as
 ```javascript
@@ -405,7 +405,7 @@ I18n.t("some.missing.scope", {defaults: [{scope: "some.existing.scope"}]});
 I18n.t("some.missing.scope", {defaults: [{message: "Some message"}]});
 ```
 
-Default values must be provided as an array of hashs where the key is the
+Default values must be provided as an array of hashes where the key is the
 type of translation desired, a `scope` or a `message`. The translation returned
 will be either the first scope recognized, or the first message defined.
 
@@ -504,7 +504,7 @@ I18n.pluralization["ru"] = function (count) {
 };
 ```
 
-You can find all rules on <http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html>.
+You can find all rules on <https://unicode-org.github.io/cldr-staging/charts/37/supplemental/language_plural_rules.html>.
 
 If you're using the same scope over and over again, you may use the `scope` option.
 
@@ -586,6 +586,7 @@ The `toHumanSize` function accepts the following options:
 - `delimiter`: defaults to `""`
 - `strip_insignificant_zeros`: defaults to `false`
 - `format`: defaults to `%n%u`
+- `scope`: defaults to `""`
 
 <!---->
 
@@ -740,7 +741,7 @@ This method is useful for very large apps where a single contained translations.
 
 To use this with require.js we are only going to change a few things from above.
 
-1. In your `config/i18n-js.yml` we need to add a better location for the i18n to be exported. You want to use this location so that it can be properly precompiled by r.js.
+1. In your `config/i18n-js.yml` we need to add a better location for the i18n to be exported to. You want to use this location so that it can be properly precompiled by r.js.
 
   ```yaml
   export_i18n_js: "app/assets/javascript/nls"
@@ -784,7 +785,7 @@ To use this with require.js we are only going to change a few things from above.
       // ...
   });
   ```
-4. (optional) As an additional configuration we can make a task to be run before the requirejs optimizer. This will allow any automated scripts that run the requirejs optimizer to export the strings before we run r.js
+4. (optional) As an additional configuration we can make a task to be run before the requirejs optimizer. This will allow any automated scripts that run the requirejs optimizer to export the strings before we run r.js.
 
   ```rake
   # lib/tasks/i18n.rake
@@ -845,7 +846,7 @@ These commands will remove *all* fingerprinted assets, and you will have to reco
 $ rake assets:precompile
 ```
 
-or similar commands.  If you are precompiling assets on the target machine(s), cached pages may be broken by this, so they will need to be refreshed.
+or similar commands. If you are precompiling assets on the target machine(s), cached pages may be broken by this, so they will need to be refreshed.
 
 2. You can change something in a different locale file.
 
@@ -856,9 +857,9 @@ or similar commands.  If you are precompiling assets on the target machine(s), c
 ### Translations in JS are not updated when Sprockets not loaded before this gem
 
 The "rails engine" declaration will try to detect existence of "sprockets" before adding the initailizer
-If sprockets is loaded after this gem, the preprocessor for 
+If sprockets is loaded after this gem, the preprocessor for
 making JS translations file cache to depend on content of locale files will not be hooked.
-So ensure sprockets is loaded before this gem like moving entry of sprockets in Gemfile or adding "require" statements for sprockets somewhere.
+So ensure sprockets is loaded before this gem by moving the entry of sprockets in the Gemfile or adding "require" statements for sprockets somewhere.
 
 **Note:** See issue [#404](https://github.com/fnando/i18n-js/issues/404) for more details and discussion of this issue.
 
