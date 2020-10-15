@@ -1025,6 +1025,7 @@
       , iterations = 0
       , unit
       , precision
+      , fullScope
     ;
 
     while (size >= kb && iterations < 4) {
@@ -1033,10 +1034,12 @@
     }
 
     if (iterations === 0) {
-      unit = this.t("number.human.storage_units.units.byte", {count: size});
+      fullScope = this.getFullScope("number.human.storage_units.units.byte", options);
+      unit = this.t(fullScope, {count: size});
       precision = 0;
     } else {
-      unit = this.t("number.human.storage_units.units." + SIZE_UNITS[iterations]);
+      fullScope = this.getFullScope("number.human.storage_units.units." + SIZE_UNITS[iterations], options);
+      unit = this.t(fullScope);
       precision = (size - Math.floor(size) === 0) ? 0 : 1;
     }
 

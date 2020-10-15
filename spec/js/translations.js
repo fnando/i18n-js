@@ -58,6 +58,18 @@
           }
         }
 
+      , extended: {
+          number: {
+            human: {
+              storage_units: {
+                  units: {
+                    "mb": "Megabyte"
+                }
+              }
+            }
+          }
+        }
+
       , arrayWithParams: [
         null,
         "An item with a param of {{value}}",

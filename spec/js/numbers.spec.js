@@ -150,6 +150,10 @@ describe("Numbers", function(){
     expect(I18n.toHumanSize(1024 * 1.6, {precision: 0})).toEqual("2KB");
   });
 
+  it("returns number as human size using custom scope", function(){
+    expect(I18n.toHumanSize(1024 * 1024, {scope: "extended"})).toEqual("1Megabyte");
+  });
+
   it("formats numbers with strip insignificant zero", function() {
     options = {separator: ".", delimiter: ",", strip_insignificant_zeros: true};
 
