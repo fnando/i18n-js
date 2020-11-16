@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="250" height="58" src="https://github.com/fnando/i18n-js/raw/master/i18njs.png" alt="i18n.js">
+  <img width="250" height="58" src="https://github.com/fnando/i18n-js/raw/main/i18njs.png" alt="i18n.js">
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@ Features:
 
 ## Version Notice
 
-The `master` branch (including this README) is for latest `3.0.0` instead of
+The `main` branch (including this README) is for latest `3.0.0` instead of
 `2.x`.
 
 ## Usage
