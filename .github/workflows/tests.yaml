@@ -49,7 +49,6 @@ jobs:
             allow_failures: true
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
-      BUNDLE_PATH:    "./vendor/bundle"
       ALLOW_FAILURES: "${{ matrix.allow_failures }}"
     runs-on: ${{ matrix.os }}-latest
     continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' }}
@@ -60,17 +59,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - uses: actions/cache@v2
-        with:
-          path: gemfiles/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ github.ref }}-${{ github.sha }}-v2
-          restore-keys: |
-            ${{ runner.os }}-gems--${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ github.ref }}-
-            ${{ runner.os }}-gems--${{ matrix.ruby }}-${{ matrix.gemfile }}-
-            ${{ runner.os }}-gems--${{ matrix.ruby }}-
-      - name: Bundle Install
-        run: |
-          bundle install --jobs 4 --retry 3
+          bundler-cache: true
       - name: Test
         run: bundle exec rake spec:ruby || $ALLOW_FAILURES
 
