@@ -50,6 +50,7 @@ module I18n
       def write_file(_file = @file, _translations = @translations)
         FileUtils.mkdir_p File.dirname(_file)
         _translations = Utils.deep_key_sort(_translations) if @sort_translation_keys
+        _translations = Utils.deep_remove_procs(_translations)
         contents = formatter.format(_translations)
 
         return if File.exist?(_file) && File.read(_file) == contents
