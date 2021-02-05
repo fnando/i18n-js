@@ -4,6 +4,7 @@ require "i18n"
 
 require "i18n/js/utils"
 require "i18n/js/private/hash_with_symbol_keys"
+require "i18n/js/private/config_store"
 
 module I18n
   module JS
@@ -26,6 +27,8 @@ module I18n
 
     def self.config_file_path=(new_path)
       @config_file_path = new_path
+      # new config file path = need to re-read config from new file
+      Private::ConfigStore.instance.flush_cache
     end
 
     # Allow using a different backend than the one globally configured
@@ -108,14 +111,16 @@ module I18n
     # Load configuration file for partial exporting and
     # custom output directory
     def self.config
-      if config_file_exists?
-        erb_result_from_yaml_file = ERB.new(File.read(config_file_path)).result
-        Private::HashWithSymbolKeys.new(
-          (::YAML.load(erb_result_from_yaml_file) || {})
-        )
-      else
-        Private::HashWithSymbolKeys.new({})
-      end.freeze
+      Private::ConfigStore.instance.fetch do
+        if config_file_exists?
+          erb_result_from_yaml_file = ERB.new(File.read(config_file_path)).result
+          Private::HashWithSymbolKeys.new(
+            (::YAML.load(erb_result_from_yaml_file) || {})
+          )
+        else
+          Private::HashWithSymbolKeys.new({})
+        end.freeze
+      end
     end
 
     # @api private

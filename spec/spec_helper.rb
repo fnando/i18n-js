@@ -64,6 +64,7 @@ RSpec.configure do |config|
 
   config.after do
     FileUtils.rm_rf(temp_path)
+    I18n::JS::Private::ConfigStore.instance.flush_cache
   end
 
   config.include Helpers
