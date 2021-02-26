@@ -16,7 +16,7 @@ module I18n
           return @config if @config
 
           yield.tap do |obj|
-            raise AugumentError, "unexpected falsy object from block" unless obj
+            raise ArgumentError, "unexpected falsy object from block" unless obj
 
             @config = obj
           end
