@@ -55,8 +55,9 @@ yarn add i18n-js
 npm install i18n-js
 ```
 
-For more details, see
-[this gist](https://gist.github.com/bazzel/ecdff4718962e57c2d5569cf01d332fe).
+For more details, see:
+- [this gist](https://gist.github.com/bazzel/ecdff4718962e57c2d5569cf01d332fe)
+- https://github.com/fnando/i18n-js/issues/597
 
 #### Rails app with [Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html)
 
