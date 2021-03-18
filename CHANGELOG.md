@@ -18,6 +18,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.8.2] - 2021-03-18
+
+### Fixed
+
+- [Ruby] Stop using deprecated method  
+  (PR: https://github.com/fnando/i18n-js/pull/598)
+- [Ruby] Fix typo in error class reference  
+  (Commit: https://github.com/fnando/i18n-js/commit/cc075ad0a36e940205d0a14390379d69013d188e)
+
+
 ## [3.8.1] - 2021-02-25
 
 ### Fixed
@@ -481,7 +491,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.8.1...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.8.2...HEAD
+[3.8.2]:      https://github.com/fnando/i18n-js/compare/v3.8.1...v3.8.2
 [3.8.1]:      https://github.com/fnando/i18n-js/compare/v3.8.0...v3.8.1
 [3.8.0]:      https://github.com/fnando/i18n-js/compare/v3.7.1...v3.8.0
 [3.7.1]:      https://github.com/fnando/i18n-js/compare/v3.7.0...v3.7.1
