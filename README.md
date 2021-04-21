@@ -528,7 +528,7 @@ I18n.missingTranslation = function (scope, options) {
 };
 ```
 
-#### Option `defaultSeparator` (global) / `separator` (local)
+### Option `defaultSeparator` (global) / `separator` (local)
 
 Default separator of translation key is `.` (dot)
 Meaning `I18n.t("scope.entry")` would search for translation entry `I18n.translations[locale].scope.entry`
