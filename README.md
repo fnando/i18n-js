@@ -480,6 +480,8 @@ I18n.locales.no = function (locale) {
 };
 ```
 
+### Translation Missing Behaviour Control
+
 By default a missing translation will be displayed as
 
     [missing "name of scope" translation]
@@ -498,8 +500,10 @@ Camel case becomes lower cased text and underscores are replaced with space
 
 becomes "what is your favorite Christmas present"
 
+#### Option `missingTranslationPrefix`
+
 In order to still detect untranslated strings, you can set
-`i18n.missingTranslationPrefix` to something like:
+`I18n.missingTranslationPrefix` to something like:
 
 ```javascript
 I18n.missingTranslationPrefix = "EE: ";
@@ -514,13 +518,26 @@ And result will be:
 
 This will help you doing automated tests against your localisation assets.
 
-Some people prefer returning `null` for missing translation:
+#### Customize return when translation entry missing
+
+Some people prefer returning `null`/`undefined` for missing translation:
 
 ```javascript
-I18n.missingTranslation = function () {
+I18n.missingTranslation = function (scope, options) {
   return undefined;
 };
 ```
+
+#### Option `defaultSeparator` (global) / `separator` (local)
+
+Default separator of translation key is `.` (dot)
+Meaning `I18n.t("scope.entry")` would search for translation entry `I18n.translations[locale].scope.entry`
+Using a different separator can be done either globally or locally.
+
+Globally: `I18n.defaultSeparator = newSeparator`
+Locally: `I18n.t("full_sentences|Server Busy. Please retry later", {separator: '|'})`
+
+### Pluralization
 
 Pluralization is possible as well and by default provides English rules:
 
