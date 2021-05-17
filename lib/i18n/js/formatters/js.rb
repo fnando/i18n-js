@@ -20,7 +20,7 @@ module I18n
         end
 
         def line(locale, translations)
-          json_literal = @pretty_print ? translations : %(JSON.parse('#{translations}'))
+          json_literal = @pretty_print ? translations : %(JSON.parse('#{translations.gsub("'"){"\\'"}}'))
           if @js_extend
             %(#{@namespace}.translations["#{locale}"] = I18n.extend((#{@namespace}.translations["#{locale}"] || {}), #{json_literal});\n)
           else
