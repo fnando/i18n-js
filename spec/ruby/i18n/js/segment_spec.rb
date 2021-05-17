@@ -170,6 +170,20 @@ MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || 
       end
     end
 
+    context "when file includes escaped double quote" do
+      let(:file){ "tmp/i18n-js/%{locale}.js" }
+      let(:translations){ { en: { "a" => 'say "hello"' } } }
+
+      it "should escape double quote" do
+        file_should_exist "en.js"
+
+        expect(File.open(File.join(temp_path, "en.js")){|f| f.read}).to eql <<-EOF
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), JSON.parse('{"a":"say \\\\"hello\\\\""}'));
+        EOF
+      end
+    end
+
     context "when js_extend is true" do
       let(:js_extend){ true }
 
