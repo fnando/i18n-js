@@ -20,10 +20,11 @@ module I18n
         end
 
         def line(locale, translations)
+          json_stringified = @pretty_print ? %(`#{translations}`) : %('#{translations}')
           if @js_extend
-            %(#{@namespace}.translations["#{locale}"] = I18n.extend((#{@namespace}.translations["#{locale}"] || {}), #{translations});\n)
+            %(#{@namespace}.translations["#{locale}"] = I18n.extend((#{@namespace}.translations["#{locale}"] || {}), JSON.parse(#{json_stringified}));\n)
           else
-            %(#{@namespace}.translations["#{locale}"] = #{translations};\n)
+            %(#{@namespace}.translations["#{locale}"] = JSON.parse(#{json_stringified});\n)
           end
         end
       end

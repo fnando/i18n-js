@@ -131,8 +131,8 @@ EOS
 
         expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"test":"Test"});
-MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), {"test":"Test2"});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), JSON.parse('{"test":"Test"}'));
+MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), JSON.parse('{"test":"Test2"}'));
         EOF
       end
     end
@@ -146,12 +146,12 @@ MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || 
 
         expect(File.open(File.join(temp_path, "en.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"test":"Test"});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), JSON.parse('{"test":"Test"}'));
         EOF
 
         expect(File.open(File.join(temp_path, "fr.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), {"test":"Test2"});
+MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), JSON.parse('{"test":"Test2"}'));
         EOF
       end
     end
@@ -166,7 +166,7 @@ MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || 
 
         expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"a":"Test","b":"Test"});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), JSON.parse('{"a":"Test","b":"Test"}'));
         EOF
       end
     end
@@ -181,7 +181,7 @@ MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || 
 
         expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = {"a":"Test","b":"Test"};
+MyNamespace.translations["en"] = JSON.parse('{"a":"Test","b":"Test"}');
         EOF
       end
     end
@@ -196,7 +196,7 @@ MyNamespace.translations["en"] = {"a":"Test","b":"Test"};
 
         expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"a":"Test","b":"Test"});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), JSON.parse('{"a":"Test","b":"Test"}'));
         EOF
       end
     end
@@ -211,7 +211,7 @@ MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || 
 
         expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"b":"Test","a":"Test"});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), JSON.parse('{"b":"Test","a":"Test"}'));
         EOF
       end
     end
