@@ -1,14 +1,15 @@
 require "i18n/js/formatters/base"
 
-JSON_ESCAPE_MAP = {
-  "'" => "\\'",
-  "\\" => "\\\\"
-}
-
 module I18n
   module JS
     module Formatters
       class JS < Base
+        JSON_ESCAPE_MAP = {
+          "'" => "\\'",
+          "\\" => "\\\\"
+        }.freeze
+        private_constant :JSON_ESCAPE_MAP
+
         def format(translations)
           contents = header
           translations.each do |locale, translations_for_locale|
