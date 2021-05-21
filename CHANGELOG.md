@@ -18,6 +18,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.8.3]
+
+### Changed
+
+- [Ruby] Generate translations in JS as `JSON.parse` instead of object literal for performance  
+  (PR: https://github.com/fnando/i18n-js/pull/605)  
+  (PR: https://github.com/fnando/i18n-js/pull/606)  
+  (PR: https://github.com/fnando/i18n-js/pull/607)  
+
+
 ## [3.8.2] - 2021-03-18
 
 ### Fixed
@@ -491,7 +501,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.8.2...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.8.3...HEAD
+[3.8.3]:      https://github.com/fnando/i18n-js/compare/v3.8.2...v3.8.3
 [3.8.2]:      https://github.com/fnando/i18n-js/compare/v3.8.1...v3.8.2
 [3.8.1]:      https://github.com/fnando/i18n-js/compare/v3.8.0...v3.8.1
 [3.8.0]:      https://github.com/fnando/i18n-js/compare/v3.7.1...v3.8.0
