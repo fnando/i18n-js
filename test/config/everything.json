@@ -1,0 +1,8 @@
+{
+  "translations": [
+    {
+      "file": "test/output/everything.json",
+      "patterns": ["*"]
+    }
+  ]
+}

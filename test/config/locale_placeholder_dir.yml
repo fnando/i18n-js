@@ -1,0 +1,5 @@
+---
+translations:
+  - file: test/output/:locale/translations.json
+    patterns:
+      - "*"

@@ -1,0 +1,8 @@
+---
+translations:
+  - file: test/output/es.json
+    patterns:
+      - "es.*"
+  - file: test/output/pt.json
+    patterns:
+      - "pt.*"

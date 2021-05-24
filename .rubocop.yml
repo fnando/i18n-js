@@ -1,0 +1,12 @@
+---
+inherit_gem:
+  rubocop-fnando: .rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 2.6
+  NewCops: enable
+
+Naming/FileName:
+  Exclude:
+    - lib/i18n-js.rb
+    - lib/guard/i18n-js.rb

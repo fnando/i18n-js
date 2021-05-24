@@ -1,0 +1,8 @@
+msgid "bye"
+msgstr "adios"
+
+msgid "bunny rabbit adventure"
+msgstr "conejito conejo aventura"
+
+msgid "time for bed!"
+msgstr "hora de acostarse!"
