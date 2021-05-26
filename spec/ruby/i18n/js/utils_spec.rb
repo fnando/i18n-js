@@ -103,4 +103,36 @@ describe I18n::JS::Utils do
       expect(described_class.scopes_match?([:a, :b, :c], [:a, '*', '*'])).to eql true
     end
   end
+
+  describe ".deep_remove_procs" do
+    let(:proc_obj) { proc {} }
+    let(:hash_with_proc) do
+      {
+        :a => :b,
+        :c => proc_obj,
+        :d => {
+          :e => proc_obj,
+          :f => :g,
+        }
+      }
+    end
+    subject { described_class.deep_remove_procs(hash_with_proc) }
+
+    it "performs a deep keys sort without changing the original hash" do
+      should eql({
+        :a => :b,
+        :d => {
+          :f => :g,
+        }
+      })
+      expect(hash_with_proc).to eql({
+        :a => :b,
+        :c => proc_obj,
+        :d => {
+          :e => proc_obj,
+          :f => :g,
+        }
+      })
+    end
+  end
 end

@@ -73,6 +73,19 @@ module I18n
           seed[key] = value.is_a?(Hash) ? deep_key_sort(value) : value
         end
       end
+
+      def self.deep_remove_procs(hash)
+        # procs exist in `i18n.plural.rule` as pluralizer
+        # But having it in translation causes the exported JS/JSON changes every time
+        # https://github.com/ruby-i18n/i18n/blob/v1.8.7/lib/i18n/backend/pluralization.rb#L51
+        hash.keys.
+          each_with_object({}) do |key, seed|
+          value = hash[key]
+          next if value.is_a?(Proc)
+
+          seed[key] = value.is_a?(Hash) ? deep_remove_procs(value) : value
+        end
+      end
     end
   end
 end
