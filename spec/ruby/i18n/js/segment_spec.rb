@@ -257,5 +257,30 @@ MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || 
         EOF
       end
     end
+
+    context "when translation entries contain procs" do
+      let(:translations) do
+        {
+          en: {
+            "test" => "Test",
+            "i18n" => {"plural" => {"rule" => proc {} }},
+          },
+          fr: {
+            "test" => "Test2",
+            "i18n" => {"plural" => {"rule" => proc {} }},
+          },
+        }
+      end
+
+      it "should write files without procs or their string representations" do
+        file_should_exist "segment.js"
+
+        expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
+MyNamespace.translations || (MyNamespace.translations = {});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"i18n":{"plural":{}},"test":"Test"});
+MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), {"i18n":{"plural":{}},"test":"Test2"});
+        EOF
+      end
+    end
   end
 end
