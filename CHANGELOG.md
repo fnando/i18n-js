@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Nothing
 
 
+## [3.8.4]
+
+### Fixed
+
+- [Ruby] Fix proc exported to JS/JSON file(s) causing issues like git merge conflicts  
+  (PR: https://github.com/fnando/i18n-js/pull/591)
+
+
 ## [3.8.3]
 
 ### Changed
@@ -501,7 +509,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.8.3...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.8.4...HEAD
+[3.8.4]:      https://github.com/fnando/i18n-js/compare/v3.8.3...v3.8.4
 [3.8.3]:      https://github.com/fnando/i18n-js/compare/v3.8.2...v3.8.3
 [3.8.2]:      https://github.com/fnando/i18n-js/compare/v3.8.1...v3.8.2
 [3.8.1]:      https://github.com/fnando/i18n-js/compare/v3.8.0...v3.8.1
