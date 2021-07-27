@@ -277,8 +277,8 @@ MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || 
 
         expect(File.open(File.join(temp_path, "segment.js")){|f| f.read}).to eql <<-EOF
 MyNamespace.translations || (MyNamespace.translations = {});
-MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), {"i18n":{"plural":{}},"test":"Test"});
-MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), {"i18n":{"plural":{}},"test":"Test2"});
+MyNamespace.translations["en"] = I18n.extend((MyNamespace.translations["en"] || {}), JSON.parse('{"i18n":{"plural":{}},"test":"Test"}'));
+MyNamespace.translations["fr"] = I18n.extend((MyNamespace.translations["fr"] || {}), JSON.parse('{"i18n":{"plural":{}},"test":"Test2"}'));
         EOF
       end
     end
