@@ -271,6 +271,15 @@ You must disable this feature by setting the option to `false`.
 To find more examples on how to use the configuration file please refer to the
 tests.
 
+#### Available locales
+
+Setting the `js_available_locales` option allows to generate translations not only
+for `I18n.available_locales` locales (which we use by default). Example:
+
+```yaml
+js_available_locales: ["de", "en"]
+```
+
 #### Namespace
 
 Setting the `namespace` option will change the namespace of the output
