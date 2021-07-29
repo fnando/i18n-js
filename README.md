@@ -273,8 +273,10 @@ tests.
 
 #### Available locales
 
-Setting the `js_available_locales` option allows to generate translations not only
-for `I18n.available_locales` locales (which we use by default). Example:
+By specifying option `js_available_locales` with a list of locales, this list
+would be used instead of default `I18n.available_locales` to generate translations.
+
+Example:
 
 ```yaml
 js_available_locales: ["de", "en"]
