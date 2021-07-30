@@ -81,7 +81,7 @@ module I18n
 
     # deep_merge! given result with result for fallback locale
     def self.merge_with_fallbacks!(result)
-      I18n.available_locales.each do |locale|
+      js_available_locales.each do |locale|
         fallback_locales = FallbackLocales.new(fallbacks, locale)
         fallback_locales.each do |fallback_locale|
           # `result[fallback_locale]` could be missing
@@ -183,7 +183,7 @@ module I18n
         #
         # So the input is wrapped by our class for better `#slice`
         Private::HashWithSymbolKeys.new(translations).
-          slice(*::I18n.available_locales).
+          slice(*::I18n::JS.js_available_locales).
           to_h
       end
     end
@@ -211,6 +211,16 @@ module I18n
         # default value
         true
       end
+    end
+
+    # Get all available locales.
+    #
+    # @return [Array<Symbol>] the locales.
+    def self.js_available_locales
+      config.fetch(:js_available_locales) do
+        # default value
+        I18n.available_locales
+      end.map(&:to_sym)
     end
 
     def self.sort_translation_keys?

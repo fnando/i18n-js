@@ -307,21 +307,30 @@ EOS
       expect(subject[:de][:null_test]).to eql(nil)
     end
 
-    context "when given locale is in `I18n.available_locales` but its translation is missing" do
+    context 'when given locale is in `I18n.available_locales` but its translation is missing' do
       subject { translations[:fr][:fallback_test] }
 
-      let(:new_locale) { :pirate }
-      let!(:old_available_locales) { I18n.config.available_locales }
-      let!(:new_available_locales) { I18n.config.available_locales + [new_locale] }
+      let(:available_locales) { %i[fr pirate] }
+
       before do
-        I18n.config.available_locales = new_available_locales
-        set_config "js_file_per_locale_with_fallbacks_as_locale_without_fallback_translations.yml"
-      end
-      after do
-        I18n.config.available_locales = old_available_locales
+        allow(::I18n).to receive(:available_locales).and_return(available_locales)
+        set_config 'js_file_per_locale_with_fallbacks_as_locale_without_fallback_translations.yml'
       end
 
-      it {should eql(nil)}
+      it { should eql(nil) }
+    end
+
+    context 'when given locale is in `.js_available_locales` but its translation is missing' do
+      subject { translations[:fr][:fallback_test] }
+
+      let(:available_locales) { %i[fr pirate] }
+
+      before do
+        allow(described_class).to receive(:js_available_locales).and_return(available_locales)
+        set_config 'js_file_per_locale_with_fallbacks_as_locale_without_fallback_translations.yml'
+      end
+
+      it { should eql(nil) }
     end
 
     context "with I18n::Fallbacks enabled" do
@@ -385,27 +394,67 @@ EOS
     end
   end
 
-  context "I18n.available_locales" do
+  describe '.js_available_locales' do
+    subject { described_class.js_available_locales }
 
-    context "when I18n.available_locales is not set" do
-      it "should allow all locales" do
-        result = I18n::JS.scoped_translations("*.admin.*.title")
+    let(:results) { described_class.scoped_translations('*.admin.*.title') }
+    let(:result)  { ->(locale) { results[locale][:admin][:show][:title] } }
 
-        expect(result[:en][:admin][:show][:title]).to eql("Show")
-        expect(result[:fr][:admin][:show][:title]).to eql("Visualiser")
-        expect(result[:ja][:admin][:show][:title]).to eql("Ignore me")
+    context 'when I18n.available_locales is not set' do
+      it { expect(subject).to eq ::I18n.available_locales }
+
+      it 'should allow all locales' do
+        expect(result.call(:en)).to eql('Show')
+        expect(result.call(:fr)).to eql('Visualiser')
+        expect(result.call(:ja)).to eql('Ignore me')
       end
     end
 
-    context "when I18n.available_locales is set" do
+    context 'when I18n.available_locales is set' do
+      let(:available_locales) { %i[en fr] }
+
+      before { allow(::I18n).to receive(:available_locales).and_return(available_locales) }
+
+      it { expect(subject).to eq available_locales }
+
+      it 'should ignore non-valid locales' do
+        expect(result.call(:en)).to eql('Show')
+        expect(result.call(:fr)).to eql('Visualiser')
+        expect(results).not_to include(:ja)
+      end
+
+      context 'when :js_available_locales set in config' do
+        before { set_config 'js_available_locales_custom.yml' }
+
+        it { expect(subject).to eq %i[en foo] }
+
+        it 'should ignore non-valid locales' do
+          expect(result.call(:en)).to eql('Show')
+          expect(results).not_to include(:fr, :ja)
+        end
+      end
+    end
+  end
+
+  context 'I18n.available_locales' do
+    let(:results) { described_class.scoped_translations('*.admin.*.title') }
+    let(:result)  { ->(locale) { results[locale][:admin][:show][:title] } }
+
+    context 'when I18n.available_locales is not set' do
+      it 'should allow all locales' do
+        expect(result.call(:en)).to eql('Show')
+        expect(result.call(:fr)).to eql('Visualiser')
+        expect(result.call(:ja)).to eql('Ignore me')
+      end
+    end
+
+    context 'when I18n.available_locales is set' do
       before { allow(::I18n).to receive(:available_locales){ [:en, :fr] } }
 
-      it "should ignore non-valid locales" do
-        result = I18n::JS.scoped_translations("*.admin.*.title")
-
-        expect(result[:en][:admin][:show][:title]).to eql("Show")
-        expect(result[:fr][:admin][:show][:title]).to eql("Visualiser")
-        expect(result.keys.include?(:ja)).to eql(false)
+      it 'should ignore non-valid locales' do
+        expect(result.call(:en)).to eql('Show')
+        expect(result.call(:fr)).to eql('Visualiser')
+        expect(results).not_to include(:ja)
       end
     end
   end

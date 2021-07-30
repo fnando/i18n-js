@@ -33,7 +33,7 @@ module I18n
       # Saves JSON file containing translations
       def save!
         if @file =~ LOCALE_INTERPOLATOR
-          I18n.available_locales.each do |locale|
+          I18n::JS.js_available_locales.each do |locale|
             write_file(file_for_locale(locale), @translations.slice(locale))
           end
         else

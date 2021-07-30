@@ -7,7 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Nothing
+- [Ruby] Allow to set custom locales instead of using only `I18n.available_locales`.
+  (PR: https://github.com/fnando/i18n-js/pull/617)
 
 ### Changed
 
