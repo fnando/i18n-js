@@ -7,8 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- [Ruby] Allow to set custom locales instead of using only `I18n.available_locales`.
-  (PR: https://github.com/fnando/i18n-js/pull/617)
+- Nothing
 
 ### Changed
 
@@ -17,6 +16,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Nothing
+
+
+## [3.9.0]
+
+### Added
+
+- [Ruby] Allow to set custom locales instead of using only `I18n.available_locales`.
+  (PR: https://github.com/fnando/i18n-js/pull/617)
 
 
 ## [3.8.4]
@@ -510,7 +517,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.8.4...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.9.0...HEAD
+[3.9.0]:      https://github.com/fnando/i18n-js/compare/v3.8.4...v3.9.0
 [3.8.4]:      https://github.com/fnando/i18n-js/compare/v3.8.3...v3.8.4
 [3.8.3]:      https://github.com/fnando/i18n-js/compare/v3.8.2...v3.8.3
 [3.8.2]:      https://github.com/fnando/i18n-js/compare/v3.8.1...v3.8.2
