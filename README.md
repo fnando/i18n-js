@@ -96,7 +96,7 @@ Now you can run `guard start -i`.
 
 ### Using listen
 
-Create a file under `config/environments/development.rb` with the following content:
+Add the following to `config/environments/development.rb` file:
 
 ```ruby
 config.after_initialize do
