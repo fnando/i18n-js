@@ -96,14 +96,16 @@ Now you can run `guard start -i`.
 
 ### Using listen
 
-Create a file under `config/initializers/i18n.rb` with the following content:
+Create a file under `config/environments/development.rb` with the following content:
 
 ```ruby
-# frozen_string_literal: true
-
-require "i18n-js/listen"
-
-I18nJS.listen
+config.after_initialize do
+  require "i18n-js/listen"
+  I18nJS.listen(
+    config_file: Rails.root.join("config/i18n.yml"), 
+    locales_dir: Rails.root.join("config/locales")
+  )
+end
 ```
 
 The code above will watch for changes based on `config/i18n.yml` and
