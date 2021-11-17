@@ -992,18 +992,21 @@ http://2ality.com/2012/07/large-integers.html
 Feel free to find & discuss possible solution(s) at issue
 [#511](https://github.com/fnando/i18n-js/issues/511)
 
-### Only works with `Simple` backend
+### May not work with all backend implementations
 
-If you set `I18n.backend` to something other than the default `Simple` backend,
-you will likely get an exception like this:
+I18n backend implementations have to conform to a specific interface to work
+with i18n-js. For backends that do not conform to the interface, you will likely
+get an exception like this:
 
 ```
 Undefined method 'initialized?' for <your backend class>
 ```
 
-For now, i18n-js is only compatible with the `Simple` backend. If you need a
-more sophisticated backend for your rails application, like
-`I18n::Backend::ActiveRecord`, you can setup i18n-js to get translations from a
+For now, i18n-js is compatible with the `Simple` backend and with
+`I18n::Backend::ActiveRecord` (>= 0.4.0).
+
+If you need a more sophisticated backend for your rails application that doesn't
+implement the required methods, you can setup i18n-js to get translations from a
 separate `Simple` backend, by adding the following in an initializer:
 
 ```ruby
