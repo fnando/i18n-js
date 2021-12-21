@@ -3,7 +3,7 @@ module I18n
     module Utils
       PLURAL_KEYS = %i[zero one two few many other].freeze
 
-      # Based on deep_merge by Stefan Rusterholz, see <http://www.ruby-forum.com/topic/142809>.
+      # Based on deep_merge by Stefan Rusterholz, see <https://www.ruby-forum.com/topic/142809>.
       # This method is used to handle I18n fallbacks. Given two equivalent path nodes in two locale trees:
       # 1. If the node in the current locale appears to be an I18n pluralization (:one, :other, etc.),
       #    use the node, but merge in any missing/non-nil keys from the fallback (default) locale.
