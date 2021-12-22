@@ -269,23 +269,23 @@
     }
 
     // Locale code format 1:
-    // According to RFC4646 (http://www.ietf.org/rfc/rfc4646.txt)
+    // According to RFC4646 (https://www.ietf.org/rfc/rfc4646.txt)
     // language codes for Traditional Chinese should be `zh-Hant`
     //
     // But due to backward compatibility
     // We use older version of IETF language tag
-    // @see http://www.w3.org/TR/html401/struct/dirlang.html
-    // @see http://en.wikipedia.org/wiki/IETF_language_tag
+    // @see https://www.w3.org/TR/html401/struct/dirlang.html
+    // @see https://en.wikipedia.org/wiki/IETF_language_tag
     //
     // Format: `language-code = primary-code ( "-" subcode )*`
     //
     // primary-code uses ISO639-1
-    // @see http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-    // @see http://www.iso.org/iso/home/standards/language_codes.htm
+    // @see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+    // @see https://www.iso.org/iso/home/standards/language_codes.htm
     //
     // subcode uses ISO 3166-1 alpha-2
-    // @see http://en.wikipedia.org/wiki/ISO_3166
-    // @see http://www.iso.org/iso/country_codes.htm
+    // @see https://en.wikipedia.org/wiki/ISO_3166
+    // @see https://www.iso.org/iso/country_codes.htm
     //
     // @note
     //   subcode can be in upper case or lower case

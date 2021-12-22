@@ -33,7 +33,7 @@ if (!Array.prototype.indexOf) {
 }
 
 // Production steps of ECMA-262, Edition 5, 15.4.4.18
-// Reference: http://es5.github.com/#x15.4.4.18
+// Reference: https://es5.github.com/#x15.4.4.18
 // https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach
 if ( !Array.prototype.forEach ) {
 
@@ -53,7 +53,7 @@ if ( !Array.prototype.forEach ) {
     var len = O.length >>> 0; // Hack to convert O.length to a UInt32
 
     // 4. If IsCallable(callback) is false, throw a TypeError exception.
-    // See: http://es5.github.com/#x9.11
+    // See: https://es5.github.com/#x9.11
     if ( {}.toString.call(callback) !== "[object Function]" ) {
       throw new TypeError( callback + " is not a function" );
     }
@@ -139,7 +139,7 @@ if (!Array.prototype.map) {
     var len = O.length >>> 0;
 
     // 4. If IsCallable(callback) is false, throw a TypeError exception.
-    // See: http://es5.github.com/#x9.11
+    // See: https://es5.github.com/#x9.11
     if (typeof callback !== 'function') {
       throw new TypeError(callback + ' is not a function');
     }

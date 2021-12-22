@@ -21,7 +21,7 @@ module I18n
       # https://github.com/rails/sprockets-rails/blob/master/lib/sprockets/railtie.rb
       #
       # Finisher hook is the place which should be used as border.
-      # http://guides.rubyonrails.org/configuring.html#initializers
+      # https://guides.rubyonrails.org/configuring.html#initializers
       #
       # For detail see Pull Request:
       # https://github.com/fnando/i18n-js/pull/371
