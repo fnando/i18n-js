@@ -96,15 +96,12 @@ Now you can run `guard start -i`.
 
 ### Using listen
 
-Add the following to `config/environments/development.rb` file:
+Create a file under `config/initializers/i18n.rb` with the following content:
 
 ```ruby
-config.after_initialize do
+Rails.application.config.after_initialize do
   require "i18n-js/listen"
-  I18nJS.listen(
-    config_file: Rails.root.join("config/i18n.yml"), 
-    locales_dir: Rails.root.join("config/locales")
-  )
+  I18nJS.listen
 end
 ```
 
