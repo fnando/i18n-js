@@ -115,6 +115,31 @@ You're done exporting files, now what? Well, go to
 [i18n](https://github.com/fnando/i18n) to discover how to use the NPM package
 that loads all the exported translation.
 
+### FAQ
+
+#### How can I export translations without having a database around?
+
+Some people may have a build process using something like Docker that don't
+necessarily have a database available. In this case, you may define your own
+loading file by using something like
+`i18n export --require ./config/i18n_export.rb`, where `i18n_export.rb` may look
+like this:
+
+```ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "rails"
+require "active_support/railtie"
+require "action_view/railtie"
+
+I18n.load_path += Dir["./config/locales/**/*.yml"]
+```
+
+Notice that you may not need to load ActiveSupport and ActionView lines, or
+even may need to add additional requires for other libs. With this approach you
+have full control on what's going to be loaded.
+
 ## Maintainer
 
 - [Nando Vieira](https://github.com/fnando)
