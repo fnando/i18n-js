@@ -10,3 +10,6 @@ Naming/FileName:
   Exclude:
     - lib/i18n-js.rb
     - lib/guard/i18n-js.rb
+
+Metrics:
+  Enabled: false

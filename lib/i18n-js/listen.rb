@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-gem "listen"
-require "listen"
-require "i18n-js"
-
 module I18nJS
   class << self
     attr_accessor :started
@@ -15,6 +11,10 @@ module I18nJS
   )
     return unless Rails.env.development?
     return if started
+
+    gem "listen"
+    require "listen"
+    require "i18n-js"
 
     self.started = true
 
@@ -43,7 +43,7 @@ module I18nJS
     @logger ||= ActiveSupport::TaggedLogging.new(Rails.logger)
   end
 
-  def self.listener(config_file, locales_dir) # rubocop:disable Metrics/MethodLength
+  def self.listener(config_file, locales_dir)
     paths = [File.dirname(config_file), locales_dir]
 
     Listen.to(*paths) do |changed, added, removed|
@@ -58,6 +58,7 @@ module I18nJS
 
       debug(changes.map {|key, value| "#{key}=#{value.inspect}" }.join(", "))
 
+      ::I18n.backend.reload!
       I18nJS.call(config_file: config_file)
     end
   end
