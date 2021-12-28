@@ -5,6 +5,8 @@ inherit_gem:
 AllCops:
   TargetRubyVersion: 2.6
   NewCops: enable
+  Exclude:
+    - tmp/**/*
 
 Naming/FileName:
   Exclude:
