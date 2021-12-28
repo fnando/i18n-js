@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+require_relative "../i18n-js"
+require_relative "cli/command"
+require_relative "cli/ui"
+require_relative "cli/init_command"
+require_relative "cli/version_command"
+require_relative "cli/export_command"
+
 module I18nJS
   class CLI
     attr_reader :ui

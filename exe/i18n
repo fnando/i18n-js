@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative "../lib/i18n-js"
+require_relative "../lib/i18n-js/cli"
 I18nJS::CLI.new(argv: ARGV, stdout: $stdout, stderr: $stderr).call

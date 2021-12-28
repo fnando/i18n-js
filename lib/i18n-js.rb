@@ -7,14 +7,8 @@ require "glob"
 require "fileutils"
 require "optparse"
 
-require_relative "./i18n-js/cli"
-require_relative "./i18n-js/cli/command"
-require_relative "./i18n-js/cli/ui"
-require_relative "./i18n-js/cli/init_command"
-require_relative "./i18n-js/cli/version_command"
-require_relative "./i18n-js/cli/export_command"
-require_relative "./i18n-js/schema"
-require_relative "./i18n-js/version"
+require_relative "i18n-js/schema"
+require_relative "i18n-js/version"
 
 module I18nJS
   MissingConfigError = Class.new(StandardError)

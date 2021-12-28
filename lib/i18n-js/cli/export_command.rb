@@ -32,7 +32,7 @@ module I18nJS
         end
       end
 
-      command do # rubocop:disable Metrics/BlockLength
+      command do
         set_defaults!
 
         ui.stdout_print("=> config file:", options[:config_file].inspect)
