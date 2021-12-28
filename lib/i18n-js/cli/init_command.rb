@@ -23,7 +23,9 @@ module I18nJS
       end
 
       command do
-        file_path = File.expand_path(options[:config_file])
+        file_path = File.expand_path(
+          options.fetch(:config_file, "config/i18n.yml")
+        )
 
         if File.file?(file_path)
           ui.fail_with("ERROR: #{file_path} already exists!")

@@ -17,6 +17,23 @@ class InitCommandTest < Minitest::Test
     assert_stdout_includes "Usage: i18n init [options]"
   end
 
+  test "initializes project with default config file" do
+    FileUtils.mkdir_p("./test/output")
+
+    Dir.chdir("test/output") do
+      cli = I18nJS::CLI.new(
+        argv: %w[init],
+        stdout: stdout,
+        stderr: stderr
+      )
+
+      assert_exit_code(0) { cli.call }
+    end
+
+    assert_file "test/output/config/i18n.yml"
+    assert_equal "", stdout_text
+  end
+
   test "initializes project" do
     cli = I18nJS::CLI.new(
       argv: %w[init --config test/output/i18n.yml],
