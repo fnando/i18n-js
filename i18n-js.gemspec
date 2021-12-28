@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = spec.summary
   spec.license     = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
+  spec.metadata = {"rubygems_mfa_required" => "true"}
 
   github_url = "https://github.com/fnando/i18n-js"
   github_tree_url = "#{github_url}/tree/v#{spec.version}"
