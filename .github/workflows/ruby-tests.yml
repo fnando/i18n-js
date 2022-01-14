@@ -2,8 +2,10 @@
 name: ruby-tests
 
 on:
-  pull_request:
+  pull_request_target:
   push:
+    branches:
+      - main
   workflow_dispatch:
     inputs: {}
 
@@ -14,9 +16,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["2.7", "3.0"]
+        ruby: ["2.7", "3.0", "3.1"]
         gemfile:
           - Gemfile
+    if: |
+      github.actor == 'dependabot[bot]' && github.event_name == 'pull_request_target' ||
+      github.actor != 'dependabot[bot]'
 
     steps:
       - uses: actions/checkout@v1
