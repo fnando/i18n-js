@@ -5,7 +5,7 @@ on:
   pull_request_target:
   push:
     branches:
-      - main
+      - v4
   workflow_dispatch:
     inputs: {}
 
