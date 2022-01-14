@@ -1,7 +1,6 @@
 # i18n-js
 
 [![Tests](https://github.com/fnando/i18n-js/workflows/ruby-tests/badge.svg)](https://github.com/fnando/i18n-js)
-[![Code Climate](https://codeclimate.com/github/fnando/i18n-js/badges/gpa.svg)](https://codeclimate.com/github/fnando/i18n-js)
 [![Gem](https://img.shields.io/gem/v/i18n-js.svg)](https://rubygems.org/gems/i18n-js)
 [![Gem](https://img.shields.io/gem/dt/i18n-js.svg)](https://rubygems.org/gems/i18n-js)
 
@@ -72,6 +71,51 @@ both `--config` and `--require`.
 
 ## Automatically export translations
 
+### Using watchman
+
+Create a script at `bin/i18n-watch`.
+
+```bash
+#!/usr/bin/env bash
+
+root=`pwd`
+
+watchman watch-del "$root"
+watchman watch-project "$root"
+watchman trigger-del "$root" i18n
+
+watchman -j <<-JSON
+[
+  "trigger",
+  "$root",
+  {
+    "name": "i18n",
+    "expression": [
+      "anyof",
+      ["match", "config/locales/**/*.yml", "wholename"],
+      ["match", "config/i18n.yml", "wholename"]
+    ],
+    "command": ["i18n", "export"]
+  }
+]
+JSON
+
+# If you're running this through Foreman,
+# the uncomment the following lines:
+# while true; do
+#   sleep 1
+# done
+```
+
+Make it executable with `chmod +x bin/i18n-watch`. To watch for changes, run
+`./bin/i18n-watch`. If you're using Foreman, make sure you uncommented the lines
+that keep the process running (`while..`), and add something like the following
+line to your Procfile:
+
+```
+i18n: ./bin/i18n-watch
+```
+
 ### Using guard
 
 Install [guard](https://rubygems.org/packages/guard) and
@@ -136,9 +180,9 @@ require "action_view/railtie"
 I18n.load_path += Dir["./config/locales/**/*.yml"]
 ```
 
-Notice that you may not need to load ActiveSupport and ActionView lines, or
-even may need to add additional requires for other libs. With this approach you
-have full control on what's going to be loaded.
+Notice that you may not need to load ActiveSupport and ActionView lines, or even
+may need to add additional requires for other libs. With this approach you have
+full control on what's going to be loaded.
 
 ## Maintainer
 
