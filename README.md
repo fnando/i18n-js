@@ -11,7 +11,6 @@
   <a href="https://badge.fury.io/rb/i18n-js"><img src="https://img.shields.io/gem/v/i18n-js.svg" alt="Gem Version"></a>
   <a href="https://www.npmjs.com/package/i18n-js"><img src="https://img.shields.io/npm/v/i18n-js.svg" alt="npm"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://travis-ci.org/fnando/i18n-js"><img src="https://img.shields.io/travis/fnando/i18n-js.svg" alt="Build Status"></a>
   <a href="https://coveralls.io/r/fnando/i18n-js"><img src="https://img.shields.io/coveralls/fnando/i18n-js.svg" alt="Coverage Status"></a>
   <a href="https://gitter.im/fnando/i18n-js"><img src="https://img.shields.io/badge/gitter-join%20chat-1dce73.svg" alt="Gitter"></a>
 </p>
