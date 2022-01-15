@@ -1,14 +1,27 @@
-# i18n-js
+<p align="center">
+  <img width="250" height="58" src="https://github.com/fnando/i18n-js/raw/main/i18njs.png" alt="i18n.js">
+</p>
 
-[![Tests](https://github.com/fnando/i18n-js/workflows/ruby-tests/badge.svg)](https://github.com/fnando/i18n-js)
-[![Gem](https://img.shields.io/gem/v/i18n-js.svg)](https://rubygems.org/gems/i18n-js)
-[![Gem](https://img.shields.io/gem/dt/i18n-js.svg)](https://rubygems.org/gems/i18n-js)
+<p align="center">
+  Export <a href="https://rubygems.org/gems/i18n">i18n</a> translations to JSON.
+  <br>
+  A perfect fit if you want to export translations to JavaScript.
+</p>
 
-Export [i18n](https://rubygems.org/gems/i18n) translations to JSON. A perfect
-fit if you want to export translations to JavaScript.
+<p align="center">
+  <small>
+    Oh, you don't use Ruby? No problem! You can still use i18n-js
+    <br>
+    and the 
+    <a href="https://www.npmjs.com/package/i18n-js/v/next">companion JavaScript package</a>.
+  </small>
+</p>
 
-Oh, you don't use Ruby? No problem! You can still use i18n-js and the
-[companion JavaScript package](https://npmjs.com/package/i18n-js).
+<p align="center">
+  <a href="https://github.com/fnando/i18n-js"><img src="https://github.com/fnando/i18n-js/workflows/ruby-tests/badge.svg" alt="Tests"></a>
+  <a href="https://rubygems.org/gems/i18n-js"><img src="https://img.shields.io/gem/v/i18n-js.svg" alt="Gem"></a>
+  <a href="https://rubygems.org/gems/i18n-js"><img src="https://img.shields.io/gem/dt/i18n-js.svg" alt="Gem"></a>
+</p>
 
 ## Installation
 
