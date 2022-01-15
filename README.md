@@ -23,6 +23,8 @@
   <a href="https://rubygems.org/gems/i18n-js"><img src="https://img.shields.io/gem/dt/i18n-js.svg" alt="Gem"></a>
 </p>
 
+![This branch contains the code for v4, our next major release.](https://messages-svg.herokuapp.com/warning.svg?message=This%20branch%20contains%20the%20code%20for%20v4%2C%20our%20next%20major%20release.)
+
 ## Installation
 
 ```bash
