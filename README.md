@@ -149,7 +149,7 @@ guard(:"i18n-js",
 end
 ```
 
-If you files in a different location, the remember to configure file paths
+If your files are located in a different path, remember to configure file paths
 accordingly.
 
 Now you can run `guard start -i`.
