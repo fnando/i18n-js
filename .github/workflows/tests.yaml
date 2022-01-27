@@ -42,6 +42,7 @@ jobs:
           - gemfiles/i18n_1_6.gemfile
           - gemfiles/i18n_1_7.gemfile
           - gemfiles/i18n_1_8.gemfile
+          - gemfiles/i18n_1_9.gemfile
         allow_failures:
           - false
         include:
