@@ -26,7 +26,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   (PR: https://github.com/fnando/i18n-js/pull/638)
 
 
-## [3.9.0]
+## [3.9.0] - 2021-07-30
 
 ### Added
 
@@ -34,7 +34,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   (PR: https://github.com/fnando/i18n-js/pull/617)
 
 
-## [3.8.4]
+## [3.8.4] - 2021-07-27
 
 ### Fixed
 
@@ -42,7 +42,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   (PR: https://github.com/fnando/i18n-js/pull/591)
 
 
-## [3.8.3]
+## [3.8.3] - 2021-05-21
 
 ### Changed
 
