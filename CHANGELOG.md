@@ -18,6 +18,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Nothing
 
 
+## [3.9.1] - 2022-02-08
+
+### Changed
+
+- [Ruby] Allow rails 7
+  (PR: https://github.com/fnando/i18n-js/pull/638)
+
+
 ## [3.9.0]
 
 ### Added
@@ -517,7 +525,8 @@ And today is not April Fools' Day
 
 
 
-[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.9.0...HEAD
+[Unreleased]: https://github.com/fnando/i18n-js/compare/v3.9.1...HEAD
+[3.9.1]:      https://github.com/fnando/i18n-js/compare/v3.9.0...v3.9.1
 [3.9.0]:      https://github.com/fnando/i18n-js/compare/v3.8.4...v3.9.0
 [3.8.4]:      https://github.com/fnando/i18n-js/compare/v3.8.3...v3.8.4
 [3.8.3]:      https://github.com/fnando/i18n-js/compare/v3.8.2...v3.8.3
