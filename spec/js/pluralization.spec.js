@@ -148,6 +148,15 @@ describe("Pluralization", function(){
     expect(I18n.p(5, "inbox", { count: 5 })).toEqual('You have 5 messages');
   });
 
+  it("fallback to default locale when I18n.fallbacks is enabled and value is null", function() {
+    I18n.locale = "pt-BR";
+    I18n.fallbacks = true;
+    I18n.translations["pt-BR"].inbox = null;
+    expect(I18n.p(0, "inbox", { count: 0 })).toEqual("You have no messages");
+    expect(I18n.p(1, "inbox", { count: 1 })).toEqual("You have 1 message");
+    expect(I18n.p(5, "inbox", { count: 5 })).toEqual("You have 5 messages");
+  });
+
   it("fallback to 'other' scope", function() {
     I18n.locale = "pt-BR";
     I18n.fallbacks = true;

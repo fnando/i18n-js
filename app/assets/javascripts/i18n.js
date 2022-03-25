@@ -433,7 +433,7 @@
       , pluralizerKey
       , message;
 
-    if (isObject(translations)) {
+    if (translations && isObject(translations)) {
       while (pluralizerKeys.length) {
         pluralizerKey = pluralizerKeys.shift();
         if (isSet(translations[pluralizerKey])) {
