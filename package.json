@@ -1,6 +1,6 @@
 {
   "name": "i18n-js",
-  "version": "3.8.0",
+  "version": "3.9.2",
   "description": "A javascript library similar to Ruby on Rails i18n gem",
   "author": "Nando Vieira",
   "license": "MIT",
