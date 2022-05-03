@@ -155,6 +155,21 @@ describe("Translate", function(){
       expect(actual).toEqual("Hello stranger!");
     });
 
+    it("uses scope provided in defaults if scope as an array doesn't exist", function() {
+      actual = I18n.translate(["greetings", "monster"], {
+        defaults: [{ scope: "greetings.stranger" }]
+      });
+      expect(actual).toEqual("Hello stranger!");
+    });
+
+    it("uses scope provided in defaults if scope with a base scope doesn't exist", function() {
+      actual = I18n.translate("monster", {
+        defaults: [{ scope: "greetings.stranger" }],
+        scope: "greetings"
+      });
+      expect(actual).toEqual("Hello stranger!");
+    });
+
     it("continues to fallback until a scope is found", function() {
       var defaults = [{scope: "foo"}, {scope: "hello"}];
 
