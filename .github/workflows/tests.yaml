@@ -82,6 +82,7 @@ jobs:
           - 10
           - 12
           - 14
+          - 16
     runs-on: ${{ matrix.os }}-latest
     steps:
       - name: Checkout
