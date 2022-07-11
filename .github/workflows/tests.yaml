@@ -46,12 +46,13 @@ jobs:
           - gemfiles/i18n_1_8.gemfile
           - gemfiles/i18n_1_9.gemfile
           - gemfiles/i18n_1_10.gemfile
+          - gemfiles/i18n_1_11.gemfile
         allow_failures:
           - false
         include:
           - os: ubuntu
             ruby: ruby-head
-            gemfile: gemfiles/i18n_1_8.gemfile
+            gemfile: gemfiles/i18n_1_11.gemfile
             allow_failures: true
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
