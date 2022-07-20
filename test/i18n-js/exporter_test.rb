@@ -99,4 +99,16 @@ class ExporterTest < Minitest::Test
     assert_json_file "test/fixtures/expected/multiple_files/pt.json",
                      "test/output/pt/translations.json"
   end
+
+  test "export files using :digest" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    I18nJS.call(config_file: "./test/config/digest.yml")
+
+    assert_file "test/output/es.d69fc73259977c7d14254b019ff85ec5.json"
+    assert_file "test/output/pt.c7ff3b8cc02447b25a1375854ea718f5.json"
+    assert_json_file "test/fixtures/expected/multiple_files/es.json",
+                     "test/output/es.d69fc73259977c7d14254b019ff85ec5.json"
+    assert_json_file "test/fixtures/expected/multiple_files/pt.json",
+                     "test/output/pt.c7ff3b8cc02447b25a1375854ea718f5.json"
+  end
 end

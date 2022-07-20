@@ -60,10 +60,15 @@ translations:
       - "!*.errors"
       - "!*.number.nth"
 
-  - file: app/frontend/locales/:locale.json
+  - file: app/frontend/locales/:locale.:digest.json
     patterns:
       - "*"
 ```
+
+The output path can use the following placeholders:
+
+- `:locale`: the language that's being exported.
+- `:digest`: the MD5 hex digest of the exported file.
 
 The Ruby API:
 
