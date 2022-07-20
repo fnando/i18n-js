@@ -4,8 +4,6 @@ name: ruby-tests
 on:
   pull_request_target:
   push:
-    branches:
-      - v4
   workflow_dispatch:
     inputs: {}
 
