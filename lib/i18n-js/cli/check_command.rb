@@ -4,9 +4,9 @@ require "benchmark"
 
 module I18nJS
   class CLI
-    class ExportCommand < Command
-      command_name "export"
-      description "Export translations as JSON files"
+    class CheckCommand < Command
+      command_name "check"
+      description "Check for missing translations"
 
       parse do |opts|
         opts.banner = "Usage: i18n #{name} [options]"
@@ -27,6 +27,13 @@ module I18nJS
           options[:require_file] = require_file
         end
 
+        opts.on(
+          "--[no-]color",
+          "Force colored output"
+        ) do |colored|
+          options[:colored] = colored
+        end
+
         opts.on("-h", "--help", "Prints this help") do
           ui.exit_with opts.to_s
         end
@@ -34,6 +41,7 @@ module I18nJS
 
       command do
         set_defaults!
+        ui.colored = options[:colored]
 
         unless options[:config_file]
           ui.fail_with("=> ERROR: you need to specify the config file")
@@ -61,12 +69,46 @@ module I18nJS
           )
         end
 
-        time = Benchmark.realtime do
-          load_require_file!(require_file) if require_file
-          I18nJS.call(config_file: config_file)
+        load_require_file!(require_file) if require_file
+        default_locale = I18n.default_locale
+        available_locales = I18n.available_locales
+
+        mapping = available_locales.each_with_object({}) do |locale, buffer|
+          buffer[locale] =
+            Glob::Map.call(Glob.filter(I18nJS.translations, ["#{locale}.*"]))
+                     .map {|key| key.gsub(/^.*?\./, "") }
         end
 
-        ui.stdout_print("=> Done in #{time.round(2)}s")
+        default_locale_keys = mapping.delete(default_locale)
+
+        ui.stdout_print "=> #{default_locale}: #{default_locale_keys.size} " \
+                        "translations"
+
+        total_missing_count = 0
+
+        mapping.each do |locale, partial_keys|
+          extraneous = partial_keys - default_locale_keys
+          missing = default_locale_keys - (partial_keys - extraneous)
+          total_missing_count += missing.size
+          ui.stdout_print "=> #{locale}: #{missing.size} missing, " \
+                          "#{extraneous.size} extraneous"
+
+          all_keys = (default_locale_keys + extraneous + missing).uniq.sort
+
+          all_keys.each do |key|
+            label = if extraneous.include?(key)
+                      ui.yellow("extraneous")
+                    elsif missing.include?(key)
+                      ui.red("missing")
+                    else
+                      next
+                    end
+
+            ui.stdout_print("   - #{locale}.#{key} (#{label})")
+          end
+        end
+
+        exit(1) if total_missing_count.nonzero?
       end
 
       private def set_defaults!

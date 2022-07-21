@@ -21,24 +21,31 @@ module I18nJS
 
     config = Glob::SymbolizeKeys.call(config || YAML.load_file(config_file))
     Schema.validate!(config)
+    exported_files = []
 
     config[:translations].each do |group|
-      export_group(group)
+      exported_files += export_group(group)
     end
+
+    exported_files
   end
 
   def self.export_group(group)
     filtered_translations = Glob.filter(translations, group[:patterns])
     output_file_path = File.expand_path(group[:file])
+    exported_files = []
 
     if output_file_path.include?(":locale")
       filtered_translations.each_key do |locale|
         locale_file_path = output_file_path.gsub(/:locale/, locale.to_s)
-        write_file(locale_file_path, locale => filtered_translations[locale])
+        exported_files << write_file(locale_file_path,
+                                     locale => filtered_translations[locale])
       end
     else
-      write_file(output_file_path, filtered_translations)
+      exported_files << write_file(output_file_path, filtered_translations)
     end
+
+    exported_files
   end
 
   def self.write_file(file_path, translations)
@@ -51,6 +58,8 @@ module I18nJS
     File.open(file_path, "w") do |file|
       file << contents
     end
+
+    file_path
   end
 
   def self.translations

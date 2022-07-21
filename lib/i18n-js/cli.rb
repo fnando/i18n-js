@@ -6,14 +6,15 @@ require_relative "cli/ui"
 require_relative "cli/init_command"
 require_relative "cli/version_command"
 require_relative "cli/export_command"
+require_relative "cli/check_command"
 
 module I18nJS
   class CLI
     attr_reader :ui
 
-    def initialize(argv:, stdout:, stderr:)
+    def initialize(argv:, stdout:, stderr:, colored: stdout.tty?)
       @argv = argv.dup
-      @ui = UI.new(stdout: stdout, stderr: stderr)
+      @ui = UI.new(stdout: stdout, stderr: stderr, colored: colored)
     end
 
     def call
@@ -26,7 +27,7 @@ module I18nJS
     end
 
     private def command_classes
-      [InitCommand, ExportCommand, VersionCommand]
+      [InitCommand, ExportCommand, VersionCommand, CheckCommand]
     end
 
     private def commands
