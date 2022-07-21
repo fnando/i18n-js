@@ -106,7 +106,7 @@ command will load your translations similarly to how `i18n export` does, but
 will output the list of keys that don't have a matching translation against the
 default locale. Here's an example:
 
-![`i18n check` command in action](https://github.com/fnando/i18n-js/raw/main/images/i18njs-check.png)
+![`i18n check` command in action](https://github.com/fnando/i18n-js/raw/main/images/i18njs-check.gif)
 
 This command will exist with status 1 whenever there are missing translations.
 This way you can use it as a CI linting.
