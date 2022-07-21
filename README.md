@@ -82,13 +82,34 @@ I18nJS.call(config: config)
 The CLI API:
 
 ```console
-$ i18n init --config config/i18n.yml
-$ i18n export --config config/i18n.yml --require config/environment.rb
+$ i18n --help
+Usage: i18n COMMAND FLAGS
+
+Commands:
+
+- init: Initialize a project
+- export: Export translations as JSON files
+- version: Show package version
+- check: Check for missing translations
+
+Run `i18n COMMAND --help` for more information on specific commands.
 ```
 
 By default, `i18n` will use `config/i18n.yml` and `config/environment.rb` as the
 configuration files. If you don't have these files, then you'll need to specify
 both `--config` and `--require`.
+
+### Listing missing translations
+
+To list missing and extraneous translations, you can use `i18n check`. This
+command will load your translations similarly to how `i18n export` does, but
+will output the list of keys that don't have a matching translation against the
+default locale. Here's an example:
+
+![`i18n check` command in action](https://github.com/fnando/i18n-js/raw/main/images/i18njs-check.png)
+
+This command will exist with status 1 whenever there are missing translations.
+This way you can use it as a CI linting.
 
 ## Automatically export translations
 

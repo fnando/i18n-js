@@ -38,6 +38,32 @@ module I18nJS
       def options
         @options ||= {}
       end
+
+      private def load_require_file!(require_file)
+        require_without_warnings(require_file)
+      rescue Exception => error # rubocop:disable Lint/RescueException
+        ui.stderr_print("=> ERROR: couldn't load",
+                        options[:require_file].inspect)
+        ui.fail_with(
+          "\n#{error_description(error)}\n#{error.backtrace.join("\n")}"
+        )
+      end
+
+      private def error_description(error)
+        [
+          error.class.name,
+          error.message
+        ].reject(&:empty?).join(" => ")
+      end
+
+      private def require_without_warnings(path)
+        old_verbose = $VERBOSE
+        $VERBOSE = nil
+
+        load path
+      ensure
+        $VERBOSE = old_verbose
+      end
     end
   end
 end

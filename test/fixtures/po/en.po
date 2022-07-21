@@ -1,0 +1,8 @@
+msgid "hello sunshine!"
+msgstr "hello sunshine!"
+
+msgid "bunny rabbit adventure"
+msgstr "bunny rabbit adventure"
+
+msgid "time for bed!"
+msgstr "time for bed!"
