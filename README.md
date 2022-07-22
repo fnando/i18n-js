@@ -24,7 +24,7 @@
   <a href="https://tldrlegal.com/license/mit-license"><img src="https://img.shields.io/:License-MIT-blue.svg" alt="MIT License"></a>
 </p>
 
-![This branch contains the code for v4, our next major release.](https://messages-svg.herokuapp.com/warning.svg?message=This%20branch%20contains%20the%20code%20for%20v4%2C%20our%20next%20major%20release.)
+> **Warning**: This branch contains the code for v4, our next major release.
 
 ## Installation
 
@@ -110,6 +110,32 @@ default locale. Here's an example:
 
 This command will exist with status 1 whenever there are missing translations.
 This way you can use it as a CI linting.
+
+You can ignore keys by adding a list to the config file:
+
+```yml
+---
+translations:
+  - file: app/frontend/locales/en.json
+    patterns:
+      - "*"
+      - "!*.activerecord"
+      - "!*.errors"
+      - "!*.number.nth"
+
+  - file: app/frontend/locales/:locale.:digest.json
+    patterns:
+      - "*"
+
+check:
+  ignore:
+    - en.mailer.login.subject
+    - en.mailer.login.body
+```
+
+> **Note**: In order to avoid mistakenly ignoring keys, this configuration
+> option only accepts the full translation scope, rather than accepting a
+> pattern like `pt.ignored.scope.*`.
 
 ## Automatically export translations
 
