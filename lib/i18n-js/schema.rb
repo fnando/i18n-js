@@ -4,8 +4,9 @@ module I18nJS
   class Schema
     InvalidError = Class.new(StandardError)
 
-    ROOT_KEYS = %i[translations].freeze
+    ROOT_KEYS = %i[translations check].freeze
     REQUIRED_ROOT_KEYS = %i[translations].freeze
+    REQUIRED_CHECK_KEYS = %i[ignore].freeze
     REQUIRED_TRANSLATION_KEYS = %i[file patterns].freeze
     TRANSLATION_KEYS = %i[file patterns].freeze
 
@@ -25,6 +26,17 @@ module I18nJS
       expect_required_keys(REQUIRED_ROOT_KEYS, target)
       reject_extraneous_keys(ROOT_KEYS, target)
       validate_translations
+      validate_check
+    end
+
+    def validate_check
+      return unless target.key?(:check)
+
+      check = target[:check]
+
+      expect_type(:check, check, Hash, target)
+      expect_required_keys(REQUIRED_CHECK_KEYS, check)
+      expect_type(:ignore, check[:ignore], Array, check)
     end
 
     def validate_translations

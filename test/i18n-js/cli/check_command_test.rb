@@ -135,4 +135,24 @@ class CheckCommandTest < Minitest::Test
     assert_includes output, "- pt.bye (extraneous)"
     assert_includes output, "- pt.hello sunshine! (missing)"
   end
+
+  test "ignores translations" do
+    cli = I18nJS::CLI.new(
+      argv: %w[
+        check
+        --config test/config/check_ignore.yml
+        --require test/config/require.rb
+      ],
+      stdout: stdout,
+      stderr: stderr
+    )
+
+    assert_exit_code(0) { cli.call }
+
+    output = stdout.tap(&:rewind).read.chomp
+
+    assert_includes output, "=> en: 3 translations"
+    assert_includes output, "=> es: 0 missing, 0 extraneous, 2 ignored"
+    assert_includes output, "=> pt: 0 missing, 0 extraneous, 2 ignored"
+  end
 end

@@ -69,9 +69,14 @@ module I18nJS
           )
         end
 
+        config = Glob::SymbolizeKeys.call(YAML.load_file(config_file))
+        Schema.validate!(config)
+
         load_require_file!(require_file) if require_file
+
         default_locale = I18n.default_locale
         available_locales = I18n.available_locales
+        ignored_keys = config.dig(:check, :ignore) || []
 
         mapping = available_locales.each_with_object({}) do |locale, buffer|
           buffer[locale] =
@@ -81,21 +86,50 @@ module I18nJS
 
         default_locale_keys = mapping.delete(default_locale)
 
+        if ignored_keys.any?
+          ui.stdout_print "=> Check #{options[:config_file].inspect} for " \
+                          "ignored keys."
+        end
+
         ui.stdout_print "=> #{default_locale}: #{default_locale_keys.size} " \
                         "translations"
 
         total_missing_count = 0
 
         mapping.each do |locale, partial_keys|
-          extraneous = partial_keys - default_locale_keys
-          missing = default_locale_keys - (partial_keys - extraneous)
+          ignored_count = 0
+
+          # Compute list of filtered keys (i.e. keys not ignored)
+          filtered_keys = partial_keys.reject do |key|
+            key = "#{locale}.#{key}"
+
+            ignored = ignored_keys.include?(key)
+            ignored_count += 1 if ignored
+            ignored
+          end
+
+          extraneous = (partial_keys - default_locale_keys).reject do |key|
+            key = "#{locale}.#{key}"
+            ignored = ignored_keys.include?(key)
+            ignored_count += 1 if ignored
+            ignored
+          end
+
+          missing = (default_locale_keys - (filtered_keys - extraneous))
+                    .reject {|key| ignored_keys.include?("#{locale}.#{key}") }
+
+          ignored_count += extraneous.size
           total_missing_count += missing.size
+
           ui.stdout_print "=> #{locale}: #{missing.size} missing, " \
-                          "#{extraneous.size} extraneous"
+                          "#{extraneous.size} extraneous, " \
+                          "#{ignored_count} ignored"
 
           all_keys = (default_locale_keys + extraneous + missing).uniq.sort
 
           all_keys.each do |key|
+            next if ignored_keys.include?("#{locale}.#{key}")
+
             label = if extraneous.include?(key)
                       ui.yellow("extraneous")
                     elsif missing.include?(key)

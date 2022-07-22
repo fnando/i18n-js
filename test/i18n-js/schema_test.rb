@@ -102,4 +102,48 @@ class SchemaTest < Minitest::Test
       )
     end
   end
+
+  test "requires check's :ignore to be a hash" do
+    assert_schema_error("Expected :check to be Hash; got NilClass instead") do
+      I18nJS::Schema.validate!(
+        translations: [
+          {
+            file: "some/file.json",
+            patterns: ["*"]
+          }
+        ],
+        check: nil
+      )
+    end
+  end
+
+  test "requires check's :ignore to have :ignore" do
+    assert_schema_error("Expected :ignore to be defined") do
+      I18nJS::Schema.validate!(
+        translations: [
+          {
+            file: "some/file.json",
+            patterns: ["*"]
+          }
+        ],
+        check: {}
+      )
+    end
+  end
+
+  test "requires check's :ignore to be an array" do
+    assert_schema_error("Expected :ignore to be Array; got Hash instead") do
+      I18nJS::Schema.validate!(
+        translations: [
+          {
+            file: "some/file.json",
+            patterns: ["*"]
+          }
+        ],
+        check: {
+          ignore: {}
+        }
+      )
+    end
+  end
 end
