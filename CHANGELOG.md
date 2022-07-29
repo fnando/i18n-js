@@ -11,6 +11,6 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
-## Unreleased
+## Jul 29, 2022
 
-- Initial release.
+- Official release of i18n-js v4.0.0.

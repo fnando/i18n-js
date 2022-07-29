@@ -24,8 +24,6 @@
   <a href="https://tldrlegal.com/license/mit-license"><img src="https://img.shields.io/:License-MIT-blue.svg" alt="MIT License"></a>
 </p>
 
-> **Warning**: This branch contains the code for v4, our next major release.
-
 ## Installation
 
 ```bash
@@ -35,7 +33,7 @@ gem install i18n-js
 Or add the following line to your project's Gemfile:
 
 ```ruby
-gem "i18n-js", "~> 4.0.0.alpha1"
+gem "i18n-js"
 ```
 
 ## Usage
