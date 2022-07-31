@@ -13,7 +13,7 @@
     Oh, you don't use Ruby? No problem! You can still use i18n-js
     <br>
     and the 
-    <a href="https://www.npmjs.com/package/i18n-js/v/next">companion JavaScript package</a>.
+    <a href="https://www.npmjs.com/package/i18n-js/v/latest">companion JavaScript package</a>.
   </small>
 </p>
 
