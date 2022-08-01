@@ -45,6 +45,14 @@ About patterns:
   - `*.messages.*`
 - Patterns starting with `!` are excluded.
   - `!*.activerecord.*` will exclude all ActiveRecord translations.
+- You can use groups:
+  - `{pt-BR,en}.js.*` will include only `pt-BR` and `en` translations, even if
+    more languages are available.
+
+> **Note**:
+>
+> Patterns use [glob](https://rubygems.org/gems/glob), so check it out for the
+> most up-to-date documentation about what's available.
 
 The config file:
 
