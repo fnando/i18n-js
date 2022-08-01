@@ -135,4 +135,15 @@ class ExporterTest < Minitest::Test
     assert_json_file "test/fixtures/expected/multiple_files/pt.json",
                      "test/output/pt.c7ff3b8cc02447b25a1375854ea718f5.json"
   end
+
+  test "export files using groups" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    actual_files = I18nJS.call(config_file: "./test/config/group.yml")
+
+    expected_files = ["test/output/group.json"]
+
+    assert_exported_files expected_files, actual_files
+    assert_json_file "test/fixtures/expected/group.json",
+                     "test/output/group.json"
+  end
 end

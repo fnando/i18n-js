@@ -1,0 +1,5 @@
+---
+translations:
+  - file: test/output/group.json
+    patterns:
+      - "{pt,en}.time for bed!"
