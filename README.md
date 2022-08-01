@@ -131,13 +131,15 @@ check:
     - en.mailer.login.body
 ```
 
-> **Note**: In order to avoid mistakenly ignoring keys, this configuration
-> option only accepts the full translation scope, rather than accepting a
-> pattern like `pt.ignored.scope.*`.
+> **Note**:
+>
+> In order to avoid mistakenly ignoring keys, this configuration option only
+> accepts the full translation scope, rather than accepting a pattern like
+> `pt.ignored.scope.*`.
 
 ## Automatically export translations
 
-### Using watchman
+### Using [watchman](https://facebook.github.io/watchman/)
 
 Create a script at `bin/i18n-watch`.
 
@@ -182,11 +184,11 @@ line to your Procfile:
 i18n: ./bin/i18n-watch
 ```
 
-### Using guard
+### Using [guard](https://rubygems.org/gems/guard)
 
-Install [guard](https://rubygems.org/packages/guard) and
-[guard-compat](https://rubygems.org/packages/guard-compat). Then create a
-Guardfile with the following configuration:
+Install [guard](https://rubygems.org/gems/guard) and
+[guard-compat](https://rubygems.org/gems/guard-compat). Then create a Guardfile
+with the following configuration:
 
 ```ruby
 guard(:"i18n-js",
@@ -204,7 +206,7 @@ accordingly.
 
 Now you can run `guard start -i`.
 
-### Using listen
+### Using [listen](https://rubygems.org/gems/listen)
 
 Create a file under `config/initializers/i18n.rb` with the following content:
 
@@ -227,6 +229,13 @@ that loads all the exported translation.
 
 ### FAQ
 
+#### I'm running v3. Is there a migration plan?
+
+[There's a document](https://github.com/fnando/i18n-js/tree/main/MIGRATING_FROM_V3_TO_V4.md)
+outlining some of the things you need to do to migrate from v3 to v4. It may not
+be as complete as we'd like it to be, so let's know if you face any issues
+during the migration is not outline is that document.
+
 #### How can I export translations without having a database around?
 
 Some people may have a build process using something like Docker that don't
@@ -246,9 +255,11 @@ require "action_view/railtie"
 I18n.load_path += Dir["./config/locales/**/*.yml"]
 ```
 
-Notice that you may not need to load ActiveSupport and ActionView lines, or even
-may need to add additional requires for other libs. With this approach you have
-full control on what's going to be loaded.
+> **Note**:
+>
+> You may not need to load ActiveSupport and ActionView lines, or even may need
+> to add additional requires for other libs. With this approach you have full
+> control on what's going to be loaded.
 
 ## Maintainer
 
