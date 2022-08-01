@@ -6,6 +6,7 @@ require "yaml"
 require "glob"
 require "fileutils"
 require "optparse"
+require "erb"
 
 require_relative "i18n-js/schema"
 require_relative "i18n-js/version"
@@ -19,7 +20,7 @@ module I18nJS
             "you must set either `config_file` or `config`"
     end
 
-    config = Glob::SymbolizeKeys.call(config || YAML.load_file(config_file))
+    config = Glob::SymbolizeKeys.call(config || load_config_file(config_file))
     Schema.validate!(config)
     exported_files = []
 
@@ -69,5 +70,10 @@ module I18nJS
       init_translations unless has_been_initialized_before
       translations
     end
+  end
+
+  def self.load_config_file(config_file)
+    erb = ERB.new(File.read(config_file))
+    YAML.safe_load(erb.result(binding))
   end
 end

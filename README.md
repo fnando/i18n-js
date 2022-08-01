@@ -76,6 +76,22 @@ The output path can use the following placeholders:
 - `:locale`: the language that's being exported.
 - `:digest`: the MD5 hex digest of the exported file.
 
+The config file is processed as erb, so you can have dynamic content on it if
+you want. The following example shows how to use groups from a variable.
+
+```yml
+---
+<% group = "{en,pt}" %>
+
+translations:
+  - file: app/frontend/translations.json
+    patterns:
+      - "<%= group %>.*"
+      - "!<%= group %>.activerecord"
+      - "!<%= group %>.errors"
+      - "!<%= group %>.number.nth"
+```
+
 The Ruby API:
 
 ```ruby

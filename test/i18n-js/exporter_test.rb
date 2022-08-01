@@ -146,4 +146,15 @@ class ExporterTest < Minitest::Test
     assert_json_file "test/fixtures/expected/group.json",
                      "test/output/group.json"
   end
+
+  test "export files using erb" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    actual_files = I18nJS.call(config_file: "./test/config/config.yml.erb")
+
+    expected_files = ["test/output/everything.json"]
+
+    assert_exported_files expected_files, actual_files
+    assert_json_file "test/fixtures/expected/everything.json",
+                     "test/output/everything.json"
+  end
 end
