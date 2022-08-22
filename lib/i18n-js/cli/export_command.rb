@@ -27,6 +27,14 @@ module I18nJS
           options[:require_file] = require_file
         end
 
+        opts.on(
+          "-q",
+          "--quiet",
+          "A Ruby file that must be loaded"
+        ) do |quiet|
+          options[:quiet] = quiet
+        end
+
         opts.on("-h", "--help", "Prints this help") do
           ui.exit_with opts.to_s
         end
@@ -39,11 +47,11 @@ module I18nJS
           ui.fail_with("=> ERROR: you need to specify the config file")
         end
 
-        ui.stdout_print("=> Config file:", options[:config_file].inspect)
+        log("=> Config file:", options[:config_file].inspect)
         config_file = File.expand_path(options[:config_file])
 
         if options[:require_file]
-          ui.stdout_print("=> Require file:", options[:require_file].inspect)
+          log("=> Require file:", options[:require_file].inspect)
           require_file = File.expand_path(options[:require_file])
         end
 
@@ -66,7 +74,13 @@ module I18nJS
           I18nJS.call(config_file: config_file)
         end
 
-        ui.stdout_print("=> Done in #{time.round(2)}s")
+        log("=> Done in #{time.round(2)}s")
+      end
+
+      private def log(*args)
+        return if options[:quiet]
+
+        ui.stdout_print(*args)
       end
 
       private def set_defaults!

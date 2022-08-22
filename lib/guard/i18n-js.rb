@@ -53,11 +53,28 @@ module Guard
       info("Changes detected: #{changes.join(', ')}") if changes
 
       @current_thread = Thread.new do
-        require @require_file
-        ::I18nJS.call(config_file: @config_file)
+        capture do
+          system "i18n",
+                 "export",
+                 "--config",
+                 config_file.to_s,
+                 "--require",
+                 require_file.to_s,
+                 "--quiet"
+        end
       end
 
       current_thread.join
+    end
+
+    def capture
+      original = $stdout
+      $stdout = StringIO.new
+      yield
+    rescue StandardError
+      # noop
+    ensure
+      $stdout = original
     end
 
     def validate_file(key, file)
@@ -68,11 +85,11 @@ module Guard
     end
 
     def error(message)
-      ::Guard::UI.error "[guard-i18n-js] #{message}"
+      ::Guard::UI.error "[i18n-js] #{message}"
     end
 
     def info(message)
-      ::Guard::UI.info "[guard-i18n-js] #{message}"
+      ::Guard::UI.info "[i18n-js] #{message}"
     end
   end
 end
