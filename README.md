@@ -12,7 +12,7 @@
   <small>
     Oh, you don't use Ruby? No problem! You can still use i18n-js
     <br>
-    and the 
+    and the
     <a href="https://www.npmjs.com/package/i18n-js/v/latest">companion JavaScript package</a>.
   </small>
 </p>
@@ -226,8 +226,21 @@ end
 ```
 
 The code above will watch for changes based on `config/i18n.yml` and
-`config/locales`. You can customize these options with
-`I18nJS.listen(config_file: "config/i18n.yml", locales_dir: "config/locales")`.
+`config/locales`. You can customize these options:
+
+- `config_file` - i18n-js configuration file
+- `locales_dir` - one or multiple directories to watch for locales changes
+- `options` - passed directly to [listen](https://github.com/guard/listen/#options)
+
+Example:
+
+```ruby
+I18nJS.listen(
+  config_file: "config/i18n.yml",
+  locales_dir: ["config/locales", "app/views"],
+  options: {only: %r{.yml$}
+)
+```
 
 ### Integrating with your frontend
 

@@ -7,7 +7,8 @@ module I18nJS
 
   def self.listen(
     config_file: Rails.root.join("config/i18n.yml"),
-    locales_dir: Rails.root.join("config/locales")
+    locales_dir: Rails.root.join("config/locales"),
+    options: {}
   )
     return unless Rails.env.development?
     return if started
@@ -18,12 +19,14 @@ module I18nJS
 
     self.started = true
 
+    locales_dirs = Array(locales_dir)
+
     relative_paths =
-      [config_file, locales_dir].map {|path| relative_path(path) }
+      [config_file, *locales_dirs].map {|path| relative_path(path) }
 
     debug("Watching #{relative_paths.inspect}")
 
-    listener(config_file, locales_dir.to_s).start
+    listener(config_file, locales_dirs.map(&:to_s), options).start
     I18nJS.call(config_file: config_file)
   end
 
@@ -43,12 +46,12 @@ module I18nJS
     @logger ||= ActiveSupport::TaggedLogging.new(Rails.logger)
   end
 
-  def self.listener(config_file, locales_dir)
-    paths = [File.dirname(config_file), locales_dir]
+  def self.listener(config_file, locales_dirs, options)
+    paths = [File.dirname(config_file), *locales_dirs]
 
-    Listen.to(*paths) do |changed, added, removed|
+    Listen.to(*paths, options) do |changed, added, removed|
       changes = compute_changes(
-        [config_file, locales_dir],
+        [config_file, *locales_dirs],
         changed,
         added,
         removed
