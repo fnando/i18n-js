@@ -11,9 +11,12 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
-## Unknown
+# Unreleased
 
 - [Fixed] Shell out export to avoid handling I18n reloading heuristics.
+- [Changed] `I18nJS.listen` now accepts a directories list to watch.
+- [Changed] `I18nJS.listen` now accepts
+  [listen](https://rubygems.org/gems/listen) options via `:options`.
 
 ## Jul 29, 2022
 

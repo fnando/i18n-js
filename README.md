@@ -228,12 +228,19 @@ end
 The code above will watch for changes based on `config/i18n.yml` and
 `config/locales`. You can customize these options:
 
-* config_file - i18n-js configuration file
-* locales_dir - one or multiple directories to watch for locales changes
-* options - passed directly to [listen gem](https://github.com/guard/listen/#options)
+- `config_file` - i18n-js configuration file
+- `locales_dir` - one or multiple directories to watch for locales changes
+- `options` - passed directly to [listen](https://github.com/guard/listen/#options)
 
 Example:
-`I18nJS.listen(config_file: "config/i18n.yml", locales_dir: ["config/locales", "app/views"], options: {only: %r{.yml$})`.
+
+```ruby
+I18nJS.listen(
+  config_file: "config/i18n.yml",
+  locales_dir: ["config/locales", "app/views"],
+  options: {only: %r{.yml$}
+)
+```
 
 ### Integrating with your frontend
 
