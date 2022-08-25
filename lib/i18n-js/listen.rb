@@ -58,9 +58,20 @@ module I18nJS
 
       debug(changes.map {|key, value| "#{key}=#{value.inspect}" }.join(", "))
 
-      ::I18n.backend.reload!
-      I18nJS.call(config_file: config_file)
+      capture do
+        system "i18n", "export", "--config", config_file.to_s
+      end
     end
+  end
+
+  def self.capture
+    original = $stdout
+    $stdout = StringIO.new
+    yield
+  rescue StandardError
+    # noop
+  ensure
+    $stdout = original
   end
 
   def self.compute_changes(paths, changed, added, removed)

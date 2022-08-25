@@ -11,6 +11,10 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unknown
+
+- [Fixed] Shell out export to avoid handling I18n reloading heuristics.
+
 ## Jul 29, 2022
 
 - Official release of i18n-js v4.0.0.

@@ -113,4 +113,26 @@ class ExportCommandTest < Minitest::Test
     assert_json_file "test/fixtures/expected/everything.json",
                      "test/output/everything.json"
   end
+
+  test "exports using quiet mode" do
+    cli = I18nJS::CLI.new(
+      argv: %w[
+        export
+        --config test/config/everything.yml
+        --require test/config/require.rb
+        --quiet
+      ],
+      stdout: stdout,
+      stderr: stderr
+    )
+
+    assert_exit_code(0) { cli.call }
+
+    assert_file "test/output/everything.json"
+    assert_json_file "test/fixtures/expected/everything.json",
+                     "test/output/everything.json"
+
+    assert_equal "", stdout.tap(&:rewind).read
+    assert_equal "", stderr.tap(&:rewind).read
+  end
 end
