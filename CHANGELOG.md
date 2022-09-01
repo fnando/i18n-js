@@ -11,6 +11,11 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unreleased
+
+- [Changed] `I18n.listen(run_on_start:)` was added to control if files should be
+  exported during `I18n.listen`'s boot. The default value is `true`.
+
 ## v4.0.1
 
 - [Fixed] Shell out export to avoid handling I18n reloading heuristics.
