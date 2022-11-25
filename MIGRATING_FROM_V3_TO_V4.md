@@ -135,7 +135,7 @@ not even using it on my projects) or eRb files.
 
 ### Upgrading the configuration file
 
-The configuration file loaded from `config/i18nyml` has changed. Given the v3
+The configuration file loaded from `config/i18n.yml` has changed. Given the v3
 configuration below
 
 ```yaml
