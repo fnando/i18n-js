@@ -231,6 +231,8 @@ The code above will watch for changes based on `config/i18n.yml` and
 - `config_file` - i18n-js configuration file
 - `locales_dir` - one or multiple directories to watch for locales changes
 - `options` - passed directly to [listen](https://github.com/guard/listen/#options)
+- `run_on_start` - export files on start. Defaults to `true`. When disabled,
+  files will be exported only when there are file changes.
 
 Example:
 
@@ -238,7 +240,8 @@ Example:
 I18nJS.listen(
   config_file: "config/i18n.yml",
   locales_dir: ["config/locales", "app/views"],
-  options: {only: %r{.yml$}
+  options: {only: %r{.yml$}},
+  run_on_start: false
 )
 ```
 

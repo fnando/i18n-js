@@ -8,6 +8,7 @@ module I18nJS
   def self.listen(
     config_file: Rails.root.join("config/i18n.yml"),
     locales_dir: Rails.root.join("config/locales"),
+    run_on_start: true,
     options: {}
   )
     return unless Rails.env.development?
@@ -27,7 +28,7 @@ module I18nJS
     debug("Watching #{relative_paths.inspect}")
 
     listener(config_file, locales_dirs.map(&:to_s), options).start
-    I18nJS.call(config_file: config_file)
+    I18nJS.call(config_file: config_file) if run_on_start
   end
 
   def self.relative_path(path)
