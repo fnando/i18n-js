@@ -4,14 +4,22 @@ module I18nJS
   class Schema
     InvalidError = Class.new(StandardError)
 
-    ROOT_KEYS = %i[translations check].freeze
-    REQUIRED_ROOT_KEYS = %i[translations].freeze
     REQUIRED_CHECK_KEYS = %i[ignore].freeze
     REQUIRED_TRANSLATION_KEYS = %i[file patterns].freeze
     TRANSLATION_KEYS = %i[file patterns].freeze
 
+    def self.root_keys
+      @root_keys ||= Set.new(%i[translations check])
+    end
+
+    def self.required_root_keys
+      @required_root_keys ||= Set.new(%i[translations])
+    end
+
     def self.validate!(target)
-      new(target).validate!
+      schema = new(target)
+      schema.validate!
+      I18nJS.plugins.each {|plugin| plugin.validate_schema(config: target) }
     end
 
     attr_reader :target
@@ -23,8 +31,8 @@ module I18nJS
     def validate!
       expect_type(:root, target, Hash, target)
 
-      expect_required_keys(REQUIRED_ROOT_KEYS, target)
-      reject_extraneous_keys(ROOT_KEYS, target)
+      expect_required_keys(self.class.required_root_keys, target)
+      reject_extraneous_keys(self.class.root_keys, target)
       validate_translations
       validate_check
     end
@@ -63,6 +71,15 @@ module I18nJS
       raise InvalidError, "#{error_message}#{node_json}"
     end
 
+    def expect_enabled_config(config_key, value)
+      return if [TrueClass, FalseClass].include?(value.class)
+
+      actual_type = value.class
+
+      reject "Expected #{config_key}.enabled to be a boolean; " \
+             "got #{actual_type} instead"
+    end
+
     def expect_type(attribute, value, expected_type, payload)
       return if value.is_a?(expected_type)
 
@@ -94,7 +111,7 @@ module I18nJS
 
     def reject_extraneous_keys(allowed_keys, value)
       keys = value.keys.map(&:to_sym)
-      extraneous = keys - allowed_keys
+      extraneous = keys.to_a - allowed_keys.to_a
 
       return if extraneous.empty?
 

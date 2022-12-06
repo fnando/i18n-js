@@ -1,0 +1,20 @@
+{
+  "en": {
+    "bunny rabbit adventure": "bunny rabbit adventure",
+    "time for bed!": "time for bed!",
+    "hello sunshine!": "hello sunshine!",
+    "injected": "yes:en"
+  },
+  "es": {
+    "bunny rabbit adventure": "conejito conejo aventura",
+    "bye": "adios",
+    "time for bed!": "hora de acostarse!",
+    "injected": "yes:es"
+  },
+  "pt": {
+    "bunny rabbit adventure": "a aventura da coelhinha",
+    "bye": "tchau",
+    "time for bed!": "hora de dormir!",
+    "injected": "yes:pt"
+  }
+}

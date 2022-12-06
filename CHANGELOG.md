@@ -16,6 +16,8 @@ Prefix your message with one of the following:
 - [Added] Parse configuration files as erb.
 - [Changed] `I18n.listen(run_on_start:)` was added to control if files should be
   exported during `I18n.listen`'s boot. The default value is `true`.
+- [Added] Now it's possible to transform translations before exporting them
+  using a stable plugin api.
 
 ## v4.0.1
 

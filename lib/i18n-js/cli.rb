@@ -7,6 +7,7 @@ require_relative "cli/init_command"
 require_relative "cli/version_command"
 require_relative "cli/export_command"
 require_relative "cli/check_command"
+require_relative "cli/plugins_command"
 
 module I18nJS
   class CLI
@@ -27,7 +28,7 @@ module I18nJS
     end
 
     private def command_classes
-      [InitCommand, ExportCommand, VersionCommand, CheckCommand]
+      [InitCommand, ExportCommand, VersionCommand, CheckCommand, PluginsCommand]
     end
 
     private def commands

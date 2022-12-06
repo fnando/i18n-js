@@ -1,0 +1,8 @@
+---
+translations:
+  - file: test/output/embed_fallback_translations.json
+    patterns:
+      - "*"
+
+embed_fallback_translations:
+  enabled: true
