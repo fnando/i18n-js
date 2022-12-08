@@ -10,6 +10,7 @@ module Minitest
       I18nJS.plugins.clear
       I18n.config.clear_available_locales_set
       I18n.backend = I18n::Backend::Simple.new
+      I18nJS::Schema.root_keys.delete(:sample)
       FileUtils.rm_rf "./test/output"
     end
 

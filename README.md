@@ -112,8 +112,9 @@ Commands:
 - init: Initialize a project
 - export: Export translations as JSON files
 - version: Show package version
-- check: Check for missing translations
 - plugins: List plugins that will be activated
+- lint:translations: Check for missing translations
+- lint:scripts: Lint files using TypeScript
 
 Run `i18n COMMAND --help` for more information on specific commands.
 ```
@@ -236,12 +237,12 @@ loaded.
 
 ### Listing missing translations
 
-To list missing and extraneous translations, you can use `i18n check`. This
-command will load your translations similarly to how `i18n export` does, but
-will output the list of keys that don't have a matching translation against the
-default locale. Here's an example:
+To list missing and extraneous translations, you can use
+`i18n lint:translations`. This command will load your translations similarly to
+how `i18n export` does, but will output the list of keys that don't have a
+matching translation against the default locale. Here's an example:
 
-![`i18n check` command in action](https://github.com/fnando/i18n-js/raw/main/images/i18njs-check.gif)
+![`i18n lint:translations` command in action](https://github.com/fnando/i18n-js/raw/main/images/i18njs-check.gif)
 
 This command will exist with status 1 whenever there are missing translations.
 This way you can use it as a CI linting.
@@ -262,7 +263,7 @@ translations:
     patterns:
       - "*"
 
-check:
+lint_translations:
   ignore:
     - en.mailer.login.subject
     - en.mailer.login.body
@@ -273,6 +274,82 @@ check:
 > In order to avoid mistakenly ignoring keys, this configuration option only
 > accepts the full translation scope, rather than accepting a pattern like
 > `pt.ignored.scope.*`.
+
+### Linting your JavaScript/TypeScript files
+
+To lint your script files and check for missing translations (which can signal
+that you're either using wrong scopes or forgot to add the translation), use
+`i18n lint:scripts`. This command will parse your JavaScript/TypeScript files
+and extract all scopes being used. This command requires a Node.js runtime. You
+can either specify one via `--node-path`, or let the plugin infer a binary from
+your `$PATH`.
+
+The comparison will be made against the export JSON files, which means it'll
+consider transformations performed by plugins (e.g. the output files may be
+affected by `embed_fallback_translations` plugin).
+
+The translations that will be extract must be called as one of the following
+ways:
+
+- `i18n.t(scope, options)`
+- `i18n.translate(scope, options)`
+- `t(scope, options)`
+
+Notice that only literal strings can be used, as in `i18n.t("message")`. If
+you're using dynamic scoping through variables (e.g.
+`const scope = "message"; i18n.t(scope)`), they will be skipped.
+
+```console
+$ i18n lint:scripts --config test/config/lint.yml --require test/config/require.rb
+=> Config file: "test/config/lint.yml"
+=> Require file: "test/config/require.rb"
+=> Node: "/Users/fnando/.asdf/shims/node"
+=> Available locales: [:en, :es, :pt]
+=> Patterns: ["!(node_modules)/**/*.js", "!(node_modules)/**/*.ts", "!(node_modules)/**/*.jsx", "!(node_modules)/**/*.tsx"]
+=> 9 translations, 11 missing, 4 ignored
+   - test/scripts/lint/file.js:1:1: en.js.missing
+   - test/scripts/lint/file.js:1:1: es.js.missing
+   - test/scripts/lint/file.js:1:1: pt.js.missing
+   - test/scripts/lint/file.js:2:8: en.base.js.missing
+   - test/scripts/lint/file.js:2:8: es.base.js.missing
+   - test/scripts/lint/file.js:2:8: pt.base.js.missing
+   - test/scripts/lint/file.js:4:8: en.js.missing
+   - test/scripts/lint/file.js:4:8: es.js.missing
+   - test/scripts/lint/file.js:4:8: pt.js.missing
+   - test/scripts/lint/file.js:6:1: en.another_ignore_scope
+   - test/scripts/lint/file.js:6:1: es.another_ignore_scope
+```
+
+This command will list all locales and their missing translations. Avoid listing
+a particular translation, you can set `lint.ignore` on your config file.
+
+```yaml
+---
+translations:
+  - file: app/frontend/translations.json
+    patterns:
+      - "*"
+
+lint_scripts:
+  ignore:
+    - ignore_scope # will ignore this scope on all languages
+    - pt.another_ignore_scope # will ignore this scope only on `pt`
+```
+
+You can also set the patterns that will be looked up. By default, it scans all
+JavaScript and TypeScript files that don't live on `node_modules`.
+
+```yaml
+---
+translations:
+  - file: app/frontend/translations.json
+    patterns:
+      - "*"
+
+lint:
+  patterns:
+    - "app/assets/**/*.ts"
+```
 
 ## Automatically export translations
 

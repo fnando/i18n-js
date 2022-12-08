@@ -7,6 +7,8 @@ require "glob"
 require "fileutils"
 require "optparse"
 require "erb"
+require "set"
+require "digest/md5"
 
 require_relative "i18n-js/schema"
 require_relative "i18n-js/version"

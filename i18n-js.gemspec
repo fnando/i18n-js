@@ -31,6 +31,8 @@ Gem::Specification.new do |spec|
       .reject {|f| f.match(%r{^(test|spec|features|images)/}) }
   end
 
+  spec.files << "lib/i18n-js/lint.js"
+
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) {|f| File.basename(f) }
   spec.require_paths = ["lib"]

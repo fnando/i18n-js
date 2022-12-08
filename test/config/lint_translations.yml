@@ -1,0 +1,12 @@
+---
+translations:
+  - file: test/output/everything.json
+    patterns:
+      - "*"
+
+lint_translations:
+  ignore:
+    - "es.bye"
+    - "es.hello sunshine!"
+    - "pt.bye"
+    - "pt.hello sunshine!"

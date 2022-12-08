@@ -18,6 +18,9 @@ Prefix your message with one of the following:
   exported during `I18n.listen`'s boot. The default value is `true`.
 - [Added] Now it's possible to transform translations before exporting them
   using a stable plugin api.
+- [Deprecated] The `i18n check` has been deprecated. Use
+  `i18n lint:translations` instead.
+- [Added] Use `i18n lint:scripts` to lint JavaScript/TypeScript.
 
 ## v4.0.1
 

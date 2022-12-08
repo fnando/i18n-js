@@ -9,12 +9,15 @@ on:
 
 jobs:
   build:
-    name: Tests with Ruby ${{ matrix.ruby }} and ${{ matrix.gemfile }}
+    name:
+      Tests with Ruby ${{ matrix.ruby }}, Node ${{ matrix.node }} and ${{
+      matrix.gemfile }}
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false
       matrix:
         ruby: ["2.7", "3.0", "3.1"]
+        node: ["16", "18"]
         gemfile:
           - Gemfile
     if: |
@@ -31,6 +34,23 @@ jobs:
           key: >
             ${{ runner.os }}-${{ matrix.ruby }}-gems-${{
             hashFiles(matrix.gemfile) }}
+
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: vendor/bundle
+          key: >
+            ${{ runner.os }}-${{ matrix.node }}-npm-${{
+            hashFiles('package.json') }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install npm dependencies
+        run: |
+          yarn install
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -49,4 +69,5 @@ jobs:
         env:
           BUNDLE_GEMFILE: ${{ matrix.gemfile }}
         run: |
+          yarn compile
           bundle exec rake

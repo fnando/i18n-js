@@ -6,8 +6,10 @@ require_relative "cli/ui"
 require_relative "cli/init_command"
 require_relative "cli/version_command"
 require_relative "cli/export_command"
-require_relative "cli/check_command"
 require_relative "cli/plugins_command"
+require_relative "cli/lint_translations_command"
+require_relative "cli/lint_scripts_command"
+require_relative "cli/check_command"
 
 module I18nJS
   class CLI
@@ -28,7 +30,15 @@ module I18nJS
     end
 
     private def command_classes
-      [InitCommand, ExportCommand, VersionCommand, CheckCommand, PluginsCommand]
+      [
+        InitCommand,
+        ExportCommand,
+        VersionCommand,
+        PluginsCommand,
+        LintTranslationsCommand,
+        LintScriptsCommand,
+        CheckCommand
+      ]
     end
 
     private def commands

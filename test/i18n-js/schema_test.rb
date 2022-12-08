@@ -103,8 +103,11 @@ class SchemaTest < Minitest::Test
     end
   end
 
-  test "requires check's :ignore to be a hash" do
-    assert_schema_error("Expected :check to be Hash; got NilClass instead") do
+  test "requires lint_translations' :ignore to be a hash" do
+    error_message =
+      "Expected :lint_translations to be Hash; got NilClass instead"
+
+    assert_schema_error(error_message) do
       I18nJS::Schema.validate!(
         translations: [
           {
@@ -112,12 +115,12 @@ class SchemaTest < Minitest::Test
             patterns: ["*"]
           }
         ],
-        check: nil
+        lint_translations: nil
       )
     end
   end
 
-  test "requires check's :ignore to have :ignore" do
+  test "requires lint_translations' :ignore to have :ignore" do
     assert_schema_error("Expected :ignore to be defined") do
       I18nJS::Schema.validate!(
         translations: [
@@ -126,12 +129,12 @@ class SchemaTest < Minitest::Test
             patterns: ["*"]
           }
         ],
-        check: {}
+        lint_translations: {}
       )
     end
   end
 
-  test "requires check's :ignore to be an array" do
+  test "requires lint_translations' :ignore to be an array" do
     assert_schema_error("Expected :ignore to be Array; got Hash instead") do
       I18nJS::Schema.validate!(
         translations: [
@@ -140,10 +143,49 @@ class SchemaTest < Minitest::Test
             patterns: ["*"]
           }
         ],
-        check: {
+        lint_translations: {
           ignore: {}
         }
       )
+    end
+  end
+
+  test "requires enabled type to be boolean" do
+    config = {
+      translations: [
+        {
+          file: "app/frontend/locales/en.json",
+          patterns: [
+            "*"
+          ]
+        }
+      ],
+      sample: {
+        enabled: nil
+      }
+    }
+
+    sample_plugin = Class.new(I18nJS::Plugin) do
+      def self.setup
+        I18nJS::Schema.root_keys << :sample
+      end
+
+      def self.validate_schema(config:)
+        config_key = :sample
+        plugin_config = config[config_key]
+        schema = I18nJS::Schema.new(config)
+
+        schema.expect_enabled_config(config_key, plugin_config[:enabled])
+      end
+    end
+
+    I18nJS.register_plugin(sample_plugin)
+
+    error_message =
+      "Expected sample.enabled to be a boolean; got NilClass instead"
+
+    assert_schema_error(error_message) do
+      I18nJS::Schema.validate!(config)
     end
   end
 end
