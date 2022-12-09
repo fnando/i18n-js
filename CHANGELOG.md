@@ -11,7 +11,7 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
-## Unreleased
+## v4.1.0 - Dec 09, 2022
 
 - [Added] Parse configuration files as erb.
 - [Changed] `I18n.listen(run_on_start:)` was added to control if files should be
