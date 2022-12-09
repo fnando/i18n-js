@@ -20,7 +20,7 @@ module I18nJS
 
     self.started = true
 
-    locales_dirs = Array(locales_dir)
+    locales_dirs = Array(locales_dir).map {|path| File.expand_path(path) }
 
     relative_paths =
       [config_file, *locales_dirs].map {|path| relative_path(path) }

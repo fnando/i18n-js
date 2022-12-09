@@ -21,6 +21,7 @@ Prefix your message with one of the following:
 - [Deprecated] The `i18n check` has been deprecated. Use
   `i18n lint:translations` instead.
 - [Added] Use `i18n lint:scripts` to lint JavaScript/TypeScript.
+- [Fixed] Expand paths passed to `I18nJS.listen(locales_dir:)`.
 
 ## v4.0.1 - Aug 25, 2022
 
