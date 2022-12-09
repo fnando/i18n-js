@@ -4,12 +4,18 @@ module I18nJS
   class Schema
     InvalidError = Class.new(StandardError)
 
-    REQUIRED_CHECK_KEYS = %i[ignore].freeze
+    REQUIRED_LINT_TRANSLATIONS_KEYS = %i[ignore].freeze
+    REQUIRED_LINT_SCRIPTS_KEYS = %i[ignore patterns].freeze
     REQUIRED_TRANSLATION_KEYS = %i[file patterns].freeze
     TRANSLATION_KEYS = %i[file patterns].freeze
 
     def self.root_keys
-      @root_keys ||= Set.new(%i[translations check])
+      @root_keys ||= Set.new(%i[
+        translations
+        lint_translations
+        lint_scripts
+        check
+      ])
     end
 
     def self.required_root_keys
@@ -34,17 +40,33 @@ module I18nJS
       expect_required_keys(self.class.required_root_keys, target)
       reject_extraneous_keys(self.class.root_keys, target)
       validate_translations
-      validate_check
+      validate_lint_translations
+      validate_lint_scripts
     end
 
-    def validate_check
-      return unless target.key?(:check)
+    def validate_lint_translations
+      key = :lint_translations
 
-      check = target[:check]
+      return unless target.key?(key)
 
-      expect_type(:check, check, Hash, target)
-      expect_required_keys(REQUIRED_CHECK_KEYS, check)
-      expect_type(:ignore, check[:ignore], Array, check)
+      config = target[key]
+
+      expect_type(key, config, Hash, target)
+      expect_required_keys(REQUIRED_LINT_TRANSLATIONS_KEYS, config)
+      expect_type(:ignore, config[:ignore], Array, config)
+    end
+
+    def validate_lint_scripts
+      key = :lint_scripts
+
+      return unless target.key?(key)
+
+      config = target[key]
+
+      expect_type(key, config, Hash, target)
+      expect_required_keys(REQUIRED_LINT_SCRIPTS_KEYS, config)
+      expect_type(:ignore, config[:ignore], Array, config)
+      expect_type(:patterns, config[:patterns], Array, config)
     end
 
     def validate_translations

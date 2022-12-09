@@ -9,3 +9,5 @@
 /vendor/
 *.log
 *.lock
+/lib/**/*.js
+/test/output

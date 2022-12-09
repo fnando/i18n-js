@@ -1,0 +1,17 @@
+=> Config file: "test/config/lint_scripts.yml"
+=> Require file: "test/config/require.rb"
+=> Node: "%{node}"
+=> Available locales: [:en, :es, :pt]
+=> Patterns: ["!(node_modules)/**/*.js", "!(node_modules)/**/*.ts", "!(node_modules)/**/*.jsx", "!(node_modules)/**/*.tsx"]
+=> 9 translations, 11 missing, 4 ignored
+   - test/scripts/lint/file.js:1:1: en.js.missing
+   - test/scripts/lint/file.js:1:1: es.js.missing
+   - test/scripts/lint/file.js:1:1: pt.js.missing
+   - test/scripts/lint/file.js:2:8: en.base.js.missing
+   - test/scripts/lint/file.js:2:8: es.base.js.missing
+   - test/scripts/lint/file.js:2:8: pt.base.js.missing
+   - test/scripts/lint/file.js:4:8: en.js.missing
+   - test/scripts/lint/file.js:4:8: es.js.missing
+   - test/scripts/lint/file.js:4:8: pt.js.missing
+   - test/scripts/lint/file.js:6:1: en.another_ignore_scope
+   - test/scripts/lint/file.js:6:1: es.another_ignore_scope

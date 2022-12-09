@@ -1,0 +1,15 @@
+---
+translations:
+  - file: test/output/everything.json
+    patterns:
+      - "*"
+
+lint_scripts:
+  patterns:
+    - "!(node_modules)/**/*.js"
+    - "!(node_modules)/**/*.ts"
+    - "!(node_modules)/**/*.jsx"
+    - "!(node_modules)/**/*.tsx"
+  ignore:
+    - ignore_scope
+    - pt.another_ignore_scope

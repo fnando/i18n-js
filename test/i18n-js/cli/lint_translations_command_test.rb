@@ -2,35 +2,29 @@
 
 require "test_helper"
 
-class CheckCommandTest < Minitest::Test
+class LintTranslationsCommandTest < Minitest::Test
   let(:stdout) { StringIO.new }
   let(:stderr) { StringIO.new }
 
-  def assert_command_deprecation_message
-    assert_stderr_includes "WARNING: `i18n check` has been deprecated in " \
-                           "favor of `i18n lint:translations`"
-  end
-
   test "displays help" do
     cli = I18nJS::CLI.new(
-      argv: %w[check --help],
+      argv: %w[lint:translations --help],
       stdout: stdout,
       stderr: stderr
     )
 
     assert_exit_code(0) { cli.call }
-    assert_stdout_includes "Usage: i18n check [options]"
+    assert_stdout_includes "Usage: i18n lint:translations [options]"
   end
 
   test "without a config file" do
     cli = I18nJS::CLI.new(
-      argv: %w[check],
+      argv: %w[lint:translations],
       stdout: stdout,
       stderr: stderr
     )
 
     assert_exit_code(1) { cli.call }
-    assert_command_deprecation_message
     assert_stderr_includes "ERROR: you need to specify the config file"
   end
 
@@ -39,13 +33,12 @@ class CheckCommandTest < Minitest::Test
     path = File.expand_path(config_file)
 
     cli = I18nJS::CLI.new(
-      argv: %W[check --config #{config_file}],
+      argv: %W[lint:translations --config #{config_file}],
       stdout: stdout,
       stderr: stderr
     )
 
     assert_exit_code(1) { cli.call }
-    assert_command_deprecation_message
     assert_stderr_includes %[ERROR: config file doesn't exist at "#{path}"]
   end
 
@@ -55,7 +48,7 @@ class CheckCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %W[
-        check
+        lint:translations
         --config test/config/everything.yml
         --require #{require_file}
       ],
@@ -64,7 +57,6 @@ class CheckCommandTest < Minitest::Test
     )
 
     assert_exit_code(1) { cli.call }
-    assert_command_deprecation_message
     assert_stderr_includes %[ERROR: require file doesn't exist at "#{path}"]
   end
 
@@ -72,13 +64,12 @@ class CheckCommandTest < Minitest::Test
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
 
     cli = I18nJS::CLI.new(
-      argv: %w[check --config test/config/everything.yml],
+      argv: %w[lint:translations --config test/config/everything.yml],
       stdout: stdout,
       stderr: stderr
     )
 
     assert_exit_code(0) { cli.call }
-    assert_command_deprecation_message
   end
 
   test "with require file that fails to load" do
@@ -86,7 +77,7 @@ class CheckCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %w[
-        check
+        lint:translations
         --config test/config/everything.yml
         --require test/config/require_error.rb
       ],
@@ -96,7 +87,6 @@ class CheckCommandTest < Minitest::Test
 
     assert_exit_code(1) { cli.call }
 
-    assert_command_deprecation_message
     assert_stderr_includes "RuntimeError => 💣"
     assert_stderr_includes \
       %[ERROR: couldn't load "test/config/require_error.rb"]
@@ -105,7 +95,7 @@ class CheckCommandTest < Minitest::Test
   test "forces colored output" do
     cli = I18nJS::CLI.new(
       argv: %w[
-        check
+        lint:translations
         --config test/config/everything.yml
         --require test/config/require.rb
         --color
@@ -118,7 +108,6 @@ class CheckCommandTest < Minitest::Test
 
     output = stdout.tap(&:rewind).read.chomp
 
-    assert_command_deprecation_message
     assert_includes output, "\e[31mmissing\e[0m"
     assert_includes output, "\e[33mextraneous\e[0m"
   end
@@ -126,7 +115,7 @@ class CheckCommandTest < Minitest::Test
   test "checks loaded translations" do
     cli = I18nJS::CLI.new(
       argv: %w[
-        check
+        lint:translations
         --config test/config/everything.yml
         --require test/config/require.rb
       ],
@@ -138,7 +127,6 @@ class CheckCommandTest < Minitest::Test
 
     output = stdout.tap(&:rewind).read.chomp
 
-    assert_command_deprecation_message
     assert_includes output, "=> en: 3 translations"
     assert_includes output, "=> es: 1 missing, 1 extraneous"
     assert_includes output, "- es.bye (extraneous)"
@@ -151,8 +139,8 @@ class CheckCommandTest < Minitest::Test
   test "ignores translations" do
     cli = I18nJS::CLI.new(
       argv: %w[
-        check
-        --config test/config/check.yml
+        lint:translations
+        --config test/config/lint_translations.yml
         --require test/config/require.rb
       ],
       stdout: stdout,
@@ -163,7 +151,6 @@ class CheckCommandTest < Minitest::Test
 
     output = stdout.tap(&:rewind).read.chomp
 
-    assert_command_deprecation_message
     assert_includes output, "=> en: 3 translations"
     assert_includes output, "=> es: 0 missing, 0 extraneous, 2 ignored"
     assert_includes output, "=> pt: 0 missing, 0 extraneous, 2 ignored"

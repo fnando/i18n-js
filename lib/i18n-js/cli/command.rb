@@ -39,6 +39,16 @@ module I18nJS
         @options ||= {}
       end
 
+      private def load_config_file(config_file)
+        config = Glob::SymbolizeKeys.call(YAML.load_file(config_file))
+
+        if config.key?(:check)
+          config[:lint_translations] ||= config.delete(:check)
+        end
+
+        config
+      end
+
       private def load_require_file!(require_file)
         require_without_warnings(require_file)
       rescue Exception => error # rubocop:disable Lint/RescueException

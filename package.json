@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "esbuild": "^0.16.2",
+    "glob": "^8.0.3",
+    "typescript": "^4.9.4"
+  },
+  "scripts": {
+    "compile": "esbuild lib/i18n-js/lint.ts --bundle --platform=node --outfile=lib/i18n-js/lint.js --target=node16"
+  }
+}

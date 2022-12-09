@@ -1,0 +1,79 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+require_relative "../lib/i18n-js/version"
+
+def write_file(path, contents)
+  File.open(File.expand_path(path), "w") do |io|
+    io << contents
+  end
+end
+
+changelog_path = "./CHANGELOG.md"
+version_path = "./lib/i18n-js/version.rb"
+
+version = nil
+segments = I18nJS::VERSION.split(".")
+major, minor, patch = *segments.take(3).map(&:to_i)
+pre = segments[4].to_s
+pre_version = pre.gsub(/[^\d]/m, "").to_i
+date = Time.now.strftime("%b %d, %Y")
+release = false
+alpha = false
+
+OptionParser.new do |opts|
+  opts.on("--major") do
+    version = "#{major + 1}.0.0"
+  end
+
+  opts.on("--minor") do
+    version = "#{major}.#{minor + 1}.0"
+  end
+
+  opts.on("--patch") do
+    version = "#{major}.#{minor}.#{patch + 1}"
+  end
+
+  opts.on("--alpha") do
+    alpha = true
+  end
+
+  opts.on("--release") do
+    release = true
+  end
+end.parse!
+
+version = "#{version}.alpha#{pre_version + 1}" if alpha
+
+unless version
+  puts "ERROR: You need to use either one of: --major, --minor, --patch"
+  exit 1
+end
+
+puts "=> Current version: #{I18nJS::VERSION}"
+puts "=> Next version: #{version}"
+
+system "yarn", "install"
+system "yarn", "compile"
+
+write_file changelog_path,
+           File.read(changelog_path)
+               .gsub("Unreleased", "v#{version} - #{date}")
+
+puts "=> Updated #{changelog_path}"
+
+write_file version_path,
+           File.read(version_path)
+               .gsub(/VERSION = ".*?"/, %[VERSION = "#{version}"])
+
+puts "=> Updated #{version_path}"
+
+if release
+  system "git", "add", changelog_path, version_path
+  system "git", "commit", "-m", "Bump up version (v#{version})"
+  system "git", "tag", "v#{version}"
+end
+
+system "rake", "build"
+system "git", "checkout", changelog_path, version_path unless release
