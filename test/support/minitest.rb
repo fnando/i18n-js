@@ -7,6 +7,7 @@ module Minitest
     setup do
       reset_i18n
 
+      I18nJS.plugins.clear
       I18n.config.clear_available_locales_set
       I18n.backend = I18n::Backend::Simple.new
       FileUtils.rm_rf "./test/output"

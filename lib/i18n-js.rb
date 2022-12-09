@@ -10,6 +10,7 @@ require "erb"
 
 require_relative "i18n-js/schema"
 require_relative "i18n-js/version"
+require_relative "i18n-js/plugin"
 
 module I18nJS
   MissingConfigError = Class.new(StandardError)
@@ -20,19 +21,27 @@ module I18nJS
             "you must set either `config_file` or `config`"
     end
 
+    load_plugins!
+
     config = Glob::SymbolizeKeys.call(config || load_config_file(config_file))
+
     Schema.validate!(config)
     exported_files = []
 
     config[:translations].each do |group|
-      exported_files += export_group(group)
+      exported_files += export_group(group, config)
     end
 
     exported_files
   end
 
-  def self.export_group(group)
+  def self.export_group(group, config)
     filtered_translations = Glob.filter(translations, group[:patterns])
+    filtered_translations =
+      plugins.reduce(filtered_translations) do |buffer, plugin|
+        plugin.transform(translations: buffer, config: config)
+      end
+
     output_file_path = File.expand_path(group[:file])
     exported_files = []
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "benchmark"
-
 module I18nJS
   class CLI
     class CheckCommand < Command

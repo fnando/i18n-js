@@ -35,12 +35,13 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) {|f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "glob"
+  spec.add_dependency "glob", ">= 0.4.0"
   spec.add_dependency "i18n"
 
   spec.add_development_dependency "activesupport"
   spec.add_development_dependency "minitest"
   spec.add_development_dependency "minitest-utils"
+  spec.add_development_dependency "mocha"
   spec.add_development_dependency "pry-meta"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rubocop"

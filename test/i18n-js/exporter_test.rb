@@ -3,13 +3,13 @@
 require "test_helper"
 
 class ExporterTest < Minitest::Test
-  test "fail when neither config_file nor config is set" do
+  test "fails when neither config_file nor config is set" do
     assert_raises(I18nJS::MissingConfigError) do
       I18nJS.call(config_file: nil, config: nil)
     end
   end
 
-  test "export all translations" do
+  test "exports all translations" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/everything.yml")
 
@@ -18,7 +18,7 @@ class ExporterTest < Minitest::Test
                      "test/output/everything.json"
   end
 
-  test "export all translations (json config)" do
+  test "exports all translations (json config)" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/everything.json")
 
@@ -27,7 +27,7 @@ class ExporterTest < Minitest::Test
                      "test/output/everything.json"
   end
 
-  test "export all translations using config object" do
+  test "exports all translations using config object" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(
       config: {
@@ -45,7 +45,7 @@ class ExporterTest < Minitest::Test
                      "test/output/everything.json"
   end
 
-  test "export all translations using gettext backend" do
+  test "exports all translations using gettext backend" do
     I18n.backend = GettextBackend.new
     I18n.load_path << Dir["./test/fixtures/po/*.po"]
     actual_files = I18nJS.call(config_file: "./test/config/everything.yml")
@@ -55,7 +55,7 @@ class ExporterTest < Minitest::Test
                      "test/output/everything.json"
   end
 
-  test "export specific paths" do
+  test "exports specific paths" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/specific.yml")
 
@@ -64,7 +64,7 @@ class ExporterTest < Minitest::Test
                      "test/output/specific.json"
   end
 
-  test "export multiple files" do
+  test "exports multiple files" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files =
       I18nJS.call(config_file: "./test/config/multiple_files.yml")
@@ -77,7 +77,7 @@ class ExporterTest < Minitest::Test
                      "test/output/pt.json"
   end
 
-  test "export multiple files using :locale" do
+  test "exports multiple files using :locale" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files =
       I18nJS.call(config_file: "./test/config/locale_placeholder.yml")
@@ -96,7 +96,7 @@ class ExporterTest < Minitest::Test
                      "test/output/pt.json"
   end
 
-  test "export multiple files using :locale as dirname" do
+  test "exports multiple files using :locale as dirname" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files =
       I18nJS.call(config_file: "./test/config/locale_placeholder_dir.yml")
@@ -115,7 +115,7 @@ class ExporterTest < Minitest::Test
                      "test/output/pt/translations.json"
   end
 
-  test "export files using :digest" do
+  test "exports files using :digest" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/digest.yml")
 
@@ -136,7 +136,7 @@ class ExporterTest < Minitest::Test
                      "test/output/pt.c7ff3b8cc02447b25a1375854ea718f5.json"
   end
 
-  test "export files using groups" do
+  test "exports files using groups" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/group.yml")
 
@@ -155,6 +155,25 @@ class ExporterTest < Minitest::Test
 
     assert_exported_files expected_files, actual_files
     assert_json_file "test/fixtures/expected/everything.json",
+                     "test/output/everything.json"
+  end
+
+  test "exports files piping translation through plugins" do
+    sample_plugin = Class.new(I18nJS::Plugin) do
+      def self.transform(translations:, config:) # rubocop:disable Lint/UnusedMethodArgument
+        translations.each_key do |locale|
+          translations[locale][:injected] = "yes:#{locale}"
+        end
+
+        translations
+      end
+    end
+
+    I18nJS.register_plugin(sample_plugin)
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    I18nJS.call(config_file: "./test/config/everything.yml")
+
+    assert_json_file "test/fixtures/expected/transformed.json",
                      "test/output/everything.json"
   end
 end

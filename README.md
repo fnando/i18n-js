@@ -113,6 +113,7 @@ Commands:
 - export: Export translations as JSON files
 - version: Show package version
 - check: Check for missing translations
+- plugins: List plugins that will be activated
 
 Run `i18n COMMAND --help` for more information on specific commands.
 ```
@@ -120,6 +121,118 @@ Run `i18n COMMAND --help` for more information on specific commands.
 By default, `i18n` will use `config/i18n.yml` and `config/environment.rb` as the
 configuration files. If you don't have these files, then you'll need to specify
 both `--config` and `--require`.
+
+### Plugins
+
+#### Built-in plugins:
+
+##### `embed_fallback_translations`:
+
+Embed fallback translations inferred from the default locale. This can be useful
+in cases where you have multiple large translation files and don't want to load
+the default locale together with the target locale.
+
+To use it, add the following to your configuration file:
+
+```yaml
+embed_fallback_translations:
+  enabled: true
+```
+
+#### Plugin API
+
+You can transform the exported translations by adding plugins. A plugin must
+inherit from `I18nJS::Plugin` and can have 3 class methods. The following
+example shows how the built-in `embed_fallback_translations` plugin is
+implemented.
+
+```ruby
+# frozen_string_literal: true
+
+module I18nJS
+  require "i18n-js/plugin"
+
+  class EmbedFallbackTranslationsPlugin < I18nJS::Plugin
+    CONFIG_KEY = :embed_fallback_translations
+
+    # This method must set up the basic plugin configuration, like adding the
+    # config's root key in case your plugin accepts configuration (defined via
+    # the config file).
+    #
+    # If you don't add this key, the linter will prevent non-default keys from
+    # being added to the configuration file.
+    def self.setup
+      I18nJS::Schema.root_keys << CONFIG_KEY
+    end
+
+    # In case your plugin accepts configuration, this is where you must validate
+    # the configuration, making sure only valid keys and type is provided.
+    # If the configuration contains invalid data, then you must raise an
+    # exception using something like
+    # `raise I18nJS::Schema::InvalidError, error_message`.
+    def self.validate_schema(config:)
+      return unless config.key?(CONFIG_KEY)
+
+      plugin_config = config[CONFIG_KEY]
+      valid_keys = %i[enabled]
+      schema = I18nJS::Schema.new(config)
+
+      schema.expect_required_keys(valid_keys, plugin_config)
+      schema.reject_extraneous_keys(valid_keys, plugin_config)
+      schema.expect_enabled_config(CONFIG_KEY, plugin_config[:enabled])
+    end
+
+    # This method is responsible for transforming the translations. The
+    # translations you'll receive may be already be filtered by other plugins
+    # and by the default filtering itself. If you need to access the original
+    # translations, use `I18nJS.translations`.
+    #
+    # Make sure you always check whether your plugin is active before
+    # transforming translations; otherwise, opting out transformation won't be
+    # possible.
+    def self.transform(translations:, config:)
+      return translations unless config.dig(CONFIG_KEY, :enabled)
+
+      translations_glob = Glob.new(translations)
+      translations_glob << "*"
+
+      mapping = translations.keys.each_with_object({}) do |locale, buffer|
+        buffer[locale] = Glob.new(translations[locale]).tap do |glob|
+          glob << "*"
+        end
+      end
+
+      default_locale = I18n.default_locale
+      default_locale_glob = mapping.delete(default_locale)
+      default_locale_paths = default_locale_glob.paths
+
+      mapping.each do |locale, glob|
+        missing_keys = default_locale_paths - glob.paths
+
+        missing_keys.each do |key|
+          components = key.split(".").map(&:to_sym)
+          fallback_translation = translations.dig(default_locale, *components)
+
+          next unless fallback_translation
+
+          translations_glob.set([locale, key].join("."), fallback_translation)
+        end
+      end
+
+      translations_glob.to_h
+    end
+  end
+
+  I18nJS.register_plugin(EmbedFallbackTranslationsPlugin)
+end
+```
+
+To distribute this plugin, you need to create a gem package that matches the
+pattern `i18n-js/*_plugin.rb`. You can test whether your plugin will be found by
+installing your gem, opening a iRB session and running
+`Gem.find_files("i18n-js/*_plugin.rb")`. If your plugin is not listed, then you
+need to double check your gem load path and see why the file is not being
+loaded.
 
 ### Listing missing translations
 
@@ -246,7 +359,8 @@ The code above will watch for changes based on `config/i18n.yml` and
 
 - `config_file` - i18n-js configuration file
 - `locales_dir` - one or multiple directories to watch for locales changes
-- `options` - passed directly to [listen](https://github.com/guard/listen/#options)
+- `options` - passed directly to
+  [listen](https://github.com/guard/listen/#options)
 - `run_on_start` - export files on start. Defaults to `true`. When disabled,
   files will be exported only when there are file changes.
 
