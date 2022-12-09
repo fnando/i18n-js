@@ -242,7 +242,20 @@ To list missing and extraneous translations, you can use
 how `i18n export` does, but will output the list of keys that don't have a
 matching translation against the default locale. Here's an example:
 
-![`i18n lint:translations` command in action](https://github.com/fnando/i18n-js/raw/main/images/i18njs-check.gif)
+```console
+$ i18n lint:translations
+=> Config file: "./config/i18n.yml"
+=> Require file: "./config/environment.rb"
+=> Check "./config/i18n.yml" for ignored keys.
+=> en: 232 translations
+=> pt-BR: 5 missing, 1 extraneous, 1 ignored
+   - pt-BR.actors.github.metrics (missing)
+   - pt-BR.actors.github.metrics_hint (missing)
+   - pt-BR.actors.github.repo_metrics (missing)
+   - pt-BR.actors.github.repository (missing)
+   - pt-BR.actors.github.user_metrics (missing)
+   - pt-BR.github.repository (extraneous)
+```
 
 This command will exist with status 1 whenever there are missing translations.
 This way you can use it as a CI linting.
@@ -300,9 +313,9 @@ you're using dynamic scoping through variables (e.g.
 `const scope = "message"; i18n.t(scope)`), they will be skipped.
 
 ```console
-$ i18n lint:scripts --config test/config/lint.yml --require test/config/require.rb
-=> Config file: "test/config/lint.yml"
-=> Require file: "test/config/require.rb"
+$ i18n lint:scripts
+=> Config file: "./config/i18n.yml"
+=> Require file: "./config/environment.rb"
 => Node: "/Users/fnando/.asdf/shims/node"
 => Available locales: [:en, :es, :pt]
 => Patterns: ["!(node_modules)/**/*.js", "!(node_modules)/**/*.ts", "!(node_modules)/**/*.jsx", "!(node_modules)/**/*.tsx"]
