@@ -22,13 +22,13 @@ Prefix your message with one of the following:
   `i18n lint:translations` instead.
 - [Added] Use `i18n lint:scripts` to lint JavaScript/TypeScript.
 
-## v4.0.1
+## v4.0.1 - Aug 25, 2022
 
 - [Fixed] Shell out export to avoid handling I18n reloading heuristics.
 - [Changed] `I18nJS.listen` now accepts a directories list to watch.
 - [Changed] `I18nJS.listen` now accepts
   [listen](https://rubygems.org/gems/listen) options via `:options`.
 
-## Jul 29, 2022
+## v4.0.0 - Jul 29, 2022
 
 - Official release of i18n-js v4.0.0.
