@@ -34,6 +34,8 @@ module I18nJS
       exported_files += export_group(group, config)
     end
 
+    plugins.each {|plugin| plugin.after_export(files: exported_files.dup) }
+
     exported_files
   end
 
