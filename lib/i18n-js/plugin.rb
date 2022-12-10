@@ -23,12 +23,14 @@ module I18nJS
   end
 
   class Plugin
-    # This method must set up the basic plugin configuration, like adding the
-    # config's root key in case your plugin accepts configuration (defined via
-    # the config file).
+    # This method is responsible for transforming the translations. The
+    # translations you'll receive may be already be filtered by other plugins
+    # and by the default filtering itself. If you need to access the original
+    # translations, use `I18nJS.translations`.
     #
-    # If you don't add this key, the linter will prevent non-default keys from
-    # being added to the configuration file.
+    # Make sure you always check whether your plugin is active before
+    # transforming translations; otherwise, opting out transformation won't be
+    # possible.
     def self.transform(translations:, config:) # rubocop:disable Lint/UnusedMethodArgument
       translations
     end
@@ -41,14 +43,12 @@ module I18nJS
     def self.validate_schema(config:)
     end
 
-    # This method is responsible for transforming the translations. The
-    # translations you'll receive may be already be filtered by other plugins
-    # and by the default filtering itself. If you need to access the original
-    # translations, use `I18nJS.translations`.
+    # This method must set up the basic plugin configuration, like adding the
+    # config's root key in case your plugin accepts configuration (defined via
+    # the config file).
     #
-    # Make sure you always check whether your plugin is active before
-    # transforming translations; otherwise, opting out transformation won't be
-    # possible.
+    # If you don't add this key, the linter will prevent non-default keys from
+    # being added to the configuration file.
     def self.setup
     end
 
@@ -57,7 +57,10 @@ module I18nJS
     #
     # You can use it to further process exported files, or generate new files
     # based on the translations that have been exported.
-    def self.after_export(files:)
+    #
+    # Make sure you always check whether your plugin is active before
+    # processing files; otherwise, opting out won't be possible.
+    def self.after_export(files:, config:)
     end
   end
 end

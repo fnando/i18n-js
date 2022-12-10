@@ -16,6 +16,8 @@ Prefix your message with one of the following:
 - [Added] Add `I18nJS::Plugin.after_export(files:)` method, that's called
   whenever whenever I18nJS finishes exporting files. You can use it to further
   process files, or generate new files based on the exported files.
+- [Changed] Pass configuration to
+  `I18nJS::Plugin.after_export(files:, config:)`.
 
 ## v4.1.0 - Dec 09, 2022
 
