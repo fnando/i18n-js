@@ -71,30 +71,36 @@ class PluginTest < Minitest::Test
   end
 
   test "runs after_export event" do
+    config_file = "./test/config/locale_placeholder.yml"
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     expected_files = [
       "test/output/en.json",
       "test/output/es.json",
       "test/output/pt.json"
     ]
+    expected_config = Glob::SymbolizeKeys.call(
+      I18nJS.load_config_file(config_file)
+    )
 
     sample_plugin = create_plugin do
-      def self.exported_files
-        @exported_files ||= []
+      class << self
+        attr_reader :received_config, :received_files
       end
 
-      def self.after_export(files:)
-        exported_files.push(*files)
+      def self.after_export(files:, config:)
+        @received_files = files
+        @received_config = config
       end
     end
 
     I18nJS.register_plugin(sample_plugin)
 
     actual_files =
-      I18nJS.call(config_file: "./test/config/locale_placeholder.yml")
+      I18nJS.call(config_file: config_file)
 
+    assert_equal expected_config, sample_plugin.received_config
     assert_exported_files expected_files, actual_files
-    assert_exported_files expected_files, sample_plugin.exported_files
+    assert_exported_files expected_files, sample_plugin.received_files
   end
 
   test "loads plugins using rubygems" do
