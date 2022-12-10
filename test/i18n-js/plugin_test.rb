@@ -70,6 +70,33 @@ class PluginTest < Minitest::Test
     assert_includes sample_plugin.calls, config
   end
 
+  test "runs after_export event" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    expected_files = [
+      "test/output/en.json",
+      "test/output/es.json",
+      "test/output/pt.json"
+    ]
+
+    sample_plugin = create_plugin do
+      def self.exported_files
+        @exported_files ||= []
+      end
+
+      def self.after_export(files:)
+        exported_files.push(*files)
+      end
+    end
+
+    I18nJS.register_plugin(sample_plugin)
+
+    actual_files =
+      I18nJS.call(config_file: "./test/config/locale_placeholder.yml")
+
+    assert_exported_files expected_files, actual_files
+    assert_exported_files expected_files, sample_plugin.exported_files
+  end
+
   test "loads plugins using rubygems" do
     Gem
       .expects(:find_files)

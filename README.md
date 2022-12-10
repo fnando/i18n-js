@@ -143,27 +143,25 @@ embed_fallback_translations:
 #### Plugin API
 
 You can transform the exported translations by adding plugins. A plugin must
-inherit from `I18nJS::Plugin` and can have 3 class methods. The following
-example shows how the built-in `embed_fallback_translations` plugin is
-implemented.
+inherit from `I18nJS::Plugin` and can have 4 class methods. To see a real
+example, see
+[lib/i18n-js/embed_fallback_translations_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/embed_fallback_translations_plugin.rb)
+
+Here's the base `I18nJS::Plugin` class with the documented api:
 
 ```ruby
 # frozen_string_literal: true
 
 module I18nJS
-  require "i18n-js/plugin"
-
-  class EmbedFallbackTranslationsPlugin < I18nJS::Plugin
-    CONFIG_KEY = :embed_fallback_translations
-
+  class Plugin
     # This method must set up the basic plugin configuration, like adding the
     # config's root key in case your plugin accepts configuration (defined via
     # the config file).
     #
     # If you don't add this key, the linter will prevent non-default keys from
     # being added to the configuration file.
-    def self.setup
-      I18nJS::Schema.root_keys << CONFIG_KEY
+    def self.transform(translations:, config:)
+      translations
     end
 
     # In case your plugin accepts configuration, this is where you must validate
@@ -172,15 +170,6 @@ module I18nJS
     # exception using something like
     # `raise I18nJS::Schema::InvalidError, error_message`.
     def self.validate_schema(config:)
-      return unless config.key?(CONFIG_KEY)
-
-      plugin_config = config[CONFIG_KEY]
-      valid_keys = %i[enabled]
-      schema = I18nJS::Schema.new(config)
-
-      schema.expect_required_keys(valid_keys, plugin_config)
-      schema.reject_extraneous_keys(valid_keys, plugin_config)
-      schema.expect_enabled_config(CONFIG_KEY, plugin_config[:enabled])
     end
 
     # This method is responsible for transforming the translations. The
@@ -191,40 +180,17 @@ module I18nJS
     # Make sure you always check whether your plugin is active before
     # transforming translations; otherwise, opting out transformation won't be
     # possible.
-    def self.transform(translations:, config:)
-      return translations unless config.dig(CONFIG_KEY, :enabled)
+    def self.setup
+    end
 
-      translations_glob = Glob.new(translations)
-      translations_glob << "*"
-
-      mapping = translations.keys.each_with_object({}) do |locale, buffer|
-        buffer[locale] = Glob.new(translations[locale]).tap do |glob|
-          glob << "*"
-        end
-      end
-
-      default_locale = I18n.default_locale
-      default_locale_glob = mapping.delete(default_locale)
-      default_locale_paths = default_locale_glob.paths
-
-      mapping.each do |locale, glob|
-        missing_keys = default_locale_paths - glob.paths
-
-        missing_keys.each do |key|
-          components = key.split(".").map(&:to_sym)
-          fallback_translation = translations.dig(default_locale, *components)
-
-          next unless fallback_translation
-
-          translations_glob.set([locale, key].join("."), fallback_translation)
-        end
-      end
-
-      translations_glob.to_h
+    # This method is called whenever `I18nJS.call(**kwargs)` finishes exporting
+    # JSON files based on your configuration.
+    #
+    # You can use it to further process exported files, or generate new files
+    # based on the translations that have been exported.
+    def self.after_export(files:)
     end
   end
-
-  I18nJS.register_plugin(EmbedFallbackTranslationsPlugin)
 end
 ```
 
