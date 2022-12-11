@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+ENV["TZ"] = "Etc/UTC"
+
 require "simplecov"
 SimpleCov.start do
   add_filter(/test/)

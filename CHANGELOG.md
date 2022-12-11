@@ -13,11 +13,11 @@ Prefix your message with one of the following:
 
 ## Unreleased
 
-- [Added] Add `I18nJS::Plugin.after_export(files:)` method, that's called
-  whenever whenever I18nJS finishes exporting files. You can use it to further
-  process files, or generate new files based on the exported files.
-- [Changed] Pass configuration to
-  `I18nJS::Plugin.after_export(files:, config:)`.
+- [Added] Add `I18nJS::Plugin.after_export(files:, config:)` method, that's
+  called whenever whenever I18nJS finishes exporting files. You can use it to
+  further process files, or generate new files based on the exported files.
+- [Added] Bult-in plugin `I18nJS::ExportFilesPlugin`, which allows exporting
+  files out of the translations file by using a custom template.
 
 ## v4.1.0 - Dec 09, 2022
 
@@ -26,6 +26,8 @@ Prefix your message with one of the following:
   exported during `I18n.listen`'s boot. The default value is `true`.
 - [Added] Now it's possible to transform translations before exporting them
   using a stable plugin api.
+- [Added] Built-in plugin `I18nJS::EmbedFallbackTranslationsPlugin`, which
+  allows embedding missing translations on exported files.
 - [Deprecated] The `i18n check` has been deprecated. Use
   `i18n lint:translations` instead.
 - [Added] Use `i18n lint:scripts` to lint JavaScript/TypeScript.
