@@ -21,7 +21,7 @@ module I18nJS
     end
 
     def transform(translations:)
-      return translations unless config.dig(config_key, :enabled)
+      return translations unless enabled?
 
       translations_glob = Glob.new(translations)
       translations_glob << "*"

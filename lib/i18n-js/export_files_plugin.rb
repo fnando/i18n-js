@@ -29,7 +29,7 @@ module I18nJS
     end
 
     def after_export(files:)
-      return unless config.dig(config_key, :enabled)
+      return unless enabled?
 
       exports = config.dig(config_key, :files)
 

@@ -51,6 +51,12 @@ module I18nJS
           .to_sym
     end
 
+    # Check whether plugin is enabled or not.
+    # A plugin is enabled when the plugin configuration has `enabled: true`.
+    def enabled?
+      config.dig(config_key, :enabled)
+    end
+
     # This method is responsible for transforming the translations. The
     # translations you'll receive may be already be filtered by other plugins
     # and by the default filtering itself. If you need to access the original
