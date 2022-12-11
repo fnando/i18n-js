@@ -39,6 +39,18 @@ module I18nJS
       @config = config
     end
 
+    # Infer the config key name out of the class.
+    # If you plugin is called `MySamplePlugin`, the key will be `my_sample`.
+    def config_key
+      self.class.name.split("::").last
+          .gsub(/Plugin$/, "")
+          .gsub(/^([A-Z]+)([A-Z])/) { "#{$1.downcase}#{$2}" }
+          .gsub(/^([A-Z]+)/) { $1.downcase }
+          .gsub(/([A-Z]+)/m) { "_#{$1.downcase}" }
+          .downcase
+          .to_sym
+    end
+
     # This method is responsible for transforming the translations. The
     # translations you'll receive may be already be filtered by other plugins
     # and by the default filtering itself. If you need to access the original

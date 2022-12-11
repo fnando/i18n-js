@@ -4,26 +4,24 @@ module I18nJS
   require "i18n-js/plugin"
 
   class EmbedFallbackTranslationsPlugin < I18nJS::Plugin
-    CONFIG_KEY = :embed_fallback_translations
-
     def setup
-      I18nJS::Schema.root_keys << CONFIG_KEY
+      I18nJS::Schema.root_keys << config_key
     end
 
     def validate_schema
-      return unless config.key?(CONFIG_KEY)
+      return unless config.key?(config_key)
 
-      plugin_config = config[CONFIG_KEY]
+      plugin_config = config[config_key]
       valid_keys = %i[enabled]
       schema = I18nJS::Schema.new(config)
 
       schema.expect_required_keys(valid_keys, plugin_config)
       schema.reject_extraneous_keys(valid_keys, plugin_config)
-      schema.expect_enabled_config(CONFIG_KEY, plugin_config[:enabled])
+      schema.expect_enabled_config(config_key, plugin_config[:enabled])
     end
 
     def transform(translations:)
-      return translations unless config.dig(CONFIG_KEY, :enabled)
+      return translations unless config.dig(config_key, :enabled)
 
       translations_glob = Glob.new(translations)
       translations_glob << "*"

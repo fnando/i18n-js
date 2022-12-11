@@ -115,4 +115,20 @@ class PluginTest < Minitest::Test
 
     I18nJS.load_plugins!
   end
+
+  test "infers config key out of class name" do
+    {
+      "SamplePlugin" => :sample,
+      "EmbedFallbackTranslationsPlugin" => :embed_fallback_translations,
+      "ExportFilesPlugin" => :export_files,
+      "FetchFromHTTPPlugin" => :fetch_from_http,
+      "HTTPClientPlugin" => :http_client
+    }.each do |class_name, key|
+      plugin_class = Class.new(I18nJS::Plugin)
+      plugin_class.stubs(:name).returns(class_name)
+      plugin = plugin_class.new(config: {})
+
+      assert_equal key, plugin.config_key
+    end
+  end
 end

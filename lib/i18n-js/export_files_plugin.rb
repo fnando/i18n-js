@@ -4,22 +4,20 @@ module I18nJS
   require "i18n-js/plugin"
 
   class ExportFilesPlugin < I18nJS::Plugin
-    CONFIG_KEY = :export_files
-
     def setup
-      I18nJS::Schema.root_keys << CONFIG_KEY
+      I18nJS::Schema.root_keys << config_key
     end
 
     def validate_schema
-      return unless config.key?(CONFIG_KEY)
+      return unless config.key?(config_key)
 
-      plugin_config = config[CONFIG_KEY]
+      plugin_config = config[config_key]
       valid_keys = %i[enabled files]
       schema = I18nJS::Schema.new(config)
 
       schema.expect_required_keys(valid_keys, plugin_config)
       schema.reject_extraneous_keys(valid_keys, plugin_config)
-      schema.expect_enabled_config(CONFIG_KEY, plugin_config[:enabled])
+      schema.expect_enabled_config(config_key, plugin_config[:enabled])
       schema.expect_array_with_items(:files, plugin_config[:files])
 
       plugin_config[:files].each do |exports|
@@ -31,9 +29,9 @@ module I18nJS
     end
 
     def after_export(files:)
-      return unless config.dig(CONFIG_KEY, :enabled)
+      return unless config.dig(config_key, :enabled)
 
-      exports = config.dig(CONFIG_KEY, :files)
+      exports = config.dig(config_key, :files)
 
       require "erb"
       require "digest/md5"
