@@ -1,0 +1,11 @@
+---
+translations:
+  - file: test/output/export_files.json
+    patterns:
+      - "*"
+
+export_files:
+  enabled: true
+  files:
+    - template: test/fixtures/export_files.erb
+      output: "%{dir}/%{base_name}-%{digest}.ts"
