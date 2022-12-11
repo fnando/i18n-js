@@ -19,7 +19,7 @@ major, minor, patch = *segments.take(3).map(&:to_i)
 pre = segments[4].to_s
 pre_version = pre.gsub(/[^\d]/m, "").to_i
 date = Time.now.strftime("%b %d, %Y")
-release = false
+dry_run = false
 alpha = false
 
 OptionParser.new do |opts|
@@ -39,8 +39,8 @@ OptionParser.new do |opts|
     alpha = true
   end
 
-  opts.on("--release") do
-    release = true
+  opts.on("--dry-run") do
+    dry_run = true
   end
 end.parse!
 
@@ -69,11 +69,13 @@ write_file version_path,
 
 puts "=> Updated #{version_path}"
 
-if release
+unless dry_run
   system "git", "add", changelog_path, version_path
   system "git", "commit", "-m", "Bump up version (v#{version})"
-  system "git", "tag", "v#{version}"
+  system "rake", "release"
 end
 
-system "rake", "build"
-system "git", "checkout", changelog_path, version_path unless release
+if dry_run
+  system "rake", "build"
+  system "git", "checkout", changelog_path, version_path
+end
