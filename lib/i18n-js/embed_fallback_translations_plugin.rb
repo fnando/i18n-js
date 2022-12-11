@@ -6,11 +6,11 @@ module I18nJS
   class EmbedFallbackTranslationsPlugin < I18nJS::Plugin
     CONFIG_KEY = :embed_fallback_translations
 
-    def self.setup
+    def setup
       I18nJS::Schema.root_keys << CONFIG_KEY
     end
 
-    def self.validate_schema(config:)
+    def validate_schema
       return unless config.key?(CONFIG_KEY)
 
       plugin_config = config[CONFIG_KEY]
@@ -22,7 +22,7 @@ module I18nJS
       schema.expect_enabled_config(CONFIG_KEY, plugin_config[:enabled])
     end
 
-    def self.transform(translations:, config:)
+    def transform(translations:)
       return translations unless config.dig(CONFIG_KEY, :enabled)
 
       translations_glob = Glob.new(translations)

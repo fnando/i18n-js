@@ -6,11 +6,11 @@ module I18nJS
   class ExportFilesPlugin < I18nJS::Plugin
     CONFIG_KEY = :export_files
 
-    def self.setup
+    def setup
       I18nJS::Schema.root_keys << CONFIG_KEY
     end
 
-    def self.validate_schema(config:)
+    def validate_schema
       return unless config.key?(CONFIG_KEY)
 
       plugin_config = config[CONFIG_KEY]
@@ -30,7 +30,7 @@ module I18nJS
       end
     end
 
-    def self.after_export(files:, config:)
+    def after_export(files:)
       return unless config.dig(CONFIG_KEY, :enabled)
 
       exports = config.dig(CONFIG_KEY, :files)

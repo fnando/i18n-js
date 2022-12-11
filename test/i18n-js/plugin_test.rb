@@ -13,36 +13,37 @@ class PluginTest < Minitest::Test
         @calls ||= []
       end
 
-      instance_eval(&block) if block
+      class_eval(&block) if block
     end
   end
 
   test "implements default transform method" do
-    sample_plugin = create_plugin
+    plugin_class = create_plugin
+    plugin = plugin_class.new(config: {})
     translations = {}
 
     assert_same translations,
-                sample_plugin.transform(translations: translations, config: {})
+                plugin.transform(translations: translations)
   end
 
   test "registers plugin" do
-    sample_plugin = create_plugin
+    plugin_class = create_plugin
+    I18nJS.register_plugin(plugin_class)
 
-    I18nJS.register_plugin(sample_plugin)
-
-    assert_includes I18nJS.plugins, sample_plugin
+    assert_includes I18nJS.available_plugins, plugin_class
   end
 
   test "setups plugin" do
-    sample_plugin = create_plugin do
-      def self.setup
-        I18nJS::Schema.root_keys << :sample_plugin
+    plugin_class = create_plugin do
+      def setup
+        I18nJS::Schema.root_keys << :sample
       end
     end
 
-    I18nJS.register_plugin(sample_plugin)
+    I18nJS.register_plugin(plugin_class)
+    I18nJS.initialize_plugins!(config: {})
 
-    assert_includes I18nJS::Schema.root_keys, :sample_plugin
+    assert_includes I18nJS::Schema.root_keys, :sample
   end
 
   test "validates schema" do
@@ -57,17 +58,18 @@ class PluginTest < Minitest::Test
       ]
     }
 
-    sample_plugin = create_plugin do
-      def self.validate_schema(config:)
-        calls << config
+    plugin_class = create_plugin do
+      def validate_schema
+        self.class.calls << config
       end
     end
 
-    I18nJS.register_plugin(sample_plugin)
+    I18nJS.register_plugin(plugin_class)
+    I18nJS.initialize_plugins!(config: config)
     I18nJS::Schema.validate!(config)
 
-    assert_equal 1, sample_plugin.calls.size
-    assert_includes sample_plugin.calls, config
+    assert_equal 1, plugin_class.calls.size
+    assert_includes plugin_class.calls, config
   end
 
   test "runs after_export event" do
@@ -82,25 +84,25 @@ class PluginTest < Minitest::Test
       I18nJS.load_config_file(config_file)
     )
 
-    sample_plugin = create_plugin do
+    plugin_class = create_plugin do
       class << self
-        attr_reader :received_config, :received_files
+        attr_accessor :received_config, :received_files
       end
 
-      def self.after_export(files:, config:)
-        @received_files = files
-        @received_config = config
+      def after_export(files:)
+        self.class.received_files = files
+        self.class.received_config = config
       end
     end
 
-    I18nJS.register_plugin(sample_plugin)
+    I18nJS.register_plugin(plugin_class)
 
     actual_files =
       I18nJS.call(config_file: config_file)
 
-    assert_equal expected_config, sample_plugin.received_config
+    assert_equal expected_config, plugin_class.received_config
     assert_exported_files expected_files, actual_files
-    assert_exported_files expected_files, sample_plugin.received_files
+    assert_exported_files expected_files, plugin_class.received_files
   end
 
   test "loads plugins using rubygems" do

@@ -8,6 +8,7 @@ module Minitest
       reset_i18n
 
       I18nJS.plugins.clear
+      I18nJS.available_plugins.clear
       I18n.config.clear_available_locales_set
       I18n.backend = I18n::Backend::Simple.new
       I18nJS::Schema.root_keys.delete(:sample)

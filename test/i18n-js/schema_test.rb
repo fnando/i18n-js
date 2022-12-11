@@ -165,12 +165,12 @@ class SchemaTest < Minitest::Test
       }
     }
 
-    sample_plugin = Class.new(I18nJS::Plugin) do
-      def self.setup
+    plugin_class = Class.new(I18nJS::Plugin) do
+      def setup
         I18nJS::Schema.root_keys << :sample
       end
 
-      def self.validate_schema(config:)
+      def validate_schema
         config_key = :sample
         plugin_config = config[config_key]
         schema = I18nJS::Schema.new(config)
@@ -179,7 +179,8 @@ class SchemaTest < Minitest::Test
       end
     end
 
-    I18nJS.register_plugin(sample_plugin)
+    I18nJS.register_plugin(plugin_class)
+    I18nJS.initialize_plugins!(config: config)
 
     error_message =
       "Expected sample.enabled to be a boolean; got NilClass instead"

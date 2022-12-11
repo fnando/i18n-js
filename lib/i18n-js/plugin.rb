@@ -3,13 +3,16 @@
 require_relative "schema"
 
 module I18nJS
+  def self.available_plugins
+    @available_plugins ||= Set.new
+  end
+
   def self.plugins
     @plugins ||= []
   end
 
   def self.register_plugin(plugin)
-    plugins << plugin
-    plugin.setup
+    available_plugins << plugin
   end
 
   def self.plugin_files
@@ -22,7 +25,20 @@ module I18nJS
     end
   end
 
+  def self.initialize_plugins!(config:)
+    @plugins = available_plugins.map do |plugin|
+      plugin.new(config: config).tap(&:setup)
+    end
+  end
+
   class Plugin
+    # The configuration that's being used to export translations.
+    attr_reader :config
+
+    def initialize(config:)
+      @config = config
+    end
+
     # This method is responsible for transforming the translations. The
     # translations you'll receive may be already be filtered by other plugins
     # and by the default filtering itself. If you need to access the original
@@ -31,7 +47,7 @@ module I18nJS
     # Make sure you always check whether your plugin is active before
     # transforming translations; otherwise, opting out transformation won't be
     # possible.
-    def self.transform(translations:, config:) # rubocop:disable Lint/UnusedMethodArgument
+    def transform(translations:)
       translations
     end
 
@@ -40,7 +56,7 @@ module I18nJS
     # If the configuration contains invalid data, then you must raise an
     # exception using something like
     # `raise I18nJS::Schema::InvalidError, error_message`.
-    def self.validate_schema(config:)
+    def validate_schema
     end
 
     # This method must set up the basic plugin configuration, like adding the
@@ -49,7 +65,7 @@ module I18nJS
     #
     # If you don't add this key, the linter will prevent non-default keys from
     # being added to the configuration file.
-    def self.setup
+    def setup
     end
 
     # This method is called whenever `I18nJS.call(**kwargs)` finishes exporting
@@ -60,7 +76,7 @@ module I18nJS
     #
     # Make sure you always check whether your plugin is active before
     # processing files; otherwise, opting out won't be possible.
-    def self.after_export(files:, config:)
+    def after_export(files:)
     end
   end
 end

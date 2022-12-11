@@ -11,6 +11,12 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unreleased
+
+- [Changed] Change plugin api to be based on instance methods. This avoids
+  having to pass in the config for each and every method. It also allows us
+  adding helper methods to the base class.
+
 ## v4.2.0 - Dec 10, 2022
 
 - [Added] Add `I18nJS::Plugin.after_export(files:, config:)` method, that's

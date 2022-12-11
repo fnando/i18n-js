@@ -25,7 +25,7 @@ module I18nJS
     def self.validate!(target)
       schema = new(target)
       schema.validate!
-      I18nJS.plugins.each {|plugin| plugin.validate_schema(config: target) }
+      I18nJS.plugins.each(&:validate_schema)
     end
 
     attr_reader :target

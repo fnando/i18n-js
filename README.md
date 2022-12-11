@@ -213,13 +213,11 @@ inherit from `I18nJS::Plugin` and can have 4 class methods. To see a real
 example, see
 [lib/i18n-js/embed_fallback_translations_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/embed_fallback_translations_plugin.rb)
 
-Here's the base `I18nJS::Plugin` class with the documented api:
-
 ```ruby
 # frozen_string_literal: true
 
 module I18nJS
-  class Plugin
+  class SamplePlugin < I18nJS::Plugin
     # This method is responsible for transforming the translations. The
     # translations you'll receive may be already be filtered by other plugins
     # and by the default filtering itself. If you need to access the original
@@ -228,7 +226,7 @@ module I18nJS
     # Make sure you always check whether your plugin is active before
     # transforming translations; otherwise, opting out transformation won't be
     # possible.
-    def self.transform(translations:, config:)
+    def transform(translations:)
       translations
     end
 
@@ -237,7 +235,7 @@ module I18nJS
     # If the configuration contains invalid data, then you must raise an
     # exception using something like
     # `raise I18nJS::Schema::InvalidError, error_message`.
-    def self.validate_schema(config:)
+    def validate_schema
     end
 
     # This method must set up the basic plugin configuration, like adding the
@@ -246,7 +244,7 @@ module I18nJS
     #
     # If you don't add this key, the linter will prevent non-default keys from
     # being added to the configuration file.
-    def self.setup
+    def setup
     end
 
     # This method is called whenever `I18nJS.call(**kwargs)` finishes exporting
@@ -257,7 +255,7 @@ module I18nJS
     #
     # Make sure you always check whether your plugin is active before
     # processing files; otherwise, opting out won't be possible.
-    def self.after_export(files:, config:)
+    def after_export(files:)
     end
   end
 end

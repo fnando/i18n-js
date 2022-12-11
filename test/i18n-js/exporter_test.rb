@@ -159,8 +159,8 @@ class ExporterTest < Minitest::Test
   end
 
   test "exports files piping translation through plugins" do
-    sample_plugin = Class.new(I18nJS::Plugin) do
-      def self.transform(translations:, config:) # rubocop:disable Lint/UnusedMethodArgument
+    plugin_class = Class.new(I18nJS::Plugin) do
+      def transform(translations:)
         translations.each_key do |locale|
           translations[locale][:injected] = "yes:#{locale}"
         end
@@ -169,7 +169,8 @@ class ExporterTest < Minitest::Test
       end
     end
 
-    I18nJS.register_plugin(sample_plugin)
+    I18nJS.register_plugin(plugin_class)
+    I18nJS.initialize_plugins!(config: {})
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     I18nJS.call(config_file: "./test/config/everything.yml")
 
