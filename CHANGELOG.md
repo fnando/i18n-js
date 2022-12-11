@@ -11,7 +11,7 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
-## Unreleased
+## v4.2.0 - Dec 10, 2022
 
 - [Added] Add `I18nJS::Plugin.after_export(files:, config:)` method, that's
   called whenever whenever I18nJS finishes exporting files. You can use it to
