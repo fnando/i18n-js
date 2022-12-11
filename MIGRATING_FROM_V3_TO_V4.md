@@ -174,8 +174,8 @@ translations:
 
 Other configuration options:
 
-- `export_i18n_js`: removed without an equivalent
-- `fallbacks`: removed without an equivalent
+- `export_i18n_js`: replaced by [export_files plugin](https://github.com/fnando/i18n-js#export_files)
+- `fallbacks`: replaced by [embed_fallback_translations plugin](https://github.com/fnando/i18n-js#embed_fallback_translations)
 - `js_available_locales`: removed (on v4 you can use groups, like in
   `{pt-BR,en}.*`)
 - `namespace`: removed without an equivalent
