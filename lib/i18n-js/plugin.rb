@@ -33,10 +33,15 @@ module I18nJS
 
   class Plugin
     # The configuration that's being used to export translations.
-    attr_reader :config
+    attr_reader :main_config
+
+    # The `I18nJS::Schema` instance that can be used to validate your plugin's
+    # configuration.
+    attr_reader :schema
 
     def initialize(config:)
-      @config = config
+      @main_config = config
+      @schema = I18nJS::Schema.new(@main_config)
     end
 
     # Infer the config key name out of the class.
@@ -51,20 +56,21 @@ module I18nJS
           .to_sym
     end
 
+    # Return the plugin configuration
+    def config
+      main_config[config_key] || {}
+    end
+
     # Check whether plugin is enabled or not.
     # A plugin is enabled when the plugin configuration has `enabled: true`.
     def enabled?
-      config.dig(config_key, :enabled)
+      config[:enabled]
     end
 
     # This method is responsible for transforming the translations. The
     # translations you'll receive may be already be filtered by other plugins
     # and by the default filtering itself. If you need to access the original
     # translations, use `I18nJS.translations`.
-    #
-    # Make sure you always check whether your plugin is active before
-    # transforming translations; otherwise, opting out transformation won't be
-    # possible.
     def transform(translations:)
       translations
     end
@@ -91,9 +97,6 @@ module I18nJS
     #
     # You can use it to further process exported files, or generate new files
     # based on the translations that have been exported.
-    #
-    # Make sure you always check whether your plugin is active before
-    # processing files; otherwise, opting out won't be possible.
     def after_export(files:)
     end
   end

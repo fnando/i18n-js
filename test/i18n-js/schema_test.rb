@@ -17,7 +17,9 @@ class SchemaTest < Minitest::Test
   end
 
   test "requires config to be a hash" do
-    assert_schema_error("Expected :root to be Hash; got NilClass instead") do
+    error_message = "Expected :root to be one of [Hash]; got NilClass instead"
+
+    assert_schema_error(error_message) do
       I18nJS::Schema.validate!(nil)
     end
   end
@@ -39,7 +41,7 @@ class SchemaTest < Minitest::Test
 
   test "requires translations key to be an array" do
     assert_schema_error(
-      "Expected :translations to be Array; got Hash instead"
+      "Expected :translations to be one of [Array]; got Hash instead"
     ) do
       I18nJS::Schema.validate!(translations: {})
     end
@@ -62,7 +64,9 @@ class SchemaTest < Minitest::Test
   end
 
   test "requires translation's :file to be a string" do
-    assert_schema_error("Expected :file to be String; got NilClass instead") do
+    error_message = "Expected :file to be one of [String]; got NilClass instead"
+
+    assert_schema_error(error_message) do
       I18nJS::Schema.validate!(
         translations: [{file: nil, patterns: "*"}]
       )
@@ -87,7 +91,7 @@ class SchemaTest < Minitest::Test
 
   test "requires :patterns to be an array" do
     assert_schema_error(
-      "Expected :patterns to be Array; got NilClass instead"
+      "Expected :patterns to be one of [Array]; got NilClass instead"
     ) do
       I18nJS::Schema.validate!(
         translations: [{patterns: nil, file: "some/file.json"}]
@@ -105,7 +109,7 @@ class SchemaTest < Minitest::Test
 
   test "requires lint_translations' :ignore to be a hash" do
     error_message =
-      "Expected :lint_translations to be Hash; got NilClass instead"
+      "Expected :lint_translations to be one of [Hash]; got NilClass instead"
 
     assert_schema_error(error_message) do
       I18nJS::Schema.validate!(
@@ -135,7 +139,9 @@ class SchemaTest < Minitest::Test
   end
 
   test "requires lint_translations' :ignore to be an array" do
-    assert_schema_error("Expected :ignore to be Array; got Hash instead") do
+    error_message = "Expected :ignore to be one of [Array]; got Hash instead"
+
+    assert_schema_error(error_message) do
       I18nJS::Schema.validate!(
         translations: [
           {
@@ -150,7 +156,7 @@ class SchemaTest < Minitest::Test
     end
   end
 
-  test "requires enabled type to be boolean" do
+  test "requires plugin's enabled type to be boolean" do
     config = {
       translations: [
         {
@@ -166,16 +172,12 @@ class SchemaTest < Minitest::Test
     }
 
     plugin_class = Class.new(I18nJS::Plugin) do
-      def setup
-        I18nJS::Schema.root_keys << :sample
+      def self.name
+        "SamplePlugin"
       end
 
-      def validate_schema
-        config_key = :sample
-        plugin_config = config[config_key]
-        schema = I18nJS::Schema.new(config)
-
-        schema.expect_enabled_config(config_key, plugin_config[:enabled])
+      def setup
+        I18nJS::Schema.root_keys << :sample
       end
     end
 
@@ -183,7 +185,8 @@ class SchemaTest < Minitest::Test
     I18nJS.initialize_plugins!(config: config)
 
     error_message =
-      "Expected sample.enabled to be a boolean; got NilClass instead"
+      "Expected :enabled to be one of [TrueClass, FalseClass]; " \
+      "got NilClass instead"
 
     assert_schema_error(error_message) do
       I18nJS::Schema.validate!(config)

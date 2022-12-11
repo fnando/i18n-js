@@ -9,20 +9,19 @@ module I18nJS
     end
 
     def validate_schema
-      return unless config.key?(config_key)
-
-      plugin_config = config[config_key]
       valid_keys = %i[enabled]
-      schema = I18nJS::Schema.new(config)
 
-      schema.expect_required_keys(valid_keys, plugin_config)
-      schema.reject_extraneous_keys(valid_keys, plugin_config)
-      schema.expect_enabled_config(config_key, plugin_config[:enabled])
+      schema.expect_required_keys(valid_keys, config)
+      schema.reject_extraneous_keys(valid_keys, config)
+      schema.expect_type(
+        :enabled,
+        config[:enabled],
+        [TrueClass, FalseClass],
+        config
+      )
     end
 
     def transform(translations:)
-      return translations unless enabled?
-
       translations_glob = Glob.new(translations)
       translations_glob << "*"
 

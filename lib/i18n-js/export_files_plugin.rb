@@ -9,18 +9,13 @@ module I18nJS
     end
 
     def validate_schema
-      return unless config.key?(config_key)
-
-      plugin_config = config[config_key]
       valid_keys = %i[enabled files]
-      schema = I18nJS::Schema.new(config)
 
-      schema.expect_required_keys(valid_keys, plugin_config)
-      schema.reject_extraneous_keys(valid_keys, plugin_config)
-      schema.expect_enabled_config(config_key, plugin_config[:enabled])
-      schema.expect_array_with_items(:files, plugin_config[:files])
+      schema.expect_required_keys(valid_keys, config)
+      schema.reject_extraneous_keys(valid_keys, config)
+      schema.expect_array_with_items(:files, config[:files])
 
-      plugin_config[:files].each do |exports|
+      config[:files].each do |exports|
         schema.expect_required_keys(%i[template output], exports)
         schema.reject_extraneous_keys(%i[template output], exports)
         schema.expect_type(:template, exports[:template], String, exports)
@@ -29,10 +24,6 @@ module I18nJS
     end
 
     def after_export(files:)
-      return unless enabled?
-
-      exports = config.dig(config_key, :files)
-
       require "erb"
       require "digest/md5"
       require "json"
@@ -43,7 +34,7 @@ module I18nJS
         extension = File.extname(name)
         base_name = File.basename(file, extension)
 
-        exports.each do |export|
+        config[:files].each do |export|
           translations = JSON.load_file(file)
           template = Template.new(
             file: file,

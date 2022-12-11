@@ -25,7 +25,18 @@ module I18nJS
     def self.validate!(target)
       schema = new(target)
       schema.validate!
-      I18nJS.plugins.each(&:validate_schema)
+      I18nJS.plugins.each do |plugin|
+        next unless target.key?(plugin.config_key)
+
+        schema.expect_type(
+          :enabled,
+          plugin.config[:enabled],
+          [TrueClass, FalseClass],
+          {plugin.config_key => plugin.config}
+        )
+
+        plugin.validate_schema
+      end
     end
 
     attr_reader :target
@@ -93,22 +104,15 @@ module I18nJS
       raise InvalidError, "#{error_message}#{node_json}"
     end
 
-    def expect_enabled_config(config_key, value)
-      return if [TrueClass, FalseClass].include?(value.class)
-
-      actual_type = value.class
-
-      reject "Expected #{config_key}.enabled to be a boolean; " \
-             "got #{actual_type} instead"
-    end
-
     def expect_type(attribute, value, expected_type, payload)
-      return if value.is_a?(expected_type)
+      expected_type = Array(expected_type)
+
+      return if expected_type.any? {|klass| value.is_a?(klass) }
 
       actual_type = value.class
 
       message = [
-        "Expected #{attribute.inspect} to be #{expected_type};",
+        "Expected #{attribute.inspect} to be one of #{expected_type};",
         "got #{actual_type} instead"
       ].join(" ")
 

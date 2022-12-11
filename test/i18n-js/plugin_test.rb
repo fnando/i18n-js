@@ -55,12 +55,19 @@ class PluginTest < Minitest::Test
             "*"
           ]
         }
-      ]
+      ],
+      sample: {
+        enabled: true
+      }
     }
 
     plugin_class = create_plugin do
+      def setup
+        I18nJS::Schema.root_keys << config_key
+      end
+
       def validate_schema
-        self.class.calls << config
+        self.class.calls << :validated_schema
       end
     end
 
@@ -69,38 +76,41 @@ class PluginTest < Minitest::Test
     I18nJS::Schema.validate!(config)
 
     assert_equal 1, plugin_class.calls.size
-    assert_includes plugin_class.calls, config
+    assert_includes plugin_class.calls, :validated_schema
   end
 
   test "runs after_export event" do
-    config_file = "./test/config/locale_placeholder.yml"
+    config = Glob::SymbolizeKeys.call(
+      I18nJS.load_config_file("./test/config/locale_placeholder.yml")
+        .merge(sample: {enabled: true})
+    )
+
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     expected_files = [
       "test/output/en.json",
       "test/output/es.json",
       "test/output/pt.json"
     ]
-    expected_config = Glob::SymbolizeKeys.call(
-      I18nJS.load_config_file(config_file)
-    )
 
     plugin_class = create_plugin do
       class << self
         attr_accessor :received_config, :received_files
       end
 
+      def setup
+        I18nJS::Schema.root_keys << :sample
+      end
+
       def after_export(files:)
         self.class.received_files = files
-        self.class.received_config = config
       end
     end
 
     I18nJS.register_plugin(plugin_class)
 
     actual_files =
-      I18nJS.call(config_file: config_file)
+      I18nJS.call(config: config)
 
-    assert_equal expected_config, plugin_class.received_config
     assert_exported_files expected_files, actual_files
     assert_exported_files expected_files, plugin_class.received_files
   end

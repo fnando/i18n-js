@@ -160,6 +160,14 @@ class ExporterTest < Minitest::Test
 
   test "exports files piping translation through plugins" do
     plugin_class = Class.new(I18nJS::Plugin) do
+      def self.name
+        "SamplePlugin"
+      end
+
+      def setup
+        I18nJS::Schema.root_keys << config_key
+      end
+
       def transform(translations:)
         translations.each_key do |locale|
           translations[locale][:injected] = "yes:#{locale}"
@@ -169,10 +177,13 @@ class ExporterTest < Minitest::Test
       end
     end
 
+    config = Glob::SymbolizeKeys.call(
+      I18nJS.load_config_file("./test/config/everything.yml")
+        .merge(sample: {enabled: true})
+    )
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(config: {})
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
-    I18nJS.call(config_file: "./test/config/everything.yml")
+    I18nJS.call(config: config)
 
     assert_json_file "test/fixtures/expected/transformed.json",
                      "test/output/everything.json"

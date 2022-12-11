@@ -32,7 +32,10 @@ module I18nJS
     exported_files = []
 
     config[:translations].each {|group| exported_files += export_group(group) }
-    plugins.each {|plugin| plugin.after_export(files: exported_files.dup) }
+
+    plugins.each do |plugin|
+      plugin.after_export(files: exported_files.dup) if plugin.enabled?
+    end
 
     exported_files
   end
@@ -41,7 +44,11 @@ module I18nJS
     filtered_translations = Glob.filter(translations, group[:patterns])
     filtered_translations =
       plugins.reduce(filtered_translations) do |buffer, plugin|
-        plugin.transform(translations: buffer)
+        if plugin.enabled?
+          plugin.transform(translations: buffer)
+        else
+          buffer
+        end
       end
 
     output_file_path = File.expand_path(group[:file])

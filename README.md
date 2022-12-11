@@ -209,9 +209,8 @@ i18n.store({
 #### Plugin API
 
 You can transform the exported translations by adding plugins. A plugin must
-inherit from `I18nJS::Plugin` and can have 4 class methods. To see a real
-example, see
-[lib/i18n-js/embed_fallback_translations_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/embed_fallback_translations_plugin.rb)
+inherit from `I18nJS::Plugin` and can have 4 class methods (they're all optional
+and will default to a noop implementation). For real examples, see [lib/i18n-js/embed_fallback_translations_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/embed_fallback_translations_plugin.rb) and [lib/i18n-js/export_files_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/export_files_plugin.rb)
 
 ```ruby
 # frozen_string_literal: true
@@ -222,11 +221,9 @@ module I18nJS
     # translations you'll receive may be already be filtered by other plugins
     # and by the default filtering itself. If you need to access the original
     # translations, use `I18nJS.translations`.
-    #
-    # Make sure you always check whether your plugin is active before
-    # transforming translations; otherwise, opting out transformation won't be
-    # possible.
     def transform(translations:)
+      # transform `translations` here…
+
       translations
     end
 
@@ -235,7 +232,11 @@ module I18nJS
     # If the configuration contains invalid data, then you must raise an
     # exception using something like
     # `raise I18nJS::Schema::InvalidError, error_message`.
+    #
+    # Notice the validation will only happen when the plugin configuration is
+    # set (i.e. the configuration contains your config key).
     def validate_schema
+      # validate plugin schema here…
     end
 
     # This method must set up the basic plugin configuration, like adding the
@@ -252,14 +253,20 @@ module I18nJS
     #
     # You can use it to further process exported files, or generate new files
     # based on the translations that have been exported.
-    #
-    # Make sure you always check whether your plugin is active before
-    # processing files; otherwise, opting out won't be possible.
     def after_export(files:)
+      # process exported files here…
     end
   end
 end
 ```
+
+The class `I18nJS::Plugin` implements some helper methods that you can use:
+
+- `I18nJS::Plugin#config_key`: the configuration key that was inferred out of
+  your plugin's class name.
+- `I18nJS::Plugin#config`: the plugin configuration.
+- `I18nJS::Plugin#enabled?`: whether the plugin is enabled or not based on the
+  plugin's configuration.
 
 To distribute this plugin, you need to create a gem package that matches the
 pattern `i18n-js/*_plugin.rb`. You can test whether your plugin will be found by
