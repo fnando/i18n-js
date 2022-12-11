@@ -512,7 +512,7 @@ that loads all the exported translation.
 
 [There's a document](https://github.com/fnando/i18n-js/tree/main/MIGRATING_FROM_V3_TO_V4.md)
 outlining some of the things you need to do to migrate from v3 to v4. It may not
-be as complete as we'd like it to be, so let's know if you face any issues
+be as complete as we'd like it to be, so let us know if you face any issues
 during the migration is not outline is that document.
 
 #### How can I export translations without having a database around?
