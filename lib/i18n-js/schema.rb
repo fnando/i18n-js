@@ -25,18 +25,7 @@ module I18nJS
     def self.validate!(target)
       schema = new(target)
       schema.validate!
-      I18nJS.plugins.each do |plugin|
-        next unless target.key?(plugin.config_key)
-
-        schema.expect_type(
-          :enabled,
-          plugin.config[:enabled],
-          [TrueClass, FalseClass],
-          {plugin.config_key => plugin.config}
-        )
-
-        plugin.validate_schema
-      end
+      schema
     end
 
     attr_reader :target
@@ -46,13 +35,44 @@ module I18nJS
     end
 
     def validate!
-      expect_type(:root, target, Hash, target)
+      validate_root
 
-      expect_required_keys(self.class.required_root_keys, target)
-      reject_extraneous_keys(self.class.root_keys, target)
+      expect_required_keys(
+        keys: self.class.required_root_keys,
+        path: nil
+      )
+
+      reject_extraneous_keys(
+        keys: self.class.root_keys,
+        path: nil
+      )
+
       validate_translations
       validate_lint_translations
       validate_lint_scripts
+      validate_plugins
+    end
+
+    def validate_plugins
+      I18nJS.plugins.each do |plugin|
+        next unless target.key?(plugin.config_key)
+
+        expect_type(
+          path: [plugin.config_key, :enabled],
+          types: [TrueClass, FalseClass]
+        )
+
+        plugin.validate_schema
+      end
+    end
+
+    def validate_root
+      return if target.is_a?(Hash)
+
+      message =  "Expected config to be \"Hash\"; " \
+                 "got #{target.class} instead"
+
+      reject message, target
     end
 
     def validate_lint_translations
@@ -60,11 +80,14 @@ module I18nJS
 
       return unless target.key?(key)
 
-      config = target[key]
+      expect_type(path: [key], types: Hash)
 
-      expect_type(key, config, Hash, target)
-      expect_required_keys(REQUIRED_LINT_TRANSLATIONS_KEYS, config)
-      expect_type(:ignore, config[:ignore], Array, config)
+      expect_required_keys(
+        keys: REQUIRED_LINT_TRANSLATIONS_KEYS,
+        path: [key]
+      )
+
+      expect_type(path: [key, :ignore], types: Array)
     end
 
     def validate_lint_scripts
@@ -72,31 +95,36 @@ module I18nJS
 
       return unless target.key?(key)
 
-      config = target[key]
-
-      expect_type(key, config, Hash, target)
-      expect_required_keys(REQUIRED_LINT_SCRIPTS_KEYS, config)
-      expect_type(:ignore, config[:ignore], Array, config)
-      expect_type(:patterns, config[:patterns], Array, config)
+      expect_type(path: [key], types: Hash)
+      expect_required_keys(
+        keys: REQUIRED_LINT_SCRIPTS_KEYS,
+        path: [key]
+      )
+      expect_type(path: [key, :ignore], types: Array)
+      expect_type(path: [key, :patterns], types: Array)
     end
 
     def validate_translations
-      translations = target[:translations]
+      expect_array_with_items(path: [:translations])
 
-      expect_type(:translations, translations, Array, target)
-      expect_array_with_items(:translations, translations)
-
-      translations.each do |translation|
-        validate_translation(translation)
+      target[:translations].each_with_index do |translation, index|
+        validate_translation(translation, index)
       end
     end
 
-    def validate_translation(translation)
-      expect_required_keys(REQUIRED_TRANSLATION_KEYS, translation)
-      reject_extraneous_keys(TRANSLATION_KEYS, translation)
-      expect_type(:file, translation[:file], String, translation)
-      expect_type(:patterns, translation[:patterns], Array, translation)
-      expect_array_with_items(:patterns, translation[:patterns], translation)
+    def validate_translation(_translation, index)
+      expect_required_keys(
+        path: [:translations, index],
+        keys: REQUIRED_TRANSLATION_KEYS
+      )
+
+      reject_extraneous_keys(
+        keys: TRANSLATION_KEYS,
+        path: [:translations, index]
+      )
+
+      expect_type(path: [:translations, index, :file], types: String)
+      expect_array_with_items(path: [:translations, index, :patterns])
     end
 
     def reject(error_message, node = nil)
@@ -104,44 +132,85 @@ module I18nJS
       raise InvalidError, "#{error_message}#{node_json}"
     end
 
-    def expect_type(attribute, value, expected_type, payload)
-      expected_type = Array(expected_type)
+    def expect_type(path:, types:)
+      path = prepare_path(path: path)
+      value = value_for(path: path)
+      types = Array(types)
 
-      return if expected_type.any? {|klass| value.is_a?(klass) }
+      return if types.any? {|type| value.is_a?(type) }
 
       actual_type = value.class
 
+      type_desc = if types.size == 1
+                    types[0].to_s.inspect
+                  else
+                    "one of #{types.inspect}"
+                  end
+
       message = [
-        "Expected #{attribute.inspect} to be one of #{expected_type};",
+        "Expected #{path.join('.').inspect} to be #{type_desc};",
         "got #{actual_type} instead"
       ].join(" ")
 
-      reject message, payload
+      reject message, target
     end
 
-    def expect_array_with_items(attribute, value, payload = value)
+    def expect_array_with_items(path:)
+      expect_type(path: path, types: Array)
+
+      path = prepare_path(path: path)
+      value = value_for(path: path)
+
       return unless value.empty?
 
-      reject "Expected #{attribute.inspect} to have at least one item", payload
+      reject "Expected #{path.join('.').inspect} to have at least one item",
+             target
     end
 
-    def expect_required_keys(required_keys, value)
-      keys = value.keys.map(&:to_sym)
+    def expect_required_keys(keys:, path:)
+      path = prepare_path(path: path)
+      value = value_for(path: path)
+      actual_keys = value.keys.map(&:to_sym)
 
-      required_keys.each do |key|
-        next if keys.include?(key)
+      keys.each do |key|
+        next if actual_keys.include?(key)
 
-        reject "Expected #{key.inspect} to be defined", value
+        path_desc = if path.empty?
+                      key.to_s.inspect
+                    else
+                      (path + [key]).join(".").inspect
+                    end
+
+        reject "Expected #{path_desc} to be defined", target
       end
     end
 
-    def reject_extraneous_keys(allowed_keys, value)
-      keys = value.keys.map(&:to_sym)
-      extraneous = keys.to_a - allowed_keys.to_a
+    def reject_extraneous_keys(keys:, path:)
+      path = prepare_path(path: path)
+      value = value_for(path: path)
+
+      actual_keys = value.keys.map(&:to_sym)
+      extraneous = actual_keys.to_a - keys.to_a
 
       return if extraneous.empty?
 
-      reject "Unexpected keys: #{extraneous.join(', ')}", value
+      path_desc = if path.empty?
+                    "config"
+                  else
+                    path.join(".").inspect
+                  end
+
+      reject "#{path_desc} has unexpected keys: #{extraneous.inspect}",
+             target
+    end
+
+    def prepare_path(path:)
+      path = path.to_s.split(".").map(&:to_sym) unless path.is_a?(Array)
+      path
+    end
+
+    def value_for(path:)
+      path.empty? ? target : target.dig(*path)
     end
   end
 end

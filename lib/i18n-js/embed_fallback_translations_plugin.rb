@@ -11,14 +11,8 @@ module I18nJS
     def validate_schema
       valid_keys = %i[enabled]
 
-      schema.expect_required_keys(valid_keys, config)
-      schema.reject_extraneous_keys(valid_keys, config)
-      schema.expect_type(
-        :enabled,
-        config[:enabled],
-        [TrueClass, FalseClass],
-        config
-      )
+      schema.expect_required_keys(keys: valid_keys, path: [config_key])
+      schema.reject_extraneous_keys(keys: valid_keys, path: [config_key])
     end
 
     def transform(translations:)

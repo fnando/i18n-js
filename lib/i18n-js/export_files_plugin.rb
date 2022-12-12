@@ -11,15 +11,32 @@ module I18nJS
     def validate_schema
       valid_keys = %i[enabled files]
 
-      schema.expect_required_keys(valid_keys, config)
-      schema.reject_extraneous_keys(valid_keys, config)
-      schema.expect_array_with_items(:files, config[:files])
+      schema.expect_required_keys(keys: valid_keys, path: [config_key])
+      schema.reject_extraneous_keys(keys: valid_keys, path: [config_key])
+      schema.expect_array_with_items(path: [config_key, :files])
 
-      config[:files].each do |exports|
-        schema.expect_required_keys(%i[template output], exports)
-        schema.reject_extraneous_keys(%i[template output], exports)
-        schema.expect_type(:template, exports[:template], String, exports)
-        schema.expect_type(:output, exports[:output], String, exports)
+      config[:files].each_with_index do |_exports, index|
+        export_keys = %i[template output]
+
+        schema.expect_required_keys(
+          keys: export_keys,
+          path: [config_key, :files, index]
+        )
+
+        schema.reject_extraneous_keys(
+          keys: export_keys,
+          path: [config_key, :files, index]
+        )
+
+        schema.expect_type(
+          path: [config_key, :files, index, :template],
+          types: String
+        )
+
+        schema.expect_type(
+          path: [config_key, :files, index, :output],
+          types: String
+        )
       end
     end
 
