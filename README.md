@@ -246,6 +246,8 @@ module I18nJS
     # If you don't add this key, the linter will prevent non-default keys from
     # being added to the configuration file.
     def setup
+      # If you plugin has configuration, uncomment the line below
+      # I18nJS::Schema.root_keys << config_key
     end
 
     # This method is called whenever `I18nJS.call(**kwargs)` finishes exporting
