@@ -1,0 +1,14 @@
+---
+en:
+  words:
+    bye: "Goodbye!"
+    hello: "Hi!"
+
+  counting:
+    one: This is one!
+
+pt:
+  words:
+    bye: "Adeus!"
+  counting:
+    one: Esse é um!
