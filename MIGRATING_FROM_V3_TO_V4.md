@@ -47,8 +47,8 @@ JSON
 ```
 
 You can also use guard. Make sure you have both
-[guard](https://rubygems.org/packages/guard) and
-[guard-compat](https://rubygems.org/packages/guard-compat) installed and use
+[guard](https://rubygems.org/gems/guard) and
+[guard-compat](https://rubygems.org/gems/guard-compat) installed and use
 Guardfile file with the following contents:
 
 ```ruby
