@@ -11,11 +11,13 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
-## Unreleased
+## v4.2.1 - Dec 25, 2022
 
 - [Changed] Change plugin api to be based on instance methods. This avoids
   having to pass in the config for each and every method. It also allows us
   adding helper methods to the base class.
+- [Fixed] Fix performance issues with embed fallback translations' initial
+  implementation.
 
 ## v4.2.0 - Dec 10, 2022
 
