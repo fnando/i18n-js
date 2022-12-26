@@ -7,7 +7,10 @@ class EmbedFallbackTranslationsPluginTest < Minitest::Test
     require "i18n-js/embed_fallback_translations_plugin"
     I18nJS.register_plugin(I18nJS::EmbedFallbackTranslationsPlugin)
 
-    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    I18n.load_path << Dir[
+      "./test/fixtures/yml/*.yml",
+      "./test/fixtures/embed/*.yml"
+    ]
     actual_files =
       I18nJS.call(config_file: "./test/config/embed_fallback_translations.yml")
 
