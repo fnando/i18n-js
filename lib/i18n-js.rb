@@ -13,6 +13,7 @@ require "digest/md5"
 require_relative "i18n-js/schema"
 require_relative "i18n-js/version"
 require_relative "i18n-js/plugin"
+require_relative "i18n-js/sort_hash"
 
 module I18nJS
   MissingConfigError = Class.new(StandardError)
@@ -51,6 +52,7 @@ module I18nJS
         end
       end
 
+    filtered_translations = sort_hash(filtered_translations)
     output_file_path = File.expand_path(group[:file])
     exported_files = []
 
@@ -75,7 +77,8 @@ module I18nJS
     file_path = file_path.gsub(/:digest/, digest)
 
     # Don't rewrite the file if it already exists and has the same content.
-    # It helps the asset pipeline or webpack understand that file wasn't changed.
+    # It helps the asset pipeline or webpack understand that file wasn't
+    # changed.
     if File.exist?(file_path) && File.read(file_path) == contents
       return file_path
     end
