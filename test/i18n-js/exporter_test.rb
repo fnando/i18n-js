@@ -188,4 +188,44 @@ class ExporterTest < Minitest::Test
     assert_json_file "test/fixtures/expected/transformed.json",
                      "test/output/everything.json"
   end
+
+  test "do not overwrite exported files if identical" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    exported_file_path = "test/output/everything.json"
+
+    # First run
+    actual_files = I18nJS.call(config_file: "./test/config/everything.yml")
+    assert_exported_files [exported_file_path], actual_files
+    exported_file_mtime = File.mtime(exported_file_path)
+
+    # Second run
+    I18nJS.call(config_file: "./test/config/everything.yml")
+
+    # mtime should be the same
+    assert_equal exported_file_mtime, 
+                 File.mtime(exported_file_path)
+  end
+
+  test "overwrite exported files if not identical" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    exported_file_path = "test/output/everything.json"
+
+    # First run
+    actual_files = I18nJS.call(config_file: "./test/config/everything.yml")
+    assert_exported_files [exported_file_path], actual_files
+
+    # Change content of existed exported file (add space to the end of file).
+    File.open(exported_file_path, 'a') { |f| f << ' ' }
+    exported_file_mtime = File.mtime(exported_file_path)
+
+    # Second run
+    I18nJS.call(config_file: "./test/config/everything.yml")
+
+    # File should overwritten to the correct one.
+    assert_json_file "test/fixtures/expected/everything.json",
+                     exported_file_path
+
+    # mtime should be newer
+    assert File.mtime(exported_file_path) > exported_file_mtime
+  end
 end
