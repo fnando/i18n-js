@@ -14,6 +14,7 @@ require_relative "i18n-js/schema"
 require_relative "i18n-js/version"
 require_relative "i18n-js/plugin"
 require_relative "i18n-js/sort_hash"
+require_relative "i18n-js/clean_hash"
 
 module I18nJS
   MissingConfigError = Class.new(StandardError)
@@ -52,7 +53,7 @@ module I18nJS
         end
       end
 
-    filtered_translations = sort_hash(filtered_translations)
+    filtered_translations = sort_hash(clean_hash(filtered_translations))
     output_file_path = File.expand_path(group[:file])
     exported_files = []
 

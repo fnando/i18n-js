@@ -231,4 +231,14 @@ class ExporterTest < Minitest::Test
     # mtime should be newer
     assert File.mtime(exported_file_path) > exported_file_mtime
   end
+
+  test "cleans hash when exporting files" do
+    I18n.backend.store_translations(:en, {a: 1, b: {c: -> { }, d: 4}})
+
+    actual_files = I18nJS.call(config_file: "./test/config/everything.yml")
+
+    assert_exported_files ["test/output/everything.json"], actual_files
+    assert_json_file "test/fixtures/expected/clean_hash.json",
+                     "test/output/everything.json"
+  end
 end
