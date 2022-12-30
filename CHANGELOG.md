@@ -15,6 +15,7 @@ Prefix your message with one of the following:
 
 - [Changed] Do not re-export files whose contents haven't changed.
 - [Changed] Translations will always be deep sorted.
+- [Fixed] Remove procs from translations before exporting files.
 
 ## v4.2.1 - Dec 25, 2022
 
