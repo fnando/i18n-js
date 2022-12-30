@@ -77,7 +77,8 @@ module I18nJS
     file_path = file_path.gsub(/:digest/, digest)
 
     # Don't rewrite the file if it already exists and has the same content.
-    # It helps the asset pipeline or webpack understand that file wasn't changed.
+    # It helps the asset pipeline or webpack understand that file wasn't
+    # changed.
     if File.exist?(file_path) && File.read(file_path) == contents
       return file_path
     end

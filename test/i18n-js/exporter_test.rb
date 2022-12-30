@@ -202,8 +202,7 @@ class ExporterTest < Minitest::Test
     I18nJS.call(config_file: "./test/config/everything.yml")
 
     # mtime should be the same
-    assert_equal exported_file_mtime, 
-                 File.mtime(exported_file_path)
+    assert_equal exported_file_mtime, File.mtime(exported_file_path)
   end
 
   test "overwrite exported files if not identical" do
@@ -215,7 +214,7 @@ class ExporterTest < Minitest::Test
     assert_exported_files [exported_file_path], actual_files
 
     # Change content of existed exported file (add space to the end of file).
-    File.open(exported_file_path, 'a') { |f| f << ' ' }
+    File.open(exported_file_path, "a") {|f| f << " " }
     exported_file_mtime = File.mtime(exported_file_path)
 
     # Second run
