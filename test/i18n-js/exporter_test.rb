@@ -147,7 +147,7 @@ class ExporterTest < Minitest::Test
                      "test/output/group.json"
   end
 
-  test "export files using erb" do
+  test "exports files using erb" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/config.yml.erb")
 
@@ -189,7 +189,7 @@ class ExporterTest < Minitest::Test
                      "test/output/everything.json"
   end
 
-  test "do not overwrite exported files if identical" do
+  test "does not overwrite exported files if identical" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     exported_file_path = "test/output/everything.json"
 
@@ -198,6 +198,8 @@ class ExporterTest < Minitest::Test
     assert_exported_files [exported_file_path], actual_files
     exported_file_mtime = File.mtime(exported_file_path)
 
+    sleep 0.1
+
     # Second run
     I18nJS.call(config_file: "./test/config/everything.yml")
 
@@ -205,7 +207,7 @@ class ExporterTest < Minitest::Test
     assert_equal exported_file_mtime, File.mtime(exported_file_path)
   end
 
-  test "overwrite exported files if not identical" do
+  test "overwrites exported files if not identical" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     exported_file_path = "test/output/everything.json"
 
@@ -216,6 +218,8 @@ class ExporterTest < Minitest::Test
     # Change content of existed exported file (add space to the end of file).
     File.open(exported_file_path, "a") {|f| f << " " }
     exported_file_mtime = File.mtime(exported_file_path)
+
+    sleep 0.1
 
     # Second run
     I18nJS.call(config_file: "./test/config/everything.yml")
