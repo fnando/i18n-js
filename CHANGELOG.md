@@ -14,6 +14,7 @@ Prefix your message with one of the following:
 ## Unreleased
 
 - [Changed] Do not re-export files whose contents haven't changed.
+- [Changed] Translations will always be deep sorted.
 
 ## v4.2.1 - Dec 25, 2022
 
