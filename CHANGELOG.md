@@ -11,6 +11,10 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unreleased
+
+- [Changed] Do not re-export files whose contents haven't changed.
+
 ## v4.2.1 - Dec 25, 2022
 
 - [Changed] Change plugin api to be based on instance methods. This avoids
