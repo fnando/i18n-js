@@ -167,6 +167,7 @@ translations:
   - file: "app/assets/javascripts/everything_else.js"
     patterns:
       # Notice the exclamation mark.
+      - "*"
       - "!*.activerecord"
       - "!*.admin.*.title"
       - "!*.date.formats"
