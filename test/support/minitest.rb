@@ -34,6 +34,7 @@ module Minitest
 
     private def assert_file(path)
       path = File.expand_path(path)
+
       assert File.file?(path), "Expected #{path} to be a file"
     end
 
@@ -46,6 +47,7 @@ module Minitest
 
     private def assert_exported_files(expected_files, actual_files)
       expected_files = expected_files.map {|path| File.expand_path(path) }.sort
+
       assert_equal expected_files.size,
                    actual_files.size,
                    "Expected files to be equal in size " \

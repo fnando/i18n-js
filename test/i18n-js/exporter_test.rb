@@ -195,6 +195,7 @@ class ExporterTest < Minitest::Test
 
     # First run
     actual_files = I18nJS.call(config_file: "./test/config/everything.yml")
+
     assert_exported_files [exported_file_path], actual_files
     exported_file_mtime = File.mtime(exported_file_path)
 
@@ -213,6 +214,7 @@ class ExporterTest < Minitest::Test
 
     # First run
     actual_files = I18nJS.call(config_file: "./test/config/everything.yml")
+
     assert_exported_files [exported_file_path], actual_files
 
     # Change content of existed exported file (add space to the end of file).

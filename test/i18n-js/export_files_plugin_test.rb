@@ -17,6 +17,7 @@ class ExportScriptFilesPluginTest < Minitest::Test
 
     actual_files =
       I18nJS.call(config_file: "./test/config/export_files.yml")
+
     assert_exported_files ["test/output/export_files.json"], actual_files
     assert_file exported_file
     assert_equal File.read("test/fixtures/expected/export_files.ts"),

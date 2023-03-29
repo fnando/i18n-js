@@ -6,11 +6,6 @@ class CheckCommandTest < Minitest::Test
   let(:stdout) { StringIO.new }
   let(:stderr) { StringIO.new }
 
-  def assert_command_deprecation_message
-    assert_stderr_includes "WARNING: `i18n check` has been deprecated in " \
-                           "favor of `i18n lint:translations`"
-  end
-
   test "displays help" do
     cli = I18nJS::CLI.new(
       argv: %w[check --help],
@@ -167,5 +162,10 @@ class CheckCommandTest < Minitest::Test
     assert_includes output, "=> en: 3 translations"
     assert_includes output, "=> es: 0 missing, 0 extraneous, 2 ignored"
     assert_includes output, "=> pt: 0 missing, 0 extraneous, 2 ignored"
+  end
+
+  private def assert_command_deprecation_message
+    assert_stderr_includes "WARNING: `i18n check` has been deprecated in " \
+                           "favor of `i18n lint:translations`"
   end
 end
