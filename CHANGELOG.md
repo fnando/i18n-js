@@ -11,6 +11,10 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unreleased
+
+- [Fixed] Load plugins when running `i18n lint:*` commands.
+
 ## v4.2.2 - Dec 30, 2022
 
 - [Changed] Do not re-export files whose contents haven't changed.

@@ -68,6 +68,8 @@ module I18nJS
         end
 
         config = load_config_file(config_file)
+        I18nJS.load_plugins!
+        I18nJS.initialize_plugins!(config: config)
         Schema.validate!(config)
 
         load_require_file!(require_file) if require_file
@@ -82,7 +84,7 @@ module I18nJS
                      .map {|key| key.gsub(/^.*?\./, "") }
         end
 
-        default_locale_keys = mapping.delete(default_locale)
+        default_locale_keys = mapping.delete(default_locale) || mapping
 
         if ignored_keys.any?
           ui.stdout_print "=> Check #{options[:config_file].inspect} for " \
