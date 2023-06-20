@@ -210,7 +210,10 @@ i18n.store({
 
 You can transform the exported translations by adding plugins. A plugin must
 inherit from `I18nJS::Plugin` and can have 4 class methods (they're all optional
-and will default to a noop implementation). For real examples, see [lib/i18n-js/embed_fallback_translations_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/embed_fallback_translations_plugin.rb) and [lib/i18n-js/export_files_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/export_files_plugin.rb)
+and will default to a noop implementation). For real examples, see
+[lib/i18n-js/embed_fallback_translations_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/embed_fallback_translations_plugin.rb)
+and
+[lib/i18n-js/export_files_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/export_files_plugin.rb)
 
 ```ruby
 # frozen_string_literal: true
@@ -299,7 +302,7 @@ $ i18n lint:translations
    - pt-BR.github.repository (extraneous)
 ```
 
-This command will exist with status 1 whenever there are missing translations.
+This command will exit with status 1 whenever there are missing translations.
 This way you can use it as a CI linting.
 
 You can ignore keys by adding a list to the config file:
@@ -375,8 +378,9 @@ $ i18n lint:scripts
    - test/scripts/lint/file.js:6:1: es.another_ignore_scope
 ```
 
-This command will list all locales and their missing translations. Avoid listing
-a particular translation, you can set `lint.ignore` on your config file.
+This command will list all locales and their missing translations. To avoid
+listing a particular translation, you can set `lint_scripts.ignore` on your
+config file.
 
 ```yaml
 ---
@@ -401,7 +405,7 @@ translations:
     patterns:
       - "*"
 
-lint:
+lint_scripts:
   patterns:
     - "app/assets/**/*.ts"
 ```
