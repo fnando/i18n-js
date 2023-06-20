@@ -36,6 +36,12 @@ Or add the following line to your project's Gemfile:
 gem "i18n-js"
 ```
 
+Create a default configuration file in ./config/i18n.yml
+
+```bash
+i18n init
+```
+
 ## Usage
 
 About patterns:
@@ -73,8 +79,11 @@ translations:
 
 The output path can use the following placeholders:
 
-- `:locale`: the language that's being exported.
-- `:digest`: the MD5 hex digest of the exported file.
+- `:locale` - the language that's being exported.
+- `:digest` - the MD5 hex digest of the exported file.
+
+The example above could generate a file named
+`app/frontend/locales/en.7bdc958e33231eafb96b81e3d108eff3.json`.
 
 The config file is processed as erb, so you can have dynamic content on it if
 you want. The following example shows how to use groups from a variable.
@@ -92,13 +101,28 @@ translations:
       - "!<%= group %>.number.nth"
 ```
 
+### Exporting locale.yml to locale.json
+
+Your i18n yaml file can be exported to JSON using the Ruby API or the command
+line utility. Examples of both approaches are provided below:
+
 The Ruby API:
 
 ```ruby
 require "i18n-js"
 
+# The following call performs the same task as the CLI `i18n export` command
 I18nJS.call(config_file: "config/i18n.yml")
+
+# You can provide the config directly using the following
+config = {
+  "translations"=>[
+    {"file"=>"app/javascript/locales/:locale.json", "patterns"=>["*"]}
+  ]
+}
+
 I18nJS.call(config: config)
+#=> ["app/javascript/locales/de.json", "app/javascript/locales/en.json"]
 ```
 
 The CLI API:
@@ -136,6 +160,7 @@ the default locale together with the target locale.
 To use it, add the following to your configuration file:
 
 ```yaml
+---
 embed_fallback_translations:
   enabled: true
 ```
@@ -147,6 +172,7 @@ plugin allows exporting other file formats. To use it, add the following to your
 configuration file:
 
 ```yaml
+---
 export_files:
   enabled: true
   files:
@@ -154,7 +180,7 @@ export_files:
       output: "%{dir}/%{base_name}.ts"
 ```
 
-You can export multiple files by define more entries.
+You can export multiple files by defining more entries.
 
 The output name can use the following placeholders:
 
@@ -303,7 +329,7 @@ $ i18n lint:translations
 ```
 
 This command will exit with status 1 whenever there are missing translations.
-This way you can use it as a CI linting.
+This way you can use it as a CI linting tool.
 
 You can ignore keys by adding a list to the config file:
 
@@ -379,8 +405,8 @@ $ i18n lint:scripts
 ```
 
 This command will list all locales and their missing translations. To avoid
-listing a particular translation, you can set `lint_scripts.ignore` on your
-config file.
+listing a particular translation, you can set `lint_scripts.ignore` or
+`lint_translations.ignore` in your config file.
 
 ```yaml
 ---
@@ -442,7 +468,7 @@ watchman -j <<-JSON
 JSON
 
 # If you're running this through Foreman,
-# the uncomment the following lines:
+# then uncomment the following lines:
 # while true; do
 #   sleep 1
 # done
@@ -524,7 +550,7 @@ that loads all the exported translation.
 [There's a document](https://github.com/fnando/i18n-js/tree/main/MIGRATING_FROM_V3_TO_V4.md)
 outlining some of the things you need to do to migrate from v3 to v4. It may not
 be as complete as we'd like it to be, so let us know if you face any issues
-during the migration is not outline is that document.
+during the migration that is not outlined in that document.
 
 #### How can I export translations without having a database around?
 
@@ -547,9 +573,9 @@ I18n.load_path += Dir["./config/locales/**/*.yml"]
 
 > **Note**:
 >
-> You may not need to load ActiveSupport and ActionView lines, or even may need
-> to add additional requires for other libs. With this approach you have full
-> control on what's going to be loaded.
+> You may not need to load the ActiveSupport and ActionView lines, or you may
+> need to add additional requires for other libs. With this approach you have
+> full control on what's going to be loaded.
 
 ## Maintainer
 
