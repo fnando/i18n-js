@@ -17,3 +17,6 @@ Naming/FileName:
 
 Style/PerlBackrefs:
   Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
