@@ -44,7 +44,7 @@ jobs:
             hashFiles('package.json') }}
 
       - name: Set up Node
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v4.0.2
         with:
           node-version: ${{ matrix.node }}
 
