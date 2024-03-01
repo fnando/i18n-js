@@ -21,8 +21,8 @@ module I18nJS
         end
       end
 
-      def self.command(&block)
-        define_method(:command, &block)
+      def self.command(&)
+        define_method(:command, &)
       end
 
       def initialize(argv:, ui:)
