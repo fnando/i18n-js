@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-${{ matrix.ruby }}-gems-${{
             hashFiles(matrix.gemfile) }}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: npm-cache
         with:
           path: vendor/bundle
