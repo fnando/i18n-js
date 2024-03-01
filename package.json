@@ -6,5 +6,9 @@
   },
   "scripts": {
     "compile": "esbuild lib/i18n-js/lint.ts --bundle --platform=node --outfile=lib/i18n-js/lint.js --target=node16"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.1",
+    "@types/node": "^16.18.11"
   }
 }
