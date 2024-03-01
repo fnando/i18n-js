@@ -9,8 +9,8 @@ class VersionCommandTest < Minitest::Test
   test "displays version" do
     cli = I18nJS::CLI.new(
       argv: %w[version],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }

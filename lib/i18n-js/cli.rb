@@ -17,7 +17,7 @@ module I18nJS
 
     def initialize(argv:, stdout:, stderr:, colored: stdout.tty?)
       @argv = argv.dup
-      @ui = UI.new(stdout: stdout, stderr: stderr, colored: colored)
+      @ui = UI.new(stdout:, stderr:, colored:)
     end
 
     def call
@@ -43,7 +43,7 @@ module I18nJS
 
     private def commands
       command_classes.map do |command_class|
-        command_class.new(argv: @argv, ui: ui)
+        command_class.new(argv: @argv, ui:)
       end
     end
 

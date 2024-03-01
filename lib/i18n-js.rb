@@ -7,7 +7,6 @@ require "glob"
 require "fileutils"
 require "optparse"
 require "erb"
-require "set"
 require "digest/md5"
 
 require_relative "i18n-js/schema"
@@ -28,7 +27,7 @@ module I18nJS
     config = Glob::SymbolizeKeys.call(config || load_config_file(config_file))
 
     load_plugins!
-    initialize_plugins!(config: config)
+    initialize_plugins!(config:)
     Schema.validate!(config)
 
     exported_files = []
@@ -59,7 +58,7 @@ module I18nJS
 
     if output_file_path.include?(":locale")
       filtered_translations.each_key do |locale|
-        locale_file_path = output_file_path.gsub(/:locale/, locale.to_s)
+        locale_file_path = output_file_path.gsub(":locale", locale.to_s)
         exported_files << write_file(locale_file_path,
                                      locale => filtered_translations[locale])
       end
@@ -75,7 +74,7 @@ module I18nJS
 
     contents = ::JSON.pretty_generate(translations)
     digest = Digest::MD5.hexdigest(contents)
-    file_path = file_path.gsub(/:digest/, digest)
+    file_path = file_path.gsub(":digest", digest)
 
     # Don't rewrite the file if it already exists and has the same content.
     # It helps the asset pipeline or webpack understand that file wasn't

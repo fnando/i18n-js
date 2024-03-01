@@ -183,7 +183,7 @@ class ExporterTest < Minitest::Test
     )
     I18nJS.register_plugin(plugin_class)
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
-    I18nJS.call(config: config)
+    I18nJS.call(config:)
 
     assert_json_file "test/fixtures/expected/transformed.json",
                      "test/output/everything.json"
@@ -231,7 +231,7 @@ class ExporterTest < Minitest::Test
                      exported_file_path
 
     # mtime should be newer
-    assert File.mtime(exported_file_path) > exported_file_mtime
+    assert_operator File.mtime(exported_file_path), :>, exported_file_mtime
   end
 
   test "cleans hash when exporting files" do

@@ -28,7 +28,7 @@ module I18nJS
     debug("Watching #{relative_paths.inspect}")
 
     listener(config_file, locales_dirs.map(&:to_s), options).start
-    I18nJS.call(config_file: config_file) if run_on_start
+    I18nJS.call(config_file:) if run_on_start
   end
 
   def self.relative_path(path)

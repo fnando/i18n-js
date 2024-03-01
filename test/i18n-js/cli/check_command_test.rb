@@ -9,8 +9,8 @@ class CheckCommandTest < Minitest::Test
   test "displays help" do
     cli = I18nJS::CLI.new(
       argv: %w[check --help],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -20,8 +20,8 @@ class CheckCommandTest < Minitest::Test
   test "without a config file" do
     cli = I18nJS::CLI.new(
       argv: %w[check],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -35,8 +35,8 @@ class CheckCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %W[check --config #{config_file}],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -54,8 +54,8 @@ class CheckCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require #{require_file}
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -68,8 +68,8 @@ class CheckCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %w[check --config test/config/everything.yml],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -85,8 +85,8 @@ class CheckCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require test/config/require_error.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -105,8 +105,8 @@ class CheckCommandTest < Minitest::Test
         --require test/config/require.rb
         --color
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -125,8 +125,8 @@ class CheckCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -150,8 +150,8 @@ class CheckCommandTest < Minitest::Test
         --config test/config/check.yml
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }

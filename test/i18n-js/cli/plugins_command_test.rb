@@ -9,8 +9,8 @@ class PluginsCommandTest < Minitest::Test
   test "displays help" do
     cli = I18nJS::CLI.new(
       argv: %w[plugins --help],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -26,8 +26,8 @@ class PluginsCommandTest < Minitest::Test
         plugins
         --require #{require_file}
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -40,8 +40,8 @@ class PluginsCommandTest < Minitest::Test
         plugins
         --require test/config/require_error.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -59,8 +59,8 @@ class PluginsCommandTest < Minitest::Test
         plugins
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -78,8 +78,8 @@ class PluginsCommandTest < Minitest::Test
         plugins
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }

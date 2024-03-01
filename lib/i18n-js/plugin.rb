@@ -27,7 +27,7 @@ module I18nJS
 
   def self.initialize_plugins!(config:)
     @plugins = available_plugins.map do |plugin|
-      plugin.new(config: config).tap(&:setup)
+      plugin.new(config:).tap(&:setup)
     end
   end
 

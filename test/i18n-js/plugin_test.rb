@@ -23,7 +23,7 @@ class PluginTest < Minitest::Test
     translations = {}
 
     assert_same translations,
-                plugin.transform(translations: translations)
+                plugin.transform(translations:)
   end
 
   test "registers plugin" do
@@ -72,7 +72,7 @@ class PluginTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(config: config)
+    I18nJS.initialize_plugins!(config:)
     I18nJS::Schema.validate!(config)
 
     assert_equal 1, plugin_class.calls.size
@@ -109,7 +109,7 @@ class PluginTest < Minitest::Test
     I18nJS.register_plugin(plugin_class)
 
     actual_files =
-      I18nJS.call(config: config)
+      I18nJS.call(config:)
 
     assert_exported_files expected_files, actual_files
     assert_exported_files expected_files, plugin_class.received_files

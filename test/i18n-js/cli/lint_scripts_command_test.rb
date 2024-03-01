@@ -9,8 +9,8 @@ class LintCommandTest < Minitest::Test
   test "displays help" do
     cli = I18nJS::CLI.new(
       argv: %w[lint:scripts --help],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -20,8 +20,8 @@ class LintCommandTest < Minitest::Test
   test "without a config file" do
     cli = I18nJS::CLI.new(
       argv: %w[lint:scripts],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -34,8 +34,8 @@ class LintCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %W[lint:scripts --config #{config_file}],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -52,8 +52,8 @@ class LintCommandTest < Minitest::Test
         --config test/config/lint_scripts.yml
         --require #{require_file}
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -68,8 +68,8 @@ class LintCommandTest < Minitest::Test
         --require test/config/require.rb
         --node-path /invalid/path/to/node
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -86,8 +86,8 @@ class LintCommandTest < Minitest::Test
         --config test/config/lint_scripts.yml
         --require test/config/require_error.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -104,8 +104,8 @@ class LintCommandTest < Minitest::Test
         --config test/config/lint_scripts.yml
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(8) { cli.call }

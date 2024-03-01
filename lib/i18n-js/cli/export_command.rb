@@ -71,16 +71,16 @@ module I18nJS
 
         time = Benchmark.realtime do
           load_require_file!(require_file) if require_file
-          I18nJS.call(config_file: config_file)
+          I18nJS.call(config_file:)
         end
 
         log("=> Done in #{time.round(2)}s")
       end
 
-      private def log(*args)
+      private def log(*)
         return if options[:quiet]
 
-        ui.stdout_print(*args)
+        ui.stdout_print(*)
       end
 
       private def set_defaults!

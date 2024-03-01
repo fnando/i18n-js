@@ -9,8 +9,8 @@ class ExportCommandTest < Minitest::Test
   test "displays help" do
     cli = I18nJS::CLI.new(
       argv: %w[export --help],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -20,8 +20,8 @@ class ExportCommandTest < Minitest::Test
   test "without a config file" do
     cli = I18nJS::CLI.new(
       argv: %w[export],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -34,8 +34,8 @@ class ExportCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %W[export --config #{config_file}],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -52,8 +52,8 @@ class ExportCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require #{require_file}
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -65,8 +65,8 @@ class ExportCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %w[export --config test/config/everything.yml],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -85,8 +85,8 @@ class ExportCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require test/config/require_error.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -103,8 +103,8 @@ class ExportCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -122,8 +122,8 @@ class ExportCommandTest < Minitest::Test
         --require test/config/require.rb
         --quiet
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }

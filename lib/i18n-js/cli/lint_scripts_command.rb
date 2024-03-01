@@ -81,7 +81,7 @@ module I18nJS
 
         config = load_config_file(config_file)
         I18nJS.load_plugins!
-        I18nJS.initialize_plugins!(config: config)
+        I18nJS.initialize_plugins!(config:)
         Schema.validate!(config)
 
         load_require_file!(require_file) if require_file
@@ -91,7 +91,7 @@ module I18nJS
 
         ui.stdout_print "=> Available locales: #{available_locales.inspect}"
 
-        exported_files = I18nJS.call(config_file: config_file)
+        exported_files = I18nJS.call(config_file:)
         data = exported_files.each_with_object({}) do |file, buffer|
           buffer.merge!(JSON.load_file(file, symbolize_names: true))
         end

@@ -14,6 +14,6 @@ require "i18n-js/cli"
 require "minitest/utils"
 require "minitest/autorun"
 
-Dir["./test/support/**/*.rb"].sort.each do |file|
+Dir["./test/support/**/*.rb"].each do |file|
   require file
 end

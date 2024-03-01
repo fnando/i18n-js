@@ -69,7 +69,7 @@ module I18nJS
 
         config = load_config_file(config_file)
         I18nJS.load_plugins!
-        I18nJS.initialize_plugins!(config: config)
+        I18nJS.initialize_plugins!(config:)
         Schema.validate!(config)
 
         load_require_file!(require_file) if require_file

@@ -9,8 +9,8 @@ class LintTranslationsCommandTest < Minitest::Test
   test "displays help" do
     cli = I18nJS::CLI.new(
       argv: %w[lint:translations --help],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -20,8 +20,8 @@ class LintTranslationsCommandTest < Minitest::Test
   test "without a config file" do
     cli = I18nJS::CLI.new(
       argv: %w[lint:translations],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -34,8 +34,8 @@ class LintTranslationsCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %W[lint:translations --config #{config_file}],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -52,8 +52,8 @@ class LintTranslationsCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require #{require_file}
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -65,8 +65,8 @@ class LintTranslationsCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %w[lint:translations --config test/config/everything.yml],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -81,8 +81,8 @@ class LintTranslationsCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require test/config/require_error.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -100,8 +100,8 @@ class LintTranslationsCommandTest < Minitest::Test
         --require test/config/require.rb
         --color
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -119,8 +119,8 @@ class LintTranslationsCommandTest < Minitest::Test
         --config test/config/everything.yml
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }
@@ -143,8 +143,8 @@ class LintTranslationsCommandTest < Minitest::Test
         --config test/config/lint_translations.yml
         --require test/config/require.rb
       ],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }

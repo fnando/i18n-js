@@ -196,7 +196,7 @@ class SchemaTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(config: config)
+    I18nJS.initialize_plugins!(config:)
 
     error_message =
       "Expected \"sample.enabled\" to be one of [TrueClass, FalseClass]; " \

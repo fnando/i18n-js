@@ -9,8 +9,8 @@ class InitCommandTest < Minitest::Test
   test "displays help" do
     cli = I18nJS::CLI.new(
       argv: %w[init --help],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -23,8 +23,8 @@ class InitCommandTest < Minitest::Test
     Dir.chdir("test/output") do
       cli = I18nJS::CLI.new(
         argv: %w[init],
-        stdout: stdout,
-        stderr: stderr
+        stdout:,
+        stderr:
       )
 
       assert_exit_code(0) { cli.call }
@@ -37,8 +37,8 @@ class InitCommandTest < Minitest::Test
   test "initializes project" do
     cli = I18nJS::CLI.new(
       argv: %w[init --config test/output/i18n.yml],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
@@ -51,16 +51,16 @@ class InitCommandTest < Minitest::Test
 
     cli = I18nJS::CLI.new(
       argv: %W[init --config #{config_file}],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(0) { cli.call }
 
     cli = I18nJS::CLI.new(
       argv: %W[init --config #{config_file}],
-      stdout: stdout,
-      stderr: stderr
+      stdout:,
+      stderr:
     )
 
     assert_exit_code(1) { cli.call }

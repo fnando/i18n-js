@@ -54,8 +54,8 @@ module I18nJS
         config[:files].each do |export|
           translations = JSON.load_file(file)
           template = Template.new(
-            file: file,
-            translations: translations,
+            file:,
+            translations:,
             template: export[:template]
           )
 
@@ -63,11 +63,11 @@ module I18nJS
 
           output = format(
             export[:output],
-            dir: dir,
-            name: name,
-            extension: extension,
+            dir:,
+            name:,
+            extension:,
             digest: Digest::MD5.hexdigest(contents),
-            base_name: base_name
+            base_name:
           )
 
           File.open(output, "w") do |io|
@@ -82,7 +82,7 @@ module I18nJS
 
       def initialize(**kwargs)
         kwargs.each do |key, value|
-          public_send("#{key}=", value)
+          public_send(:"#{key}=", value)
         end
       end
 

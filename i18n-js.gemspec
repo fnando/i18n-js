@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "./lib/i18n-js/version"
+require_relative "lib/i18n-js/version"
 
 Gem::Specification.new do |spec|
   spec.name    = "i18n-js"
@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary     = "Export i18n translations and use them on JavaScript."
   spec.description = spec.summary
   spec.license     = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.2.0")
   spec.metadata = {"rubygems_mfa_required" => "true"}
 
   github_url = "https://github.com/fnando/i18n-js"

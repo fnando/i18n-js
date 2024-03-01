@@ -133,8 +133,8 @@ module I18nJS
     end
 
     def expect_type(path:, types:)
-      path = prepare_path(path: path)
-      value = value_for(path: path)
+      path = prepare_path(path:)
+      value = value_for(path:)
       types = Array(types)
 
       return if types.any? {|type| value.is_a?(type) }
@@ -156,10 +156,10 @@ module I18nJS
     end
 
     def expect_array_with_items(path:)
-      expect_type(path: path, types: Array)
+      expect_type(path:, types: Array)
 
-      path = prepare_path(path: path)
-      value = value_for(path: path)
+      path = prepare_path(path:)
+      value = value_for(path:)
 
       return unless value.empty?
 
@@ -168,8 +168,8 @@ module I18nJS
     end
 
     def expect_required_keys(keys:, path:)
-      path = prepare_path(path: path)
-      value = value_for(path: path)
+      path = prepare_path(path:)
+      value = value_for(path:)
       actual_keys = value.keys.map(&:to_sym)
 
       keys.each do |key|
@@ -186,8 +186,8 @@ module I18nJS
     end
 
     def reject_extraneous_keys(keys:, path:)
-      path = prepare_path(path: path)
-      value = value_for(path: path)
+      path = prepare_path(path:)
+      value = value_for(path:)
 
       actual_keys = value.keys.map(&:to_sym)
       extraneous = actual_keys.to_a - keys.to_a
