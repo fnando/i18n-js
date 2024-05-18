@@ -11,6 +11,10 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unreleased
+
+- [Changed] Allow glob patterns in lint:translations.
+
 ## v4.2.3 - Mar 29, 2023
 
 - [Fixed] Load plugins when running `i18n lint:*` commands.
