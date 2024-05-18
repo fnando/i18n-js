@@ -69,7 +69,7 @@ module I18nJS
 
         config = load_config_file(config_file)
         I18nJS.load_plugins!
-        I18nJS.initialize_plugins!(config:)
+        I18nJS.initialize_plugins!(config: config)
         Schema.validate!(config)
 
         load_require_file!(require_file) if require_file
@@ -103,20 +103,20 @@ module I18nJS
           filtered_keys = partial_keys.reject do |key|
             key = "#{locale}.#{key}"
 
-            ignored = ignored_keys.include?(key)
+            ignored = key_matches?(key, ignored_keys)
             ignored_count += 1 if ignored
             ignored
           end
 
           extraneous = (partial_keys - default_locale_keys).reject do |key|
             key = "#{locale}.#{key}"
-            ignored = ignored_keys.include?(key)
+            ignored = key_matches?(key, ignored_keys)
             ignored_count += 1 if ignored
             ignored
           end
 
           missing = (default_locale_keys - (filtered_keys - extraneous))
-                    .reject {|key| ignored_keys.include?("#{locale}.#{key}") }
+                    .reject {|key| key_matches?("#{locale}.#{key}", ignored_keys) }
 
           ignored_count += extraneous.size
           total_missing_count += missing.size
@@ -128,7 +128,7 @@ module I18nJS
           all_keys = (default_locale_keys + extraneous + missing).uniq.sort
 
           all_keys.each do |key|
-            next if ignored_keys.include?("#{locale}.#{key}")
+            next if key_matches?("#{locale}.#{key}", ignored_keys)
 
             label = if extraneous.include?(key)
                       ui.yellow("extraneous")
@@ -145,6 +145,9 @@ module I18nJS
         exit(1) if total_missing_count.nonzero?
       end
 
+      private def key_matches?(key, ignored_keys)
+        ignored_keys.include?(key) || ignored_keys.any? { |ignored_key| File.fnmatch?(ignored_key, key) }
+      end
       private def set_defaults!
         config_file = "./config/i18n.yml"
         require_file = "./config/environment.rb"
