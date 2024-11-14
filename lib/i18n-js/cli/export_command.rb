@@ -30,7 +30,7 @@ module I18nJS
         opts.on(
           "-q",
           "--quiet",
-          "A Ruby file that must be loaded"
+          "Suppress non-error output"
         ) do |quiet|
           options[:quiet] = quiet
         end
