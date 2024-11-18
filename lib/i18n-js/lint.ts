@@ -1,5 +1,5 @@
 import { readFileSync, statSync } from "fs";
-import * as ts from "typescript";
+import ts from "typescript";
 import { glob } from "glob";
 
 type ScopeInfo = {
