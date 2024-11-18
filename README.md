@@ -351,13 +351,14 @@ lint_translations:
   ignore:
     - en.mailer.login.subject
     - en.mailer.login.body
+    - en.faker.* 
 ```
 
 > **Note**:
 >
-> In order to avoid mistakenly ignoring keys, this configuration option only
-> accepts the full translation scope, rather than accepting a pattern like
-> `pt.ignored.scope.*`.
+> In order to avoid mistakenly ignoring keys, prefer using a full list of translations
+> instead of using a pattern like `pt.ignored.scope.*`. We recommend only using
+> patterns for excluding scopes coming from modules, such as `en.faker.*`.
 
 ### Linting your JavaScript/TypeScript files
 
