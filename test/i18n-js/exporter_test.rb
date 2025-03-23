@@ -96,6 +96,26 @@ class ExporterTest < Minitest::Test
                      "test/output/pt.json"
   end
 
+  test "exports multiple files using :locale in parallel" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    actual_files =
+      I18nJS.call(config_file: "./test/config/locale_placeholder.yml",
+                  parallel: true)
+
+    expected_files = [
+      "test/output/en.json",
+      "test/output/es.json",
+      "test/output/pt.json"
+    ]
+
+    assert_exported_files expected_files,
+                          actual_files
+    assert_json_file "test/fixtures/expected/multiple_files/es.json",
+                     "test/output/es.json"
+    assert_json_file "test/fixtures/expected/multiple_files/pt.json",
+                     "test/output/pt.json"
+  end
+
   test "exports multiple files using :locale as dirname" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files =
