@@ -58,6 +58,7 @@ module I18nJS
 
     if output_file_path.include?(":locale")
       promises = []
+
       filtered_translations.each_key do |locale|
         promises <<
           Concurrent::Promises.future(
@@ -67,6 +68,7 @@ module I18nJS
             write_file(locale_file_path, translations)
           end
       end
+
       exported_files = Concurrent::Promises.zip(*promises).value!
     else
       exported_files << write_file(output_file_path, filtered_translations)
