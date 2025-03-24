@@ -11,6 +11,11 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unreleased
+
+- [Added] Add `parallel` option to `I18nJS.call` to parallelize file export when
+  `:locale` placeholder is used.
+
 ## v4.2.3 - Mar 29, 2023
 
 - [Fixed] Load plugins when running `i18n lint:*` commands.
