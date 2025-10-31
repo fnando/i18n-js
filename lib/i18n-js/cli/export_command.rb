@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "benchmark"
-
 module I18nJS
   class CLI
     class ExportCommand < Command
@@ -69,7 +67,7 @@ module I18nJS
           )
         end
 
-        time = Benchmark.realtime do
+        time = benchmark_realtime do
           load_require_file!(require_file) if require_file
           I18nJS.call(config_file:)
         end
@@ -89,6 +87,12 @@ module I18nJS
 
         options[:config_file] ||= config_file if File.file?(config_file)
         options[:require_file] ||= require_file if File.file?(require_file)
+      end
+
+      private def benchmark_realtime
+        start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        yield
+        Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
       end
     end
   end
