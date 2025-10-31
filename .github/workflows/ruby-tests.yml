@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.2", "3.3"]
-        node: ["18", "20"]
+        ruby: ["3.3", "3.4"]
+        node: ["22", "24"]
         gemfile:
           - Gemfile
     if: |
