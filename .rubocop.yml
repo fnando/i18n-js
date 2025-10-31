@@ -20,3 +20,6 @@ Style/PerlBackrefs:
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
+
+Gemspec/AttributeAssignment:
+  Enabled: false

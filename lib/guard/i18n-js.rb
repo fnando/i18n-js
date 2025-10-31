@@ -77,7 +77,7 @@ module Guard
       $stdout = original
     end
 
-    def validate_file(key, file)
+    def validate_file(key, file) #  rubocop:disable Naming/PredicateMethod
       return true if file && File.file?(file)
 
       error("#{key.inspect} must be a file")
