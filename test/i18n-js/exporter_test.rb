@@ -18,6 +18,15 @@ class ExporterTest < Minitest::Test
                      "test/output/everything.json"
   end
 
+  test "exported files end with a trailing newline" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    I18nJS.call(config_file: "./test/config/everything.yml")
+
+    contents = File.read("test/output/everything.json")
+
+    assert contents.end_with?("\n"), "Expected exported JSON file to end with a trailing newline"
+  end
+
   test "exports all translations (json config)" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/everything.json")
