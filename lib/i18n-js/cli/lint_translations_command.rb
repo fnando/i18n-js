@@ -78,10 +78,12 @@ module I18nJS
         available_locales = I18n.available_locales
         ignored_keys = config.dig(:lint_translations, :ignore) || []
 
-        mapping = available_locales.each_with_object({}) do |locale, buffer|
-          buffer[locale] =
-            Glob::Map.call(Glob.filter(I18nJS.translations, ["#{locale}.*"]))
-                     .map {|key| key.gsub(/^.*?\./, "") }
+        mapping = available_locales.to_h do |locale|
+          [
+            locale, Glob::Map.call(
+              Glob.filter(I18nJS.translations, ["#{locale}.*"])
+            ).map {|key| key.gsub(/^.*?\./, "") }
+          ]
         end
 
         default_locale_keys = mapping.delete(default_locale) || mapping

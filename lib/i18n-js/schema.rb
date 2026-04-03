@@ -2,7 +2,7 @@
 
 module I18nJS
   class Schema
-    InvalidError = Class.new(StandardError)
+    class InvalidError < StandardError; end
 
     REQUIRED_LINT_TRANSLATIONS_KEYS = %i[ignore].freeze
     REQUIRED_LINT_SCRIPTS_KEYS = %i[ignore patterns].freeze

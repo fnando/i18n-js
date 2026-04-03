@@ -16,7 +16,7 @@ require_relative "i18n-js/sort_hash"
 require_relative "i18n-js/clean_hash"
 
 module I18nJS
-  MissingConfigError = Class.new(StandardError)
+  class MissingConfigError < StandardError; end
 
   def self.call(config_file: nil, config: nil)
     if !config_file && !config
