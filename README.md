@@ -68,9 +68,9 @@ translations:
   - file: app/frontend/locales/en.json
     patterns:
       - "*"
-      - "!*.activerecord"
-      - "!*.errors"
-      - "!*.number.nth"
+      - "!*.activerecord.*"
+      - "!*.errors.*"
+      - "!*.number.nth.*"
 
   - file: app/frontend/locales/:locale.:digest.json
     patterns:
@@ -96,9 +96,9 @@ translations:
   - file: app/frontend/translations.json
     patterns:
       - "<%= group %>.*"
-      - "!<%= group %>.activerecord"
-      - "!<%= group %>.errors"
-      - "!<%= group %>.number.nth"
+      - "!<%= group %>.activerecord.*"
+      - "!<%= group %>.errors.*"
+      - "!<%= group %>.number.nth.*"
 ```
 
 ### Exporting locale.yml to locale.json
@@ -339,9 +339,9 @@ translations:
   - file: app/frontend/locales/en.json
     patterns:
       - "*"
-      - "!*.activerecord"
-      - "!*.errors"
-      - "!*.number.nth"
+      - "!*.activerecord.*"
+      - "!*.errors.*"
+      - "!*.number.nth.*"
 
   - file: app/frontend/locales/:locale.:digest.json
     patterns:
