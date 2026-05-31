@@ -156,6 +156,16 @@ class PluginTest < Minitest::Test
     assert_exported_files expected_files, plugin_class.received_files
   end
 
+  test "raises error for unknown plugin name" do
+    error = assert_raises(I18nJS::Schema::InvalidError) do
+      I18nJS.initialize_plugins!(
+        config: {pipeline: [{plugin: "unknown", enabled: true}]}
+      )
+    end
+
+    assert_match "Unknown plugin: \"unknown\"", error.message
+  end
+
   test "loads plugins using rubygems" do
     Gem
       .expects(:find_files)

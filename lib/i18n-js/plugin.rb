@@ -21,6 +21,11 @@ module I18nJS
         klass.key == plugin_config[:plugin]
       end
 
+      unless plugin_class
+        raise I18nJS::Schema::InvalidError,
+              "Unknown plugin: #{plugin_config[:plugin].inspect}"
+      end
+
       plugin_config = plugin_config.except(:plugin)
       plugin = plugin_class.new(main_config: config, plugin_config:)
 
