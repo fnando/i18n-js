@@ -27,8 +27,8 @@ module I18nJS
     config = Glob::SymbolizeKeys.call(config || load_config_file(config_file))
 
     load_plugins!
-    plugins = initialize_plugins!(config:)
     Schema.validate!(config)
+    plugins = initialize_plugins!(config:)
 
     exported_files = []
 
