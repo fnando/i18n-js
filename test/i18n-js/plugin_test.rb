@@ -62,9 +62,7 @@ class PluginTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(
-      config: {pipeline: [{plugin: "sample", enabled: false}]}
-    )
+    I18nJS.initialize_plugins!(pipeline: [{plugin: "sample", enabled: false}])
 
     refute plugin_class.called
   end
