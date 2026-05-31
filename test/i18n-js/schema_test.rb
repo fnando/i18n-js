@@ -195,7 +195,6 @@ class SchemaTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-    plugins = I18nJS.initialize_plugins!(config:)
 
     error_message =
       "Expected \"pipeline.0.enabled\" to be one of [TrueClass, FalseClass]; " \

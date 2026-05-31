@@ -94,7 +94,7 @@ module I18nJS
     def validate_pipeline
       expect_type(path: [:pipeline], types: Array)
 
-      target[:pipeline].each_with_index do |stage, index|
+      target[:pipeline].each_with_index do |_, index|
         expect_type(path: [:pipeline, index], types: Hash)
         expect_required_keys(
           path: [:pipeline, index],

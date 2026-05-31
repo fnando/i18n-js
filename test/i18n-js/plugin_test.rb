@@ -91,8 +91,7 @@ class PluginTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-    plugins = I18nJS.initialize_plugins!(config:)
-    I18nJS::Schema.validate!(config)
+    I18nJS.initialize_plugins!(config:)
 
     assert_equal 1, plugin_class.calls.size
     assert_includes plugin_class.calls, :validated_schema
@@ -113,7 +112,7 @@ class PluginTest < Minitest::Test
         pipeline: [
           {plugin: "sample", enabled: true, index: 0},
           {plugin: "sample", enabled: true, index: 1},
-          {plugin: "sample", enabled: false, index: 2},
+          {plugin: "sample", enabled: false, index: 2}
         ]
       }
     )
