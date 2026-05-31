@@ -165,7 +165,9 @@ pipeline:
 ## 6. The `check` key was removed
 
 The `check:` root key is no longer a recognised configuration option and will
-cause a validation error if present. Remove it from your config file.
+cause a validation error if present. If you used `check.ignore` to suppress
+known-missing translation keys, move those entries to `lint_translations.ignore`
+— it serves the same purpose.
 
 **Before**
 
@@ -176,8 +178,16 @@ check:
     - "pt.bye"
 ```
 
-**After** — delete the `check:` block entirely. There is no replacement in the
-current version.
+**After**
+
+```yaml
+lint_translations:
+  ignore:
+    - "es.bye"
+    - "pt.bye"
+```
+
+If your `check:` block contained no `ignore:` list, delete it entirely.
 
 ---
 
@@ -186,5 +196,5 @@ current version.
 - [ ] Remove the top-level `embed_fallback_translations:` block and replace with a `pipeline:` entry
 - [ ] Remove the top-level `export_files:` block and replace with a `pipeline:` entry (move `files:` into the stage)
 - [ ] Do the same for any third-party plugin that had its own top-level key
-- [ ] Remove the `check:` block if present
+- [ ] Move `check.ignore` entries to `lint_translations.ignore`, then delete the `check:` block
 - [ ] Verify the `pipeline:` key is a YAML sequence (starts with `-`), not a mapping
