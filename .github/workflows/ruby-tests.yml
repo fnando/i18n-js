@@ -9,14 +9,12 @@ on:
 
 jobs:
   build:
-    name:
-      Tests with Ruby ${{ matrix.ruby }}, Node ${{ matrix.node }} and ${{
-      matrix.gemfile }}
+    name: Tests with Ruby ${{ matrix.ruby }}, Node ${{ matrix.node }} and ${{ matrix.gemfile }}
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.3", "3.4"]
+        ruby: ["3.4", "3.5", "4.0"]
         node: ["22", "24"]
         gemfile:
           - Gemfile
@@ -32,17 +30,13 @@ jobs:
         with:
           path: vendor/bundle
           key: >
-            ${{ runner.os }}-${{ matrix.ruby }}-gems-${{
-            hashFiles(matrix.gemfile) }}
-
+            ${{ runner.os }}-${{ matrix.ruby }}-gems-${{ hashFiles(matrix.gemfile) }} #magic___^_^___line
       - uses: actions/cache@v4
         id: npm-cache
         with:
           path: vendor/bundle
           key: >
-            ${{ runner.os }}-${{ matrix.node }}-npm-${{
-            hashFiles('package.json') }}
-
+            ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('package.json') }} #magic___^_^___line
       - name: Set up Node
         uses: actions/setup-node@v4.0.2
         with:
