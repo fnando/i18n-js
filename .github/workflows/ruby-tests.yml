@@ -30,13 +30,13 @@ jobs:
         with:
           path: vendor/bundle
           key: >
-            ${{ runner.os }}-${{ matrix.ruby }}-gems-${{ hashFiles(matrix.gemfile) }} #magic___^_^___line
+            ${{ runner.os }}-${{ matrix.ruby }}-gems-${{ hashFiles(matrix.gemfile) }}
       - uses: actions/cache@v4
         id: npm-cache
         with:
           path: vendor/bundle
           key: >
-            ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('package.json') }} #magic___^_^___line
+            ${{ runner.os }}-${{ matrix.node }}-npm-${{ hashFiles('package.json') }}
       - name: Set up Node
         uses: actions/setup-node@v4.0.2
         with:
