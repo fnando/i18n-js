@@ -45,9 +45,7 @@ class PluginTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(
-      config: {pipeline: [{plugin: "sample", enabled: true}]}
-    )
+    I18nJS.initialize_plugins!(pipeline: [{plugin: "sample", enabled: true}])
 
     assert plugin_class.called
   end
@@ -91,7 +89,7 @@ class PluginTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(config:)
+    I18nJS.initialize_plugins!(config)
 
     assert_equal 1, plugin_class.calls.size
     assert_includes plugin_class.calls, :validated_schema
@@ -108,13 +106,11 @@ class PluginTest < Minitest::Test
 
     I18nJS.register_plugin(plugin_class)
     plugins = I18nJS.initialize_plugins!(
-      config: {
-        pipeline: [
-          {plugin: "sample", enabled: true, index: 0},
-          {plugin: "sample", enabled: true, index: 1},
-          {plugin: "sample", enabled: false, index: 2}
-        ]
-      }
+      pipeline: [
+        {plugin: "sample", enabled: true, index: 0},
+        {plugin: "sample", enabled: true, index: 1},
+        {plugin: "sample", enabled: false, index: 2}
+      ]
     )
 
     assert_equal 2, plugins.size
@@ -148,9 +144,7 @@ class PluginTest < Minitest::Test
     end
 
     I18nJS.register_plugin(plugin_class)
-
-    actual_files =
-      I18nJS.call(config:)
+    actual_files = I18nJS.call(config:)
 
     assert_exported_files expected_files, actual_files
     assert_exported_files expected_files, plugin_class.received_files
@@ -158,9 +152,7 @@ class PluginTest < Minitest::Test
 
   test "raises error for unknown plugin name" do
     error = assert_raises(I18nJS::Schema::InvalidError) do
-      I18nJS.initialize_plugins!(
-        config: {pipeline: [{plugin: "unknown", enabled: true}]}
-      )
+      I18nJS.initialize_plugins!(pipeline: [{plugin: "unknown", enabled: true}])
     end
 
     assert_match "Unknown plugin: \"unknown\"", error.message

@@ -28,7 +28,7 @@ module I18nJS
 
     load_plugins!
     Schema.validate!(config)
-    plugins = initialize_plugins!(config:)
+    plugins = initialize_plugins!(config)
 
     exported_files = []
 

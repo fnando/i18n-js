@@ -15,7 +15,7 @@ module I18nJS
     Gem.find_files("i18n-js/*_plugin.rb")
   end
 
-  def self.initialize_plugins!(config:)
+  def self.initialize_plugins!(config)
     config.fetch(:pipeline, []).filter_map do |plugin_config|
       plugin_class = available_plugins.find do |klass|
         klass.key == plugin_config[:plugin]
