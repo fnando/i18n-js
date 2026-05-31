@@ -4,39 +4,20 @@ module I18nJS
   require "i18n-js/plugin"
 
   class ExportFilesPlugin < I18nJS::Plugin
-    def setup
-      I18nJS::Schema.root_keys << config_key
-    end
-
     def validate_schema
       valid_keys = %i[enabled files]
 
-      schema.expect_required_keys(keys: valid_keys, path: [config_key])
-      schema.reject_extraneous_keys(keys: valid_keys, path: [config_key])
-      schema.expect_array_with_items(path: [config_key, :files])
+      schema.expect_required_keys(keys: valid_keys)
+      schema.reject_extraneous_keys(keys: valid_keys)
+      schema.expect_array_with_items(path: [:files])
+
+      export_keys = %i[template output]
 
       config[:files].each_with_index do |_exports, index|
-        export_keys = %i[template output]
-
-        schema.expect_required_keys(
-          keys: export_keys,
-          path: [config_key, :files, index]
-        )
-
-        schema.reject_extraneous_keys(
-          keys: export_keys,
-          path: [config_key, :files, index]
-        )
-
-        schema.expect_type(
-          path: [config_key, :files, index, :template],
-          types: String
-        )
-
-        schema.expect_type(
-          path: [config_key, :files, index, :output],
-          types: String
-        )
+        schema.expect_required_keys(keys: export_keys, path: [:files, index])
+        schema.reject_extraneous_keys(keys: export_keys, path: [:files, index])
+        schema.expect_type(path: [:files, index, :template], types: String)
+        schema.expect_type(path: [:files, index, :output], types: String)
       end
     end
 

@@ -5,7 +5,6 @@ require "test_helper"
 class ExportScriptFilesPluginTest < Minitest::Test
   test "exports script files" do
     require "i18n-js/export_files_plugin"
-    I18nJS.plugins.clear
     I18nJS.register_plugin(I18nJS::ExportFilesPlugin)
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
 

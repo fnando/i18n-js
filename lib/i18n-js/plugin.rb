@@ -7,10 +7,6 @@ module I18nJS
     @available_plugins ||= Set.new
   end
 
-  def self.plugins
-    @plugins ||= []
-  end
-
   def self.register_plugin(plugin)
     available_plugins << plugin
   end
@@ -19,46 +15,55 @@ module I18nJS
     Gem.find_files("i18n-js/*_plugin.rb")
   end
 
+  def self.initialize_plugins!(config:)
+    config.fetch(:pipeline, []).filter_map do |plugin_config|
+      plugin_class = available_plugins.find do |klass|
+        klass.key == plugin_config[:plugin]
+      end
+
+      plugin_config = plugin_config.except(:plugin)
+      plugin = plugin_class.new(main_config: config, plugin_config:)
+
+      next unless plugin.enabled?
+
+      plugin.validate_schema
+      plugin.setup
+      plugin
+    end
+  end
+
   def self.load_plugins!
     plugin_files.each do |path|
       require path
     end
   end
 
-  def self.initialize_plugins!(config:)
-    @plugins = available_plugins.map do |plugin|
-      plugin.new(config:).tap(&:setup)
-    end
-  end
-
   class Plugin
-    # The configuration that's being used to export translations.
+    # The plugin's configuration.
+    attr_reader :config
+
+    # The main configuration, which holds translation setup for
+    # plugins that supports exporting.
     attr_reader :main_config
 
-    # The `I18nJS::Schema` instance that can be used to validate your plugin's
-    # configuration.
+    # The schema validator for the plugin.
     attr_reader :schema
-
-    def initialize(config:)
-      @main_config = config
-      @schema = I18nJS::Schema.new(@main_config)
-    end
 
     # Infer the config key name out of the class.
     # If you plugin is called `MySamplePlugin`, the key will be `my_sample`.
-    def config_key
-      self.class.name.split("::").last
+    def self.key
+      name.split("::").last
           .gsub(/Plugin$/, "")
           .gsub(/^([A-Z]+)([A-Z])/) { "#{$1.downcase}#{$2}" }
           .gsub(/^([A-Z]+)/) { $1.downcase }
           .gsub(/([A-Z]+)/m) { "_#{$1.downcase}" }
           .downcase
-          .to_sym
     end
 
-    # Return the plugin configuration
-    def config
-      main_config[config_key] || {}
+    def initialize(plugin_config:, main_config:)
+      @config = plugin_config
+      @main_config = main_config
+      @schema = Schema.new(config)
     end
 
     # Check whether plugin is enabled or not.
