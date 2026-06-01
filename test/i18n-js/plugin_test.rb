@@ -19,7 +19,7 @@ class PluginTest < Minitest::Test
 
   test "implements default transform method" do
     plugin_class = create_plugin
-    plugin = plugin_class.new(config: {})
+    plugin = plugin_class.new(main_config: {}, plugin_config: {})
     translations = {}
 
     assert_same translations,
@@ -35,15 +35,36 @@ class PluginTest < Minitest::Test
 
   test "setups plugin" do
     plugin_class = create_plugin do
+      class << self
+        attr_accessor :called
+      end
+
       def setup
-        I18nJS::Schema.root_keys << :sample
+        self.class.called = true
       end
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(config: {})
+    I18nJS.initialize_plugins!(pipeline: [{plugin: "sample", enabled: true}])
 
-    assert_includes I18nJS::Schema.root_keys, :sample
+    assert plugin_class.called
+  end
+
+  test "skips setup for disabled plugin" do
+    plugin_class = create_plugin do
+      class << self
+        attr_accessor :called
+      end
+
+      def setup
+        self.class.called = true
+      end
+    end
+
+    I18nJS.register_plugin(plugin_class)
+    I18nJS.initialize_plugins!(pipeline: [{plugin: "sample", enabled: false}])
+
+    refute plugin_class.called
   end
 
   test "validates schema" do
@@ -56,33 +77,51 @@ class PluginTest < Minitest::Test
           ]
         }
       ],
-      sample: {
-        enabled: true
-      }
+      pipeline: [{plugin: "sample", enabled: true}]
     }
 
     plugin_class = create_plugin do
-      def setup
-        I18nJS::Schema.root_keys << config_key
-      end
-
       def validate_schema
         self.class.calls << :validated_schema
       end
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(config:)
-    I18nJS::Schema.validate!(config)
+    I18nJS.initialize_plugins!(config)
 
     assert_equal 1, plugin_class.calls.size
     assert_includes plugin_class.calls, :validated_schema
   end
 
+  test "runs sample plugin class more than once" do
+    plugin_class = create_plugin do
+      attr_accessor :called
+
+      def setup
+        self.called = true
+      end
+    end
+
+    I18nJS.register_plugin(plugin_class)
+    plugins = I18nJS.initialize_plugins!(
+      pipeline: [
+        {plugin: "sample", enabled: true, index: 0},
+        {plugin: "sample", enabled: true, index: 1},
+        {plugin: "sample", enabled: false, index: 2}
+      ]
+    )
+
+    assert_equal 2, plugins.size
+    assert plugins.all?(&:called)
+    assert_equal 0, plugins[0].config[:index]
+    assert_equal 1, plugins[1].config[:index]
+  end
+
   test "runs after_export event" do
     config = Glob::SymbolizeKeys.call(
-      I18nJS.load_config_file("./test/config/locale_placeholder.yml")
-        .merge(sample: {enabled: true})
+      I18nJS
+        .load_config_file("./test/config/locale_placeholder.yml")
+        .merge(pipeline: [{plugin: "sample", enabled: true}])
     )
 
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
@@ -97,22 +136,24 @@ class PluginTest < Minitest::Test
         attr_accessor :received_config, :received_files
       end
 
-      def setup
-        I18nJS::Schema.root_keys << :sample
-      end
-
       def after_export(files:)
         self.class.received_files = files
       end
     end
 
     I18nJS.register_plugin(plugin_class)
-
-    actual_files =
-      I18nJS.call(config:)
+    actual_files = I18nJS.call(config:)
 
     assert_exported_files expected_files, actual_files
     assert_exported_files expected_files, plugin_class.received_files
+  end
+
+  test "raises error for unknown plugin name" do
+    error = assert_raises(I18nJS::Schema::InvalidError) do
+      I18nJS.initialize_plugins!(pipeline: [{plugin: "unknown", enabled: true}])
+    end
+
+    assert_match "Unknown plugin: \"unknown\"", error.message
   end
 
   test "loads plugins using rubygems" do
@@ -128,17 +169,16 @@ class PluginTest < Minitest::Test
 
   test "infers config key out of class name" do
     {
-      "SamplePlugin" => :sample,
-      "EmbedFallbackTranslationsPlugin" => :embed_fallback_translations,
-      "ExportFilesPlugin" => :export_files,
-      "FetchFromHTTPPlugin" => :fetch_from_http,
-      "HTTPClientPlugin" => :http_client
+      "SamplePlugin" => "sample",
+      "EmbedFallbackTranslationsPlugin" => "embed_fallback_translations",
+      "ExportFilesPlugin" => "export_files",
+      "FetchFromHTTPPlugin" => "fetch_from_http",
+      "HTTPClientPlugin" => "http_client"
     }.each do |class_name, key|
       plugin_class = Class.new(I18nJS::Plugin)
       plugin_class.stubs(:name).returns(class_name)
-      plugin = plugin_class.new(config: {})
 
-      assert_equal key, plugin.config_key
+      assert_equal key, plugin_class.key
     end
   end
 end

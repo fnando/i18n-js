@@ -4,8 +4,9 @@ translations:
     patterns:
       - "*"
 
-export_files:
-  enabled: true
-  files:
-    - template: test/fixtures/export_files.erb
-      output: "%{dir}/%{base_name}-%{digest}.ts"
+pipeline:
+  - plugin: export_files
+    enabled: true
+    files:
+      - template: test/fixtures/export_files.erb
+        output: "%{dir}/%{base_name}-%{digest}.ts"

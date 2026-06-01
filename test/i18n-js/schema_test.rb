@@ -33,8 +33,10 @@ class SchemaTest < Minitest::Test
   test "rejects extraneous keys on root" do
     assert_schema_error("config has unexpected keys: [:foo]") do
       I18nJS::Schema.validate!(
-        translations: [{file: "file.json", patterns: ["*"]}],
-        foo: 1
+        {
+          translations: [{file: "file.json", patterns: ["*"]}],
+          foo: 1
+        }
       )
     end
   end
@@ -47,13 +49,22 @@ class SchemaTest < Minitest::Test
     end
   end
 
+  test "requires pipeline key to be an array" do
+    assert_schema_error(
+      %[Expected "pipeline" to be "Array"; got Hash instead]
+    ) do
+      I18nJS::Schema.validate!(
+        translations: [{file: "file.json", patterns: ["*"]}],
+        pipeline: {}
+      )
+    end
+  end
+
   test "requires at least one translation config" do
     error_message = "Expected \"translations\" to have at least one item"
 
     assert_schema_error(error_message) do
-      I18nJS::Schema.validate!(
-        translations: []
-      )
+      I18nJS::Schema.validate!(translations: [])
     end
   end
 
@@ -61,9 +72,7 @@ class SchemaTest < Minitest::Test
     error_message = "Expected \"translations.0.file\" to be defined"
 
     assert_schema_error(error_message) do
-      I18nJS::Schema.validate!(
-        translations: [{patterns: "*"}]
-      )
+      I18nJS::Schema.validate!(translations: [{patterns: "*"}])
     end
   end
 
@@ -72,9 +81,7 @@ class SchemaTest < Minitest::Test
                     "got NilClass instead"
 
     assert_schema_error(error_message) do
-      I18nJS::Schema.validate!(
-        translations: [{file: nil, patterns: "*"}]
-      )
+      I18nJS::Schema.validate!(translations: [{file: nil, patterns: "*"}])
     end
   end
 
@@ -82,9 +89,7 @@ class SchemaTest < Minitest::Test
     error_message = "Expected \"translations.0.patterns\" to be defined"
 
     assert_schema_error(error_message) do
-      I18nJS::Schema.validate!(
-        translations: [{file: "some/file.json"}]
-      )
+      I18nJS::Schema.validate!(translations: [{file: "some/file.json"}])
     end
   end
 
@@ -180,26 +185,19 @@ class SchemaTest < Minitest::Test
           ]
         }
       ],
-      sample: {
-        enabled: nil
-      }
+      pipeline: [{plugin: "sample", enabled: nil}]
     }
 
     plugin_class = Class.new(I18nJS::Plugin) do
       def self.name
         "SamplePlugin"
       end
-
-      def setup
-        I18nJS::Schema.root_keys << :sample
-      end
     end
 
     I18nJS.register_plugin(plugin_class)
-    I18nJS.initialize_plugins!(config:)
 
     error_message =
-      "Expected \"sample.enabled\" to be one of [TrueClass, FalseClass]; " \
+      "Expected \"pipeline.0.enabled\" to be one of [TrueClass, FalseClass]; " \
       "got NilClass instead"
 
     assert_schema_error(error_message) do

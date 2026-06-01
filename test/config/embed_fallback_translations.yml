@@ -4,5 +4,6 @@ translations:
     patterns:
       - "*"
 
-embed_fallback_translations:
-  enabled: true
+pipeline:
+  - plugin: embed_fallback_translations
+    enabled: true

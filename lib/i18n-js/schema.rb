@@ -10,16 +10,16 @@ module I18nJS
     TRANSLATION_KEYS = %i[file patterns].freeze
 
     def self.root_keys
-      @root_keys ||= Set.new(%i[
+      @root_keys ||= %i[
         translations
-        lint_translations
         lint_scripts
-        check
-      ])
+        lint_translations
+        pipeline
+      ].freeze
     end
 
     def self.required_root_keys
-      @required_root_keys ||= Set.new(%i[translations])
+      @required_root_keys ||= %i[translations].freeze
     end
 
     def self.validate!(target)
@@ -48,22 +48,9 @@ module I18nJS
       )
 
       validate_translations
+      validate_pipeline if target.key?(:pipeline)
       validate_lint_translations
       validate_lint_scripts
-      validate_plugins
-    end
-
-    def validate_plugins
-      I18nJS.plugins.each do |plugin|
-        next unless target.key?(plugin.config_key)
-
-        expect_type(
-          path: [plugin.config_key, :enabled],
-          types: [TrueClass, FalseClass]
-        )
-
-        plugin.validate_schema
-      end
     end
 
     def validate_root
@@ -102,6 +89,23 @@ module I18nJS
       )
       expect_type(path: [key, :ignore], types: Array)
       expect_type(path: [key, :patterns], types: Array)
+    end
+
+    def validate_pipeline
+      expect_type(path: [:pipeline], types: Array)
+
+      target[:pipeline].each_with_index do |_, index|
+        expect_type(path: [:pipeline, index], types: Hash)
+        expect_required_keys(
+          path: [:pipeline, index],
+          keys: %i[plugin enabled]
+        )
+        expect_type(path: [:pipeline, index, :plugin], types: String)
+        expect_type(
+          path: [:pipeline, index, :enabled],
+          types: [TrueClass, FalseClass]
+        )
+      end
     end
 
     def validate_translations
@@ -155,7 +159,7 @@ module I18nJS
       reject message, target
     end
 
-    def expect_array_with_items(path:)
+    def expect_array_with_items(path: [])
       expect_type(path:, types: Array)
 
       path = prepare_path(path:)
@@ -167,7 +171,7 @@ module I18nJS
              target
     end
 
-    def expect_required_keys(keys:, path:)
+    def expect_required_keys(keys:, path: [])
       path = prepare_path(path:)
       value = value_for(path:)
       actual_keys = value.keys.map(&:to_sym)
@@ -185,7 +189,7 @@ module I18nJS
       end
     end
 
-    def reject_extraneous_keys(keys:, path:)
+    def reject_extraneous_keys(keys:, path: [])
       path = prepare_path(path:)
       value = value_for(path:)
 
@@ -204,12 +208,12 @@ module I18nJS
              target
     end
 
-    def prepare_path(path:)
+    def prepare_path(path: [])
       path = path.to_s.split(".").map(&:to_sym) unless path.is_a?(Array)
       path
     end
 
-    def value_for(path:)
+    def value_for(path: [])
       path.empty? ? target : target.dig(*path)
     end
   end

@@ -164,10 +164,6 @@ class ExporterTest < Minitest::Test
         "SamplePlugin"
       end
 
-      def setup
-        I18nJS::Schema.root_keys << config_key
-      end
-
       def transform(translations:)
         translations.each_key do |locale|
           translations[locale][:injected] = "yes:#{locale}"
@@ -178,8 +174,9 @@ class ExporterTest < Minitest::Test
     end
 
     config = Glob::SymbolizeKeys.call(
-      I18nJS.load_config_file("./test/config/everything.yml")
-        .merge(sample: {enabled: true})
+      I18nJS
+        .load_config_file("./test/config/everything.yml")
+        .merge(pipeline: [{plugin: "sample", enabled: true}])
     )
     I18nJS.register_plugin(plugin_class)
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]

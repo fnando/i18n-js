@@ -11,6 +11,31 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
+## Unreleased
+
+- [Changed] Plugin configuration moved from top-level keys to a `pipeline:`
+  array in the config file. Each entry requires a `plugin:` key identifying the
+  plugin and an `enabled:` key. Plugin-specific options are defined inline in
+  the same stage object.
+- [Changed] `I18nJS::Plugin.key` is now a class method returning a String.
+  Previously it was an instance method called `config_key` that returned a
+  Symbol.
+- [Changed] `I18nJS::Plugin#initialize` now accepts `plugin_config:` and
+  `main_config:` instead of a single `config:` argument.
+- [Changed] `I18nJS::Plugin#config` now returns only the plugin's own
+  configuration slice instead of the full main config.
+- [Changed] `I18nJS.initialize_plugins!` now returns the list of active plugin
+  instances. The `I18nJS.plugins` accessor has been removed.
+- [Changed] `I18nJS::Schema.root_keys` is now a frozen Array. Plugins no
+  longer need to register a root key in their `setup` method.
+- [Changed] Schema validation paths in `validate_schema` are now relative to
+  the plugin's own config root. Remove the leading `config_key` segment from
+  all paths passed to `schema.*` helpers.
+- [Removed] The `check:` root key is no longer recognised by the schema
+  validator. Remove it from your config file.
+- [Added] A single plugin class can now appear multiple times in the pipeline
+  with different configurations, each running as an independent instance.
+
 ## v4.2.3 - Mar 29, 2023
 
 - [Fixed] Load plugins when running `i18n lint:*` commands.

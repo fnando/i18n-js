@@ -27,12 +27,14 @@ module I18nJS
     config = Glob::SymbolizeKeys.call(config || load_config_file(config_file))
 
     load_plugins!
-    initialize_plugins!(config:)
     Schema.validate!(config)
+    plugins = initialize_plugins!(config)
 
     exported_files = []
 
-    config[:translations].each {|group| exported_files += export_group(group) }
+    config[:translations].each do |group|
+      exported_files += export_group(group:, plugins:)
+    end
 
     plugins.each do |plugin|
       plugin.after_export(files: exported_files.dup) if plugin.enabled?
@@ -41,15 +43,11 @@ module I18nJS
     exported_files
   end
 
-  def self.export_group(group)
+  def self.export_group(group:, plugins:)
     filtered_translations = Glob.filter(translations, group[:patterns])
     filtered_translations =
       plugins.reduce(filtered_translations) do |buffer, plugin|
-        if plugin.enabled?
-          plugin.transform(translations: buffer)
-        else
-          buffer
-        end
+        plugin.transform(translations: buffer)
       end
 
     filtered_translations = sort_hash(clean_hash(filtered_translations))

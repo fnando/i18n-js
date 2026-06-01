@@ -35,15 +35,11 @@ module I18nJS
       end
     end
 
-    def setup
-      I18nJS::Schema.root_keys << config_key
-    end
-
     def validate_schema
       valid_keys = %i[enabled]
 
-      schema.expect_required_keys(keys: valid_keys, path: [config_key])
-      schema.reject_extraneous_keys(keys: valid_keys, path: [config_key])
+      schema.expect_required_keys(keys: valid_keys)
+      schema.reject_extraneous_keys(keys: valid_keys)
     end
 
     def transform(translations:)

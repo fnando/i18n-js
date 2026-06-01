@@ -161,8 +161,9 @@ To use it, add the following to your configuration file:
 
 ```yaml
 ---
-embed_fallback_translations:
-  enabled: true
+pipeline:
+  - plugin: embed_fallback_translations
+    enabled: true
 ```
 
 ##### `export_files`:
@@ -173,11 +174,12 @@ configuration file:
 
 ```yaml
 ---
-export_files:
-  enabled: true
-  files:
-    - template: path/to/template.erb
-      output: "%{dir}/%{base_name}.ts"
+pipeline:
+  - plugin: export_files
+    enabled: true
+    files:
+      - template: path/to/template.erb
+        output: "%{dir}/%{base_name}.ts"
 ```
 
 You can export multiple files by defining more entries.
@@ -235,8 +237,8 @@ i18n.store({
 #### Plugin API
 
 You can transform the exported translations by adding plugins. A plugin must
-inherit from `I18nJS::Plugin` and can have 4 class methods (they're all optional
-and will default to a noop implementation). For real examples, see
+inherit from `I18nJS::Plugin` and can override 4 instance methods (they're all
+optional and default to a noop implementation). For real examples, see
 [lib/i18n-js/embed_fallback_translations_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/embed_fallback_translations_plugin.rb)
 and
 [lib/i18n-js/export_files_plugin.rb](https://github.com/fnando/i18n-js/blob/main/lib/i18n-js/export_files_plugin.rb)
@@ -247,7 +249,7 @@ and
 module I18nJS
   class SamplePlugin < I18nJS::Plugin
     # This method is responsible for transforming the translations. The
-    # translations you'll receive may be already be filtered by other plugins
+    # translations you'll receive may already be filtered by other plugins
     # and by the default filtering itself. If you need to access the original
     # translations, use `I18nJS.translations`.
     def transform(translations:)
@@ -257,26 +259,17 @@ module I18nJS
     end
 
     # In case your plugin accepts configuration, this is where you must validate
-    # the configuration, making sure only valid keys and type is provided.
-    # If the configuration contains invalid data, then you must raise an
-    # exception using something like
+    # it, making sure only valid keys and types are provided.
+    # If the configuration contains invalid data, raise an exception using
     # `raise I18nJS::Schema::InvalidError, error_message`.
-    #
-    # Notice the validation will only happen when the plugin configuration is
-    # set (i.e. the configuration contains your config key).
+    # Paths passed to schema helpers are relative to the plugin's own config
+    # root (i.e. the pipeline stage object, minus the `plugin:` key).
     def validate_schema
       # validate plugin schema here…
     end
 
-    # This method must set up the basic plugin configuration, like adding the
-    # config's root key in case your plugin accepts configuration (defined via
-    # the config file).
-    #
-    # If you don't add this key, the linter will prevent non-default keys from
-    # being added to the configuration file.
+    # Called after schema validation. Use this for any one-time plugin setup.
     def setup
-      # If you plugin has configuration, uncomment the line below
-      # I18nJS::Schema.root_keys << config_key
     end
 
     # This method is called whenever `I18nJS.call(**kwargs)` finishes exporting
@@ -291,20 +284,32 @@ module I18nJS
 end
 ```
 
-The class `I18nJS::Plugin` implements some helper methods that you can use:
+The class `I18nJS::Plugin` exposes the following helpers:
 
-- `I18nJS::Plugin#config_key`: the configuration key that was inferred out of
-  your plugin's class name.
-- `I18nJS::Plugin#config`: the plugin configuration.
-- `I18nJS::Plugin#enabled?`: whether the plugin is enabled or not based on the
-  plugin's configuration.
+- `I18nJS::Plugin.key`: the configuration key inferred from your plugin's class
+  name (e.g. `SamplePlugin` → `"sample"`). Override this class method to use a
+  custom key.
+- `I18nJS::Plugin#config`: the plugin's own configuration hash (the pipeline
+  stage entry, minus the `plugin:` key).
+- `I18nJS::Plugin#main_config`: the full i18n-js configuration hash.
+- `I18nJS::Plugin#enabled?`: whether the plugin is enabled based on
+  `config[:enabled]`.
 
-To distribute this plugin, you need to create a gem package that matches the
-pattern `i18n-js/*_plugin.rb`. You can test whether your plugin will be found by
-installing your gem, opening a iRB session and running
-`Gem.find_files("i18n-js/*_plugin.rb")`. If your plugin is not listed, then you
-need to double check your gem load path and see why the file is not being
-loaded.
+Plugins are configured via the `pipeline:` array in the config file. Each entry
+must have a `plugin:` key matching `Plugin.key` and an `enabled:` boolean. Any
+additional keys in the stage are passed to the plugin as part of `config`.
+
+```yaml
+pipeline:
+  - plugin: sample
+    enabled: true
+    my_option: value
+```
+
+To distribute a plugin, create a gem whose load path contains a file matching
+the pattern `i18n-js/*_plugin.rb`. You can verify it will be found by running
+`Gem.find_files("i18n-js/*_plugin.rb")` in an IRB session after installing
+your gem.
 
 ### Listing missing translations
 
