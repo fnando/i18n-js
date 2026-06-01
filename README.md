@@ -576,7 +576,7 @@ require "action_view/railtie"
 I18n.load_path += Dir["./config/locales/**/*.yml"]
 ```
 
-> **Note**:
+> [!NOTE]
 >
 > You may not need to load the ActiveSupport and ActionView lines, or you may
 > need to add additional requires for other libs. With this approach you have
