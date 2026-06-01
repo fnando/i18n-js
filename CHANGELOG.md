@@ -13,6 +13,8 @@ Prefix your message with one of the following:
 
 ## Unreleased
 
+- [Fixed] Return the number of missing translations as the exit code when
+  running `i18n lint:scripts`.
 - [Changed] Plugin configuration moved from top-level keys to a `pipeline:`
   array in the config file. Each entry requires a `plugin:` key identifying the
   plugin and an `enabled:` key. Plugin-specific options are defined inline in
@@ -26,11 +28,11 @@ Prefix your message with one of the following:
   configuration slice instead of the full main config.
 - [Changed] `I18nJS.initialize_plugins!` now returns the list of active plugin
   instances. The `I18nJS.plugins` accessor has been removed.
-- [Changed] `I18nJS::Schema.root_keys` is now a frozen Array. Plugins no
-  longer need to register a root key in their `setup` method.
-- [Changed] Schema validation paths in `validate_schema` are now relative to
-  the plugin's own config root. Remove the leading `config_key` segment from
-  all paths passed to `schema.*` helpers.
+- [Changed] `I18nJS::Schema.root_keys` is now a frozen Array. Plugins no longer
+  need to register a root key in their `setup` method.
+- [Changed] Schema validation paths in `validate_schema` are now relative to the
+  plugin's own config root. Remove the leading `config_key` segment from all
+  paths passed to `schema.*` helpers.
 - [Removed] The `check:` root key is no longer recognised by the schema
   validator. Remove it from your config file.
 - [Added] A single plugin class can now appear multiple times in the pipeline

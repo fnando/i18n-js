@@ -137,7 +137,7 @@ module I18nJS
                         "missing, #{ignored_count} ignored"
         ui.stdout_print messages.sort.join("\n")
 
-        exit(missing_count.size)
+        exit(missing_count)
       end
 
       private def set_defaults!
