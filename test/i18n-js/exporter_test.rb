@@ -24,7 +24,7 @@ class ExporterTest < Minitest::Test
 
     contents = File.read("test/output/everything.json")
 
-    assert contents.end_with?("\n"), "Expected exported JSON file to end with a trailing newline"
+    assert contents.end_with?("\n")
   end
 
   test "exports all translations (json config)" do

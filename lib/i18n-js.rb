@@ -70,7 +70,7 @@ module I18nJS
   def self.write_file(file_path, translations)
     FileUtils.mkdir_p(File.dirname(file_path))
 
-    contents = ::JSON.pretty_generate(translations) + "\n"
+    contents = "#{::JSON.pretty_generate(translations)}\n"
     digest = Digest::MD5.hexdigest(contents)
     file_path = file_path.gsub(":digest", digest)
 
