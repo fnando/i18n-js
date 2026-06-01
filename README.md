@@ -55,7 +55,7 @@ About patterns:
   - `{pt-BR,en}.js.*` will include only `pt-BR` and `en` translations, even if
     more languages are available.
 
-> **Note**:
+> [!NOTE]
 >
 > Patterns use [glob](https://rubygems.org/gems/glob), so check it out for the
 > most up-to-date documentation about what's available.
@@ -358,7 +358,7 @@ lint_translations:
     - en.mailer.login.body
 ```
 
-> **Note**:
+> [!NOTE]
 >
 > In order to avoid mistakenly ignoring keys, this configuration option only
 > accepts the full translation scope, rather than accepting a pattern like
