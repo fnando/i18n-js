@@ -9,7 +9,6 @@ require_relative "cli/export_command"
 require_relative "cli/plugins_command"
 require_relative "cli/lint_translations_command"
 require_relative "cli/lint_scripts_command"
-require_relative "cli/check_command"
 
 module I18nJS
   class CLI
@@ -36,8 +35,7 @@ module I18nJS
         VersionCommand,
         PluginsCommand,
         LintTranslationsCommand,
-        LintScriptsCommand,
-        CheckCommand
+        LintScriptsCommand
       ]
     end
 

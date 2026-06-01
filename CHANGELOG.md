@@ -13,6 +13,7 @@ Prefix your message with one of the following:
 
 ## Unreleased
 
+- [Removed] Remove `i18n check`; use `i18n lint:translations` instead.
 - [Fixed] Return the number of missing translations as the exit code when
   running `i18n lint:scripts`.
 - [Changed] Plugin configuration moved from top-level keys to a `pipeline:`
