@@ -18,6 +18,15 @@ class ExporterTest < Minitest::Test
                      "test/output/everything.json"
   end
 
+  test "exported files end with a trailing newline" do
+    I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
+    I18nJS.call(config_file: "./test/config/everything.yml")
+
+    contents = File.read("test/output/everything.json")
+
+    assert contents.end_with?("\n")
+  end
+
   test "exports all translations (json config)" do
     I18n.load_path << Dir["./test/fixtures/yml/*.yml"]
     actual_files = I18nJS.call(config_file: "./test/config/everything.json")
@@ -120,20 +129,20 @@ class ExporterTest < Minitest::Test
     actual_files = I18nJS.call(config_file: "./test/config/digest.yml")
 
     expected_files = [
-      "test/output/en.677728247a2f2111271f43d6a9c07d1a.json",
-      "test/output/es.d69fc73259977c7d14254b019ff85ec5.json",
-      "test/output/pt.c7ff3b8cc02447b25a1375854ea718f5.json"
+      "test/output/en.913d6b883381e2f2eefaa24054591aa6.json",
+      "test/output/es.0158e18c349c0f67702b24f750431143.json",
+      "test/output/pt.5b66b78c6d06dc6e0783f47f2d46940f.json"
     ]
 
     assert_exported_files expected_files, actual_files
     assert_json_file "test/fixtures/expected/multiple_files/en.json",
-                     "test/output/en.677728247a2f2111271f43d6a9c07d1a.json"
+                     "test/output/en.913d6b883381e2f2eefaa24054591aa6.json"
 
     assert_json_file "test/fixtures/expected/multiple_files/es.json",
-                     "test/output/es.d69fc73259977c7d14254b019ff85ec5.json"
+                     "test/output/es.0158e18c349c0f67702b24f750431143.json"
 
     assert_json_file "test/fixtures/expected/multiple_files/pt.json",
-                     "test/output/pt.c7ff3b8cc02447b25a1375854ea718f5.json"
+                     "test/output/pt.5b66b78c6d06dc6e0783f47f2d46940f.json"
   end
 
   test "exports files using groups" do
