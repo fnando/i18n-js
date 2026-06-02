@@ -118,8 +118,8 @@ module I18nJS
         scopes = JSON.parse(out, symbolize_names: true)
         map = Glob::Map.call(translations)
 
-        missing_count = 0
-        ignored_count = 0
+        ignored_keys = Set.new
+        missing_keys = Set.new
         messages = []
 
         available_locales.each do |locale|
@@ -128,16 +128,19 @@ module I18nJS
             scope_with_locale = "#{locale}.#{full_scope}"
 
             if ignored?(ignore_matchers, scope_with_locale)
-              ignored_count += 1
+              ignored_keys << scope_with_locale
               next
             end
 
             next if map.include?(scope_with_locale)
 
-            missing_count += 1
+            missing_keys << scope_with_locale
             messages << "   - #{scope[:location]}: #{scope_with_locale}"
           end
         end
+
+        ignored_count = ignored_keys.size
+        missing_count = missing_keys.size
 
         ui.stdout_print "=> #{map.size} translations, #{missing_count} " \
                         "missing, #{ignored_count} ignored"
