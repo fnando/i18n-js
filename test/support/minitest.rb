@@ -10,6 +10,7 @@ module Minitest
       I18nJS.available_plugins.clear
       I18n.config.clear_available_locales_set
       I18n.backend = I18n::Backend::Simple.new
+      I18n.fallbacks = nil if I18n.respond_to?(:fallbacks)
       FileUtils.rm_rf "./test/output"
     end
 

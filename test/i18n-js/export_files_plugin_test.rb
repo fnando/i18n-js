@@ -12,7 +12,7 @@ class ExportScriptFilesPluginTest < Minitest::Test
     Time.stubs(:now).returns(now)
 
     exported_file =
-      "test/output/export_files-a21c90181a5fddc55bf998edc5f4a5ca.ts"
+      "test/output/export_files-52e42eb3fa452837f4275c2cbbb6ef53.ts"
 
     actual_files =
       I18nJS.call(config_file: "./test/config/export_files.yml")

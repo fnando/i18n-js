@@ -130,7 +130,7 @@ class ExporterTest < Minitest::Test
 
     expected_files = [
       "test/output/en.950ef8b554852123e348521115051af4.json",
-      "test/output/es.755043ec22e785c6b92edd5ae4b1b70c.json",
+      "test/output/es.b4bd9a92e305bdcc77fffac91e3481e7.json",
       "test/output/pt.e57f5dde9957ac6fb34651f9a1714b47.json"
     ]
 
@@ -139,7 +139,7 @@ class ExporterTest < Minitest::Test
                      "test/output/en.950ef8b554852123e348521115051af4.json"
 
     assert_json_file "test/fixtures/expected/multiple_files/es.json",
-                     "test/output/es.755043ec22e785c6b92edd5ae4b1b70c.json"
+                     "test/output/es.b4bd9a92e305bdcc77fffac91e3481e7.json"
 
     assert_json_file "test/fixtures/expected/multiple_files/pt.json",
                      "test/output/pt.e57f5dde9957ac6fb34651f9a1714b47.json"
