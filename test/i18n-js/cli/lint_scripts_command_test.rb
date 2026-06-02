@@ -108,7 +108,7 @@ class LintCommandTest < Minitest::Test
       stderr:
     )
 
-    assert_exit_code(11) { cli.call }
+    assert_exit_code(8) { cli.call }
 
     output = format(
       File.read("./test/fixtures/expected/lint.txt"),

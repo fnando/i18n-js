@@ -11,5 +11,5 @@ lint_scripts:
     - "!(node_modules)/**/*.jsx"
     - "!(node_modules)/**/*.tsx"
   ignore:
-    - ignore_scope
+    - "*.ignore_scope"
     - pt.another_ignore_scope

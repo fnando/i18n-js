@@ -40,13 +40,7 @@ module I18nJS
       end
 
       private def load_config_file(config_file)
-        config = Glob::SymbolizeKeys.call(YAML.load_file(config_file))
-
-        if config.key?(:check)
-          config[:lint_translations] ||= config.delete(:check)
-        end
-
-        config
+        Glob::SymbolizeKeys.call(YAML.load_file(config_file))
       end
 
       private def load_require_file!(require_file)

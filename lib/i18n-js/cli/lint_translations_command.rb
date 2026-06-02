@@ -76,73 +76,98 @@ module I18nJS
 
         default_locale = I18n.default_locale
         available_locales = I18n.available_locales
-        ignored_keys = config.dig(:lint_translations, :ignore) || []
+                                .reject {|locale| locale == default_locale }
+        ignore_matchers =
+          (config.dig(:lint_translations, :ignore) || []).map do |path|
+            Glob::Matcher.new(path)
+          end
 
-        mapping = available_locales.each_with_object({}) do |locale, buffer|
-          buffer[locale] =
-            Glob::Map.call(Glob.filter(I18nJS.translations, ["#{locale}.*"]))
-                     .map {|key| key.gsub(/^.*?\./, "") }
+        if ignore_matchers.any?
+          ui.stdout_print(
+            "=> Check",
+            options[:config_file].inspect,
+            "for ignored keys"
+          )
         end
 
-        default_locale_keys = mapping.delete(default_locale) || mapping
+        ui.stdout_print(
+          "=> Available locales: #{I18n.available_locales.inspect}"
+        )
 
-        if ignored_keys.any?
-          ui.stdout_print "=> Check #{options[:config_file].inspect} for " \
-                          "ignored keys."
-        end
+        default_keys = build_locale_keys(default_locale)
 
-        ui.stdout_print "=> #{default_locale}: #{default_locale_keys.size} " \
+        ui.stdout_print "=> #{default_locale}: #{default_keys.size} " \
                         "translations"
 
-        total_missing_count = 0
+        missing_keys = Set.new
 
-        mapping.each do |locale, partial_keys|
-          ignored_count = 0
+        available_locales.each do |locale|
+          ignored = Set.new
+          missing = Set.new
+          extraneous = Set.new
 
-          # Compute list of filtered keys (i.e. keys not ignored)
-          filtered_keys = partial_keys.reject do |key|
-            key = "#{locale}.#{key}"
+          ignored.merge(
+            default_keys
+            .select {|key| ignored?(ignore_matchers, "#{locale}.#{key}") }
+          )
 
-            ignored = ignored_keys.include?(key)
-            ignored_count += 1 if ignored
-            ignored
-          end
+          source_keys = default_keys - ignored.to_a
+          locale_keys = build_locale_keys(locale)
 
-          extraneous = (partial_keys - default_locale_keys).reject do |key|
-            key = "#{locale}.#{key}"
-            ignored = ignored_keys.include?(key)
-            ignored_count += 1 if ignored
-            ignored
-          end
+          ignored.merge(
+            locale_keys
+            .select {|key| ignored?(ignore_matchers, "#{locale}.#{key}") }
+          )
 
-          missing = (default_locale_keys - (filtered_keys - extraneous))
-                    .reject {|key| ignored_keys.include?("#{locale}.#{key}") }
-
-          ignored_count += extraneous.size
-          total_missing_count += missing.size
+          source_keys -= ignored.to_a
+          missing.merge(source_keys - locale_keys)
+          extraneous.merge(locale_keys - source_keys - ignored.to_a)
+          missing_keys.merge(build_list_with_locale(missing, locale))
 
           ui.stdout_print "=> #{locale}: #{missing.size} missing, " \
                           "#{extraneous.size} extraneous, " \
-                          "#{ignored_count} ignored"
+                          "#{ignored.size} ignored"
 
-          all_keys = (default_locale_keys + extraneous + missing).uniq.sort
+          all_keys =
+            (
+              build_list_with_label(missing, :missing) +
+              build_list_with_label(extraneous, :extraneous)
+            ).sort_by(&:first)
 
-          all_keys.each do |key|
-            next if ignored_keys.include?("#{locale}.#{key}")
-
-            label = if extraneous.include?(key)
+          all_keys.each do |key, label|
+            label = if label == :extraneous
                       ui.yellow("extraneous")
-                    elsif missing.include?(key)
-                      ui.red("missing")
                     else
-                      next
+                      ui.red("missing")
                     end
 
             ui.stdout_print("   - #{locale}.#{key} (#{label})")
           end
         end
 
-        exit(1) if total_missing_count.nonzero?
+        exit(missing_keys.size)
+      end
+
+      def build_list_with_label(list, label)
+        list.map {|item| [item, label] }
+      end
+
+      def build_list_with_locale(list, locale)
+        list.map {|item| "#{locale}.#{item}" }
+      end
+
+      def ignored?(matchers, key)
+        matchers.any? {|matcher| matcher.match?(key) }
+      end
+
+      private def build_locale_keys(locale)
+        Glob::Map
+          .call(Glob.filter(I18nJS.translations, ["#{locale}.*"]))
+          .map {|key| strip_locale(key) }
+      end
+
+      private def strip_locale(key)
+        key.gsub(/^.*?\./, "")
       end
 
       private def set_defaults!

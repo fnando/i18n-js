@@ -308,8 +308,8 @@ pipeline:
 
 To distribute a plugin, create a gem whose load path contains a file matching
 the pattern `i18n-js/*_plugin.rb`. You can verify it will be found by running
-`Gem.find_files("i18n-js/*_plugin.rb")` in an IRB session after installing
-your gem.
+`Gem.find_files("i18n-js/*_plugin.rb")` in an IRB session after installing your
+gem.
 
 ### Listing missing translations
 
@@ -333,7 +333,7 @@ $ i18n lint:translations
    - pt-BR.github.repository (extraneous)
 ```
 
-This command will exit with status 1 whenever there are missing translations.
+This command will `exit(missing_count)` whenever there are missing translations.
 This way you can use it as a CI linting tool.
 
 You can ignore keys by adding a list to the config file:
@@ -354,15 +354,9 @@ translations:
 
 lint_translations:
   ignore:
-    - en.mailer.login.subject
-    - en.mailer.login.body
+    - "*.mailer.login.subject"
+    - "*.mailer.login.body"
 ```
-
-> [!NOTE]
->
-> In order to avoid mistakenly ignoring keys, this configuration option only
-> accepts the full translation scope, rather than accepting a pattern like
-> `pt.ignored.scope.*`.
 
 ### Linting your JavaScript/TypeScript files
 
@@ -422,7 +416,7 @@ translations:
 
 lint_scripts:
   ignore:
-    - ignore_scope # will ignore this scope on all languages
+    - "*.ignore_scope" # will ignore this scope on all languages
     - pt.another_ignore_scope # will ignore this scope only on `pt`
 ```
 

@@ -6,7 +6,5 @@ translations:
 
 lint_translations:
   ignore:
-    - "es.bye"
-    - "es.hello sunshine!"
-    - "pt.bye"
-    - "pt.hello sunshine!"
+    - "*.bye"
+    - "*.hello_sunshine"

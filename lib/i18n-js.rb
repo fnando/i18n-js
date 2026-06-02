@@ -12,6 +12,7 @@ require "digest/md5"
 require_relative "i18n-js/schema"
 require_relative "i18n-js/version"
 require_relative "i18n-js/plugin"
+require_relative "i18n-js/deep_merge"
 require_relative "i18n-js/sort_hash"
 require_relative "i18n-js/clean_hash"
 
