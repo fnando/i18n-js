@@ -3,4 +3,4 @@ translations:
   - file: test/output/specific.json
     patterns:
       - "*.bye"
-      - "*.time for bed!"
+      - "*.time_for_bed"

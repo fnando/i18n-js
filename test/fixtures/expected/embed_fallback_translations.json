@@ -1,23 +1,23 @@
 {
   "en": {
-    "bunny rabbit adventure": "bunny rabbit adventure",
+    "bunny_rabbit_adventure": "bunny rabbit adventure",
     "counting": {
       "one": "This is one!"
     },
-    "hello sunshine!": "hello sunshine!",
-    "time for bed!": "time for bed!",
+    "hello_sunshine": "hello sunshine!",
+    "time_for_bed": "time for bed!",
     "words": {
       "bye": "Goodbye!",
       "hello": "Hi!"
     }
   },
   "es": {
-    "bunny rabbit adventure": "conejito conejo aventura",
+    "bunny_rabbit_adventure": "conejito conejo aventura",
     "counting": {
       "one": "This is one!"
     },
-    "hello sunshine!": "hello sunshine!",
-    "time for bed!": "hora de acostarse!",
+    "hello_sunshine": "hello sunshine!",
+    "time_for_bed": "hora de acostarse!",
     "words": {
       "bye": "Goodbye!",
       "hello": "Hi!"
@@ -25,12 +25,12 @@
     "bye": "adios"
   },
   "pt": {
-    "bunny rabbit adventure": "a aventura da coelhinha",
+    "bunny_rabbit_adventure": "a aventura da coelhinha",
     "counting": {
       "one": "Esse é um!"
     },
-    "hello sunshine!": "hello sunshine!",
-    "time for bed!": "hora de dormir!",
+    "hello_sunshine": "hello sunshine!",
+    "time_for_bed": "hora de dormir!",
     "words": {
       "bye": "Adeus!",
       "hello": "Hi!"

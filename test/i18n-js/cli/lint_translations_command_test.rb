@@ -104,7 +104,7 @@ class LintTranslationsCommandTest < Minitest::Test
       stderr:
     )
 
-    assert_exit_code(1) { cli.call }
+    assert_exit_code(2) { cli.call }
 
     output = stdout.tap(&:rewind).read.chomp
 
@@ -123,17 +123,17 @@ class LintTranslationsCommandTest < Minitest::Test
       stderr:
     )
 
-    assert_exit_code(1) { cli.call }
+    assert_exit_code(2) { cli.call }
 
     output = stdout.tap(&:rewind).read.chomp
 
     assert_includes output, "=> en: 3 translations"
     assert_includes output, "=> es: 1 missing, 1 extraneous"
     assert_includes output, "- es.bye (extraneous)"
-    assert_includes output, "- es.hello sunshine! (missing)"
+    assert_includes output, "- es.hello_sunshine (missing)"
     assert_includes output, "=> pt: 1 missing, 1 extraneous"
     assert_includes output, "- pt.bye (extraneous)"
-    assert_includes output, "- pt.hello sunshine! (missing)"
+    assert_includes output, "- pt.hello_sunshine (missing)"
   end
 
   test "ignores translations" do

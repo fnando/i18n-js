@@ -129,20 +129,20 @@ class ExporterTest < Minitest::Test
     actual_files = I18nJS.call(config_file: "./test/config/digest.yml")
 
     expected_files = [
-      "test/output/en.913d6b883381e2f2eefaa24054591aa6.json",
-      "test/output/es.0158e18c349c0f67702b24f750431143.json",
-      "test/output/pt.5b66b78c6d06dc6e0783f47f2d46940f.json"
+      "test/output/en.950ef8b554852123e348521115051af4.json",
+      "test/output/es.755043ec22e785c6b92edd5ae4b1b70c.json",
+      "test/output/pt.e57f5dde9957ac6fb34651f9a1714b47.json"
     ]
 
     assert_exported_files expected_files, actual_files
     assert_json_file "test/fixtures/expected/multiple_files/en.json",
-                     "test/output/en.913d6b883381e2f2eefaa24054591aa6.json"
+                     "test/output/en.950ef8b554852123e348521115051af4.json"
 
     assert_json_file "test/fixtures/expected/multiple_files/es.json",
-                     "test/output/es.0158e18c349c0f67702b24f750431143.json"
+                     "test/output/es.755043ec22e785c6b92edd5ae4b1b70c.json"
 
     assert_json_file "test/fixtures/expected/multiple_files/pt.json",
-                     "test/output/pt.5b66b78c6d06dc6e0783f47f2d46940f.json"
+                     "test/output/pt.e57f5dde9957ac6fb34651f9a1714b47.json"
   end
 
   test "exports files using groups" do

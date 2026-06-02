@@ -1,8 +1,8 @@
 msgid "bye"
 msgstr "adios"
 
-msgid "bunny rabbit adventure"
+msgid "bunny_rabbit_adventure"
 msgstr "conejito conejo aventura"
 
-msgid "time for bed!"
+msgid "time_for_bed"
 msgstr "hora de acostarse!"

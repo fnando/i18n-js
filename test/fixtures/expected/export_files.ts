@@ -4,18 +4,18 @@ import { i18n } from "config/i18n";
 
 i18n.store({
   "en": {
-    "bunny rabbit adventure": "bunny rabbit adventure",
-    "hello sunshine!": "hello sunshine!",
-    "time for bed!": "time for bed!"
+    "bunny_rabbit_adventure": "bunny rabbit adventure",
+    "hello_sunshine": "hello sunshine!",
+    "time_for_bed": "time for bed!"
   },
   "es": {
-    "bunny rabbit adventure": "conejito conejo aventura",
+    "bunny_rabbit_adventure": "conejito conejo aventura",
     "bye": "adios",
-    "time for bed!": "hora de acostarse!"
+    "time_for_bed": "hora de acostarse!"
   },
   "pt": {
-    "bunny rabbit adventure": "a aventura da coelhinha",
+    "bunny_rabbit_adventure": "a aventura da coelhinha",
     "bye": "tchau",
-    "time for bed!": "hora de dormir!"
+    "time_for_bed": "hora de dormir!"
   }
 });

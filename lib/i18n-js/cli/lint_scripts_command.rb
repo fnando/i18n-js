@@ -87,13 +87,21 @@ module I18nJS
         load_require_file!(require_file) if require_file
 
         available_locales = I18n.available_locales
-        ignored_keys = config.dig(:lint_scripts, :ignore) || []
+        ignore_matchers =
+          (config.dig(:lint_scripts, :ignore) || []).map do |path|
+            Glob::Matcher.new(path)
+          end
 
         ui.stdout_print "=> Available locales: #{available_locales.inspect}"
 
         exported_files = I18nJS.call(config_file:)
-        data = exported_files.each_with_object({}) do |file, buffer|
-          buffer.merge!(JSON.load_file(file, symbolize_names: true))
+        translations = exported_files.each_with_object({}) do |file, buffer|
+          buffer.merge!(
+            I18nJS.deep_merge(
+              buffer,
+              JSON.load_file(file, symbolize_names: true)
+            )
+          )
         end
 
         lint_file = File.expand_path(File.join(__dir__, "../lint.js"))
@@ -108,20 +116,18 @@ module I18nJS
 
         out = IO.popen([node_path, lint_file, patterns.join(":")]).read
         scopes = JSON.parse(out, symbolize_names: true)
-        map = Glob::Map.call(data)
+        map = Glob::Map.call(translations)
+
         missing_count = 0
         ignored_count = 0
-
         messages = []
 
         available_locales.each do |locale|
           scopes.each do |scope|
-            scope_with_locale = "#{locale}.#{scope[:full]}"
+            full_scope = scope[:full]
+            scope_with_locale = "#{locale}.#{full_scope}"
 
-            ignored = ignored_keys.include?(scope[:full]) ||
-                      ignored_keys.include?(scope_with_locale)
-
-            if ignored
+            if ignored?(ignore_matchers, scope_with_locale)
               ignored_count += 1
               next
             end
@@ -138,6 +144,10 @@ module I18nJS
         ui.stdout_print messages.sort.join("\n")
 
         exit(missing_count)
+      end
+
+      private def ignored?(matchers, key)
+        matchers.any? {|matcher| matcher.match?(key) }
       end
 
       private def set_defaults!

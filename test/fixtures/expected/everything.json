@@ -1,17 +1,17 @@
 {
   "en": {
-    "bunny rabbit adventure": "bunny rabbit adventure",
-    "time for bed!": "time for bed!",
-    "hello sunshine!": "hello sunshine!"
+    "bunny_rabbit_adventure": "bunny rabbit adventure",
+    "time_for_bed": "time for bed!",
+    "hello_sunshine": "hello sunshine!"
   },
   "es": {
-    "bunny rabbit adventure": "conejito conejo aventura",
+    "bunny_rabbit_adventure": "conejito conejo aventura",
     "bye": "adios",
-    "time for bed!": "hora de acostarse!"
+    "time_for_bed": "hora de acostarse!"
   },
   "pt": {
-    "bunny rabbit adventure": "a aventura da coelhinha",
+    "bunny_rabbit_adventure": "a aventura da coelhinha",
     "bye": "tchau",
-    "time for bed!": "hora de dormir!"
+    "time_for_bed": "hora de dormir!"
   }
 }
