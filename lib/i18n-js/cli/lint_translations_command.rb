@@ -82,37 +82,53 @@ module I18nJS
             Glob::Matcher.new(path)
           end
 
+        if ignore_matchers.any?
+          ui.stdout_print(
+            "=> Check",
+            options[:config_file].inspect,
+            "for ignored keys"
+          )
+        end
+
+        ui.stdout_print(
+          "=> Available locales: #{I18n.available_locales.inspect}"
+        )
+
         default_keys = build_locale_keys(default_locale)
 
         ui.stdout_print "=> #{default_locale}: #{default_keys.size} " \
                         "translations"
 
-        missing_count = 0
+        missing_keys = Set.new
 
         available_locales.each do |locale|
-          source_keys = default_keys
-                        .reject do |key|
-            ignored?(
-              ignore_matchers, "#{locale}.#{key}"
-            )
-          end
-          ignored_count = default_keys.size - source_keys.size
+          ignored = Set.new
+          missing = Set.new
+          extraneous = Set.new
 
+          ignored.merge(
+            default_keys
+            .select {|key| ignored?(ignore_matchers, "#{locale}.#{key}") }
+          )
+
+          source_keys = default_keys - ignored.to_a
           locale_keys = build_locale_keys(locale)
-          ignored = locale_keys.select do |key|
-            ignored?(ignore_matchers, "#{locale}.#{key}")
-          end
 
-          ignored_count += ignored.size
-          source_keys -= ignored
-          missing = source_keys - locale_keys
-          extraneous = locale_keys - source_keys - ignored
+          ignored.merge(
+            locale_keys
+            .select {|key| ignored?(ignore_matchers, "#{locale}.#{key}") }
+          )
 
-          missing_count += missing.size
+          ignored.merge(ignored)
+
+          source_keys -= ignored.to_a
+          missing.merge(source_keys - locale_keys)
+          extraneous.merge(locale_keys - source_keys - ignored.to_a)
+          missing_keys.merge(build_list_with_locale(missing, locale))
 
           ui.stdout_print "=> #{locale}: #{missing.size} missing, " \
                           "#{extraneous.size} extraneous, " \
-                          "#{ignored_count} ignored"
+                          "#{ignored.size} ignored"
 
           all_keys =
             (
@@ -131,11 +147,15 @@ module I18nJS
           end
         end
 
-        exit(missing_count)
+        exit(missing_keys.size)
       end
 
       def build_list_with_label(list, label)
         list.map {|item| [item, label] }
+      end
+
+      def build_list_with_locale(list, locale)
+        list.map {|item| "#{locale}.#{item}" }
       end
 
       def ignored?(matchers, key)

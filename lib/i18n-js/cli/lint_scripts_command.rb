@@ -92,7 +92,17 @@ module I18nJS
             Glob::Matcher.new(path)
           end
 
-        ui.stdout_print "=> Available locales: #{available_locales.inspect}"
+        if ignore_matchers.any?
+          ui.stdout_print(
+            "=> Check",
+            options[:config_file].inspect,
+            "for ignored keys"
+          )
+        end
+
+        ui.stdout_print(
+          "=> Available locales: #{I18n.available_locales.inspect}"
+        )
 
         exported_files = I18nJS.call(config_file:)
         translations = exported_files.each_with_object({}) do |file, buffer|

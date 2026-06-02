@@ -333,7 +333,7 @@ $ i18n lint:translations
    - pt-BR.github.repository (extraneous)
 ```
 
-This command will exit with status 1 whenever there are missing translations.
+This command will `exit(missing_count)` whenever there are missing translations.
 This way you can use it as a CI linting tool.
 
 You can ignore keys by adding a list to the config file:
