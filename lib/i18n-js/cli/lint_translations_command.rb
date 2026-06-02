@@ -119,8 +119,6 @@ module I18nJS
             .select {|key| ignored?(ignore_matchers, "#{locale}.#{key}") }
           )
 
-          ignored.merge(ignored)
-
           source_keys -= ignored.to_a
           missing.merge(source_keys - locale_keys)
           extraneous.merge(locale_keys - source_keys - ignored.to_a)
