@@ -13,6 +13,8 @@ Prefix your message with one of the following:
 
 ## Unreleased
 
+- [Changed] `i18n lint:translations` and `i18n lint:scripts` now support globs
+  in their `ignore` option.
 - [Removed] Remove `i18n check`; use `i18n lint:translations` instead.
 - [Fixed] Return the number of missing translations as the exit code when
   running `i18n lint:scripts`.
