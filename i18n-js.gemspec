@@ -42,7 +42,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "i18n"
 
   spec.add_development_dependency "activesupport"
-  spec.add_development_dependency "faker"
   spec.add_development_dependency "minitest"
   spec.add_development_dependency "minitest-utils"
   spec.add_development_dependency "mocha"
