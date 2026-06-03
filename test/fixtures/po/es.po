@@ -5,4 +5,4 @@ msgid "bunny_rabbit_adventure"
 msgstr "conejito conejo aventura"
 
 msgid "time_for_bed"
-msgstr "hora de acostarse!"
+msgstr "¡hora de acostarse!"

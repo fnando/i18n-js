@@ -1,0 +1,9 @@
+---
+translations:
+  - file: test/output/embed_fallback_translations_with_i18n_fallbacks.json
+    patterns:
+      - "*"
+
+pipeline:
+  - plugin: embed_fallback_translations
+    enabled: true

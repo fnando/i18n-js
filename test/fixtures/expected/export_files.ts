@@ -11,7 +11,7 @@ i18n.store({
   "es": {
     "bunny_rabbit_adventure": "conejito conejo aventura",
     "bye": "adios",
-    "time_for_bed": "hora de acostarse!"
+    "time_for_bed": "¡hora de acostarse!"
   },
   "pt": {
     "bunny_rabbit_adventure": "a aventura da coelhinha",

@@ -13,19 +13,20 @@
   },
   "es": {
     "bunny_rabbit_adventure": "conejito conejo aventura",
+    "bye": "adios",
     "counting": {
-      "one": "This is one!"
+      "one": "Esse é um!"
     },
     "hello_sunshine": "hello sunshine!",
     "time_for_bed": "¡hora de acostarse!",
     "words": {
-      "bye": "Goodbye!",
+      "bye": "Adeus!",
       "hello": "Hi!"
-    },
-    "bye": "adios"
+    }
   },
   "pt": {
     "bunny_rabbit_adventure": "a aventura da coelhinha",
+    "bye": "tchau",
     "counting": {
       "one": "Esse é um!"
     },
@@ -34,7 +35,6 @@
     "words": {
       "bye": "Adeus!",
       "hello": "Hi!"
-    },
-    "bye": "tchau"
+    }
   }
 }

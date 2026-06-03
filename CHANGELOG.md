@@ -13,6 +13,9 @@ Prefix your message with one of the following:
 
 ## Unreleased
 
+- [Added] `embed_fallback_translations` plugin now supports `I18n.fallbacks`,
+  and will switch to it automatically if you're using a backend that includes
+  the `I18n::Backend::Fallbacks` module and have `I18n.fallbacks` configured.
 - [Changed] `i18n lint:translations` and `i18n lint:scripts` now support globs
   in their `ignore` option.
 - [Removed] Previous versions allowed bare keys in lint's `:ignore` rule. This

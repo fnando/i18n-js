@@ -153,9 +153,15 @@ both `--config` and `--require`.
 
 ##### `embed_fallback_translations`:
 
-Embed fallback translations inferred from the default locale. This can be useful
-in cases where you have multiple large translation files and don't want to load
-the default locale together with the target locale.
+Embed fallback translations into each locale. This can be useful in cases where
+you have multiple large translation files and don't want to load the default
+locale together with the target locale.
+
+When `I18n.fallbacks` is configured (e.g. via `I18n::Backend::Fallbacks` or
+Rails' `config.i18n.fallbacks`), the full fallback chain is respected. For
+example, if `es` falls back to `pt` which falls back to `en`, missing `es`
+translations are first filled from `pt`, then from `en`. When `I18n.fallbacks`
+is not configured, translations fall back directly to `I18n.default_locale`.
 
 To use it, add the following to your configuration file:
 
@@ -165,6 +171,18 @@ pipeline:
   - plugin: embed_fallback_translations
     enabled: true
 ```
+
+> [!NOTE]
+>
+> `I18n.fallbacks=(*)` is weird. The most common way of using it is with
+> `I18n.fallbacks[:es] = [:pt, :en]` and
+> `I18n.fallbacks = I18n::Locale::Fallbacks(default_locale, hash_map)`. If you
+> assign just a hash, no error will be raised, but it's not the correct
+> behavior, and you'll get a hash back, rather than a `I18n::Locale::Fallbacks`
+> instance.
+>
+> When assigning an array, remember to pass the default locale as the last
+> argument, as precedence is from left to right.
 
 ##### `export_files`:
 
@@ -224,7 +242,7 @@ i18n.store({
   es: {
     "bunny rabbit adventure": "conejito conejo aventura",
     bye: "adios",
-    "time for bed!": "hora de acostarse!",
+    "time for bed!": "¡hora de acostarse!",
   },
   pt: {
     "bunny rabbit adventure": "a aventura da coelhinha",
