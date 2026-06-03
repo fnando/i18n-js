@@ -8,6 +8,7 @@ require "fileutils"
 require "optparse"
 require "erb"
 require "digest/md5"
+require "concurrent-ruby"
 
 require_relative "i18n-js/schema"
 require_relative "i18n-js/version"
@@ -56,11 +57,19 @@ module I18nJS
     exported_files = []
 
     if output_file_path.include?(":locale")
+      promises = []
+
       filtered_translations.each_key do |locale|
-        locale_file_path = output_file_path.gsub(":locale", locale.to_s)
-        exported_files << write_file(locale_file_path,
-                                     locale => filtered_translations[locale])
+        promises <<
+          Concurrent::Promises.future(
+            output_file_path.gsub(":locale", locale.to_s),
+            locale => filtered_translations[locale]
+          ) do |locale_file_path, translations|
+            write_file(locale_file_path, translations)
+          end
       end
+
+      exported_files = Concurrent::Promises.zip(*promises).value!
     else
       exported_files << write_file(output_file_path, filtered_translations)
     end
