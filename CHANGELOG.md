@@ -45,7 +45,7 @@ Prefix your message with one of the following:
   validator. Remove it from your config file.
 - [Added] A single plugin class can now appear multiple times in the pipeline
   with different configurations, each running as an independent instance.
-- [Changed] Export translations in parallel. To enable parallel mode, your 
+- [Changed] Export translations in parallel. To enable parallel mode, your
   output file definition must include the `:locale` placeholder.
 
 ## v4.2.3 - Mar 29, 2023
