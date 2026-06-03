@@ -11,7 +11,7 @@ Prefix your message with one of the following:
 - [Security] in case of vulnerabilities.
 -->
 
-## Unreleased
+## v5.0.0.rc1 - Jun 02, 2026
 
 - [Added] `embed_fallback_translations` plugin now supports `I18n.fallbacks`,
   and will switch to it automatically if you're using a backend that includes
