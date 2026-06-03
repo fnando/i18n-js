@@ -25,13 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         id: bundler-cache
         with:
           path: vendor/bundle
           key: >
             ${{ runner.os }}-${{ matrix.ruby }}-gems-${{ hashFiles(matrix.gemfile) }}
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         id: npm-cache
         with:
           path: vendor/bundle
