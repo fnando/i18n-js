@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "esbuild": "^0.25.0",
-    "glob": "^8.0.3",
+    "glob": "^13.0.6",
     "typescript": "^5.6.0"
   },
   "scripts": {

@@ -54,8 +54,8 @@ end
 puts "=> Current version: #{I18nJS::VERSION}"
 puts "=> Next version: #{version}"
 
-system "yarn", "install"
-system "yarn", "compile"
+system "npm", "install"
+system "npm", "run", "compile"
 
 write_file changelog_path,
            File.read(changelog_path)
