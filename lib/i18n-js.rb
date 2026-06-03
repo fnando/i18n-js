@@ -20,7 +20,7 @@ require_relative "i18n-js/clean_hash"
 module I18nJS
   MissingConfigError = Class.new(StandardError)
 
-  def self.call(config_file: nil, config: nil, parallel: false)
+  def self.call(config_file: nil, config: nil)
     if !config_file && !config
       raise MissingConfigError,
             "you must set either `config_file` or `config`"
